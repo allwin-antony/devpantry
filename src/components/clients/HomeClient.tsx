@@ -173,18 +173,15 @@ export function HomeClient() {
             </Link>
           </div>
 
-          {/* Trust bar */}
-          <div className="flex items-center gap-4 text-xs text-[var(--text-muted)] mt-4 font-mono">
-            <span className="flex items-center gap-1.5">
-              <ShieldCheck className="w-3.5 h-3.5 text-emerald-500" />
-              100% client-side
-            </span>
-            <span className="text-[var(--border-dev)]">·</span>
+          {/* Metrics bar */}
+          <div className="flex flex-wrap items-center gap-4 text-xs text-[var(--text-muted)] mt-4 font-mono">
             <span>2,180+ fonts</span>
             <span className="text-[var(--border-dev)]">·</span>
-            <span>353K+ icons</span>
+            <span>353K+ vector icons</span>
             <span className="text-[var(--border-dev)]">·</span>
-            <span>238 libraries</span>
+            <span>238 icon packs</span>
+            <span className="text-[var(--border-dev)]">·</span>
+            <span>19 API schemas</span>
           </div>
         </div>
       </section>

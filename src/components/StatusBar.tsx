@@ -42,7 +42,7 @@ export const StatusBar: React.FC = () => {
 
         <div className="hidden sm:flex items-center gap-1 text-[10px]">
           <ShieldCheck className="w-3 h-3 text-emerald-500" />
-          <span>100% Client-Side Privacy</span>
+          <span>Production Ready</span>
         </div>
 
         <div className="flex items-center gap-1.5 text-[10px]">

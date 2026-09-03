@@ -41,7 +41,7 @@ const SAMPLE_USER_JSON = `{
   "email": "jane.dev@startup.io",
   "phone": "+1-555-0199",
   "website_url": "https://developer.io",
-  "bio": "Building resilient apps with zero telemetry.",
+  "bio": "Building fast, scalable modern web applications.",
   "account_balance": 1500.50,
   "is_active": true,
   "created_at": "2026-09-03T12:00:00Z"
@@ -376,8 +376,10 @@ export function ChaosTemplatesClient() {
               {customTemplates.map(tmpl => {
                 const isSelected = isCustomMode && activeCustomId === tmpl.id;
                 return (
-                  <button
+                  <div
                     key={tmpl.id}
+                    role="button"
+                    tabIndex={0}
                     onClick={() => {
                       setIsCustomMode(true);
                       setActiveCustomId(tmpl.id);
@@ -385,7 +387,16 @@ export function ChaosTemplatesClient() {
                       setCustomRawJson(tmpl.rawJson);
                       setViewMode('chaos');
                     }}
-                    className={`w-full text-left p-2 rounded-lg border transition-all flex items-center justify-between gap-1 cursor-pointer my-0.5 ${
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter' || e.key === ' ') {
+                        setIsCustomMode(true);
+                        setActiveCustomId(tmpl.id);
+                        setCustomTitle(tmpl.name);
+                        setCustomRawJson(tmpl.rawJson);
+                        setViewMode('chaos');
+                      }
+                    }}
+                    className={`w-full text-left p-2 rounded-lg border transition-all flex items-center justify-between gap-1 cursor-pointer my-0.5 select-none ${
                       isSelected 
                         ? 'bg-[var(--bg-sidebar)] border-rose-500 shadow-sm' 
                         : 'border-transparent hover:bg-[var(--bg-sidebar)]/60 text-[var(--text-secondary)]'
@@ -404,7 +415,7 @@ export function ChaosTemplatesClient() {
                     >
                       <Trash2 className="w-3 h-3" />
                     </button>
-                  </button>
+                  </div>
                 );
               })}
             </div>

@@ -39,11 +39,11 @@ export const metadata: Metadata = {
     'custom schema builder',
     'typescript interface generator',
     'zod schema generator',
-    'client-side dev tools'
+    'developer asset studio'
   ],
-  authors: [{ name: 'Antigravity & OpenSource Community' }],
-  creator: 'DevPlayground',
-  publisher: 'DevPlayground Studio',
+  authors: [{ name: 'FailState Community' }],
+  creator: 'FailState',
+  publisher: 'FailState Studio',
   robots: {
     index: true,
     follow: true,
@@ -59,9 +59,9 @@ export const metadata: Metadata = {
     type: 'website',
     locale: 'en_US',
     url: 'https://devplayground.io',
-    siteName: 'DevPlayground Studio',
-    title: 'DevPlayground | Developer Edge-Case & Open-Source Asset Studio',
-    description: 'High-entropy mock data, 120+ open-source typefaces, vector icon customizer, and real-world API & SSO response vault — 100% Client-Side.',
+    siteName: 'FailState Studio',
+    title: 'FailState | Developer Asset Engine & Chaos Testing Studio',
+    description: 'High-entropy mock data, 2,180+ open-source typefaces, 353K+ vector icons, and 19 production API & SSO response schemas.',
     images: [
       {
         url: '/og-image.png',

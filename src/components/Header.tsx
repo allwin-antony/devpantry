@@ -64,13 +64,8 @@ export const Header: React.FC = () => {
         })}
       </nav>
 
-      {/* Right: Privacy Indicator & Theme Switcher */}
+      {/* Right: Theme Switcher */}
       <div className="flex items-center gap-3 shrink-0">
-        <div className="hidden sm:flex items-center gap-1.5 text-[10px] font-mono text-[var(--text-muted)] bg-[var(--bg-sidebar)] px-2.5 py-1 rounded border border-[var(--border-dev)]">
-          <ShieldCheck className="w-3.5 h-3.5 text-emerald-500" />
-          <span>100% Client-Side Sandbox</span>
-        </div>
-
         {/* Dark / Light Mode Switcher */}
         <button
           onClick={toggleTheme}

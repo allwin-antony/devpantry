@@ -224,8 +224,8 @@ curl -X POST "https://api.mock.failstate.io/v1/${service.id}" \\
               <span className="text-xs px-2.5 py-0.5 rounded-full font-bold bg-[var(--bg-panel-subtle)] text-[var(--text-secondary)] border border-[var(--border-dev)] font-mono">
                 {service.provider}
               </span>
-              <span className="text-xs px-2.5 py-0.5 rounded-full font-bold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 flex items-center gap-1">
-                <ShieldCheck className="w-3.5 h-3.5" /> 100% Client-Side Privacy
+              <span className="text-xs px-2.5 py-0.5 rounded-full font-bold bg-cyan-500/10 text-cyan-600 dark:text-cyan-400 border border-cyan-500/20 font-mono">
+                JSON &amp; TypeScript Fixtures
               </span>
             </div>
 
