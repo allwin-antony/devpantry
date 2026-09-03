@@ -1,5 +1,5 @@
 import { MetadataRoute } from 'next';
-import { getAllFontSlugs, getAllIconPrefixes } from '@/lib/datasetLoader';
+import { getAllFontSlugs, getAllIconPrefixes, getAllServiceResponseIds } from '@/lib/datasetLoader';
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = 'https://devplayground.io';
@@ -56,5 +56,14 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.8,
   }));
 
-  return [...coreRoutes, ...fontRoutes, ...iconRoutes];
+  // Chaos API Template detail pages (SEO)
+  const templateIds = getAllServiceResponseIds();
+  const templateRoutes: MetadataRoute.Sitemap = templateIds.map(id => ({
+    url: `${baseUrl}/chaos-templates/${id}`,
+    lastModified: now,
+    changeFrequency: 'weekly',
+    priority: 0.85,
+  }));
+
+  return [...coreRoutes, ...fontRoutes, ...iconRoutes, ...templateRoutes];
 }

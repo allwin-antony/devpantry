@@ -35,29 +35,42 @@ interface CustomTemplate {
   createdAt: number;
 }
 
-const DEFAULT_CUSTOM_JSON = `{
-  "event": "user.signup.completed",
-  "user": {
-    "id": "usr_998877",
-    "name": "Jane Developer",
-    "email": "jane.dev@startup.io",
-    "phone": "+1-555-0199",
-    "avatar_url": "https://images.example.com/avatar.png",
-    "age": 28,
-    "balance": 1500.50,
-    "is_verified": true,
-    "created_at": "2026-09-03T12:00:00Z"
-  },
-  "auth": {
-    "access_token": "tok_live_sec_8833992211aa",
-    "token_type": "Bearer",
-    "expires_in": 3600
-  },
-  "metadata": {
-    "ip_address": "192.168.1.1",
-    "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7)"
-  }
+const SAMPLE_USER_JSON = `{
+  "user_id": "usr_998877",
+  "name": "Jane Developer",
+  "email": "jane.dev@startup.io",
+  "phone": "+1-555-0199",
+  "website_url": "https://developer.io",
+  "bio": "Building resilient apps with zero telemetry.",
+  "account_balance": 1500.50,
+  "is_active": true,
+  "created_at": "2026-09-03T12:00:00Z"
 }`;
+
+const SAMPLE_ORDER_JSON = `{
+  "order_id": "ord_884411",
+  "customer_name": "Alex Mercer",
+  "customer_email": "alex@store.com",
+  "shipping_address": "742 Evergreen Terrace, Springfield",
+  "shipping_phone": "+1-555-0123",
+  "item_count": 3,
+  "currency": "USD",
+  "total_price": 289.99,
+  "order_status": "processing",
+  "notes": "Leave at front desk"
+}`;
+
+const SAMPLE_WEBHOOK_JSON = `{
+  "event_id": "evt_990011",
+  "event_type": "payment.succeeded",
+  "auth_token": "tok_live_sec_8833992211aa",
+  "sender_name": "Stripe Gateway",
+  "target_url": "https://api.startup.io/webhooks",
+  "amount_paid": 99.00,
+  "timestamp": "2026-09-03T18:30:00Z"
+}`;
+
+const DEFAULT_CUSTOM_JSON = SAMPLE_USER_JSON;
 
 export function ChaosTemplatesClient() {
   const [selectedServiceId, setSelectedServiceId] = useState<string>(ALL_SERVICE_RESPONSES[0].id);
@@ -588,11 +601,86 @@ export function ChaosTemplatesClient() {
         {/* Editor or Viewer Body */}
         <div className="flex-1 min-h-0 bg-[var(--bg-panel)] border border-[var(--border-dev)] rounded-xl overflow-hidden flex flex-col shadow-sm">
           {viewMode === 'edit_custom' ? (
-            <div className="flex-1 flex flex-col p-4 bg-[var(--bg-codebox)] gap-3">
-              <div className="flex items-center justify-between text-xs text-[var(--text-muted)] pb-2 border-b border-[var(--border-dev)]">
-                <span>Paste or write your JSON blueprint below:</span>
-                {jsonParseError && <span className="text-rose-500 font-bold">{jsonParseError}</span>}
+            <div className="flex-1 flex flex-col p-4 bg-[var(--bg-codebox)] gap-3 overflow-y-auto">
+              {/* Intuitive 3-Step Instruction Card */}
+              <div className="bg-rose-500/10 border border-rose-500/30 rounded-lg p-3 flex flex-col gap-2.5">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <Sparkles className="w-4 h-4 text-rose-500" />
+                    <span className="text-xs font-bold text-rose-500 font-sans uppercase">
+                      How Custom Chaos Blueprints Work
+                    </span>
+                  </div>
+                  <span className="text-[10px] text-[var(--text-muted)] font-mono">
+                    3 Simple Steps
+                  </span>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-2 text-[11px] text-[var(--text-code)] font-sans">
+                  <div className="bg-black/30 p-2.5 rounded border border-white/10 flex flex-col gap-1">
+                    <strong className="text-amber-400 font-mono text-xs">1. Paste Clean JSON</strong>
+                    <span className="text-[10px] text-slate-300 leading-snug">
+                      Write or paste your normal API response structure, or click a sample preset below.
+                    </span>
+                  </div>
+
+                  <div className="bg-black/30 p-2.5 rounded border border-white/10 flex flex-col gap-1">
+                    <strong className="text-cyan-400 font-mono text-xs">2. Auto-Detect Keys</strong>
+                    <span className="text-[10px] text-slate-300 leading-snug">
+                      Keys like <code className="text-rose-400">email</code>, <code className="text-rose-400">name</code>, <code className="text-rose-400">price</code>, <code className="text-rose-400">phone</code>, <code className="text-rose-400">url</code>, <code className="text-rose-400">token</code> are automatically matched.
+                    </span>
+                  </div>
+
+                  <div className="bg-black/30 p-2.5 rounded border border-white/10 flex flex-col gap-1">
+                    <strong className="text-emerald-400 font-mono text-xs">3. Test & Export</strong>
+                    <span className="text-[10px] text-slate-300 leading-snug">
+                      Click <strong>Preview Chaos Payload</strong> to slide entropy (0–100%), re-roll permutations (<kbd className="bg-white/10 px-1 rounded">R</kbd>), or export TypeScript types.
+                    </span>
+                  </div>
+                </div>
+
+                {/* Instant Sample Presets */}
+                <div className="flex flex-wrap items-center gap-1.5 pt-1 border-t border-rose-500/20">
+                  <span className="text-[10px] text-[var(--text-muted)] font-bold font-mono mr-1">LOAD QUICK SAMPLE:</span>
+                  <button
+                    onClick={() => {
+                      setCustomRawJson(SAMPLE_USER_JSON);
+                      setCustomTitle('User Profile API');
+                      setJsonParseError(null);
+                    }}
+                    className="px-2.5 py-1 rounded bg-white/10 hover:bg-white/20 text-white text-[10px] font-mono border border-white/15 cursor-pointer transition-colors"
+                  >
+                    👤 User Profile
+                  </button>
+                  <button
+                    onClick={() => {
+                      setCustomRawJson(SAMPLE_ORDER_JSON);
+                      setCustomTitle('E-Commerce Order API');
+                      setJsonParseError(null);
+                    }}
+                    className="px-2.5 py-1 rounded bg-white/10 hover:bg-white/20 text-white text-[10px] font-mono border border-white/15 cursor-pointer transition-colors"
+                  >
+                    🛒 E-Commerce Order
+                  </button>
+                  <button
+                    onClick={() => {
+                      setCustomRawJson(SAMPLE_WEBHOOK_JSON);
+                      setCustomTitle('Payment Webhook API');
+                      setJsonParseError(null);
+                    }}
+                    className="px-2.5 py-1 rounded bg-white/10 hover:bg-white/20 text-white text-[10px] font-mono border border-white/15 cursor-pointer transition-colors"
+                  >
+                    ⚡ Payment Webhook
+                  </button>
+                </div>
               </div>
+
+              {/* JSON Blueprint Editor */}
+              <div className="flex items-center justify-between text-xs text-[var(--text-muted)] pb-1 border-b border-[var(--border-dev)] shrink-0">
+                <span className="font-mono text-[11px] text-slate-300 font-bold">JSON Blueprint Code:</span>
+                {jsonParseError && <span className="text-rose-400 font-bold font-mono text-[11px]">{jsonParseError}</span>}
+              </div>
+
               <textarea
                 value={customRawJson}
                 onChange={e => {
@@ -604,20 +692,22 @@ export function ChaosTemplatesClient() {
                     setJsonParseError(err.message);
                   }
                 }}
-                className="flex-1 w-full bg-transparent border-none outline-none font-mono text-xs text-[var(--text-code)] resize-none leading-relaxed"
-                placeholder="Paste your JSON schema here..."
+                className="flex-1 w-full min-h-[220px] bg-black/20 p-3 rounded-lg border border-white/10 outline-none font-mono text-xs text-[var(--text-code)] resize-none leading-relaxed focus:border-rose-500"
+                placeholder="Paste your clean JSON response schema here..."
                 spellCheck={false}
               />
-              <div className="flex items-center justify-between pt-2 border-t border-[var(--border-dev)]">
-                <span className="text-[10px] text-[var(--text-muted)]">
-                  The chaos engine automatically recognizes keys like <code>email</code>, <code>name</code>, <code>url</code>, <code>token</code>, <code>price</code> and injects dirty values.
+
+              <div className="flex items-center justify-between pt-2 border-t border-[var(--border-dev)] shrink-0">
+                <span className="text-[10px] text-[var(--text-muted)] font-mono">
+                  Press <strong className="text-emerald-400">Save Template</strong> in the top bar to keep it across sessions.
                 </span>
                 <button
                   onClick={() => setViewMode('chaos')}
-                  className="px-4 py-1.5 rounded bg-rose-500 text-white text-xs font-bold hover:bg-rose-600 transition-colors flex items-center gap-1.5 cursor-pointer shadow-sm"
+                  className="px-4 py-2 rounded-lg bg-rose-500 text-white text-xs font-bold hover:bg-rose-600 transition-colors flex items-center gap-1.5 cursor-pointer shadow-md shadow-rose-500/20"
                 >
                   <Flame className="w-3.5 h-3.5" />
                   <span>Preview Chaos Payload</span>
+                  <ArrowRight className="w-3.5 h-3.5" />
                 </button>
               </div>
             </div>

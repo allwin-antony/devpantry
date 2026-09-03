@@ -380,3 +380,8 @@ export const ALL_SERVICE_RESPONSES: ServiceResponseItem[] = [
 export function getServiceResponseById(id: string): ServiceResponseItem | undefined {
   return ALL_SERVICE_RESPONSES.find(s => s.id === id);
 }
+
+export function getAllServiceResponseIds(): string[] {
+  return ALL_SERVICE_RESPONSES.map(s => s.id);
+}
+
