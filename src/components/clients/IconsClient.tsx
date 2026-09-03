@@ -18,7 +18,8 @@ import {
   Download,
   Terminal,
   Grid,
-  Zap
+  Zap,
+  Plus
 } from 'lucide-react';
 
 export function IconsClient() {
@@ -39,8 +40,8 @@ export function IconsClient() {
   // Loaded icon list for selected collection
   const [loadedIcons, setLoadedIcons] = useState<string[]>([]);
   const [isLoadingIcons, setIsLoadingIcons] = useState<boolean>(false);
+  const [displayLimit, setDisplayLimit] = useState<number>(144);
   const [selectedIconName, setSelectedIconName] = useState<string | null>(null);
-  const [rawSvgData, setRawSvgData] = useState<string>('');
 
   const colorPresets = [
     { name: 'Rose', hex: '#f43f5e' },
@@ -75,35 +76,47 @@ export function IconsClient() {
     });
   }, [allCollections, collectionSearch, selectedCategory]);
 
-  // Fetch icon names from Iconify when activeCollection changes
+  // Fetch complete icon list from Iconify Collection API
   useEffect(() => {
     let isCancelled = false;
     setIsLoadingIcons(true);
+    setDisplayLimit(144);
 
     // Initial samples from catalog
     const initialSamples = activeCollection.samples || ['home', 'user', 'settings', 'search', 'bell', 'check', 'mail', 'heart', 'star', 'calendar'];
     setLoadedIcons(initialSamples);
     setSelectedIconName(initialSamples[0] || 'icon');
 
-    // Try fetching the full/extended icon list from Iconify JSON endpoint
-    fetch(`https://api.iconify.design/${activeCollection.prefix}.json`)
+    // Fetch full collection manifest from Iconify API
+    fetch(`https://api.iconify.design/collection?prefix=${activeCollection.prefix}`)
       .then(res => res.json())
       .then(data => {
-        if (!isCancelled && data && (data.icons || data.uncategorized || data.categories)) {
-          let iconsList: string[] = [];
-          if (data.icons) {
-            iconsList = Object.keys(data.icons);
-          } else if (data.uncategorized) {
-            iconsList = data.uncategorized;
+        if (!isCancelled && data) {
+          const list: string[] = [];
+
+          if (Array.isArray(data.uncategorized)) {
+            list.push(...data.uncategorized);
           }
-          if (iconsList.length > 0) {
-            setLoadedIcons(iconsList.slice(0, 150)); // Fast preview grid
-            if (iconsList.length > 0) setSelectedIconName(iconsList[0]);
+          if (data.categories && typeof data.categories === 'object') {
+            for (const catIcons of Object.values(data.categories)) {
+              if (Array.isArray(catIcons)) {
+                list.push(...catIcons);
+              }
+            }
+          }
+          if (Array.isArray(data.hidden)) {
+            list.push(...data.hidden);
+          }
+
+          if (list.length > 0) {
+            const unique = Array.from(new Set(list));
+            setLoadedIcons(unique);
+            if (unique.length > 0) setSelectedIconName(unique[0]);
           }
         }
       })
       .catch(() => {
-        // Fallback to sample icons
+        // Fallback remains the sample icons
       })
       .finally(() => {
         if (!isCancelled) setIsLoadingIcons(false);
@@ -115,10 +128,15 @@ export function IconsClient() {
   }, [activeCollection]);
 
   // Filter icons within collection
-  const visibleIcons = useMemo(() => {
+  const allFilteredIcons = useMemo(() => {
     if (!iconSearch.trim()) return loadedIcons;
-    return loadedIcons.filter(name => name.toLowerCase().includes(iconSearch.toLowerCase()));
+    const q = iconSearch.toLowerCase();
+    return loadedIcons.filter(name => name.toLowerCase().includes(q));
   }, [loadedIcons, iconSearch]);
+
+  const visibleIcons = useMemo(() => {
+    return allFilteredIcons.slice(0, displayLimit);
+  }, [allFilteredIcons, displayLimit]);
 
   const copyToClipboard = (text: string, id: string) => {
     navigator.clipboard.writeText(text);
@@ -238,11 +256,14 @@ export function MyComponent() {
                   {activeCollection.name}
                 </h2>
                 <span className="text-[10px] px-2 py-0.5 rounded font-bold bg-cyan-500/15 text-cyan-600 dark:text-cyan-300 border border-cyan-500/30">
-                  {activeCollection.total_icons.toLocaleString()} icons
+                  {loadedIcons.length > activeCollection.samples?.length ? loadedIcons.length.toLocaleString() : activeCollection.total_icons.toLocaleString()} icons
                 </span>
                 <span className="text-[10px] px-2 py-0.5 rounded font-bold bg-emerald-500/15 text-emerald-600 dark:text-emerald-300 border border-emerald-500/30">
                   {activeCollection.license}
                 </span>
+                {isLoadingIcons && (
+                  <span className="text-[10px] text-cyan-500 animate-pulse">Loading catalog...</span>
+                )}
               </div>
               <div className="text-xs text-[var(--text-secondary)] font-sans mt-0.5">
                 Author: {activeCollection.author} • Prefix: <code className="text-rose-500 font-mono">{activeCollection.prefix}</code>
@@ -350,18 +371,18 @@ export function MyComponent() {
                 type="text"
                 value={iconSearch}
                 onChange={e => setIconSearch(e.target.value)}
-                placeholder={`Search inside ${activeCollection.name}...`}
+                placeholder={`Search inside ${activeCollection.name} (${allFilteredIcons.length} icons)...`}
                 className="dev-input flex-1 px-2 py-0.5 rounded text-xs"
               />
             </div>
 
             <div className="text-[11px] text-[var(--text-muted)]">
-              Showing <strong>{visibleIcons.length}</strong> icons • Click any icon to inspect & copy
+              Showing <strong>{visibleIcons.length}</strong> of <strong>{allFilteredIcons.length}</strong> icons • Click any to copy
             </div>
           </div>
 
           {/* Actual SVG Icon Grid */}
-          <div className="flex-1 overflow-y-auto p-4 bg-[var(--bg-codebox)]">
+          <div className="flex-1 overflow-y-auto p-4 bg-[var(--bg-codebox)] flex flex-col justify-between">
             <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-3">
               {visibleIcons.map(name => {
                 const isSelected = selectedIconName === name;
@@ -389,6 +410,7 @@ export function MyComponent() {
                         alt={name}
                         width={iconSize}
                         height={iconSize}
+                        loading="lazy"
                         className="pointer-events-none"
                       />
                     </div>
@@ -400,6 +422,19 @@ export function MyComponent() {
                 );
               })}
             </div>
+
+            {/* Load More Button */}
+            {allFilteredIcons.length > visibleIcons.length && (
+              <div className="pt-6 pb-2 text-center">
+                <button
+                  onClick={() => setDisplayLimit(l => l + 144)}
+                  className="px-4 py-2 rounded-lg bg-[var(--bg-panel)] border border-[var(--border-dev)] text-xs font-bold text-[var(--text-primary)] hover:border-cyan-500 hover:text-cyan-500 transition-colors inline-flex items-center gap-2 cursor-pointer shadow-sm"
+                >
+                  <Plus className="w-3.5 h-3.5" />
+                  <span>Load More Icons ({allFilteredIcons.length - visibleIcons.length} remaining)</span>
+                </button>
+              </div>
+            )}
           </div>
         </div>
       </div>

@@ -353,9 +353,14 @@ font-family: '${activeFont.name}', ${activeFont.category === 'Serif' ? 'serif' :
                 <div>
                   <div className="flex items-start justify-between gap-2 mb-2">
                     <div>
-                      <h3 className="text-sm font-bold text-[var(--text-primary)] font-sans group-hover:text-rose-500 transition-colors">
+                      <Link
+                        href={`/fonts/${font.slug}`}
+                        onClick={(e) => e.stopPropagation()}
+                        className="text-sm font-bold text-[var(--text-primary)] font-sans hover:text-rose-500 hover:underline transition-colors inline-block"
+                        title={`Go to ${font.name} dedicated page`}
+                      >
                         {font.name}
-                      </h3>
+                      </Link>
                       <div className="text-[10px] text-[var(--text-muted)] truncate max-w-[170px]">
                         {font.publisher}
                       </div>

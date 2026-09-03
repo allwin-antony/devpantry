@@ -15,7 +15,8 @@ import {
   Terminal, 
   Sparkles,
   ShieldCheck,
-  Download
+  Download,
+  Plus
 } from 'lucide-react';
 
 export function IconDetailClient({ collection }: { collection: IconCollectionItem }) {
@@ -27,6 +28,8 @@ export function IconDetailClient({ collection }: { collection: IconCollectionIte
 
   const [loadedIcons, setLoadedIcons] = useState<string[]>([]);
   const [selectedIcon, setSelectedIcon] = useState<string>('');
+  const [displayLimit, setDisplayLimit] = useState<number>(144);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const colorPresets = [
     { name: 'Cyan', hex: '#06b6d4' },
@@ -37,37 +40,59 @@ export function IconDetailClient({ collection }: { collection: IconCollectionIte
     { name: 'White', hex: '#ffffff' }
   ];
 
-  // Fetch full icon list from Iconify API
+  // Fetch full icon list from Iconify Collection API
   useEffect(() => {
     let isCancelled = false;
+    setIsLoading(true);
+    setDisplayLimit(144);
     const initialSamples = collection.samples || ['home', 'user', 'settings', 'search', 'bell', 'check', 'mail'];
     setLoadedIcons(initialSamples);
     setSelectedIcon(initialSamples[0] || 'icon');
 
-    fetch(`https://api.iconify.design/${collection.prefix}.json`)
+    fetch(`https://api.iconify.design/collection?prefix=${collection.prefix}`)
       .then(res => res.json())
       .then(data => {
         if (!isCancelled && data) {
-          let list: string[] = [];
-          if (data.icons) list = Object.keys(data.icons);
-          else if (data.uncategorized) list = data.uncategorized;
+          const list: string[] = [];
+          if (Array.isArray(data.uncategorized)) {
+            list.push(...data.uncategorized);
+          }
+          if (data.categories && typeof data.categories === 'object') {
+            for (const catIcons of Object.values(data.categories)) {
+              if (Array.isArray(catIcons)) {
+                list.push(...catIcons);
+              }
+            }
+          }
+          if (Array.isArray(data.hidden)) {
+            list.push(...data.hidden);
+          }
           if (list.length > 0) {
-            setLoadedIcons(list);
-            setSelectedIcon(list[0]);
+            const unique = Array.from(new Set(list));
+            setLoadedIcons(unique);
+            if (unique.length > 0) setSelectedIcon(unique[0]);
           }
         }
       })
-      .catch(() => {});
+      .catch(() => {})
+      .finally(() => {
+        if (!isCancelled) setIsLoading(false);
+      });
 
     return () => {
       isCancelled = true;
     };
   }, [collection]);
 
-  const filteredIcons = useMemo(() => {
+  const allFilteredIcons = useMemo(() => {
     if (!searchQuery.trim()) return loadedIcons;
-    return loadedIcons.filter(name => name.toLowerCase().includes(searchQuery.toLowerCase()));
+    const q = searchQuery.toLowerCase();
+    return loadedIcons.filter(name => name.toLowerCase().includes(q));
   }, [loadedIcons, searchQuery]);
+
+  const visibleIcons = useMemo(() => {
+    return allFilteredIcons.slice(0, displayLimit);
+  }, [allFilteredIcons, displayLimit]);
 
   const copyToClipboard = (text: string, id: string) => {
     navigator.clipboard.writeText(text);
@@ -75,7 +100,7 @@ export function IconDetailClient({ collection }: { collection: IconCollectionIte
     setTimeout(() => setCopiedCode(null), 1800);
   };
 
-  const currentIcon = selectedIcon || (filteredIcons[0] || 'icon');
+  const currentIcon = selectedIcon || (visibleIcons[0] || 'icon');
   const getSvgUrl = (iconName: string) => {
     const encodedColor = encodeURIComponent(iconColor === 'currentColor' ? '#ffffff' : iconColor);
     return `https://api.iconify.design/${collection.prefix}/${iconName}.svg?color=${encodedColor}`;
@@ -119,8 +144,11 @@ export function Example() {
               {collection.name}
             </h1>
             <span className="text-xs px-2.5 py-0.5 rounded-full font-bold bg-cyan-500/15 text-cyan-600 dark:text-cyan-300 border border-cyan-500/30">
-              {collection.total_icons.toLocaleString()} Vector Icons
+              {loadedIcons.length > collection.samples?.length ? loadedIcons.length.toLocaleString() : collection.total_icons.toLocaleString()} Vector Icons
             </span>
+            {isLoading && (
+              <span className="text-xs text-cyan-500 animate-pulse">Loading catalog...</span>
+            )}
           </div>
 
           <p className="text-xs md:text-sm text-[var(--text-secondary)] font-sans">
@@ -261,19 +289,19 @@ export function Example() {
               type="text"
               value={searchQuery}
               onChange={e => setSearchQuery(e.target.value)}
-              placeholder={`Search all ${loadedIcons.length} icons in ${collection.name}...`}
+              placeholder={`Search all ${allFilteredIcons.length} icons in ${collection.name}...`}
               className="dev-input flex-1 px-2.5 py-1 rounded text-xs"
             />
           </div>
 
           <span className="text-xs text-[var(--text-muted)]">
-            Showing <strong>{filteredIcons.length}</strong> icons
+            Showing <strong>{visibleIcons.length}</strong> of <strong>{allFilteredIcons.length}</strong> icons
           </span>
         </div>
 
         {/* Icon Grid */}
         <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-3 max-h-[500px] overflow-y-auto pr-1">
-          {filteredIcons.map(name => {
+          {visibleIcons.map(name => {
             const isSelected = selectedIcon === name;
             return (
               <button
@@ -297,6 +325,7 @@ export function Example() {
                     alt={name}
                     width={iconSize}
                     height={iconSize}
+                    loading="lazy"
                     className="pointer-events-none"
                   />
                 </div>
@@ -308,6 +337,19 @@ export function Example() {
             );
           })}
         </div>
+
+        {/* Load More Button */}
+        {allFilteredIcons.length > visibleIcons.length && (
+          <div className="pt-2 text-center">
+            <button
+              onClick={() => setDisplayLimit(l => l + 144)}
+              className="px-4 py-2 rounded-lg bg-[var(--bg-panel)] border border-[var(--border-dev)] text-xs font-bold text-[var(--text-primary)] hover:border-cyan-500 hover:text-cyan-500 transition-colors inline-flex items-center gap-2 cursor-pointer shadow-sm"
+            >
+              <Plus className="w-3.5 h-3.5" />
+              <span>Load More Icons ({allFilteredIcons.length - visibleIcons.length} remaining)</span>
+            </button>
+          </div>
+        )}
       </section>
     </div>
   );
