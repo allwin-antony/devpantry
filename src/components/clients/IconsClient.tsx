@@ -22,7 +22,9 @@ import {
   Loader2,
   Globe,
   Filter,
-  X
+  X,
+  Share2,
+  Image as ImageIcon
 } from 'lucide-react';
 
 interface ParsedIconItem {
@@ -44,7 +46,7 @@ export function IconsClient() {
   const [selectedCategory, setSelectedCategory] = useState<string>('All');
   
   // SVG Customizer State
-  const [iconSize, setIconSize] = useState<number>(28);
+  const [iconSize, setIconSize] = useState<number>(32);
   const [strokeWidth, setStrokeWidth] = useState<number>(2);
   const [iconColor, setIconColor] = useState<string>('#f43f5e');
   const [copiedCode, setCopiedCode] = useState<string | null>(null);
@@ -92,6 +94,30 @@ export function IconsClient() {
     });
   }, [allCollections, collectionSearch, selectedCategory]);
 
+  // ── URL Hash Synchronization (e.g. #lucide:a-arrow-down or #tabler:settings) ──
+  useEffect(() => {
+    const parseUrlHash = () => {
+      const hash = window.location.hash.replace(/^#/, '').trim();
+      if (hash && hash.includes(':')) {
+        const parts = hash.split(':');
+        const prefix = parts[0];
+        const name = parts.slice(1).join(':');
+        if (prefix && name) {
+          setSelectedPrefix(prefix);
+          setSelectedIconItem({
+            fullKey: hash,
+            prefix,
+            name
+          });
+        }
+      }
+    };
+
+    parseUrlHash();
+    window.addEventListener('hashchange', parseUrlHash);
+    return () => window.removeEventListener('hashchange', parseUrlHash);
+  }, []);
+
   // 1. Fetch complete icon list for active single collection
   useEffect(() => {
     let isCancelled = false;
@@ -101,8 +127,8 @@ export function IconsClient() {
     const initialSamples = activeCollection.samples || ['home', 'user', 'settings', 'search', 'bell', 'check', 'mail'];
     setLoadedIcons(initialSamples);
     
-    // Only set default if no master search active
-    if (!masterSearchQuery.trim()) {
+    // Only set default if no icon already active from URL hash or master search
+    if (!selectedIconItem || (selectedIconItem.prefix !== activeCollection.prefix && !window.location.hash)) {
       setSelectedIconItem({
         fullKey: `${activeCollection.prefix}:${initialSamples[0] || 'icon'}`,
         prefix: activeCollection.prefix,
@@ -126,13 +152,6 @@ export function IconsClient() {
           if (list.length > 0) {
             const unique = Array.from(new Set(list));
             setLoadedIcons(unique);
-            if (unique.length > 0 && !masterSearchQuery.trim()) {
-              setSelectedIconItem({
-                fullKey: `${activeCollection.prefix}:${unique[0]}`,
-                prefix: activeCollection.prefix,
-                name: unique[0]
-              });
-            }
           }
         }
       })
@@ -144,7 +163,7 @@ export function IconsClient() {
     return () => {
       isCancelled = true;
     };
-  }, [activeCollection, masterSearchQuery]);
+  }, [activeCollection]);
 
   // 2. Global Master Search across ALL 353,000+ icons
   useEffect(() => {
@@ -172,7 +191,9 @@ export function IconsClient() {
               };
             });
             setGlobalResults(parsed);
-            if (parsed.length > 0) setSelectedIconItem(parsed[0]);
+            if (parsed.length > 0) {
+              handleSelectIcon(parsed[0]);
+            }
           }
         })
         .catch(() => {})
@@ -240,6 +261,13 @@ export function IconsClient() {
     }, 2000);
   };
 
+  const handleSelectIcon = (item: ParsedIconItem) => {
+    setSelectedIconItem(item);
+    if (typeof window !== 'undefined') {
+      window.history.replaceState(null, '', `#${item.fullKey}`);
+    }
+  };
+
   const getSvgUrl = (prefix: string, iconName: string) => {
     const encodedColor = encodeURIComponent(iconColor === 'currentColor' ? '#ffffff' : iconColor);
     return `https://api.iconify.design/${prefix}/${iconName}.svg?color=${encodedColor}`;
@@ -250,6 +278,10 @@ export function IconsClient() {
     prefix: activeCollection.prefix,
     name: 'icon'
   };
+
+  const activeIconCollection = useMemo(() => {
+    return allCollections.find(c => c.prefix === activeIcon.prefix) || activeCollection;
+  }, [allCollections, activeIcon.prefix, activeCollection]);
 
   const reactSnippet = `import { Icon } from '@iconify/react';
 
@@ -268,6 +300,12 @@ export function MyComponent() {
   <!-- Icon: ${activeIcon.fullKey} -->
   <use href="https://api.iconify.design/${activeIcon.prefix}/${activeIcon.name}.svg" />
 </svg>`;
+
+  const htmlImgSnippet = `<img src="${getSvgUrl(activeIcon.prefix, activeIcon.name)}" width="${iconSize}" height="${iconSize}" alt="${activeIcon.name}" />`;
+
+  const shareUrl = typeof window !== 'undefined' 
+    ? `${window.location.origin}/icons#${activeIcon.fullKey}` 
+    : `https://devplayground.io/icons#${activeIcon.fullKey}`;
 
   return (
     <div className="h-full flex flex-col md:flex-row p-3 overflow-hidden gap-3 font-mono relative">
@@ -392,43 +430,37 @@ export function MyComponent() {
           </div>
         </div>
 
-        {/* ── 2. Top Controls & Active Icon Info Card ── */}
+        {/* ── 2. ACTIVE ICON HERO & CUSTOMIZER BENCH ── */}
         <div className="bg-[var(--bg-panel)] border border-[var(--border-dev)] rounded-xl p-4 shrink-0 shadow-sm transition-colors flex flex-col gap-3">
           {/* Header Bar */}
-          <div className="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-[var(--border-dev)]">
-            <div>
-              <div className="flex items-center gap-2.5">
-                <h2 className="text-base font-bold text-[var(--text-primary)] font-sans">
-                  {isMasterSearchActive ? (
-                    <span className="text-cyan-500 flex items-center gap-1.5">
-                      <span>Global Results: &ldquo;{masterSearchQuery}&rdquo;</span>
-                    </span>
-                  ) : (
-                    activeCollection.name
-                  )}
-                </h2>
-
-                <span className="text-[10px] px-2 py-0.5 rounded font-bold bg-cyan-500/15 text-cyan-600 dark:text-cyan-300 border border-cyan-500/30">
-                  {isMasterSearchActive
-                    ? `${totalCount.toLocaleString()} matches across 238 libs` 
-                    : `${loadedIcons.length.toLocaleString()} icons`}
-                </span>
-
-                <span className="text-[10px] px-2 py-0.5 rounded font-bold bg-emerald-500/15 text-emerald-600 dark:text-emerald-300 border border-emerald-500/30">
-                  {activeCollection.license}
-                </span>
-
-                {(isLoadingLibrary || isLoadingMaster) && (
-                  <span className="text-[10px] text-cyan-500 animate-pulse flex items-center gap-1">
-                    <Loader2 className="w-3 h-3 animate-spin" />
-                    <span>Searching...</span>
+          <div className="flex flex-wrap items-center justify-between gap-3 pb-2.5 border-b border-[var(--border-dev)]">
+            <div className="flex items-center gap-2.5">
+              <h2 className="text-base font-bold text-[var(--text-primary)] font-sans">
+                {isMasterSearchActive ? (
+                  <span className="text-cyan-500 flex items-center gap-1.5">
+                    <span>Global Results: &ldquo;{masterSearchQuery}&rdquo;</span>
                   </span>
+                ) : (
+                  activeCollection.name
                 )}
-              </div>
+              </h2>
 
-              <div className="text-xs text-[var(--text-secondary)] font-sans mt-0.5">
-                Active Icon: <code className="text-rose-500 font-mono font-bold">{activeIcon.fullKey}</code>
-              </div>
+              <span className="text-[10px] px-2 py-0.5 rounded font-bold bg-cyan-500/15 text-cyan-600 dark:text-cyan-300 border border-cyan-500/30">
+                {isMasterSearchActive
+                  ? `${totalCount.toLocaleString()} matches across 238 libs` 
+                  : `${loadedIcons.length.toLocaleString()} icons`}
+              </span>
+
+              <span className="text-[10px] px-2 py-0.5 rounded font-bold bg-emerald-500/15 text-emerald-600 dark:text-emerald-300 border border-emerald-500/30">
+                {activeCollection.license}
+              </span>
+
+              {(isLoadingLibrary || isLoadingMaster) && (
+                <span className="text-[10px] text-cyan-500 animate-pulse flex items-center gap-1">
+                  <Loader2 className="w-3 h-3 animate-spin" />
+                  <span>Searching...</span>
+                </span>
+              )}
             </div>
 
             <div className="flex items-center gap-2">
@@ -452,8 +484,105 @@ export function MyComponent() {
             </div>
           </div>
 
-          {/* SVG Canvas Sliders */}
-          <div className="flex flex-wrap items-center justify-between gap-3 text-xs">
+          {/* 🌟 SELECTED ICON HERO DETAILS BENCH (Visual Preview + Full Metadata) 🌟 */}
+          <div className="bg-[var(--bg-codebox)] border border-[var(--border-dev)] rounded-lg p-3.5 flex flex-col md:flex-row items-start md:items-center justify-between gap-4 transition-colors shadow-inner">
+            {/* Left: Live Visual SVG Canvas & Details */}
+            <div className="flex items-center gap-3.5">
+              {/* Live Preview Box */}
+              <div 
+                style={{ width: `${Math.max(iconSize + 20, 52)}px`, height: `${Math.max(iconSize + 20, 52)}px` }}
+                className="p-2 rounded-xl bg-white/5 border border-[var(--border-dev)] flex items-center justify-center shadow-sm shrink-0"
+              >
+                <img
+                  src={getSvgUrl(activeIcon.prefix, activeIcon.name)}
+                  alt={activeIcon.name}
+                  width={iconSize}
+                  height={iconSize}
+                  className="pointer-events-none drop-shadow-sm"
+                />
+              </div>
+
+              {/* Text Specs */}
+              <div>
+                <div className="flex items-center gap-2">
+                  <span className="text-sm font-bold text-[var(--text-primary)] font-mono">
+                    {activeIcon.name}
+                  </span>
+                  <span className="text-[10px] px-1.5 py-0.2 rounded font-bold bg-cyan-500/20 text-cyan-600 dark:text-cyan-300 border border-cyan-500/30">
+                    {activeIcon.prefix}
+                  </span>
+                </div>
+
+                <div className="text-[11px] text-[var(--text-secondary)] font-mono mt-0.5 flex flex-wrap items-center gap-2">
+                  <span className="text-rose-500 font-bold">&lt;Icon icon=&quot;{activeIcon.fullKey}&quot; /&gt;</span>
+                  <span>•</span>
+                  <span>{activeIconCollection.name}</span>
+                  <span>•</span>
+                  <span className="text-emerald-500 font-semibold">{activeIconCollection.license}</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Right: Quick Action Copy Buttons */}
+            <div className="flex flex-wrap items-center gap-1.5 text-xs shrink-0">
+              <button
+                onClick={() => copyToClipboard(reactSnippet, 'hero-react', `<Icon icon="${activeIcon.fullKey}" />`)}
+                title="Copy React JSX"
+                className="px-2.5 py-1 text-xs font-semibold rounded bg-[var(--bg-sidebar)] border border-[var(--border-dev)] text-[var(--text-primary)] hover:border-cyan-500 flex items-center gap-1 transition-colors cursor-pointer"
+              >
+                {copiedCode === 'hero-react' ? <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500" /> : <Code2 className="w-3.5 h-3.5 text-cyan-500" />}
+                <span className={copiedCode === 'hero-react' ? 'text-emerald-600 dark:text-emerald-400 font-bold' : ''}>
+                  {copiedCode === 'hero-react' ? 'Copied!' : 'React'}
+                </span>
+              </button>
+
+              <button
+                onClick={() => copyToClipboard(svgSnippet, 'hero-svg', 'SVG markup')}
+                title="Copy Raw SVG"
+                className="px-2.5 py-1 text-xs font-semibold rounded bg-[var(--bg-sidebar)] border border-[var(--border-dev)] text-[var(--text-primary)] hover:border-cyan-500 flex items-center gap-1 transition-colors cursor-pointer"
+              >
+                {copiedCode === 'hero-svg' ? <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500" /> : <Box className="w-3.5 h-3.5 text-rose-500" />}
+                <span className={copiedCode === 'hero-svg' ? 'text-emerald-600 dark:text-emerald-400 font-bold' : ''}>
+                  {copiedCode === 'hero-svg' ? 'Copied!' : 'SVG'}
+                </span>
+              </button>
+
+              <button
+                onClick={() => copyToClipboard(htmlImgSnippet, 'hero-img', `<img> tag`)}
+                title="Copy HTML <img> tag"
+                className="px-2.5 py-1 text-xs font-semibold rounded bg-[var(--bg-sidebar)] border border-[var(--border-dev)] text-[var(--text-primary)] hover:border-cyan-500 flex items-center gap-1 transition-colors cursor-pointer"
+              >
+                {copiedCode === 'hero-img' ? <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500" /> : <ImageIcon className="w-3.5 h-3.5 text-amber-500" />}
+                <span className={copiedCode === 'hero-img' ? 'text-emerald-600 dark:text-emerald-400 font-bold' : ''}>
+                  {copiedCode === 'hero-img' ? 'Copied!' : 'HTML'}
+                </span>
+              </button>
+
+              <button
+                onClick={() => copyToClipboard(shareUrl, 'hero-share', shareUrl)}
+                title="Copy direct link to this icon"
+                className="px-2.5 py-1 text-xs font-semibold rounded bg-[var(--bg-sidebar)] border border-[var(--border-dev)] text-[var(--text-primary)] hover:border-cyan-500 flex items-center gap-1 transition-colors cursor-pointer"
+              >
+                {copiedCode === 'hero-share' ? <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500" /> : <Share2 className="w-3.5 h-3.5 text-violet-500" />}
+                <span className={copiedCode === 'hero-share' ? 'text-emerald-600 dark:text-emerald-400 font-bold' : ''}>
+                  {copiedCode === 'hero-share' ? 'Copied!' : 'Link'}
+                </span>
+              </button>
+
+              <a
+                href={getSvgUrl(activeIcon.prefix, activeIcon.name)}
+                target="_blank"
+                download={`${activeIcon.name}.svg`}
+                className="px-2.5 py-1 rounded bg-cyan-500 text-white text-xs font-bold hover:bg-cyan-600 flex items-center gap-1 transition-colors shadow-sm"
+              >
+                <Download className="w-3.5 h-3.5" />
+                <span>SVG</span>
+              </a>
+            </div>
+          </div>
+
+          {/* SVG Canvas Sliders & Style Adjusters */}
+          <div className="flex flex-wrap items-center justify-between gap-3 text-xs pt-1">
             <div className="flex flex-wrap items-center gap-3">
               {/* Size Slider */}
               <div className="flex items-center gap-1.5 bg-[var(--bg-sidebar)] px-2 py-1 rounded border border-[var(--border-dev)]">
@@ -501,29 +630,8 @@ export function MyComponent() {
               </div>
             </div>
 
-            {/* Quick Copy Snippets */}
-            <div className="flex items-center gap-1">
-              <button
-                onClick={() => copyToClipboard(reactSnippet, 'react-copy', `<Icon icon="${activeIcon.fullKey}" />`)}
-                title="Copy React snippet"
-                className="px-2 py-1 text-xs font-semibold rounded bg-[var(--bg-sidebar)] border border-[var(--border-dev)] text-[var(--text-primary)] hover:border-cyan-500 flex items-center gap-1 transition-colors cursor-pointer"
-              >
-                {copiedCode === 'react-copy' ? <CheckCircle2 className="w-3 h-3 text-emerald-500" /> : <Code2 className="w-3 h-3 text-cyan-500" />}
-                <span className={copiedCode === 'react-copy' ? 'text-emerald-600 dark:text-emerald-400 font-bold' : ''}>
-                  {copiedCode === 'react-copy' ? 'Copied!' : 'React'}
-                </span>
-              </button>
-
-              <button
-                onClick={() => copyToClipboard(svgSnippet, 'svg-copy', 'SVG markup')}
-                title="Copy SVG markup"
-                className="px-2 py-1 text-xs font-semibold rounded bg-[var(--bg-sidebar)] border border-[var(--border-dev)] text-[var(--text-primary)] hover:border-cyan-500 flex items-center gap-1 transition-colors cursor-pointer"
-              >
-                {copiedCode === 'svg-copy' ? <CheckCircle2 className="w-3 h-3 text-emerald-500" /> : <Box className="w-3 h-3 text-rose-500" />}
-                <span className={copiedCode === 'svg-copy' ? 'text-emerald-600 dark:text-emerald-400 font-bold' : ''}>
-                  {copiedCode === 'svg-copy' ? 'Copied!' : 'SVG'}
-                </span>
-              </button>
+            <div className="text-[10px] text-[var(--text-muted)] font-mono">
+              Direct Link: <code className="text-cyan-500 font-bold">/icons#{activeIcon.fullKey}</code>
             </div>
           </div>
         </div>
@@ -572,13 +680,13 @@ export function MyComponent() {
                   <button
                     key={item.fullKey}
                     onClick={() => {
-                      setSelectedIconItem(item);
+                      handleSelectIcon(item);
                       copyToClipboard(`<Icon icon="${item.fullKey}" />`, `icon-${item.fullKey}`, item.fullKey);
                     }}
-                    title={`Click to copy <Icon icon="${item.fullKey}" />`}
+                    title={`Click to inspect & copy <Icon icon="${item.fullKey}" />`}
                     className={`flex flex-col items-center justify-center p-3 rounded-lg border transition-all cursor-pointer group ${
                       isSelected
-                        ? 'bg-cyan-500/15 border-cyan-500 shadow-sm ring-1 ring-cyan-500'
+                        ? 'bg-cyan-500/15 border-cyan-500 shadow-sm ring-2 ring-cyan-500'
                         : 'bg-[var(--bg-panel)] border-[var(--border-dev)] hover:border-cyan-500/40 hover:bg-[var(--bg-sidebar)]'
                     }`}
                   >
@@ -602,7 +710,7 @@ export function MyComponent() {
                       className={`text-[10px] font-mono truncate max-w-full text-center px-1 py-0.5 rounded transition-colors ${
                         isCopied 
                           ? 'bg-emerald-500 text-white font-bold shadow-sm' 
-                          : 'text-[var(--text-secondary)] group-hover:text-[var(--text-primary)]'
+                          : (isSelected ? 'text-cyan-500 font-bold' : 'text-[var(--text-secondary)] group-hover:text-[var(--text-primary)]')
                       }`}
                     >
                       {isCopied ? 'Copied!' : item.name}
