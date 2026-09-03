@@ -127,23 +127,13 @@ export function IconsClient() {
     setIsLoadingLibrary(true);
     setDisplayLimit(144);
 
-    const initialSamples = activeCollection.samples || ['home', 'user', 'settings', 'search', 'bell', 'check', 'mail'];
-    
     // Check if an initial URL hash was requested for this collection on load/refresh
     const requested = requestedHashIconRef.current;
     if (requested && requested.prefix === activeCollection.prefix) {
-      const reorderedSamples = [requested.name, ...initialSamples.filter(s => s !== requested.name)];
-      setLoadedIcons(reorderedSamples);
+      setLoadedIcons([requested.name]);
       setSelectedIconItem(requested);
     } else {
-      setLoadedIcons(initialSamples);
-      if (!selectedIconItem || selectedIconItem.prefix !== activeCollection.prefix) {
-        setSelectedIconItem({
-          fullKey: `${activeCollection.prefix}:${initialSamples[0] || 'icon'}`,
-          prefix: activeCollection.prefix,
-          name: initialSamples[0] || 'icon'
-        });
-      }
+      setLoadedIcons([]);
     }
 
     fetch(`https://api.iconify.design/collection?prefix=${activeCollection.prefix}`)
@@ -169,6 +159,13 @@ export function IconsClient() {
               requestedHashIconRef.current = null;
             }
             setLoadedIcons(unique);
+            if (!selectedIconItem || selectedIconItem.prefix !== activeCollection.prefix) {
+              setSelectedIconItem({
+                fullKey: `${activeCollection.prefix}:${unique[0]}`,
+                prefix: activeCollection.prefix,
+                name: unique[0]
+              });
+            }
           }
         }
       })
@@ -688,10 +685,27 @@ export function MyComponent() {
 
           {/* Actual SVG Icon Grid */}
           <div className="flex-1 overflow-y-auto p-4 bg-[var(--bg-panel-subtle)]">
-            <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-3">
-              {displayedItems.map(item => {
-                const isSelected = activeIcon.fullKey === item.fullKey;
-                const isCopied = copiedCode === `icon-${item.fullKey}`;
+            {isLoadingLibrary && displayedItems.length === 0 ? (
+              <div className="flex flex-col items-center justify-center py-12 gap-3">
+                <Loader2 className="w-6 h-6 text-cyan-500 animate-spin" />
+                <span className="text-xs font-mono text-[var(--text-muted)] animate-pulse">
+                  Loading {activeCollection.name} icons...
+                </span>
+                <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-3 w-full mt-4 opacity-40 pointer-events-none">
+                  {Array.from({ length: 24 }).map((_, i) => (
+                    <div key={i} className="h-24 rounded-lg bg-[var(--bg-panel)] border border-[var(--border-dev)] animate-pulse" />
+                  ))}
+                </div>
+              </div>
+            ) : displayedItems.length === 0 ? (
+              <div className="flex flex-col items-center justify-center py-20 text-xs text-[var(--text-muted)] font-mono">
+                No icons found matching your search.
+              </div>
+            ) : (
+              <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-3">
+                {displayedItems.map(item => {
+                  const isSelected = activeIcon.fullKey === item.fullKey;
+                  const isCopied = copiedCode === `icon-${item.fullKey}`;
 
                 return (
                   <button
@@ -743,16 +757,17 @@ export function MyComponent() {
                 );
               })}
             </div>
+          )}
 
-            {/* Infinite Scroll Sentinel */}
-            {displayedItems.length < totalCount && (
-              <div ref={sentinelRef} className="py-6 text-center text-xs text-[var(--text-muted)] flex items-center justify-center gap-2">
-                <Loader2 className="w-4 h-4 text-cyan-500 animate-spin" />
-                <span>Loading more vector icons...</span>
-              </div>
-            )}
-          </div>
+          {/* Infinite Scroll Sentinel */}
+          {displayedItems.length < totalCount && (
+            <div ref={sentinelRef} className="py-6 text-center text-xs text-[var(--text-muted)] flex items-center justify-center gap-2">
+              <Loader2 className="w-4 h-4 text-cyan-500 animate-spin" />
+              <span>Loading more vector icons...</span>
+            </div>
+          )}
         </div>
+      </div>
       </div>
     </div>
   );

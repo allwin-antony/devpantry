@@ -66,16 +66,13 @@ export function IconDetailClient({ collection }: { collection: IconCollectionIte
     let isCancelled = false;
     setIsLoading(true);
     setDisplayLimit(144);
-    const initialSamples = collection.samples || ['home', 'user', 'settings', 'search', 'bell', 'check', 'mail'];
     
     const reqIcon = requestedHashRef.current;
     if (reqIcon) {
-      const ordered = [reqIcon, ...initialSamples.filter(s => s !== reqIcon)];
-      setLoadedIcons(ordered);
+      setLoadedIcons([reqIcon]);
       setSelectedIcon(reqIcon);
     } else {
-      setLoadedIcons(initialSamples);
-      setSelectedIcon(initialSamples[0] || 'icon');
+      setLoadedIcons([]);
     }
 
     fetch(`https://api.iconify.design/collection?prefix=${collection.prefix}`)
@@ -104,6 +101,9 @@ export function IconDetailClient({ collection }: { collection: IconCollectionIte
               requestedHashRef.current = null;
             }
             setLoadedIcons(unique);
+            if (!selectedIcon || selectedIcon === 'icon') {
+              setSelectedIcon(unique[0] || 'icon');
+            }
           }
         }
       })
@@ -364,10 +364,23 @@ export function Example() {
         </div>
 
         {/* Icon Grid */}
-        <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-3 max-h-[500px] overflow-y-auto pr-1">
-          {visibleIcons.map(name => {
-            const isSelected = selectedIcon === name;
-            const isCopied = copiedCode === `grid-${name}`;
+        {isLoading && visibleIcons.length === 0 ? (
+          <div className="flex flex-col items-center justify-center py-12 gap-3">
+            <Loader2 className="w-6 h-6 text-cyan-500 animate-spin" />
+            <span className="text-xs font-mono text-[var(--text-muted)] animate-pulse">
+              Loading {collection.name} icons...
+            </span>
+            <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-3 w-full mt-4 opacity-40 pointer-events-none">
+              {Array.from({ length: 24 }).map((_, i) => (
+                <div key={i} className="h-24 rounded-lg bg-[var(--bg-panel-subtle)] border border-[var(--border-dev-subtle)] animate-pulse" />
+              ))}
+            </div>
+          </div>
+        ) : (
+          <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-3 max-h-[500px] overflow-y-auto pr-1">
+            {visibleIcons.map(name => {
+              const isSelected = selectedIcon === name;
+              const isCopied = copiedCode === `grid-${name}`;
             return (
               <button
                 key={name}
@@ -416,6 +429,7 @@ export function Example() {
             </div>
           )}
         </div>
+      )}
       </section>
     </div>
   );

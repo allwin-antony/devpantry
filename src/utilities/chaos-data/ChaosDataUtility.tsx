@@ -9,6 +9,11 @@ export const ChaosDataUtility: React.FC = () => {
   const [viewMode, setViewMode] = useState<'table' | 'json' | 'typescript' | 'zod' | 'csv'>('table');
   const [copied, setCopied] = useState<boolean>(false);
   const [seed, setSeed] = useState<number>(0);
+  const [mounted, setMounted] = useState<boolean>(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -26,8 +31,11 @@ export const ChaosDataUtility: React.FC = () => {
 
   const generatedData = useMemo(() => {
     void seed;
+    if (!mounted) {
+      return selectedPreset.generate(count, 0);
+    }
     return selectedPreset.generate(count, entropy);
-  }, [selectedPreset, count, entropy, seed]);
+  }, [selectedPreset, count, entropy, seed, mounted]);
 
   const currentExportFormat = viewMode === 'table' ? 'json' : viewMode;
 
@@ -179,10 +187,10 @@ export const ChaosDataUtility: React.FC = () => {
           ))}
         </div>
 
-        <div className="flex items-center gap-3 text-[var(--text-muted)] text-[11px]">
+        <div className="flex items-center gap-3 text-[var(--text-muted)] text-[11px]" suppressHydrationWarning>
           <span>schema: <strong className="text-[var(--text-primary)]">{selectedPreset.id}</strong></span>
           <span>columns: <strong className="text-[var(--text-primary)]">{columns.length}</strong></span>
-          <span>size: <strong className="text-cyan-500">{(payloadByteSize / 1024).toFixed(1)} KB</strong></span>
+          <span>size: <strong className="text-cyan-500" suppressHydrationWarning>{(payloadByteSize / 1024).toFixed(1)} KB</strong></span>
         </div>
       </div>
 

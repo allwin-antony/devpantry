@@ -24,33 +24,33 @@ const STORAGE_KEY = 'failstate-custom-schema';
 
 export const SchemaBuilderUtility: React.FC = () => {
   // Load saved fields or default to User Profile template
-  const [fields, setFields] = useState<SchemaFieldConfig[]>(() => {
-    try {
-      const saved = localStorage.getItem(STORAGE_KEY);
-      if (saved) {
-        const parsed = JSON.parse(saved);
-        if (Array.isArray(parsed) && parsed.length > 0) return parsed;
-      }
-    } catch {
-      // Fallback
-    }
-    return DOMAIN_TEMPLATES[0].fields;
-  });
-
+  const [fields, setFields] = useState<SchemaFieldConfig[]>(DOMAIN_TEMPLATES[0].fields);
   const [count, setCount] = useState<number>(25);
   const [globalEntropy, setGlobalEntropy] = useState<number>(65);
   const [viewMode, setViewMode] = useState<'table' | 'json' | 'typescript' | 'zod' | 'csv' | 'sql'>('table');
   const [copied, setCopied] = useState<boolean>(false);
   const [seed, setSeed] = useState<number>(0);
+  const [mounted, setMounted] = useState<boolean>(false);
+
+  // Load from localStorage on mount
+  useEffect(() => {
+    setMounted(true);
+    try {
+      const saved = localStorage.getItem(STORAGE_KEY);
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (Array.isArray(parsed) && parsed.length > 0) setFields(parsed);
+      }
+    } catch {}
+  }, []);
 
   // Persist fields in localStorage
   useEffect(() => {
+    if (!mounted) return;
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(fields));
-    } catch {
-      // Ignore quota errors
-    }
-  }, [fields]);
+    } catch {}
+  }, [fields, mounted]);
 
   // Global hotkey: R to re-roll
   useEffect(() => {
@@ -66,8 +66,11 @@ export const SchemaBuilderUtility: React.FC = () => {
   // Generate records
   const generatedData = useMemo(() => {
     void seed;
+    if (!mounted) {
+      return generateFromSchema(fields, count, 0);
+    }
     return generateFromSchema(fields, count, globalEntropy);
-  }, [fields, count, globalEntropy, seed]);
+  }, [fields, count, globalEntropy, seed, mounted]);
 
   const currentExportFormat = viewMode === 'table' ? 'json' : viewMode;
 
@@ -377,9 +380,9 @@ export const SchemaBuilderUtility: React.FC = () => {
               ))}
             </div>
 
-            <div className="flex items-center gap-3 text-[var(--text-muted)] text-[11px]">
+            <div className="flex items-center gap-3 text-[var(--text-muted)] text-[11px]" suppressHydrationWarning>
               <span>cols: <strong className="text-[var(--text-primary)]">{columns.length}</strong></span>
-              <span>size: <strong className="text-cyan-500">{(payloadByteSize / 1024).toFixed(1)} KB</strong></span>
+              <span>size: <strong className="text-cyan-500" suppressHydrationWarning>{(payloadByteSize / 1024).toFixed(1)} KB</strong></span>
             </div>
           </div>
 

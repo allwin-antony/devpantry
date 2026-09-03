@@ -12,10 +12,10 @@ export const Header: React.FC = () => {
 
   const navItems = [
     { href: '/', label: 'Overview', icon: Terminal },
-    { href: '/chaos-data', label: 'Chaos Data', icon: Flame, badge: 'Schema GUI' },
-    { href: '/chaos-templates', label: 'Chaos Templates', icon: Radio, badge: '17 APIs' },
     { href: '/fonts', label: 'Fonts Studio', icon: Type, badge: '2,180+' },
     { href: '/icons', label: 'Vector Icons', icon: Box, badge: '353K+' },
+    { href: '/chaos-data', label: 'Chaos Data', icon: Flame, badge: 'Schema GUI' },
+    { href: '/chaos-templates', label: 'Chaos Templates', icon: Radio, badge: '17 APIs' },
   ];
 
   return (

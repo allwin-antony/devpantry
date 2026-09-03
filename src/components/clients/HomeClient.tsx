@@ -2,17 +2,16 @@
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { 
-  Flame, 
-  Type, 
-  Box, 
-  Radio, 
-  ArrowRight, 
-  Code2, 
+import {
+  Flame,
+  Type,
+  Box,
+  Radio,
+  ArrowRight,
+  Code2,
   Search,
   Zap,
   Check,
-  Github,
   ShieldCheck
 } from 'lucide-react';
 
@@ -68,7 +67,7 @@ export function HomeClient() {
             }));
           }
         })
-        .catch(() => {})
+        .catch(() => { })
         .finally(() => setIsLoadingIcons(false));
     }, 300);
     return () => clearTimeout(timer);
@@ -81,24 +80,6 @@ export function HomeClient() {
   };
 
   const tools = [
-    {
-      icon: Flame,
-      iconColor: 'text-rose-500',
-      title: 'Chaos Data Studio',
-      desc: 'Generate high-entropy test datasets with 13+ field types, BLNS attack payloads, and per-column chaos sliders. Export to JSON, CSV, Zod & SQL.',
-      href: '/chaos-data',
-      badge: 'Schema GUI',
-      badgeColor: 'text-rose-600 dark:text-rose-400 bg-rose-500/10 border-rose-500/20',
-    },
-    {
-      icon: Radio,
-      iconColor: 'text-violet-500',
-      title: 'API Chaos Templates',
-      desc: 'Real-world API schemas for Stripe, Google SSO, GitHub OAuth, Supabase Auth, Resend, and Twilio — injected with dirty mock payloads.',
-      href: '/chaos-templates',
-      badge: '17 APIs',
-      badgeColor: 'text-violet-600 dark:text-violet-400 bg-violet-500/10 border-violet-500/20',
-    },
     {
       icon: Type,
       iconColor: 'text-amber-500',
@@ -117,6 +98,24 @@ export function HomeClient() {
       badge: '353K+ Icons',
       badgeColor: 'text-cyan-600 dark:text-cyan-400 bg-cyan-500/10 border-cyan-500/20',
     },
+    {
+      icon: Flame,
+      iconColor: 'text-rose-500',
+      title: 'Chaos Data Studio',
+      desc: 'Generate high-entropy test datasets with 13+ field types, BLNS attack payloads, and per-column chaos sliders. Export to JSON, CSV, Zod & SQL.',
+      href: '/chaos-data',
+      badge: 'Schema GUI',
+      badgeColor: 'text-rose-600 dark:text-rose-400 bg-rose-500/10 border-rose-500/20',
+    },
+    {
+      icon: Radio,
+      iconColor: 'text-violet-500',
+      title: 'API Chaos Templates',
+      desc: 'Real-world API schemas for Stripe, Google SSO, GitHub OAuth, Supabase Auth, Resend, and Twilio — injected with dirty mock payloads.',
+      href: '/chaos-templates',
+      badge: '17 APIs',
+      badgeColor: 'text-violet-600 dark:text-violet-400 bg-violet-500/10 border-violet-500/20',
+    }
   ];
 
   return (
@@ -149,7 +148,7 @@ export function HomeClient() {
 
           {/* Tagline */}
           <p className="text-base sm:text-lg text-[var(--text-muted)] font-sans max-w-xl leading-relaxed">
-            Made for developers who build resilient frontends.
+            Made for developers who build resilient.
           </p>
 
           {/* CTAs */}
@@ -200,22 +199,20 @@ export function HomeClient() {
             <div className="flex items-center gap-1 bg-[var(--bg-sidebar)] p-0.5 rounded-lg border border-[var(--border-dev)] text-xs">
               <button
                 onClick={() => setActiveTab('fonts')}
-                className={`px-3 py-1.5 rounded-md text-[11px] font-bold flex items-center gap-1.5 transition-colors cursor-pointer ${
-                  activeTab === 'fonts'
+                className={`px-3 py-1.5 rounded-md text-[11px] font-bold flex items-center gap-1.5 transition-colors cursor-pointer ${activeTab === 'fonts'
                     ? 'bg-rose-500 text-white shadow-sm'
                     : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
-                }`}
+                  }`}
               >
                 <Type className="w-3.5 h-3.5" />
                 Try Fonts
               </button>
               <button
                 onClick={() => setActiveTab('icons')}
-                className={`px-3 py-1.5 rounded-md text-[11px] font-bold flex items-center gap-1.5 transition-colors cursor-pointer ${
-                  activeTab === 'icons'
+                className={`px-3 py-1.5 rounded-md text-[11px] font-bold flex items-center gap-1.5 transition-colors cursor-pointer ${activeTab === 'icons'
                     ? 'bg-cyan-500 text-white shadow-sm'
                     : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
-                }`}
+                  }`}
               >
                 <Box className="w-3.5 h-3.5" />
                 Try Icons
@@ -319,11 +316,10 @@ export function HomeClient() {
                         className="pointer-events-none"
                       />
                     </div>
-                    <span className={`text-[10px] font-mono truncate max-w-full text-center ${
-                      copiedId === `icon-${item.fullKey}`
+                    <span className={`text-[10px] font-mono truncate max-w-full text-center ${copiedId === `icon-${item.fullKey}`
                         ? 'text-emerald-500 font-bold'
                         : 'text-[var(--text-muted)] group-hover:text-[var(--text-primary)]'
-                    }`}>
+                      }`}>
                       {copiedId === `icon-${item.fullKey}` ? 'Copied!' : item.name}
                     </span>
                   </button>
