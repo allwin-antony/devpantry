@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useState, useMemo, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { type IconCollectionItem } from '@/lib/datasetLoader';
 import { 
@@ -16,7 +16,7 @@ import {
   Sparkles,
   ShieldCheck,
   Download,
-  Plus
+  Loader2
 } from 'lucide-react';
 
 export function IconDetailClient({ collection }: { collection: IconCollectionItem }) {
@@ -30,6 +30,7 @@ export function IconDetailClient({ collection }: { collection: IconCollectionIte
   const [selectedIcon, setSelectedIcon] = useState<string>('');
   const [displayLimit, setDisplayLimit] = useState<number>(144);
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const sentinelRef = useRef<HTMLDivElement | null>(null);
 
   const colorPresets = [
     { name: 'Cyan', hex: '#06b6d4' },
@@ -93,6 +94,25 @@ export function IconDetailClient({ collection }: { collection: IconCollectionIte
   const visibleIcons = useMemo(() => {
     return allFilteredIcons.slice(0, displayLimit);
   }, [allFilteredIcons, displayLimit]);
+
+  // Infinite scroll observer
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      entries => {
+        if (entries[0].isIntersecting && displayLimit < allFilteredIcons.length) {
+          setDisplayLimit(prev => Math.min(prev + 96, allFilteredIcons.length));
+        }
+      },
+      { rootMargin: '400px' }
+    );
+
+    const el = sentinelRef.current;
+    if (el) observer.observe(el);
+
+    return () => {
+      if (el) observer.unobserve(el);
+    };
+  }, [displayLimit, allFilteredIcons.length]);
 
   const copyToClipboard = (text: string, id: string) => {
     navigator.clipboard.writeText(text);
@@ -280,7 +300,7 @@ export function Example() {
         </div>
       </section>
 
-      {/* Full Library Grid with Search */}
+      {/* Full Library Grid with Search & Infinite Scroll */}
       <section className="bg-[var(--bg-panel)] border border-[var(--border-dev)] rounded-xl p-5 shadow-sm transition-colors flex flex-col gap-4">
         <div className="flex flex-wrap items-center justify-between gap-4 pb-3 border-b border-[var(--border-dev)]">
           <div className="flex items-center gap-2 flex-1 max-w-sm">
@@ -295,7 +315,7 @@ export function Example() {
           </div>
 
           <span className="text-xs text-[var(--text-muted)]">
-            Showing <strong>{visibleIcons.length}</strong> of <strong>{allFilteredIcons.length}</strong> icons
+            Showing <strong>{visibleIcons.length}</strong> of <strong>{allFilteredIcons.length}</strong> icons • Infinite scroll
           </span>
         </div>
 
@@ -336,20 +356,15 @@ export function Example() {
               </button>
             );
           })}
-        </div>
 
-        {/* Load More Button */}
-        {allFilteredIcons.length > visibleIcons.length && (
-          <div className="pt-2 text-center">
-            <button
-              onClick={() => setDisplayLimit(l => l + 144)}
-              className="px-4 py-2 rounded-lg bg-[var(--bg-panel)] border border-[var(--border-dev)] text-xs font-bold text-[var(--text-primary)] hover:border-cyan-500 hover:text-cyan-500 transition-colors inline-flex items-center gap-2 cursor-pointer shadow-sm"
-            >
-              <Plus className="w-3.5 h-3.5" />
-              <span>Load More Icons ({allFilteredIcons.length - visibleIcons.length} remaining)</span>
-            </button>
-          </div>
-        )}
+          {/* Sentinel inside scroll container */}
+          {visibleIcons.length < allFilteredIcons.length && (
+            <div ref={sentinelRef} className="col-span-full py-4 text-center text-xs text-[var(--text-muted)] flex items-center justify-center gap-2">
+              <Loader2 className="w-4 h-4 text-cyan-500 animate-spin" />
+              <span>Loading more icons...</span>
+            </div>
+          )}
+        </div>
       </section>
     </div>
   );

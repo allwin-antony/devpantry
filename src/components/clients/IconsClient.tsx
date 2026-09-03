@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useState, useMemo, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { getAllIconCollections, getAllIconLibraries, type IconCollectionItem } from '@/lib/datasetLoader';
 import { 
@@ -19,7 +19,7 @@ import {
   Terminal,
   Grid,
   Zap,
-  Plus
+  Loader2
 } from 'lucide-react';
 
 export function IconsClient() {
@@ -42,6 +42,7 @@ export function IconsClient() {
   const [isLoadingIcons, setIsLoadingIcons] = useState<boolean>(false);
   const [displayLimit, setDisplayLimit] = useState<number>(144);
   const [selectedIconName, setSelectedIconName] = useState<string | null>(null);
+  const sentinelRef = useRef<HTMLDivElement | null>(null);
 
   const colorPresets = [
     { name: 'Rose', hex: '#f43f5e' },
@@ -115,9 +116,7 @@ export function IconsClient() {
           }
         }
       })
-      .catch(() => {
-        // Fallback remains the sample icons
-      })
+      .catch(() => {})
       .finally(() => {
         if (!isCancelled) setIsLoadingIcons(false);
       });
@@ -137,6 +136,25 @@ export function IconsClient() {
   const visibleIcons = useMemo(() => {
     return allFilteredIcons.slice(0, displayLimit);
   }, [allFilteredIcons, displayLimit]);
+
+  // Infinite scroll intersection observer
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      entries => {
+        if (entries[0].isIntersecting && displayLimit < allFilteredIcons.length) {
+          setDisplayLimit(prev => Math.min(prev + 96, allFilteredIcons.length));
+        }
+      },
+      { rootMargin: '400px' }
+    );
+
+    const el = sentinelRef.current;
+    if (el) observer.observe(el);
+
+    return () => {
+      if (el) observer.unobserve(el);
+    };
+  }, [displayLimit, allFilteredIcons.length]);
 
   const copyToClipboard = (text: string, id: string) => {
     navigator.clipboard.writeText(text);
@@ -256,7 +274,7 @@ export function MyComponent() {
                   {activeCollection.name}
                 </h2>
                 <span className="text-[10px] px-2 py-0.5 rounded font-bold bg-cyan-500/15 text-cyan-600 dark:text-cyan-300 border border-cyan-500/30">
-                  {loadedIcons.length > activeCollection.samples?.length ? loadedIcons.length.toLocaleString() : activeCollection.total_icons.toLocaleString()} icons
+                  {allFilteredIcons.length.toLocaleString()} icons
                 </span>
                 <span className="text-[10px] px-2 py-0.5 rounded font-bold bg-emerald-500/15 text-emerald-600 dark:text-emerald-300 border border-emerald-500/30">
                   {activeCollection.license}
@@ -377,12 +395,12 @@ export function MyComponent() {
             </div>
 
             <div className="text-[11px] text-[var(--text-muted)]">
-              Showing <strong>{visibleIcons.length}</strong> of <strong>{allFilteredIcons.length}</strong> icons • Click any to copy
+              Showing <strong>{visibleIcons.length}</strong> of <strong>{allFilteredIcons.length}</strong> icons • Infinite scroll
             </div>
           </div>
 
           {/* Actual SVG Icon Grid */}
-          <div className="flex-1 overflow-y-auto p-4 bg-[var(--bg-codebox)] flex flex-col justify-between">
+          <div className="flex-1 overflow-y-auto p-4 bg-[var(--bg-codebox)]">
             <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-3">
               {visibleIcons.map(name => {
                 const isSelected = selectedIconName === name;
@@ -423,16 +441,11 @@ export function MyComponent() {
               })}
             </div>
 
-            {/* Load More Button */}
-            {allFilteredIcons.length > visibleIcons.length && (
-              <div className="pt-6 pb-2 text-center">
-                <button
-                  onClick={() => setDisplayLimit(l => l + 144)}
-                  className="px-4 py-2 rounded-lg bg-[var(--bg-panel)] border border-[var(--border-dev)] text-xs font-bold text-[var(--text-primary)] hover:border-cyan-500 hover:text-cyan-500 transition-colors inline-flex items-center gap-2 cursor-pointer shadow-sm"
-                >
-                  <Plus className="w-3.5 h-3.5" />
-                  <span>Load More Icons ({allFilteredIcons.length - visibleIcons.length} remaining)</span>
-                </button>
+            {/* Infinite Scroll Sentinel */}
+            {visibleIcons.length < allFilteredIcons.length && (
+              <div ref={sentinelRef} className="py-6 text-center text-xs text-[var(--text-muted)] flex items-center justify-center gap-2">
+                <Loader2 className="w-4 h-4 text-cyan-500 animate-spin" />
+                <span>Loading more vector icons...</span>
               </div>
             )}
           </div>

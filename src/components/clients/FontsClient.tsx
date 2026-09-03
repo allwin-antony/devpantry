@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useState, useMemo, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { getAllFonts, getFontCdnStylesheet, type FontItem } from '@/lib/datasetLoader';
 import { 
@@ -14,8 +14,7 @@ import {
   ArrowRight,
   Sparkles,
   Sliders,
-  ChevronLeft,
-  ChevronRight
+  Loader2
 } from 'lucide-react';
 
 export function FontsClient() {
@@ -25,8 +24,8 @@ export function FontsClient() {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string>('All');
   const [selectedLicense, setSelectedLicense] = useState<string>('All');
-  const [currentPage, setCurrentPage] = useState<number>(1);
-  const pageSize = 48; // Fast, responsive grid with pagination
+  const [visibleCount, setVisibleCount] = useState<number>(60);
+  const sentinelRef = useRef<HTMLDivElement | null>(null);
 
   // Interactive Typography Tester State
   const [activeFont, setActiveFont] = useState<FontItem>(() => allFonts[0]);
@@ -43,7 +42,7 @@ export function FontsClient() {
   // Available categories
   const categories = ['All', 'Sans', 'Serif', 'Display', 'Monospace'];
 
-  // Dynamically inject stylesheet for the active font so it actually loads in the browser
+  // Dynamically inject stylesheet for the active font
   useEffect(() => {
     if (!activeFont) return;
     const url = activeFont.cdn_stylesheet_url || getFontCdnStylesheet(activeFont);
@@ -82,21 +81,38 @@ export function FontsClient() {
     });
   }, [allFonts, searchQuery, selectedCategory, selectedLicense]);
 
-  // Reset page on search or filter change
+  // Reset visible count on filter/search change
   useEffect(() => {
-    setCurrentPage(1);
+    setVisibleCount(60);
   }, [searchQuery, selectedCategory, selectedLicense]);
 
-  // Pagination slice
-  const totalPages = Math.ceil(filteredFonts.length / pageSize);
-  const paginatedFonts = useMemo(() => {
-    const start = (currentPage - 1) * pageSize;
-    return filteredFonts.slice(start, start + pageSize);
-  }, [filteredFonts, currentPage, pageSize]);
+  // Sliced fonts for infinite scroll
+  const visibleFonts = useMemo(() => {
+    return filteredFonts.slice(0, visibleCount);
+  }, [filteredFonts, visibleCount]);
 
-  // Also dynamically load stylesheets for visible cards on current page (up to 48)
+  // Infinite scroll intersection observer
   useEffect(() => {
-    paginatedFonts.slice(0, 16).forEach(f => {
+    const observer = new IntersectionObserver(
+      entries => {
+        if (entries[0].isIntersecting && visibleCount < filteredFonts.length) {
+          setVisibleCount(prev => Math.min(prev + 48, filteredFonts.length));
+        }
+      },
+      { rootMargin: '400px' }
+    );
+
+    const el = sentinelRef.current;
+    if (el) observer.observe(el);
+
+    return () => {
+      if (el) observer.unobserve(el);
+    };
+  }, [visibleCount, filteredFonts.length]);
+
+  // Dynamically load stylesheets for newly visible cards in batches
+  useEffect(() => {
+    visibleFonts.slice(0, 32).forEach(f => {
       const url = f.cdn_stylesheet_url || getFontCdnStylesheet(f);
       if (!document.querySelector(`link[data-font-slug="${f.slug}"]`)) {
         const link = document.createElement('link');
@@ -106,7 +122,7 @@ export function FontsClient() {
         document.head.appendChild(link);
       }
     });
-  }, [paginatedFonts]);
+  }, [visibleFonts]);
 
   const copyToClipboard = (text: string, id: string) => {
     navigator.clipboard.writeText(text);
@@ -262,7 +278,7 @@ font-family: '${activeFont.name}', ${activeFont.category === 'Serif' ? 'serif' :
         </div>
       </section>
 
-      {/* Catalog Search & Category Filter */}
+      {/* Catalog Search & Category Filter Bar */}
       <div className="bg-[var(--bg-panel)] border border-[var(--border-dev)] rounded-lg px-3 py-2 flex flex-wrap items-center justify-between gap-3 shrink-0 shadow-sm transition-colors">
         {/* Search Bar */}
         <div className="flex items-center gap-2 flex-1 max-w-sm">
@@ -294,7 +310,7 @@ font-family: '${activeFont.name}', ${activeFont.category === 'Serif' ? 'serif' :
           ))}
         </div>
 
-        {/* License Filter & Pagination */}
+        {/* License Filter & Total Counter */}
         <div className="flex items-center gap-3 text-xs">
           <select
             value={selectedLicense}
@@ -307,38 +323,15 @@ font-family: '${activeFont.name}', ${activeFont.category === 'Serif' ? 'serif' :
           </select>
 
           <span className="text-[11px] text-[var(--text-muted)] font-mono">
-            <strong>{filteredFonts.length}</strong> fonts
+            Showing <strong>{visibleFonts.length}</strong> of <strong>{filteredFonts.length}</strong> fonts
           </span>
-
-          {/* Pagination Controls */}
-          {totalPages > 1 && (
-            <div className="flex items-center gap-1 bg-[var(--bg-sidebar)] p-0.5 rounded border border-[var(--border-dev)]">
-              <button
-                onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
-                disabled={currentPage === 1}
-                className="p-1 rounded text-[var(--text-secondary)] hover:text-[var(--text-primary)] disabled:opacity-30 cursor-pointer"
-              >
-                <ChevronLeft className="w-3.5 h-3.5" />
-              </button>
-              <span className="text-[10px] px-1 font-bold text-[var(--text-primary)]">
-                {currentPage} / {totalPages}
-              </span>
-              <button
-                onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
-                disabled={currentPage === totalPages}
-                className="p-1 rounded text-[var(--text-secondary)] hover:text-[var(--text-primary)] disabled:opacity-30 cursor-pointer"
-              >
-                <ChevronRight className="w-3.5 h-3.5" />
-              </button>
-            </div>
-          )}
         </div>
       </div>
 
-      {/* Fonts Catalog Grid */}
+      {/* Infinite Scrolling Fonts Grid */}
       <div className="flex-1 overflow-y-auto pr-1">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">
-          {paginatedFonts.map(font => {
+          {visibleFonts.map(font => {
             const isSelected = activeFont.slug === font.slug;
             return (
               <div
@@ -371,7 +364,7 @@ font-family: '${activeFont.name}', ${activeFont.category === 'Serif' ? 'serif' :
                     </span>
                   </div>
 
-                  {/* Font Specimen Preview - Shows current sampleText typed in tester! */}
+                  {/* Font Specimen Preview */}
                   <div 
                     style={{ fontFamily: font.css_font_family || `'${font.name}', sans-serif` }}
                     className="p-2.5 rounded bg-[var(--bg-panel-subtle)] border border-[var(--border-dev-subtle)] text-base text-[var(--text-primary)] truncate my-2 select-none leading-normal"
@@ -411,6 +404,14 @@ font-family: '${activeFont.name}', ${activeFont.category === 'Serif' ? 'serif' :
             );
           })}
         </div>
+
+        {/* Infinite Scroll Sentinel */}
+        {visibleFonts.length < filteredFonts.length && (
+          <div ref={sentinelRef} className="py-6 text-center text-xs text-[var(--text-muted)] flex items-center justify-center gap-2">
+            <Loader2 className="w-4 h-4 text-rose-500 animate-spin" />
+            <span>Loading more fonts...</span>
+          </div>
+        )}
       </div>
     </div>
   );
