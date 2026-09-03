@@ -3,7 +3,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Flame, Type, Sparkles, Box, Radio, Sun, Moon, ShieldCheck, Terminal } from 'lucide-react';
+import { Flame, Type, Box, Radio, Sun, Moon, ShieldCheck, Terminal, Sparkles } from 'lucide-react';
 import { useTheme } from './ThemeProvider';
 
 export const Header: React.FC = () => {
@@ -12,14 +12,14 @@ export const Header: React.FC = () => {
 
   const navItems = [
     { href: '/', label: 'Overview', icon: Terminal },
-    { href: '/chaos-data', label: 'Chaos Data', icon: Flame, badge: 'Edge-Case' },
-    { href: '/fonts', label: 'Fonts Studio', icon: Type, badge: '120+' },
-    { href: '/icons', label: 'Vector Icons', icon: Box, badge: '25k+' },
-    { href: '/api-vault', label: 'API Vault', icon: Radio, badge: 'Live SSO' },
+    { href: '/chaos-data', label: 'Chaos Data', icon: Flame, badge: 'Schema GUI' },
+    { href: '/fonts', label: 'Fonts Studio', icon: Type, badge: '2,100+' },
+    { href: '/icons', label: 'Vector Icons', icon: Box, badge: '353K+' },
+    { href: '/chaos-templates', label: 'Chaos Templates', icon: Radio, badge: '17 APIs' },
   ];
 
   return (
-    <header className="w-full h-12 bg-[var(--bg-panel)] border-b border-[var(--border-dev)] px-4 flex items-center justify-between gap-4 select-none shrink-0 z-30 transition-colors shadow-sm">
+    <header className="w-full h-12 bg-[var(--bg-panel)] border-b border-[var(--border-dev)] px-4 flex items-center justify-between gap-4 select-none shrink-0 z-30 transition-colors shadow-sm font-mono">
       {/* Left: Brand */}
       <div className="flex items-center gap-4 shrink-0">
         <Link href="/" className="flex items-center gap-2 group cursor-pointer">
@@ -33,7 +33,7 @@ export const Header: React.FC = () => {
       </div>
 
       {/* Center: Top Navigation Tabs */}
-      <nav className="hidden md:flex items-center bg-[var(--bg-sidebar)] p-1 rounded-lg border border-[var(--border-dev)] font-mono text-xs gap-1">
+      <nav className="hidden md:flex items-center bg-[var(--bg-sidebar)] p-1 rounded-lg border border-[var(--border-dev)] text-xs gap-1">
         {navItems.map(item => {
           const Icon = item.icon;
           const isActive = item.href === '/' ? pathname === '/' : pathname.startsWith(item.href);

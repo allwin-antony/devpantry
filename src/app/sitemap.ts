@@ -1,10 +1,11 @@
 import { MetadataRoute } from 'next';
+import { getAllFontSlugs, getAllIconPrefixes } from '@/lib/datasetLoader';
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = 'https://devplayground.io';
   const now = new Date();
 
-  return [
+  const coreRoutes: MetadataRoute.Sitemap = [
     {
       url: baseUrl,
       lastModified: now,
@@ -20,20 +21,40 @@ export default function sitemap(): MetadataRoute.Sitemap {
     {
       url: `${baseUrl}/fonts`,
       lastModified: now,
-      changeFrequency: 'weekly',
-      priority: 0.9,
+      changeFrequency: 'daily',
+      priority: 0.95,
     },
     {
       url: `${baseUrl}/icons`,
       lastModified: now,
-      changeFrequency: 'weekly',
-      priority: 0.9,
+      changeFrequency: 'daily',
+      priority: 0.95,
     },
     {
-      url: `${baseUrl}/api-vault`,
+      url: `${baseUrl}/chaos-templates`,
       lastModified: now,
       changeFrequency: 'weekly',
       priority: 0.9,
     },
   ];
+
+  // Font detail pages
+  const fontSlugs = getAllFontSlugs();
+  const fontRoutes: MetadataRoute.Sitemap = fontSlugs.map(slug => ({
+    url: `${baseUrl}/fonts/${slug}`,
+    lastModified: now,
+    changeFrequency: 'monthly',
+    priority: 0.8,
+  }));
+
+  // Icon library detail pages
+  const iconPrefixes = getAllIconPrefixes();
+  const iconRoutes: MetadataRoute.Sitemap = iconPrefixes.map(prefix => ({
+    url: `${baseUrl}/icons/${prefix}`,
+    lastModified: now,
+    changeFrequency: 'monthly',
+    priority: 0.8,
+  }));
+
+  return [...coreRoutes, ...fontRoutes, ...iconRoutes];
 }

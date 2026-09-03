@@ -10,14 +10,16 @@ export const StatusBar: React.FC = () => {
   const getRouteLabel = () => {
     if (pathname === '/') return 'command-hub';
     if (pathname.startsWith('/chaos-data')) return 'chaos-synthesizer';
+    if (pathname.startsWith('/fonts/')) return 'font-detail-page';
     if (pathname.startsWith('/fonts')) return 'fonts-studio';
-    if (pathname.startsWith('/icons')) return 'vector-icons';
-    if (pathname.startsWith('/api-vault')) return 'api-vault';
+    if (pathname.startsWith('/icons/')) return 'icon-library-page';
+    if (pathname.startsWith('/icons')) return 'vector-icons-browser';
+    if (pathname.startsWith('/chaos-templates')) return 'chaos-templates';
     return 'playground';
   };
 
   return (
-    <footer className="dev-statusbar w-full px-4 flex items-center justify-between select-none text-[var(--text-muted)] bg-[var(--bg-statusbar)] border-t border-[var(--border-dev)] shrink-0 transition-colors">
+    <footer className="dev-statusbar w-full px-4 flex items-center justify-between select-none text-[var(--text-muted)] bg-[var(--bg-statusbar)] border-t border-[var(--border-dev)] shrink-0 transition-colors font-mono">
       {/* Left indicators */}
       <div className="flex items-center gap-4">
         <div className="flex items-center gap-1.5">
@@ -35,12 +37,12 @@ export const StatusBar: React.FC = () => {
       <div className="flex items-center gap-4">
         <div className="hidden md:flex items-center gap-1 text-[10px]">
           <Cpu className="w-3 h-3 text-cyan-500" />
-          <span>Next.js 16 SSR & SSG</span>
+          <span>Next.js 16 SSG & Turbopack</span>
         </div>
 
         <div className="hidden sm:flex items-center gap-1 text-[10px]">
           <ShieldCheck className="w-3 h-3 text-emerald-500" />
-          <span>No Remote Telemetry</span>
+          <span>100% Client-Side Privacy</span>
         </div>
 
         <div className="flex items-center gap-1.5 text-[10px]">
