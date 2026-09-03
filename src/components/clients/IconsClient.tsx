@@ -22,7 +22,7 @@ import {
   Loader2,
   Globe,
   Filter,
-  Check
+  X
 } from 'lucide-react';
 
 interface ParsedIconItem {
@@ -37,8 +37,10 @@ export function IconsClient() {
 
   const [selectedPrefix, setSelectedPrefix] = useState<string>('lucide');
   const [collectionSearch, setCollectionSearch] = useState<string>('');
-  const [iconSearch, setIconSearch] = useState<string>('');
-  const [searchScope, setSearchScope] = useState<'global' | 'collection'>('global');
+  
+  // Two distinct search queries
+  const [masterSearchQuery, setMasterSearchQuery] = useState<string>('');
+  const [librarySearchQuery, setLibrarySearchQuery] = useState<string>('');
   const [selectedCategory, setSelectedCategory] = useState<string>('All');
   
   // SVG Customizer State
@@ -51,7 +53,8 @@ export function IconsClient() {
   // Loaded icon list for selected collection
   const [loadedIcons, setLoadedIcons] = useState<string[]>([]);
   const [globalResults, setGlobalResults] = useState<ParsedIconItem[]>([]);
-  const [isLoadingIcons, setIsLoadingIcons] = useState<boolean>(false);
+  const [isLoadingLibrary, setIsLoadingLibrary] = useState<boolean>(false);
+  const [isLoadingMaster, setIsLoadingMaster] = useState<boolean>(false);
   const [displayLimit, setDisplayLimit] = useState<number>(144);
   const [selectedIconItem, setSelectedIconItem] = useState<ParsedIconItem | null>(null);
   const sentinelRef = useRef<HTMLDivElement | null>(null);
@@ -79,7 +82,7 @@ export function IconsClient() {
     return ['All', ...Array.from(set).slice(0, 8)];
   }, [allCollections]);
 
-  // Filter collections
+  // Filter collections in sidebar
   const filteredCollections = useMemo(() => {
     return allCollections.filter(c => {
       const q = collectionSearch.toLowerCase();
@@ -89,21 +92,23 @@ export function IconsClient() {
     });
   }, [allCollections, collectionSearch, selectedCategory]);
 
-  // Fetch complete icon list for single collection
+  // 1. Fetch complete icon list for active single collection
   useEffect(() => {
-    if (searchScope === 'global' && iconSearch.trim().length > 1) return;
-
     let isCancelled = false;
-    setIsLoadingIcons(true);
+    setIsLoadingLibrary(true);
     setDisplayLimit(144);
 
     const initialSamples = activeCollection.samples || ['home', 'user', 'settings', 'search', 'bell', 'check', 'mail'];
     setLoadedIcons(initialSamples);
-    setSelectedIconItem({
-      fullKey: `${activeCollection.prefix}:${initialSamples[0] || 'icon'}`,
-      prefix: activeCollection.prefix,
-      name: initialSamples[0] || 'icon'
-    });
+    
+    // Only set default if no master search active
+    if (!masterSearchQuery.trim()) {
+      setSelectedIconItem({
+        fullKey: `${activeCollection.prefix}:${initialSamples[0] || 'icon'}`,
+        prefix: activeCollection.prefix,
+        name: initialSamples[0] || 'icon'
+      });
+    }
 
     fetch(`https://api.iconify.design/collection?prefix=${activeCollection.prefix}`)
       .then(res => res.json())
@@ -121,7 +126,7 @@ export function IconsClient() {
           if (list.length > 0) {
             const unique = Array.from(new Set(list));
             setLoadedIcons(unique);
-            if (unique.length > 0) {
+            if (unique.length > 0 && !masterSearchQuery.trim()) {
               setSelectedIconItem({
                 fullKey: `${activeCollection.prefix}:${unique[0]}`,
                 prefix: activeCollection.prefix,
@@ -133,25 +138,28 @@ export function IconsClient() {
       })
       .catch(() => {})
       .finally(() => {
-        if (!isCancelled) setIsLoadingIcons(false);
+        if (!isCancelled) setIsLoadingLibrary(false);
       });
 
     return () => {
       isCancelled = true;
     };
-  }, [activeCollection, searchScope, iconSearch]);
+  }, [activeCollection, masterSearchQuery]);
 
-  // Global Master Search across ALL 353,000+ icons
+  // 2. Global Master Search across ALL 353,000+ icons
   useEffect(() => {
-    if (searchScope !== 'global' || !iconSearch.trim() || iconSearch.trim().length < 2) {
+    if (!masterSearchQuery.trim() || masterSearchQuery.trim().length < 2) {
       setGlobalResults([]);
+      setIsLoadingMaster(false);
       return;
     }
 
     let isCancelled = false;
-    setIsLoadingIcons(true);
+    setIsLoadingMaster(true);
+    setDisplayLimit(144);
+
     const timeout = setTimeout(() => {
-      fetch(`https://api.iconify.design/search?query=${encodeURIComponent(iconSearch.trim())}&limit=160`)
+      fetch(`https://api.iconify.design/search?query=${encodeURIComponent(masterSearchQuery.trim())}&limit=160`)
         .then(res => res.json())
         .then(data => {
           if (!isCancelled && data && Array.isArray(data.icons)) {
@@ -169,7 +177,7 @@ export function IconsClient() {
         })
         .catch(() => {})
         .finally(() => {
-          if (!isCancelled) setIsLoadingIcons(false);
+          if (!isCancelled) setIsLoadingMaster(false);
         });
     }, 250);
 
@@ -177,29 +185,31 @@ export function IconsClient() {
       isCancelled = true;
       clearTimeout(timeout);
     };
-  }, [iconSearch, searchScope, activeCollection.prefix]);
+  }, [masterSearchQuery, activeCollection.prefix]);
+
+  const isMasterSearchActive = masterSearchQuery.trim().length >= 2;
 
   // Compute displayed icons
   const displayedItems: ParsedIconItem[] = useMemo(() => {
-    if (searchScope === 'global' && iconSearch.trim().length >= 2) {
+    if (isMasterSearchActive) {
       return globalResults.slice(0, displayLimit);
     }
-    const q = iconSearch.toLowerCase();
+    const q = librarySearchQuery.toLowerCase();
     const filtered = q ? loadedIcons.filter(name => name.toLowerCase().includes(q)) : loadedIcons;
     return filtered.slice(0, displayLimit).map(name => ({
       fullKey: `${activeCollection.prefix}:${name}`,
       prefix: activeCollection.prefix,
       name
     }));
-  }, [searchScope, iconSearch, globalResults, loadedIcons, activeCollection.prefix, displayLimit]);
+  }, [isMasterSearchActive, globalResults, librarySearchQuery, loadedIcons, activeCollection.prefix, displayLimit]);
 
   const totalCount = useMemo(() => {
-    if (searchScope === 'global' && iconSearch.trim().length >= 2) {
+    if (isMasterSearchActive) {
       return globalResults.length;
     }
-    const q = iconSearch.toLowerCase();
+    const q = librarySearchQuery.toLowerCase();
     return q ? loadedIcons.filter(name => name.toLowerCase().includes(q)).length : loadedIcons.length;
-  }, [searchScope, iconSearch, globalResults, loadedIcons]);
+  }, [isMasterSearchActive, globalResults, librarySearchQuery, loadedIcons]);
 
   // Infinite scroll intersection observer
   useEffect(() => {
@@ -263,7 +273,7 @@ export function MyComponent() {
     <div className="h-full flex flex-col md:flex-row p-3 overflow-hidden gap-3 font-mono relative">
       {/* Toast Notification for Copied Feedback (Crystal Clear in Light & Dark Mode) */}
       {copiedToast && (
-        <div className="absolute bottom-6 right-6 z-50 bg-emerald-600 text-white px-4 py-2.5 rounded-lg shadow-xl shadow-emerald-500/20 flex items-center gap-2 text-xs font-bold font-sans animate-in fade-in slide-in-from-bottom-2 border border-emerald-400/40">
+        <div className="fixed bottom-6 right-6 z-50 bg-emerald-600 text-white px-4 py-2.5 rounded-lg shadow-xl shadow-emerald-500/20 flex items-center gap-2 text-xs font-bold font-sans animate-in fade-in slide-in-from-bottom-2 border border-emerald-400/40">
           <CheckCircle2 className="w-4 h-4 text-white" />
           <span>Copied <code className="bg-emerald-700/60 px-1.5 py-0.5 rounded font-mono text-[11px] text-white">{copiedToast}</code> to clipboard!</span>
         </div>
@@ -271,7 +281,7 @@ export function MyComponent() {
 
       {/* Left Sidebar: 238 Collections Directory */}
       <div className="w-full md:w-80 bg-[var(--bg-panel)] border border-[var(--border-dev)] rounded-xl flex flex-col overflow-hidden shrink-0 shadow-sm transition-colors">
-        {/* Header & Search */}
+        {/* Header & Collections Search */}
         <div className="p-3 border-b border-[var(--border-dev)] flex flex-col gap-2 bg-[var(--bg-panel-subtle)] shrink-0">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
@@ -309,14 +319,14 @@ export function MyComponent() {
         {/* Collections Scroll List */}
         <div className="flex-1 overflow-y-auto p-2 flex flex-col gap-1">
           {filteredCollections.map(col => {
-            const isSelected = col.prefix === selectedPrefix && searchScope === 'collection';
+            const isSelected = col.prefix === selectedPrefix && !isMasterSearchActive;
             return (
               <button
                 key={col.prefix}
                 onClick={() => {
                   setSelectedPrefix(col.prefix);
-                  setSearchScope('collection');
-                  setIconSearch('');
+                  setMasterSearchQuery('');
+                  setLibrarySearchQuery('');
                 }}
                 className={`w-full text-left p-2.5 rounded-lg border transition-all flex flex-col gap-1 cursor-pointer ${
                   isSelected 
@@ -348,67 +358,50 @@ export function MyComponent() {
 
       {/* Main Panel */}
       <div className="flex-1 flex flex-col gap-3 min-w-0 overflow-hidden">
-        {/* 1. TOP PROMINENT MASTER SEARCH BAR */}
+        {/* ── 1. TOP DEDICATED MASTER SEARCH BAR ── */}
         <div className="bg-[var(--bg-panel)] border border-[var(--border-dev)] rounded-xl p-3 shrink-0 shadow-sm transition-colors flex flex-wrap items-center justify-between gap-3">
-          <div className="flex items-center gap-2.5 flex-1 max-w-xl">
+          <div className="flex items-center gap-2.5 flex-1 max-w-2xl">
             <div className="w-8 h-8 rounded-lg bg-cyan-500/15 text-cyan-600 dark:text-cyan-400 flex items-center justify-center shrink-0">
               <Globe className="w-4 h-4" />
             </div>
             <div className="flex-1 relative">
               <input
                 type="text"
-                value={iconSearch}
-                onChange={e => setIconSearch(e.target.value)}
-                placeholder={
-                  searchScope === 'global'
-                    ? 'Global Master Search (e.g. cart, user, lock, github across 353K+ icons)...'
-                    : `Search inside ${activeCollection.name}...`
-                }
-                className="dev-input w-full pl-8 pr-3 py-1.5 rounded-lg text-xs"
+                value={masterSearchQuery}
+                onChange={e => setMasterSearchQuery(e.target.value)}
+                placeholder="Global Master Search (type 'cart', 'user', 'shield', 'github' across all 353K+ icons)..."
+                className="dev-input w-full pl-8 pr-8 py-1.5 rounded-lg text-xs"
               />
               <Search className="w-3.5 h-3.5 text-cyan-500 absolute left-2.5 top-2.5 pointer-events-none" />
+              {masterSearchQuery && (
+                <button
+                  onClick={() => setMasterSearchQuery('')}
+                  className="absolute right-2.5 top-2 text-[var(--text-muted)] hover:text-[var(--text-primary)] cursor-pointer"
+                  title="Clear Master Search"
+                >
+                  <X className="w-3.5 h-3.5" />
+                </button>
+              )}
             </div>
           </div>
 
           <div className="flex items-center gap-2">
-            {/* Scope Switcher */}
-            <div className="flex items-center gap-1 bg-[var(--bg-sidebar)] p-0.5 rounded-lg border border-[var(--border-dev)] text-xs">
-              <button
-                onClick={() => setSearchScope('global')}
-                className={`px-2.5 py-1 rounded-md text-[11px] font-bold flex items-center gap-1.5 transition-colors cursor-pointer ${
-                  searchScope === 'global'
-                    ? 'bg-cyan-500 text-white shadow-sm'
-                    : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
-                }`}
-              >
-                <Globe className="w-3.5 h-3.5" />
-                <span>Master Search (All 353K+)</span>
-              </button>
-
-              <button
-                onClick={() => setSearchScope('collection')}
-                className={`px-2.5 py-1 rounded-md text-[11px] font-bold flex items-center gap-1.5 transition-colors cursor-pointer ${
-                  searchScope === 'collection'
-                    ? 'bg-cyan-500 text-white shadow-sm'
-                    : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
-                }`}
-              >
-                <span>{activeCollection.name}</span>
-              </button>
-            </div>
+            <span className="text-[11px] font-bold px-2 py-1 rounded bg-[var(--bg-sidebar)] border border-[var(--border-dev)] text-cyan-600 dark:text-cyan-400">
+              {isMasterSearchActive ? `${totalCount} Master Matches` : 'Master Search: 353K+ SVGs'}
+            </span>
           </div>
         </div>
 
-        {/* 2. Top Controls & Active Icon Info Card */}
+        {/* ── 2. Top Controls & Active Icon Info Card ── */}
         <div className="bg-[var(--bg-panel)] border border-[var(--border-dev)] rounded-xl p-4 shrink-0 shadow-sm transition-colors flex flex-col gap-3">
           {/* Header Bar */}
           <div className="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-[var(--border-dev)]">
             <div>
               <div className="flex items-center gap-2.5">
                 <h2 className="text-base font-bold text-[var(--text-primary)] font-sans">
-                  {searchScope === 'global' && iconSearch.trim().length >= 2 ? (
+                  {isMasterSearchActive ? (
                     <span className="text-cyan-500 flex items-center gap-1.5">
-                      <span>Search results for &ldquo;{iconSearch}&rdquo;</span>
+                      <span>Global Results: &ldquo;{masterSearchQuery}&rdquo;</span>
                     </span>
                   ) : (
                     activeCollection.name
@@ -416,7 +409,7 @@ export function MyComponent() {
                 </h2>
 
                 <span className="text-[10px] px-2 py-0.5 rounded font-bold bg-cyan-500/15 text-cyan-600 dark:text-cyan-300 border border-cyan-500/30">
-                  {searchScope === 'global' && iconSearch.trim().length >= 2 
+                  {isMasterSearchActive
                     ? `${totalCount.toLocaleString()} matches across 238 libs` 
                     : `${loadedIcons.length.toLocaleString()} icons`}
                 </span>
@@ -425,7 +418,7 @@ export function MyComponent() {
                   {activeCollection.license}
                 </span>
 
-                {isLoadingIcons && (
+                {(isLoadingLibrary || isLoadingMaster) && (
                   <span className="text-[10px] text-cyan-500 animate-pulse flex items-center gap-1">
                     <Loader2 className="w-3 h-3 animate-spin" />
                     <span>Searching...</span>
@@ -535,14 +528,36 @@ export function MyComponent() {
           </div>
         </div>
 
-        {/* 3. Icons Grid Card */}
+        {/* ── 3. Icons Grid Card WITH 2ND SEARCH BAR (LIBRARY SEARCH) ── */}
         <div className="flex-1 bg-[var(--bg-panel)] border border-[var(--border-dev)] rounded-xl overflow-hidden flex flex-col shadow-sm">
-          <div className="px-4 py-2 border-b border-[var(--border-dev)] flex items-center justify-between text-xs bg-[var(--bg-panel-subtle)] shrink-0">
-            <div className="text-[11px] text-[var(--text-secondary)] font-sans">
-              Click any icon to <strong>copy component</strong> and inspect
+          {/* Second Search Bar: Library-Based Search */}
+          <div className="px-4 py-2 border-b border-[var(--border-dev)] flex flex-wrap items-center justify-between text-xs bg-[var(--bg-panel-subtle)] shrink-0 gap-3">
+            <div className="flex items-center gap-2 flex-1 max-w-sm">
+              <Search className="w-3.5 h-3.5 text-[var(--text-muted)]" />
+              <input
+                type="text"
+                value={librarySearchQuery}
+                onChange={e => {
+                  setLibrarySearchQuery(e.target.value);
+                  if (masterSearchQuery) setMasterSearchQuery(''); // clear master if searching within library
+                }}
+                placeholder={`Search inside ${activeCollection.name} (${loadedIcons.length} icons)...`}
+                className="dev-input flex-1 px-2.5 py-1 rounded text-xs"
+              />
+              {librarySearchQuery && (
+                <button
+                  onClick={() => setLibrarySearchQuery('')}
+                  className="text-[var(--text-muted)] hover:text-[var(--text-primary)] cursor-pointer"
+                >
+                  <X className="w-3.5 h-3.5" />
+                </button>
+              )}
             </div>
-            <div className="text-[11px] text-[var(--text-muted)] font-mono">
-              Showing <strong>{displayedItems.length.toLocaleString()}</strong> of <strong>{totalCount.toLocaleString()}</strong> icons
+
+            <div className="flex items-center gap-3">
+              <span className="text-[11px] text-[var(--text-muted)] font-mono">
+                Showing <strong>{displayedItems.length.toLocaleString()}</strong> of <strong>{totalCount.toLocaleString()}</strong> icons
+              </span>
             </div>
           </div>
 
@@ -594,7 +609,7 @@ export function MyComponent() {
                     </span>
 
                     {/* Source Library Tag in Master Search */}
-                    {searchScope === 'global' && (
+                    {isMasterSearchActive && (
                       <span className="text-[8px] mt-0.5 px-1 rounded bg-[var(--pill-bg)] text-cyan-600 dark:text-cyan-400 font-mono font-bold truncate max-w-full opacity-80">
                         {item.prefix}
                       </span>
