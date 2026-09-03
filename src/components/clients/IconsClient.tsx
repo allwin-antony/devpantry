@@ -21,7 +21,8 @@ import {
   Zap,
   Loader2,
   Globe,
-  Filter
+  Filter,
+  Check
 } from 'lucide-react';
 
 interface ParsedIconItem {
@@ -45,6 +46,7 @@ export function IconsClient() {
   const [strokeWidth, setStrokeWidth] = useState<number>(2);
   const [iconColor, setIconColor] = useState<string>('#f43f5e');
   const [copiedCode, setCopiedCode] = useState<string | null>(null);
+  const [copiedToast, setCopiedToast] = useState<string | null>(null);
 
   // Loaded icon list for selected collection
   const [loadedIcons, setLoadedIcons] = useState<string[]>([]);
@@ -218,10 +220,14 @@ export function IconsClient() {
     };
   }, [displayLimit, totalCount]);
 
-  const copyToClipboard = (text: string, id: string) => {
+  const copyToClipboard = (text: string, id: string, toastLabel?: string) => {
     navigator.clipboard.writeText(text);
     setCopiedCode(id);
-    setTimeout(() => setCopiedCode(null), 1800);
+    setCopiedToast(toastLabel || text);
+    setTimeout(() => {
+      setCopiedCode(null);
+      setCopiedToast(null);
+    }, 2000);
   };
 
   const getSvgUrl = (prefix: string, iconName: string) => {
@@ -254,7 +260,15 @@ export function MyComponent() {
 </svg>`;
 
   return (
-    <div className="h-full flex flex-col md:flex-row p-3 overflow-hidden gap-3 font-mono">
+    <div className="h-full flex flex-col md:flex-row p-3 overflow-hidden gap-3 font-mono relative">
+      {/* Toast Notification for Copied Feedback (Crystal Clear in Light & Dark Mode) */}
+      {copiedToast && (
+        <div className="absolute bottom-6 right-6 z-50 bg-emerald-600 text-white px-4 py-2.5 rounded-lg shadow-xl shadow-emerald-500/20 flex items-center gap-2 text-xs font-bold font-sans animate-in fade-in slide-in-from-bottom-2 border border-emerald-400/40">
+          <CheckCircle2 className="w-4 h-4 text-white" />
+          <span>Copied <code className="bg-emerald-700/60 px-1.5 py-0.5 rounded font-mono text-[11px] text-white">{copiedToast}</code> to clipboard!</span>
+        </div>
+      )}
+
       {/* Left Sidebar: 238 Collections Directory */}
       <div className="w-full md:w-80 bg-[var(--bg-panel)] border border-[var(--border-dev)] rounded-xl flex flex-col overflow-hidden shrink-0 shadow-sm transition-colors">
         {/* Header & Search */}
@@ -332,9 +346,60 @@ export function MyComponent() {
         </div>
       </div>
 
-      {/* Main Panel: Interactive SVG Canvas & Icon Browser */}
+      {/* Main Panel */}
       <div className="flex-1 flex flex-col gap-3 min-w-0 overflow-hidden">
-        {/* Top Controls Card */}
+        {/* 1. TOP PROMINENT MASTER SEARCH BAR */}
+        <div className="bg-[var(--bg-panel)] border border-[var(--border-dev)] rounded-xl p-3 shrink-0 shadow-sm transition-colors flex flex-wrap items-center justify-between gap-3">
+          <div className="flex items-center gap-2.5 flex-1 max-w-xl">
+            <div className="w-8 h-8 rounded-lg bg-cyan-500/15 text-cyan-600 dark:text-cyan-400 flex items-center justify-center shrink-0">
+              <Globe className="w-4 h-4" />
+            </div>
+            <div className="flex-1 relative">
+              <input
+                type="text"
+                value={iconSearch}
+                onChange={e => setIconSearch(e.target.value)}
+                placeholder={
+                  searchScope === 'global'
+                    ? 'Global Master Search (e.g. cart, user, lock, github across 353K+ icons)...'
+                    : `Search inside ${activeCollection.name}...`
+                }
+                className="dev-input w-full pl-8 pr-3 py-1.5 rounded-lg text-xs"
+              />
+              <Search className="w-3.5 h-3.5 text-cyan-500 absolute left-2.5 top-2.5 pointer-events-none" />
+            </div>
+          </div>
+
+          <div className="flex items-center gap-2">
+            {/* Scope Switcher */}
+            <div className="flex items-center gap-1 bg-[var(--bg-sidebar)] p-0.5 rounded-lg border border-[var(--border-dev)] text-xs">
+              <button
+                onClick={() => setSearchScope('global')}
+                className={`px-2.5 py-1 rounded-md text-[11px] font-bold flex items-center gap-1.5 transition-colors cursor-pointer ${
+                  searchScope === 'global'
+                    ? 'bg-cyan-500 text-white shadow-sm'
+                    : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
+                }`}
+              >
+                <Globe className="w-3.5 h-3.5" />
+                <span>Master Search (All 353K+)</span>
+              </button>
+
+              <button
+                onClick={() => setSearchScope('collection')}
+                className={`px-2.5 py-1 rounded-md text-[11px] font-bold flex items-center gap-1.5 transition-colors cursor-pointer ${
+                  searchScope === 'collection'
+                    ? 'bg-cyan-500 text-white shadow-sm'
+                    : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
+                }`}
+              >
+                <span>{activeCollection.name}</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        {/* 2. Top Controls & Active Icon Info Card */}
         <div className="bg-[var(--bg-panel)] border border-[var(--border-dev)] rounded-xl p-4 shrink-0 shadow-sm transition-colors flex flex-col gap-3">
           {/* Header Bar */}
           <div className="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-[var(--border-dev)]">
@@ -343,8 +408,7 @@ export function MyComponent() {
                 <h2 className="text-base font-bold text-[var(--text-primary)] font-sans">
                   {searchScope === 'global' && iconSearch.trim().length >= 2 ? (
                     <span className="text-cyan-500 flex items-center gap-1.5">
-                      <Globe className="w-4 h-4" />
-                      <span>Global Master Search: &ldquo;{iconSearch}&rdquo;</span>
+                      <span>Search results for &ldquo;{iconSearch}&rdquo;</span>
                     </span>
                   ) : (
                     activeCollection.name
@@ -376,11 +440,13 @@ export function MyComponent() {
 
             <div className="flex items-center gap-2">
               <button
-                onClick={() => copyToClipboard(`npm install @iconify/react @iconify-json/${activeIcon.prefix}`, 'install-cmd')}
+                onClick={() => copyToClipboard(`npm install @iconify/react @iconify-json/${activeIcon.prefix}`, 'install-cmd', `npm install @iconify/react @iconify-json/${activeIcon.prefix}`)}
                 className="px-2.5 py-1 text-xs font-semibold rounded bg-[var(--bg-sidebar)] border border-[var(--border-dev)] text-[var(--text-primary)] hover:border-cyan-500 flex items-center gap-1.5 transition-colors cursor-pointer"
               >
                 <Terminal className="w-3.5 h-3.5 text-cyan-500" />
-                <span>{copiedCode === 'install-cmd' ? 'Copied' : 'Install'}</span>
+                <span className={copiedCode === 'install-cmd' ? 'text-emerald-600 dark:text-emerald-400 font-bold' : ''}>
+                  {copiedCode === 'install-cmd' ? 'Copied!' : 'Install'}
+                </span>
               </button>
 
               <Link
@@ -445,67 +511,36 @@ export function MyComponent() {
             {/* Quick Copy Snippets */}
             <div className="flex items-center gap-1">
               <button
-                onClick={() => copyToClipboard(reactSnippet, 'react-copy')}
+                onClick={() => copyToClipboard(reactSnippet, 'react-copy', `<Icon icon="${activeIcon.fullKey}" />`)}
                 title="Copy React snippet"
                 className="px-2 py-1 text-xs font-semibold rounded bg-[var(--bg-sidebar)] border border-[var(--border-dev)] text-[var(--text-primary)] hover:border-cyan-500 flex items-center gap-1 transition-colors cursor-pointer"
               >
                 {copiedCode === 'react-copy' ? <CheckCircle2 className="w-3 h-3 text-emerald-500" /> : <Code2 className="w-3 h-3 text-cyan-500" />}
-                <span>{copiedCode === 'react-copy' ? 'Copied' : 'React'}</span>
+                <span className={copiedCode === 'react-copy' ? 'text-emerald-600 dark:text-emerald-400 font-bold' : ''}>
+                  {copiedCode === 'react-copy' ? 'Copied!' : 'React'}
+                </span>
               </button>
 
               <button
-                onClick={() => copyToClipboard(svgSnippet, 'svg-copy')}
+                onClick={() => copyToClipboard(svgSnippet, 'svg-copy', 'SVG markup')}
                 title="Copy SVG markup"
                 className="px-2 py-1 text-xs font-semibold rounded bg-[var(--bg-sidebar)] border border-[var(--border-dev)] text-[var(--text-primary)] hover:border-cyan-500 flex items-center gap-1 transition-colors cursor-pointer"
               >
                 {copiedCode === 'svg-copy' ? <CheckCircle2 className="w-3 h-3 text-emerald-500" /> : <Box className="w-3 h-3 text-rose-500" />}
-                <span>{copiedCode === 'svg-copy' ? 'Copied' : 'SVG'}</span>
+                <span className={copiedCode === 'svg-copy' ? 'text-emerald-600 dark:text-emerald-400 font-bold' : ''}>
+                  {copiedCode === 'svg-copy' ? 'Copied!' : 'SVG'}
+                </span>
               </button>
             </div>
           </div>
         </div>
 
-        {/* Icons Grid with Search Bar and Scope Switcher */}
+        {/* 3. Icons Grid Card */}
         <div className="flex-1 bg-[var(--bg-panel)] border border-[var(--border-dev)] rounded-xl overflow-hidden flex flex-col shadow-sm">
-          {/* Master Search Bar & Scope Switcher */}
-          <div className="px-4 py-2 border-b border-[var(--border-dev)] flex flex-wrap items-center justify-between text-xs bg-[var(--bg-panel-subtle)] shrink-0 gap-3">
-            <div className="flex items-center gap-2 flex-1 max-w-md">
-              <Search className="w-3.5 h-3.5 text-cyan-500" />
-              <input
-                type="text"
-                value={iconSearch}
-                onChange={e => setIconSearch(e.target.value)}
-                placeholder={searchScope === 'global' ? 'Global Master Search (cart, user, github, settings across 353K+ icons)...' : `Search inside ${activeCollection.name}...`}
-                className="dev-input flex-1 px-2.5 py-1 rounded text-xs"
-              />
+          <div className="px-4 py-2 border-b border-[var(--border-dev)] flex items-center justify-between text-xs bg-[var(--bg-panel-subtle)] shrink-0">
+            <div className="text-[11px] text-[var(--text-secondary)] font-sans">
+              Click any icon to <strong>copy component</strong> and inspect
             </div>
-
-            {/* Scope Switcher */}
-            <div className="flex items-center gap-1 bg-[var(--bg-sidebar)] p-0.5 rounded border border-[var(--border-dev)] text-xs">
-              <button
-                onClick={() => setSearchScope('global')}
-                className={`px-2 py-0.5 rounded text-[11px] font-bold flex items-center gap-1 transition-colors cursor-pointer ${
-                  searchScope === 'global'
-                    ? 'bg-cyan-500 text-white shadow-sm'
-                    : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
-                }`}
-              >
-                <Globe className="w-3 h-3" />
-                <span>Master Search (All 353K+)</span>
-              </button>
-
-              <button
-                onClick={() => setSearchScope('collection')}
-                className={`px-2 py-0.5 rounded text-[11px] font-bold flex items-center gap-1 transition-colors cursor-pointer ${
-                  searchScope === 'collection'
-                    ? 'bg-cyan-500 text-white shadow-sm'
-                    : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
-                }`}
-              >
-                <span>{activeCollection.name}</span>
-              </button>
-            </div>
-
             <div className="text-[11px] text-[var(--text-muted)] font-mono">
               Showing <strong>{displayedItems.length.toLocaleString()}</strong> of <strong>{totalCount.toLocaleString()}</strong> icons
             </div>
@@ -516,17 +551,19 @@ export function MyComponent() {
             <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-3">
               {displayedItems.map(item => {
                 const isSelected = activeIcon.fullKey === item.fullKey;
+                const isCopied = copiedCode === `icon-${item.fullKey}`;
+
                 return (
                   <button
                     key={item.fullKey}
                     onClick={() => {
                       setSelectedIconItem(item);
-                      copyToClipboard(`<Icon icon="${item.fullKey}" />`, `icon-${item.fullKey}`);
+                      copyToClipboard(`<Icon icon="${item.fullKey}" />`, `icon-${item.fullKey}`, item.fullKey);
                     }}
-                    title={`Click to copy ${item.fullKey}`}
+                    title={`Click to copy <Icon icon="${item.fullKey}" />`}
                     className={`flex flex-col items-center justify-center p-3 rounded-lg border transition-all cursor-pointer group ${
                       isSelected
-                        ? 'bg-cyan-500/15 border-cyan-500 shadow-sm'
+                        ? 'bg-cyan-500/15 border-cyan-500 shadow-sm ring-1 ring-cyan-500'
                         : 'bg-[var(--bg-panel)] border-[var(--border-dev)] hover:border-cyan-500/40 hover:bg-[var(--bg-sidebar)]'
                     }`}
                   >
@@ -545,13 +582,20 @@ export function MyComponent() {
                       />
                     </div>
 
-                    <span className="text-[10px] text-[var(--text-muted)] group-hover:text-[var(--text-primary)] font-mono truncate max-w-full text-center">
-                      {copiedCode === `icon-${item.fullKey}` ? 'Copied!' : item.name}
+                    {/* Copied Badge with High Contrast in Both Modes */}
+                    <span 
+                      className={`text-[10px] font-mono truncate max-w-full text-center px-1 py-0.5 rounded transition-colors ${
+                        isCopied 
+                          ? 'bg-emerald-500 text-white font-bold shadow-sm' 
+                          : 'text-[var(--text-secondary)] group-hover:text-[var(--text-primary)]'
+                      }`}
+                    >
+                      {isCopied ? 'Copied!' : item.name}
                     </span>
 
                     {/* Source Library Tag in Master Search */}
                     {searchScope === 'global' && (
-                      <span className="text-[8px] mt-0.5 px-1 rounded bg-[var(--pill-bg)] text-cyan-500 font-mono font-bold truncate max-w-full opacity-80">
+                      <span className="text-[8px] mt-0.5 px-1 rounded bg-[var(--pill-bg)] text-cyan-600 dark:text-cyan-400 font-mono font-bold truncate max-w-full opacity-80">
                         {item.prefix}
                       </span>
                     )}

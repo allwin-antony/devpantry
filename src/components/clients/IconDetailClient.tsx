@@ -25,6 +25,7 @@ export function IconDetailClient({ collection }: { collection: IconCollectionIte
   const [strokeWidth, setStrokeWidth] = useState<number>(2);
   const [iconColor, setIconColor] = useState<string>('#06b6d4');
   const [copiedCode, setCopiedCode] = useState<string | null>(null);
+  const [copiedToast, setCopiedToast] = useState<string | null>(null);
 
   const [loadedIcons, setLoadedIcons] = useState<string[]>([]);
   const [selectedIcon, setSelectedIcon] = useState<string>('');
@@ -114,10 +115,14 @@ export function IconDetailClient({ collection }: { collection: IconCollectionIte
     };
   }, [displayLimit, allFilteredIcons.length]);
 
-  const copyToClipboard = (text: string, id: string) => {
+  const copyToClipboard = (text: string, id: string, toastLabel?: string) => {
     navigator.clipboard.writeText(text);
     setCopiedCode(id);
-    setTimeout(() => setCopiedCode(null), 1800);
+    setCopiedToast(toastLabel || text);
+    setTimeout(() => {
+      setCopiedCode(null);
+      setCopiedToast(null);
+    }, 2000);
   };
 
   const currentIcon = selectedIcon || (visibleIcons[0] || 'icon');
@@ -300,6 +305,14 @@ export function Example() {
         </div>
       </section>
 
+      {/* Toast Notification for Copied Feedback */}
+      {copiedToast && (
+        <div className="fixed bottom-6 right-6 z-50 bg-emerald-600 text-white px-4 py-2.5 rounded-lg shadow-xl shadow-emerald-500/20 flex items-center gap-2 text-xs font-bold font-sans animate-in fade-in slide-in-from-bottom-2 border border-emerald-400/40">
+          <CheckCircle2 className="w-4 h-4 text-white" />
+          <span>Copied <code className="bg-emerald-700/60 px-1.5 py-0.5 rounded font-mono text-[11px] text-white">{copiedToast}</code> to clipboard!</span>
+        </div>
+      )}
+
       {/* Full Library Grid with Search & Infinite Scroll */}
       <section className="bg-[var(--bg-panel)] border border-[var(--border-dev)] rounded-xl p-5 shadow-sm transition-colors flex flex-col gap-4">
         <div className="flex flex-wrap items-center justify-between gap-4 pb-3 border-b border-[var(--border-dev)]">
@@ -323,16 +336,17 @@ export function Example() {
         <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-3 max-h-[500px] overflow-y-auto pr-1">
           {visibleIcons.map(name => {
             const isSelected = selectedIcon === name;
+            const isCopied = copiedCode === `grid-${name}`;
             return (
               <button
                 key={name}
                 onClick={() => {
                   setSelectedIcon(name);
-                  copyToClipboard(`<Icon icon="${collection.prefix}:${name}" />`, `grid-${name}`);
+                  copyToClipboard(`<Icon icon="${collection.prefix}:${name}" />`, `grid-${name}`, `${collection.prefix}:${name}`);
                 }}
                 className={`flex flex-col items-center justify-center p-3 rounded-lg border transition-all cursor-pointer group ${
                   isSelected
-                    ? 'bg-cyan-500/15 border-cyan-500 shadow-sm'
+                    ? 'bg-cyan-500/15 border-cyan-500 shadow-sm ring-1 ring-cyan-500'
                     : 'bg-[var(--bg-panel-subtle)] border-[var(--border-dev-subtle)] hover:border-cyan-500/40 hover:bg-[var(--bg-sidebar)]'
                 }`}
               >
@@ -350,8 +364,14 @@ export function Example() {
                   />
                 </div>
 
-                <span className="text-[10px] text-[var(--text-muted)] group-hover:text-[var(--text-primary)] font-mono truncate max-w-full text-center">
-                  {copiedCode === `grid-${name}` ? 'Copied!' : name}
+                <span 
+                  className={`text-[10px] font-mono truncate max-w-full text-center px-1 py-0.5 rounded transition-colors ${
+                    isCopied
+                      ? 'bg-emerald-500 text-white font-bold shadow-sm'
+                      : 'text-[var(--text-secondary)] group-hover:text-[var(--text-primary)]'
+                  }`}
+                >
+                  {isCopied ? 'Copied!' : name}
                 </span>
               </button>
             );
