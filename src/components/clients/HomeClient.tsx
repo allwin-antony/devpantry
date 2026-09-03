@@ -180,9 +180,31 @@ export function HomeClient() {
 
         <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6 relative z-10">
           <div className="max-w-3xl">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-rose-500/10 border border-rose-500/20 text-rose-600 dark:text-rose-300 text-xs font-bold mb-3 shadow-sm">
-              <Sparkles className="w-3.5 h-3.5 text-rose-500" />
-              <span>Next.js 16 Developer Asset Engine & Chaos Sandbox</span>
+            {/* Project Name & Animated Tagline Badge */}
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[var(--bg-panel-subtle)] border border-rose-500/30 text-xs font-bold mb-4 shadow-sm relative overflow-hidden group">
+              {/* Animated Glowing Shimmer Background */}
+              <div className="absolute inset-0 bg-gradient-to-r from-rose-500/10 via-amber-500/10 via-cyan-500/10 to-rose-500/10 animate-shimmer pointer-events-none" />
+
+              {/* Glowing Pulse Dot */}
+              <div className="relative flex items-center justify-center">
+                <span className="w-2 h-2 rounded-full bg-rose-500 relative z-10" />
+                <span className="absolute w-4 h-4 rounded-full bg-rose-500 animate-ping-slow pointer-events-none" />
+              </div>
+
+              {/* Project Name */}
+              <span className="font-mono text-rose-500 font-extrabold uppercase tracking-wider text-[11px] relative z-10">
+                FAILSTATE <span className="text-[var(--text-muted)] font-normal">•</span> DEVPLAYGROUND.IO
+              </span>
+
+              <span className="hidden sm:inline text-[var(--text-muted)] text-[10px] relative z-10">|</span>
+
+              {/* Tagline */}
+              <span className="text-[var(--text-secondary)] font-sans font-medium text-[11px] hidden sm:inline relative z-10">
+                The Open-Source Developer Asset Engine & Chaos Sandbox
+              </span>
+
+              {/* Sparkle Icon */}
+              <Sparkles className="w-3.5 h-3.5 text-amber-500 animate-pulse ml-0.5 relative z-10" />
             </div>
 
             <h1 className="text-2xl sm:text-3xl md:text-4xl font-extrabold tracking-tight text-[var(--text-primary)] font-sans mb-3 leading-tight">
