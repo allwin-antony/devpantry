@@ -112,10 +112,10 @@ export function Example() {
       </div>
 
       {/* Library Header Card */}
-      <section className="bg-[var(--bg-panel)] border border-[var(--border-dev)] rounded-xl p-6 relative overflow-hidden shadow-sm transition-colors flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+      <section className="bg-[var(--bg-panel)] border border-[var(--border-dev)] rounded-xl p-6 relative shadow-sm transition-colors flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
         <div>
-          <div className="flex items-center gap-3 mb-2">
-            <h1 className="text-2xl md:text-3xl font-extrabold text-[var(--text-primary)] font-sans">
+          <div className="flex flex-wrap items-center gap-3 mb-2 pt-1">
+            <h1 className="text-2xl md:text-3xl font-extrabold text-[var(--text-primary)] font-sans leading-normal">
               {collection.name}
             </h1>
             <span className="text-xs px-2.5 py-0.5 rounded-full font-bold bg-cyan-500/15 text-cyan-600 dark:text-cyan-300 border border-cyan-500/30">

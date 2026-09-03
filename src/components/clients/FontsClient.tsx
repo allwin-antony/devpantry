@@ -369,7 +369,7 @@ font-family: '${activeFont.name}', ${activeFont.category === 'Serif' ? 'serif' :
                   {/* Font Specimen Preview - Shows current sampleText typed in tester! */}
                   <div 
                     style={{ fontFamily: font.css_font_family || `'${font.name}', sans-serif` }}
-                    className="p-2.5 rounded bg-[var(--bg-panel-subtle)] border border-[var(--border-dev-subtle)] text-base text-[var(--text-primary)] truncate my-2 select-none"
+                    className="p-2.5 rounded bg-[var(--bg-panel-subtle)] border border-[var(--border-dev-subtle)] text-base text-[var(--text-primary)] truncate my-2 select-none leading-normal"
                   >
                     {sampleText || font.name}
                   </div>

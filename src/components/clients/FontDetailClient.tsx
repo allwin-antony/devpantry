@@ -95,12 +95,12 @@ module.exports = {
       </div>
 
       {/* Font Header Banner */}
-      <section className="bg-[var(--bg-panel)] border border-[var(--border-dev)] rounded-xl p-6 relative overflow-hidden shadow-sm transition-colors flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+      <section className="bg-[var(--bg-panel)] border border-[var(--border-dev)] rounded-xl p-6 relative shadow-sm transition-colors flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
         <div>
-          <div className="flex items-center gap-3 mb-2">
+          <div className="flex flex-wrap items-center gap-3 mb-2 pt-1">
             <h1 
               style={{ fontFamily: font.css_font_family }}
-              className="text-3xl md:text-4xl font-extrabold text-[var(--text-primary)]"
+              className="text-3xl md:text-4xl font-extrabold text-[var(--text-primary)] leading-normal tracking-tight"
             >
               {font.name}
             </h1>
