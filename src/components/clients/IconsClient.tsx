@@ -2,6 +2,7 @@
 
 import React, { useState, useMemo, useEffect, useRef } from 'react';
 import Link from 'next/link';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { getAllIconCollections, getAllIconLibraries, type IconCollectionItem } from '@/lib/datasetLoader';
 import { 
   Box, 
@@ -33,7 +34,77 @@ interface ParsedIconItem {
   name: string;
 }
 
+function IconSvgPreview({
+  prefix,
+  name,
+  color,
+  size,
+  strokeWidth,
+  className
+}: {
+  prefix: string;
+  name: string;
+  color: string;
+  size: number;
+  strokeWidth: number;
+  className?: string;
+}) {
+  const [svgContent, setSvgContent] = useState<string | null>(null);
+
+  useEffect(() => {
+    let isCancelled = false;
+    const encodedColor = encodeURIComponent(color === 'currentColor' ? '#ffffff' : color);
+    fetch(`https://api.iconify.design/${prefix}/${name}.svg?color=${encodedColor}`)
+      .then(res => res.text())
+      .then(rawSvg => {
+        if (!isCancelled && rawSvg && rawSvg.includes('<svg')) {
+          setSvgContent(rawSvg);
+        }
+      })
+      .catch(() => {});
+    return () => {
+      isCancelled = true;
+    };
+  }, [prefix, name, color]);
+
+  const fallbackUrl = `https://api.iconify.design/${prefix}/${name}.svg?color=${encodeURIComponent(color === 'currentColor' ? '#ffffff' : color)}`;
+
+  if (!svgContent) {
+    return (
+      <img
+        src={fallbackUrl}
+        alt={name}
+        width={size}
+        height={size}
+        className={className}
+      />
+    );
+  }
+
+  let modifiedSvg = svgContent;
+  if (modifiedSvg.includes('stroke-width')) {
+    modifiedSvg = modifiedSvg.replace(/stroke-width="[^"]*"/g, `stroke-width="${strokeWidth}"`);
+  } else {
+    modifiedSvg = modifiedSvg.replace(/<path/g, `<path stroke-width="${strokeWidth}"`);
+  }
+
+  modifiedSvg = modifiedSvg
+    .replace(/width="[^"]*"/, `width="${size}"`)
+    .replace(/height="[^"]*"/, `height="${size}"`);
+
+  return (
+    <div
+      style={{ width: `${size}px`, height: `${size}px`, display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}
+      className={className}
+      dangerouslySetInnerHTML={{ __html: modifiedSvg }}
+    />
+  );
+}
+
 export function IconsClient() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+
   const allCollections = useMemo(() => getAllIconCollections(), []);
   const featuredLibs = useMemo(() => getAllIconLibraries(), []);
 
@@ -60,6 +131,37 @@ export function IconsClient() {
   const [displayLimit, setDisplayLimit] = useState<number>(144);
   const [selectedIconItem, setSelectedIconItem] = useState<ParsedIconItem | null>(null);
   const sentinelRef = useRef<HTMLDivElement | null>(null);
+  const [mounted, setMounted] = useState<boolean>(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  const updateUrlState = (prefix: string, iconName?: string) => {
+    if (typeof window === 'undefined') return;
+    const current = new URLSearchParams();
+    current.set('prefix', prefix);
+    if (iconName) {
+      current.set('icon', iconName);
+    }
+    const search = current.toString();
+    const hash = iconName ? `#${prefix}:${iconName}` : '';
+    const newUrl = `${window.location.pathname}?${search}${hash}`;
+    window.history.pushState(null, '', newUrl);
+  };
+
+  const handleSelectLibrary = (prefix: string) => {
+    setSelectedPrefix(prefix);
+    setMasterSearchQuery('');
+    setLibrarySearchQuery('');
+    setSelectedIconItem(null);
+    updateUrlState(prefix);
+  };
+
+  const handleSelectIcon = (item: ParsedIconItem) => {
+    setSelectedIconItem(item);
+    updateUrlState(item.prefix, item.name);
+  };
 
   const colorPresets = [
     { name: 'Rose', hex: '#f43f5e' },
@@ -94,8 +196,26 @@ export function IconsClient() {
     });
   }, [allCollections, collectionSearch, selectedCategory]);
 
-  // ── URL Hash Tracking on Load/Refresh (e.g. #lucide:a-arrow-down) ──
+  // ── URL Hash Tracking & SearchParams Sync on Load/Refresh ──
   const requestedHashIconRef = useRef<{ prefix: string; name: string; fullKey: string } | null>(null);
+
+  useEffect(() => {
+    if (!mounted) return;
+    const prefixParam = searchParams?.get('prefix') || searchParams?.get('lib');
+    const iconParam = searchParams?.get('icon');
+
+    if (prefixParam) {
+      const foundCol = allCollections.find(c => c.prefix === prefixParam);
+      if (foundCol) {
+        setSelectedPrefix(foundCol.prefix);
+        if (iconParam) {
+          const fullKey = `${foundCol.prefix}:${iconParam}`;
+          requestedHashIconRef.current = { prefix: foundCol.prefix, name: iconParam, fullKey };
+          setSelectedIconItem({ prefix: foundCol.prefix, name: iconParam, fullKey });
+        }
+      }
+    }
+  }, [searchParams, mounted, allCollections]);
 
   useEffect(() => {
     const parseUrlHash = () => {
@@ -275,13 +395,6 @@ export function IconsClient() {
     }, 2000);
   };
 
-  const handleSelectIcon = (item: ParsedIconItem) => {
-    setSelectedIconItem(item);
-    if (typeof window !== 'undefined') {
-      window.history.replaceState(null, '', `#${item.fullKey}`);
-    }
-  };
-
   const getSvgUrl = (prefix: string, iconName: string) => {
     const encodedColor = encodeURIComponent(iconColor === 'currentColor' ? '#ffffff' : iconColor);
     return `https://api.iconify.design/${prefix}/${iconName}.svg?color=${encodedColor}`;
@@ -376,9 +489,7 @@ export function MyComponent() {
               <button
                 key={col.prefix}
                 onClick={() => {
-                  setSelectedPrefix(col.prefix);
-                  setMasterSearchQuery('');
-                  setLibrarySearchQuery('');
+                  handleSelectLibrary(col.prefix);
                 }}
                 className={`w-full text-left p-2.5 rounded-lg border transition-all flex flex-col gap-1 cursor-pointer ${
                   isSelected 
@@ -421,7 +532,7 @@ export function MyComponent() {
                 type="text"
                 value={masterSearchQuery}
                 onChange={e => setMasterSearchQuery(e.target.value)}
-                placeholder="Global Master Search (type 'cart', 'user', 'shield', 'github' across all 353K+ icons)..."
+                placeholder="Search 353,000+ vector icons..."
                 className="dev-input w-full pl-8 pr-8 py-1.5 rounded-lg text-xs"
               />
               <Search className="w-3.5 h-3.5 text-cyan-500 absolute left-2.5 top-2.5 pointer-events-none" />
@@ -507,11 +618,12 @@ export function MyComponent() {
                 style={{ width: `${Math.max(iconSize + 20, 52)}px`, height: `${Math.max(iconSize + 20, 52)}px` }}
                 className="p-2 rounded-xl bg-[var(--bg-panel)] border border-[var(--border-dev)] flex items-center justify-center shadow-sm shrink-0"
               >
-                <img
-                  src={getSvgUrl(activeIcon.prefix, activeIcon.name)}
-                  alt={activeIcon.name}
-                  width={iconSize}
-                  height={iconSize}
+                <IconSvgPreview
+                  prefix={activeIcon.prefix}
+                  name={activeIcon.name}
+                  color={iconColor}
+                  size={iconSize}
+                  strokeWidth={strokeWidth}
                   className="pointer-events-none drop-shadow-sm"
                 />
               </div>
@@ -642,10 +754,6 @@ export function MyComponent() {
                   />
                 ))}
               </div>
-            </div>
-
-            <div className="text-[10px] text-[var(--text-muted)] font-mono">
-              Direct Link: <code className="text-cyan-500 font-bold">/icons#{activeIcon.fullKey}</code>
             </div>
           </div>
         </div>

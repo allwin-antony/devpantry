@@ -1,5 +1,6 @@
 import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
+import { Suspense } from 'react';
 import { getAllIconCollections, getIconCollectionByPrefix, getAllIconPrefixes } from '@/lib/datasetLoader';
 import { IconDetailClient } from '@/components/clients/IconDetailClient';
 
@@ -50,5 +51,9 @@ export default async function IconDetailPage({ params }: PageProps) {
     notFound();
   }
 
-  return <IconDetailClient collection={collection} />;
+  return (
+    <Suspense fallback={<div className="p-4 text-xs font-mono text-[var(--text-muted)]">Loading Icon Collection...</div>}>
+      <IconDetailClient collection={collection} />
+    </Suspense>
+  );
 }

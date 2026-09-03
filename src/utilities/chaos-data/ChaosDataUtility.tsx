@@ -1,8 +1,10 @@
 import React, { useState, useMemo, useEffect } from 'react';
+import { useSearchParams } from 'next/navigation';
 import { CHAOS_PRESETS, exportData } from './chaosDataEngine';
 import { Copy, Download, RefreshCw, Eye, CheckCircle2, Database } from 'lucide-react';
 
 export const ChaosDataUtility: React.FC = () => {
+  const searchParams = useSearchParams();
   const [selectedPresetId, setSelectedPresetId] = useState<string>(CHAOS_PRESETS[0].id);
   const [count, setCount] = useState<number>(25);
   const [entropy, setEntropy] = useState<number>(65);
@@ -14,6 +16,29 @@ export const ChaosDataUtility: React.FC = () => {
   useEffect(() => {
     setMounted(true);
   }, []);
+
+  useEffect(() => {
+    if (!mounted) return;
+    const presetParam = searchParams?.get('preset');
+    if (presetParam) {
+      const found = CHAOS_PRESETS.find(p => p.id === presetParam);
+      if (found) {
+        setSelectedPresetId(found.id);
+      }
+    }
+  }, [searchParams, mounted]);
+
+  const handleSelectPreset = (presetId: string) => {
+    setSelectedPresetId(presetId);
+    if (typeof window !== 'undefined') {
+      const current = new URLSearchParams();
+      current.set('tab', 'presets');
+      current.set('preset', presetId);
+      const search = current.toString();
+      const newUrl = `${window.location.pathname}?${search}`;
+      window.history.pushState(null, '', newUrl);
+    }
+  };
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -85,7 +110,7 @@ export const ChaosDataUtility: React.FC = () => {
             return (
               <button
                 key={preset.id}
-                onClick={() => setSelectedPresetId(preset.id)}
+                onClick={() => handleSelectPreset(preset.id)}
                 className={`px-2.5 py-1 text-xs rounded transition-colors shrink-0 ${
                   isSelected
                     ? 'bg-rose-500/15 text-rose-500 dark:text-rose-300 border border-rose-500/40 font-bold'

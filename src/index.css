@@ -60,8 +60,8 @@
 
   /* Text */
   --text-primary: #0f172a;
-  --text-secondary: #475569;
-  --text-muted: #64748b;
+  --text-secondary: #334155;
+  --text-muted: #475569;
   --text-code: #f8fafc;
 
   --grid-line: rgba(0, 0, 0, 0.04);
@@ -154,6 +154,11 @@ html, body {
 .dev-input:focus {
   border-color: var(--border-focus);
   box-shadow: 0 0 0 1px rgba(244, 63, 94, 0.3);
+}
+
+.dev-input::placeholder {
+  color: var(--text-muted);
+  opacity: 0.85;
 }
 
 /* Data Table Styling */

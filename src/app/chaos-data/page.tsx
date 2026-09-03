@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { Suspense } from 'react';
 import { ChaosDataClient } from '@/components/clients/ChaosDataClient';
 
 export const metadata: Metadata = {
@@ -23,5 +24,9 @@ export const metadata: Metadata = {
 };
 
 export default function ChaosDataPage() {
-  return <ChaosDataClient />;
+  return (
+    <Suspense fallback={<div className="p-4 text-xs font-mono text-[var(--text-muted)]">Loading Chaos Studio...</div>}>
+      <ChaosDataClient />
+    </Suspense>
+  );
 }

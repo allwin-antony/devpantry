@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { Suspense } from 'react';
 import { IconsClient } from '@/components/clients/IconsClient';
 
 export const metadata: Metadata = {
@@ -24,5 +25,9 @@ export const metadata: Metadata = {
 };
 
 export default function IconsPage() {
-  return <IconsClient />;
+  return (
+    <Suspense fallback={<div className="p-4 text-xs font-mono text-[var(--text-muted)]">Loading Icons Studio...</div>}>
+      <IconsClient />
+    </Suspense>
+  );
 }

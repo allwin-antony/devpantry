@@ -2,6 +2,7 @@
 
 import React, { useState, useMemo, useEffect, useRef } from 'react';
 import Link from 'next/link';
+import { useSearchParams } from 'next/navigation';
 import { type IconCollectionItem } from '@/lib/datasetLoader';
 import { 
   Box, 
@@ -19,7 +20,75 @@ import {
   Loader2
 } from 'lucide-react';
 
+function IconSvgPreview({
+  prefix,
+  name,
+  color,
+  size,
+  strokeWidth,
+  className
+}: {
+  prefix: string;
+  name: string;
+  color: string;
+  size: number;
+  strokeWidth: number;
+  className?: string;
+}) {
+  const [svgContent, setSvgContent] = useState<string | null>(null);
+
+  useEffect(() => {
+    let isCancelled = false;
+    const encodedColor = encodeURIComponent(color === 'currentColor' ? '#ffffff' : color);
+    fetch(`https://api.iconify.design/${prefix}/${name}.svg?color=${encodedColor}`)
+      .then(res => res.text())
+      .then(rawSvg => {
+        if (!isCancelled && rawSvg && rawSvg.includes('<svg')) {
+          setSvgContent(rawSvg);
+        }
+      })
+      .catch(() => {});
+    return () => {
+      isCancelled = true;
+    };
+  }, [prefix, name, color]);
+
+  const fallbackUrl = `https://api.iconify.design/${prefix}/${name}.svg?color=${encodeURIComponent(color === 'currentColor' ? '#ffffff' : color)}`;
+
+  if (!svgContent) {
+    return (
+      <img
+        src={fallbackUrl}
+        alt={name}
+        width={size}
+        height={size}
+        className={className}
+      />
+    );
+  }
+
+  let modifiedSvg = svgContent;
+  if (modifiedSvg.includes('stroke-width')) {
+    modifiedSvg = modifiedSvg.replace(/stroke-width="[^"]*"/g, `stroke-width="${strokeWidth}"`);
+  } else {
+    modifiedSvg = modifiedSvg.replace(/<path/g, `<path stroke-width="${strokeWidth}"`);
+  }
+
+  modifiedSvg = modifiedSvg
+    .replace(/width="[^"]*"/, `width="${size}"`)
+    .replace(/height="[^"]*"/, `height="${size}"`);
+
+  return (
+    <div
+      style={{ width: `${size}px`, height: `${size}px`, display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}
+      className={className}
+      dangerouslySetInnerHTML={{ __html: modifiedSvg }}
+    />
+  );
+}
+
 export function IconDetailClient({ collection }: { collection: IconCollectionItem }) {
+  const searchParams = useSearchParams();
   const [searchQuery, setSearchQuery] = useState('');
   const [iconSize, setIconSize] = useState<number>(32);
   const [strokeWidth, setStrokeWidth] = useState<number>(2);
@@ -32,6 +101,31 @@ export function IconDetailClient({ collection }: { collection: IconCollectionIte
   const [displayLimit, setDisplayLimit] = useState<number>(144);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const sentinelRef = useRef<HTMLDivElement | null>(null);
+  const [mounted, setMounted] = useState<boolean>(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  const handleSelectIcon = (name: string) => {
+    setSelectedIcon(name);
+    if (typeof window !== 'undefined') {
+      const current = new URLSearchParams();
+      current.set('icon', name);
+      const search = current.toString();
+      const hash = `#${collection.prefix}:${name}`;
+      const newUrl = `${window.location.pathname}?${search}${hash}`;
+      window.history.replaceState(null, '', newUrl);
+    }
+  };
+
+  useEffect(() => {
+    if (!mounted) return;
+    const iconParam = searchParams?.get('icon');
+    if (iconParam) {
+      setSelectedIcon(iconParam);
+    }
+  }, [searchParams, mounted]);
 
   const colorPresets = [
     { name: 'Cyan', hex: '#06b6d4' },
@@ -266,6 +360,22 @@ export function Example() {
               <span className="text-[10px] font-bold text-[var(--text-primary)] w-8 text-right">{iconSize}px</span>
             </div>
 
+            {/* Stroke Width */}
+            <div className="flex items-center gap-1 bg-[var(--bg-sidebar)] p-0.5 rounded border border-[var(--border-dev)] text-xs">
+              <span className="text-[var(--text-muted)] px-1 text-[10px]">STROKE:</span>
+              {[1, 1.5, 2, 2.5, 3].map(w => (
+                <button
+                  key={w}
+                  onClick={() => setStrokeWidth(w)}
+                  className={`px-1.5 py-0.5 rounded text-[10px] transition-colors cursor-pointer ${
+                    strokeWidth === w ? 'bg-cyan-500 text-white font-bold' : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
+                  }`}
+                >
+                  {w}px
+                </button>
+              ))}
+            </div>
+
             {/* Colors */}
             <div className="flex items-center gap-1 bg-[var(--bg-sidebar)] p-1 rounded border border-[var(--border-dev)]">
               {colorPresets.map(c => (
@@ -299,11 +409,12 @@ export function Example() {
               style={{ width: `${iconSize + 24}px`, height: `${iconSize + 24}px` }} 
               className="p-3 rounded-xl bg-[var(--bg-panel)] border border-[var(--border-dev)] flex items-center justify-center shadow-sm"
             >
-              <img
-                src={getSvgUrl(currentIcon)}
-                alt={currentIcon}
-                width={iconSize}
-                height={iconSize}
+              <IconSvgPreview
+                prefix={collection.prefix}
+                name={currentIcon}
+                color={iconColor}
+                size={iconSize}
+                strokeWidth={strokeWidth}
               />
             </div>
 
@@ -385,7 +496,7 @@ export function Example() {
               <button
                 key={name}
                 onClick={() => {
-                  setSelectedIcon(name);
+                  handleSelectIcon(name);
                   copyToClipboard(`<Icon icon="${collection.prefix}:${name}" />`, `grid-${name}`, `${collection.prefix}:${name}`);
                 }}
                 className={`flex flex-col items-center justify-center p-3 rounded-lg border transition-all cursor-pointer group ${

@@ -1,12 +1,42 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { ChaosDataUtility } from '@/utilities/chaos-data/ChaosDataUtility';
 import { SchemaBuilderUtility } from '@/utilities/schema-builder/SchemaBuilderUtility';
 import { Flame, Layers, Sparkles } from 'lucide-react';
 
 export function ChaosDataClient() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+
   const [activeTab, setActiveTab] = useState<'presets' | 'custom'>('presets');
+  const [mounted, setMounted] = useState<boolean>(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (!mounted) return;
+    const tabParam = searchParams?.get('tab');
+    if (tabParam === 'custom') {
+      setActiveTab('custom');
+    } else if (tabParam === 'presets') {
+      setActiveTab('presets');
+    }
+  }, [searchParams, mounted]);
+
+  const handleTabChange = (newTab: 'presets' | 'custom') => {
+    setActiveTab(newTab);
+    if (typeof window !== 'undefined') {
+      const current = new URLSearchParams();
+      current.set('tab', newTab);
+      const search = current.toString();
+      const newUrl = `${window.location.pathname}?${search}`;
+      window.history.pushState(null, '', newUrl);
+    }
+  };
 
   return (
     <div className="h-full flex flex-col p-3 overflow-hidden gap-2">
@@ -19,7 +49,7 @@ export function ChaosDataClient() {
 
           <div className="flex items-center bg-[var(--bg-sidebar)] p-0.5 rounded border border-[var(--border-dev)] text-xs">
             <button
-              onClick={() => setActiveTab('presets')}
+              onClick={() => handleTabChange('presets')}
               className={`px-3 py-1 rounded flex items-center gap-1.5 transition-colors cursor-pointer ${
                 activeTab === 'presets'
                   ? 'bg-rose-500 text-white font-bold shadow-sm'
@@ -31,7 +61,7 @@ export function ChaosDataClient() {
             </button>
 
             <button
-              onClick={() => setActiveTab('custom')}
+              onClick={() => handleTabChange('custom')}
               className={`px-3 py-1 rounded flex items-center gap-1.5 transition-colors cursor-pointer ${
                 activeTab === 'custom'
                   ? 'bg-rose-500 text-white font-bold shadow-sm'

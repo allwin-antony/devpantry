@@ -2,6 +2,7 @@
 
 import React, { useState, useMemo, useEffect } from 'react';
 import Link from 'next/link';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { ALL_SERVICE_RESPONSES, type ServiceResponseItem } from '@/lib/datasetLoader';
 import { fillChaosPayload } from '@/utilities/chaos-data/chaosTemplateFiller';
 import { 
@@ -72,14 +73,26 @@ const SAMPLE_WEBHOOK_JSON = `{
 
 const DEFAULT_CUSTOM_JSON = SAMPLE_USER_JSON;
 
-export function ChaosTemplatesClient() {
-  const [selectedServiceId, setSelectedServiceId] = useState<string>(ALL_SERVICE_RESPONSES[0].id);
-  const [isCustomMode, setIsCustomMode] = useState<boolean>(false);
+export interface ChaosTemplatesClientProps {
+  initialServiceId?: string;
+  initialMode?: 'custom' | 'service';
+}
+
+export function ChaosTemplatesClient({ initialServiceId, initialMode }: ChaosTemplatesClientProps = {}) {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+
+  const [selectedServiceId, setSelectedServiceId] = useState<string>(
+    initialServiceId || ALL_SERVICE_RESPONSES[0].id
+  );
+  const [isCustomMode, setIsCustomMode] = useState<boolean>(initialMode === 'custom');
   const [selectedCategory, setSelectedCategory] = useState<string>('All');
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [activeResponseKey, setActiveResponseKey] = useState<string>('');
   const [entropy, setEntropy] = useState<number>(75);
-  const [viewMode, setViewMode] = useState<'chaos' | 'clean' | 'typescript' | 'curl' | 'edit_custom'>('chaos');
+  const [viewMode, setViewMode] = useState<'chaos' | 'clean' | 'typescript' | 'curl' | 'edit_custom'>(
+    initialMode === 'custom' ? 'edit_custom' : 'chaos'
+  );
   const [seed, setSeed] = useState<number>(0);
   const [simulatedStatus, setSimulatedStatus] = useState<number>(200);
   const [copiedCode, setCopiedCode] = useState<string | null>(null);
@@ -88,6 +101,22 @@ export function ChaosTemplatesClient() {
   useEffect(() => {
     setMounted(true);
   }, []);
+
+  const updateUrlState = (target: { template?: string; mode?: string; customId?: string }) => {
+    if (typeof window === 'undefined') return;
+    const current = new URLSearchParams();
+    if (target.template) {
+      current.set('template', target.template);
+    } else if (target.mode) {
+      current.set('mode', target.mode);
+    } else if (target.customId) {
+      current.set('custom', target.customId);
+    }
+    const search = current.toString();
+    const query = search ? `?${search}` : '';
+    const newUrl = `${window.location.pathname}${query}`;
+    window.history.pushState(null, '', newUrl);
+  };
 
   // Custom User Templates (stored in localStorage)
   const [customTemplates, setCustomTemplates] = useState<CustomTemplate[]>([]);
@@ -111,6 +140,33 @@ export function ChaosTemplatesClient() {
       }
     } catch {}
   }, []);
+
+  // Synchronize state with URL search parameters on mount / changes
+  useEffect(() => {
+    if (!mounted) return;
+    const templateParam = searchParams?.get('template');
+    const modeParam = searchParams?.get('mode');
+    const customParam = searchParams?.get('custom');
+
+    if (modeParam === 'custom' || templateParam === 'custom') {
+      setIsCustomMode(true);
+      setViewMode('edit_custom');
+    } else if (customParam) {
+      setIsCustomMode(true);
+      setActiveCustomId(customParam);
+      const found = customTemplates.find(t => t.id === customParam);
+      if (found) {
+        setCustomTitle(found.name);
+        setCustomRawJson(found.rawJson);
+      }
+    } else if (templateParam) {
+      const foundSvc = ALL_SERVICE_RESPONSES.find(s => s.id === templateParam);
+      if (foundSvc) {
+        setIsCustomMode(false);
+        setSelectedServiceId(foundSvc.id);
+      }
+    }
+  }, [searchParams, mounted, customTemplates]);
 
   // Save custom templates
   const saveCustomTemplate = () => {
@@ -330,6 +386,7 @@ export function ChaosTemplatesClient() {
               setActiveCustomId('');
               setCustomTitle('New Custom API Schema');
               setCustomRawJson(DEFAULT_CUSTOM_JSON);
+              updateUrlState({ mode: 'custom', template: undefined, customId: undefined });
             }}
             className={`w-full py-2 px-3 rounded-lg text-xs font-bold flex items-center justify-center gap-2 transition-all cursor-pointer shadow-sm ${
               isCustomMode
@@ -386,6 +443,7 @@ export function ChaosTemplatesClient() {
                       setCustomTitle(tmpl.name);
                       setCustomRawJson(tmpl.rawJson);
                       setViewMode('chaos');
+                      updateUrlState({ customId: tmpl.id, mode: undefined, template: undefined });
                     }}
                     onKeyDown={(e) => {
                       if (e.key === 'Enter' || e.key === ' ') {
@@ -394,6 +452,7 @@ export function ChaosTemplatesClient() {
                         setCustomTitle(tmpl.name);
                         setCustomRawJson(tmpl.rawJson);
                         setViewMode('chaos');
+                        updateUrlState({ customId: tmpl.id, mode: undefined, template: undefined });
                       }
                     }}
                     className={`w-full text-left p-2 rounded-lg border transition-all flex items-center justify-between gap-1 cursor-pointer my-0.5 select-none ${
@@ -437,6 +496,7 @@ export function ChaosTemplatesClient() {
                   setActiveResponseKey('');
                   setSimulatedStatus(200);
                   if (viewMode === 'edit_custom') setViewMode('chaos');
+                  updateUrlState({ template: svc.id, mode: undefined, customId: undefined });
                 }}
                 className={`w-full text-left p-2.5 rounded-lg border transition-all flex flex-col gap-1 cursor-pointer ${
                   isSelected 

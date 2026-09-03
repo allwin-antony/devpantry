@@ -258,7 +258,7 @@ export const SchemaBuilderUtility: React.FC = () => {
                 className="p-2.5 rounded-lg bg-[var(--bg-panel-subtle)] border border-[var(--border-dev)] flex flex-col gap-2 group hover:border-rose-500/40 transition-colors"
               >
                 <div className="flex items-center gap-2">
-                  <span className="text-[10px] text-[var(--text-muted)] font-bold w-4 select-none">
+                  <span className="text-[10px] text-[var(--text-secondary)] font-bold w-4 select-none">
                     #{idx + 1}
                   </span>
 
@@ -289,16 +289,30 @@ export const SchemaBuilderUtility: React.FC = () => {
                     onClick={() => handleRemoveField(field.id)}
                     disabled={fields.length <= 1}
                     title={fields.length <= 1 ? "At least one field is required" : "Delete field"}
-                    className="p-1 rounded text-[var(--text-muted)] hover:text-rose-500 hover:bg-rose-500/10 disabled:opacity-30 transition-colors"
+                    className="p-1 rounded text-[var(--text-secondary)] hover:text-rose-500 hover:bg-rose-500/10 disabled:opacity-30 transition-colors"
                   >
                     <Trash2 className="w-3.5 h-3.5" />
                   </button>
                 </div>
 
+                {/* Field Type Description Hint */}
+                {(() => {
+                  const typeDef = AVAILABLE_FIELD_TYPES.find(t => t.id === field.type);
+                  if (!typeDef) return null;
+                  return (
+                    <div className="pl-6 text-[10.5px] font-mono text-[var(--text-secondary)] flex items-center gap-1.5 opacity-90">
+                      <span className="text-[9px] px-1.5 py-0.2 rounded bg-rose-500/15 text-rose-600 dark:text-rose-400 font-bold border border-rose-500/20 shrink-0">
+                        {typeDef.category}
+                      </span>
+                      <span className="truncate">{typeDef.description}</span>
+                    </div>
+                  );
+                })()}
+
                 {/* If Enum, render comma-separated values input */}
                 {field.type === 'enum' && (
                   <div className="flex items-center gap-2 pl-6">
-                    <span className="text-[10px] text-[var(--text-muted)] shrink-0">Values:</span>
+                    <span className="text-[10px] font-bold text-[var(--text-secondary)] shrink-0">Values:</span>
                     <input
                       type="text"
                       value={field.options || 'active, pending, suspended'}
@@ -311,9 +325,9 @@ export const SchemaBuilderUtility: React.FC = () => {
 
                 {/* Per-field Chaos Slider */}
                 <div className="flex items-center justify-between gap-3 pl-6 pt-1 border-t border-[var(--border-dev-subtle)] text-[11px]">
-                  <div className="flex items-center gap-1.5 text-[var(--text-muted)]">
+                  <div className="flex items-center gap-1.5 text-[var(--text-secondary)]">
                     <SlidersHorizontal className="w-3 h-3 text-rose-500" />
-                    <span className="text-[10px]">Field Chaos:</span>
+                    <span className="text-[10px] font-bold">Field Chaos:</span>
                   </div>
 
                   <div className="flex items-center gap-2 flex-1 max-w-[180px]">
@@ -325,7 +339,7 @@ export const SchemaBuilderUtility: React.FC = () => {
                       onChange={e => handleUpdateField(field.id, { chaosLevel: Number(e.target.value) })}
                       className="w-full accent-rose-500 cursor-pointer h-1"
                     />
-                    <span className={`text-[10px] font-bold w-7 text-right ${field.chaosLevel > 70 ? 'text-rose-500' : 'text-cyan-500'}`}>
+                    <span className={`text-[10px] font-bold w-7 text-right ${field.chaosLevel > 70 ? 'text-rose-500' : 'text-cyan-600 dark:text-cyan-400'}`}>
                       {field.chaosLevel}%
                     </span>
                   </div>
