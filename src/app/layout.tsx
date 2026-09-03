@@ -2,7 +2,6 @@ import type { Metadata, Viewport } from 'next';
 import './globals.css';
 import { ThemeProvider } from '../components/ThemeProvider';
 import { Header } from '../components/Header';
-import { StatusBar } from '../components/StatusBar';
 
 export const viewport: Viewport = {
   themeColor: [
@@ -137,9 +136,6 @@ export default function RootLayout({
           <main className="flex-1 h-full overflow-hidden flex flex-col min-w-0">
             {children}
           </main>
-
-          {/* Bottom Status Bar */}
-          <StatusBar />
         </ThemeProvider>
       </body>
     </html>
