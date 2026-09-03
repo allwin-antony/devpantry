@@ -258,7 +258,7 @@ export function MyComponent() {
         </div>
 
         <div className="p-2 border-t border-[var(--border-dev)] text-[10px] text-[var(--text-muted)] text-center bg-[var(--bg-panel-subtle)]">
-          Showing <strong>{filteredCollections.length}</strong> of {allCollections.length} libraries
+          Showing <strong>{filteredCollections.length.toLocaleString()}</strong> libraries
         </div>
       </div>
 
@@ -395,7 +395,7 @@ export function MyComponent() {
             </div>
 
             <div className="text-[11px] text-[var(--text-muted)]">
-              Showing <strong>{visibleIcons.length}</strong> of <strong>{allFilteredIcons.length}</strong> icons • Infinite scroll
+              Showing <strong>{allFilteredIcons.length.toLocaleString()}</strong> icons
             </div>
           </div>
 

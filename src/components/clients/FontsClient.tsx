@@ -323,7 +323,7 @@ font-family: '${activeFont.name}', ${activeFont.category === 'Serif' ? 'serif' :
           </select>
 
           <span className="text-[11px] text-[var(--text-muted)] font-mono">
-            Showing <strong>{visibleFonts.length}</strong> of <strong>{filteredFonts.length}</strong> fonts
+            Showing <strong>{filteredFonts.length.toLocaleString()}</strong> fonts
           </span>
         </div>
       </div>

@@ -314,8 +314,8 @@ export function Example() {
             />
           </div>
 
-          <span className="text-xs text-[var(--text-muted)]">
-            Showing <strong>{visibleIcons.length}</strong> of <strong>{allFilteredIcons.length}</strong> icons • Infinite scroll
+          <span className="text-[11px] text-[var(--text-muted)] font-mono">
+            Showing <strong>{allFilteredIcons.length.toLocaleString()}</strong> icons
           </span>
         </div>
 
