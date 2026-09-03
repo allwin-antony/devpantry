@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { 
   Flame, 
@@ -23,11 +23,9 @@ import {
   Download,
   Check
 } from 'lucide-react';
-import { getAllFonts, getFontCdnStylesheet } from '@/lib/datasetLoader';
-import { NAUGHTY_STRINGS, DIRTY_EMAILS, DIRTY_URLS } from '@/utilities/chaos-data/chaosDataEngine';
 
 export function HomeClient() {
-  const [activeTab, setActiveTab] = useState<'fonts' | 'icons' | 'chaos'>('fonts');
+  const [activeTab, setActiveTab] = useState<'fonts' | 'icons'>('fonts');
   
   // Font widget state
   const [fontSampleText, setFontSampleText] = useState('Build fast. Break nothing.');
@@ -46,13 +44,6 @@ export function HomeClient() {
     { fullKey: 'heroicons:shopping-bag-solid', prefix: 'heroicons', name: 'shopping-bag-solid' }
   ]);
   const [isLoadingIcons, setIsLoadingIcons] = useState(false);
-
-  // Chaos widget state
-  const [generatedChaos, setGeneratedChaos] = useState<{ title: string; value: string; type: string }>({
-    title: 'BiDi & Zero-Width Trap',
-    value: 'test\u202E\u0000\uFEFF@ex\u0430mple.com',
-    type: 'Punycode Email'
-  });
 
   // Hero Quick Specimen Fonts
   const heroFonts = [
@@ -110,29 +101,11 @@ export function HomeClient() {
     setTimeout(() => setCopiedId(null), 1800);
   };
 
-  const generateNewChaos = (type: 'blns' | 'punycode' | 'float' | 'date') => {
-    if (type === 'blns') {
-      const val = NAUGHTY_STRINGS[Math.floor(Math.random() * NAUGHTY_STRINGS.length)];
-      setGeneratedChaos({ title: 'Big List of Naughty Strings (BLNS)', value: val, type: 'Security / Boundary Attack' });
-    } else if (type === 'punycode') {
-      const val = DIRTY_EMAILS[Math.floor(Math.random() * DIRTY_EMAILS.length)];
-      setGeneratedChaos({ title: 'RFC 5321 & Punycode Homoglyph', value: val, type: 'Punycode Unicode Email' });
-    } else if (type === 'float') {
-      const traps = [0.1 + 0.2, 0.30000000000000004, 1e-15, 9007199254740992, NaN, Infinity, -0];
-      const val = String(traps[Math.floor(Math.random() * traps.length)]);
-      setGeneratedChaos({ title: 'IEEE 754 Floating Precision Trap', value: val, type: 'Floating Point Anomaly' });
-    } else {
-      const dates = ['1970-01-01T00:00:00.000Z', '2038-01-19T03:14:07.000Z', '9999-12-31T23:59:59.999Z', '0000-00-00T00:00:00Z'];
-      const val = dates[Math.floor(Math.random() * dates.length)];
-      setGeneratedChaos({ title: 'Epoch Edge Date / Y2038 Overflow', value: val, type: 'Timestamp Anomaly' });
-    }
-  };
-
   const coreStudios = [
     {
       id: 'chaos-data',
       title: 'Chaos Mock Data & Schema Studio',
-      badge: 'Synthetic Engine',
+      badge: 'Synthetic Tables',
       badgeColor: 'text-rose-600 dark:text-rose-400 bg-rose-500/15 border-rose-500/30',
       description: 'Generate dirty, high-entropy test datasets across E-Commerce, B2B Users, Invoicing, and 100+ BLNS attack payloads. Compose custom tables with 13+ field types and per-column entropy sliders.',
       icon: Flame,
@@ -140,6 +113,18 @@ export function HomeClient() {
       href: '/chaos-data',
       stats: '100+ BLNS Strings • 13 Types • JSON / CSV / Zod / SQL',
       cta: 'Launch Data Studio'
+    },
+    {
+      id: 'chaos-templates',
+      title: 'API Chaos Templates & Blueprints',
+      badge: '17 Production APIs',
+      badgeColor: 'text-violet-600 dark:text-violet-400 bg-violet-500/15 border-violet-500/30',
+      description: 'Production API response schemas for Stripe Billing, Google SSO, GitHub OAuth, Supabase Auth, Resend, and Twilio — injected with chaotic mock payloads. Build custom JSON chaos blueprints and export TypeScript fixtures.',
+      icon: Radio,
+      iconColor: 'text-violet-500',
+      href: '/chaos-templates',
+      stats: '17 Production Schemas • Custom JSON Builder • TypeScript SDK',
+      cta: 'Test API Schemas'
     },
     {
       id: 'fonts',
@@ -164,18 +149,6 @@ export function HomeClient() {
       href: '/icons',
       stats: '353,000+ SVGs • 238 Libraries • Live Master Search',
       cta: 'Open Icon Browser'
-    },
-    {
-      id: 'chaos-templates',
-      title: 'API Chaos Templates & Blueprints',
-      badge: '17 Real APIs',
-      badgeColor: 'text-violet-600 dark:text-violet-400 bg-violet-500/15 border-violet-500/30',
-      description: 'Production API response schemas for Stripe Billing, Google SSO, GitHub OAuth, Supabase Auth, Resend, and Twilio — injected with chaotic mock payloads. Build custom JSON chaos blueprints and export TypeScript fixtures.',
-      icon: Radio,
-      iconColor: 'text-violet-500',
-      href: '/chaos-templates',
-      stats: '17 Production Schemas • Custom JSON Builder • TypeScript SDK',
-      cta: 'Test API Schemas'
     }
   ];
 
@@ -271,7 +244,7 @@ export function HomeClient() {
         </div>
       </section>
 
-      {/* ── 2. INTERACTIVE LIVE QUICK-WORKBENCH WIDGET ── */}
+      {/* ── 2. INTERACTIVE LIVE QUICK-WORKBENCH WIDGET (FONTS & ICONS) ── */}
       <section className="bg-[var(--bg-panel)] border border-[var(--border-dev)] rounded-2xl p-5 shadow-sm transition-colors flex flex-col gap-4">
         <div className="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-[var(--border-dev)]">
           <div className="flex items-center gap-2">
@@ -305,18 +278,6 @@ export function HomeClient() {
             >
               <Box className="w-3.5 h-3.5" />
               <span>Instant Icons</span>
-            </button>
-
-            <button
-              onClick={() => setActiveTab('chaos')}
-              className={`px-3 py-1 rounded-md text-[11px] font-bold flex items-center gap-1.5 transition-colors cursor-pointer ${
-                activeTab === 'chaos'
-                  ? 'bg-emerald-500 text-white shadow-sm'
-                  : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
-              }`}
-            >
-              <Flame className="w-3.5 h-3.5" />
-              <span>Instant Chaos Data</span>
             </button>
           </div>
         </div>
@@ -380,6 +341,16 @@ export function HomeClient() {
                 </div>
               ))}
             </div>
+
+            <div className="text-center pt-2">
+              <Link
+                href="/fonts"
+                className="inline-flex items-center gap-1.5 text-xs font-bold text-rose-500 hover:underline cursor-pointer"
+              >
+                <span>Browse All 2,180+ Open-Source Fonts with Full Weight Specimens & Sliders</span>
+                <ArrowRight className="w-3.5 h-3.5" />
+              </Link>
+            </div>
           </div>
         )}
 
@@ -431,7 +402,7 @@ export function HomeClient() {
               ))}
             </div>
 
-            <div className="text-center pt-1">
+            <div className="text-center pt-2">
               <Link
                 href={`/icons#${iconResults[0]?.fullKey || 'lucide:shopping-cart'}`}
                 className="inline-flex items-center gap-1.5 text-xs font-bold text-cyan-500 hover:underline"
@@ -439,61 +410,6 @@ export function HomeClient() {
                 <span>Open Full Vector Icon Browser with 353K+ SVGs & Customizer</span>
                 <ArrowRight className="w-3.5 h-3.5" />
               </Link>
-            </div>
-          </div>
-        )}
-
-        {/* Tab 3: Instant Chaos Data Generator */}
-        {activeTab === 'chaos' && (
-          <div className="flex flex-col gap-3">
-            <div className="flex flex-wrap items-center gap-2">
-              <span className="text-[10px] text-[var(--text-muted)] font-bold mr-1">SYNTHESIZE:</span>
-              <button
-                onClick={() => generateNewChaos('punycode')}
-                className="px-2.5 py-1 rounded bg-[var(--bg-sidebar)] border border-[var(--border-dev)] text-xs font-bold text-[var(--text-primary)] hover:border-emerald-500 transition-colors cursor-pointer"
-              >
-                Punycode Email
-              </button>
-              <button
-                onClick={() => generateNewChaos('blns')}
-                className="px-2.5 py-1 rounded bg-[var(--bg-sidebar)] border border-[var(--border-dev)] text-xs font-bold text-[var(--text-primary)] hover:border-emerald-500 transition-colors cursor-pointer"
-              >
-                BLNS Naughty String
-              </button>
-              <button
-                onClick={() => generateNewChaos('float')}
-                className="px-2.5 py-1 rounded bg-[var(--bg-sidebar)] border border-[var(--border-dev)] text-xs font-bold text-[var(--text-primary)] hover:border-emerald-500 transition-colors cursor-pointer"
-              >
-                Float Precision (0.1+0.2)
-              </button>
-              <button
-                onClick={() => generateNewChaos('date')}
-                className="px-2.5 py-1 rounded bg-[var(--bg-sidebar)] border border-[var(--border-dev)] text-xs font-bold text-[var(--text-primary)] hover:border-emerald-500 transition-colors cursor-pointer"
-              >
-                Y2038 / Epoch Timestamp
-              </button>
-            </div>
-
-            <div className="bg-[var(--bg-panel-subtle)] border border-[var(--border-dev)] rounded-xl p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 shadow-inner">
-              <div className="min-w-0 flex-1">
-                <div className="flex items-center gap-2 mb-1">
-                  <span className="text-xs font-bold text-[var(--text-primary)] font-sans">{generatedChaos.title}</span>
-                  <span className="text-[9px] px-1.5 py-0.2 rounded font-bold bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30">
-                    {generatedChaos.type}
-                  </span>
-                </div>
-                <code className="text-xs text-rose-500 font-mono break-all font-bold select-all">
-                  {generatedChaos.value}
-                </code>
-              </div>
-
-              <button
-                onClick={() => copyText(generatedChaos.value, 'chaos-val')}
-                className="px-3 py-1.5 rounded-lg bg-emerald-500 text-white text-xs font-bold hover:bg-emerald-600 flex items-center gap-1.5 transition-colors shadow-sm cursor-pointer shrink-0"
-              >
-                {copiedId === 'chaos-val' ? <Check className="w-3.5 h-3.5 text-white" /> : <Copy className="w-3.5 h-3.5" />}
-                <span>{copiedId === 'chaos-val' ? 'Copied!' : 'Copy Value'}</span>
-              </button>
             </div>
           </div>
         )}
@@ -559,7 +475,7 @@ export function HomeClient() {
             </span>
             <Link href="/fonts" className="text-[11px] text-rose-500 hover:underline flex items-center gap-1 font-bold">
               <span>View All 2,180+</span>
-              <ArrowRight className="w-3 h-3" />
+              <ArrowRight className="w-3.5 h-3.5" />
             </Link>
           </div>
 
@@ -588,7 +504,7 @@ export function HomeClient() {
             </span>
             <Link href="/icons" className="text-[11px] text-cyan-500 hover:underline flex items-center gap-1 font-bold">
               <span>View All 238 Libs</span>
-              <ArrowRight className="w-3 h-3" />
+              <ArrowRight className="w-3.5 h-3.5" />
             </Link>
           </div>
 
