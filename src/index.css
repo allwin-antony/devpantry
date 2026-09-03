@@ -1,0 +1,191 @@
+@import "tailwindcss";
+
+/* FailState Design System - High-Density Theme Tokens (Dark & Light) */
+
+:root {
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+
+  /* Default Dark Mode (Carbon Space) */
+  --bg-app: #06090f;
+  --bg-sidebar: #090d16;
+  --bg-panel: #0d131f;
+  --bg-panel-subtle: #080c14;
+  --bg-panel-hover: #131b2c;
+  --bg-input: #080c14;
+  --bg-statusbar: #05080e;
+  --bg-codebox: #04060a;
+  --bg-modal: #090e18;
+
+  /* Borders */
+  --border-dev: rgba(255, 255, 255, 0.08);
+  --border-dev-subtle: rgba(255, 255, 255, 0.04);
+  --border-focus: #f43f5e;
+
+  /* Text */
+  --text-primary: #f8fafc;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
+  --text-code: #e2e8f0;
+
+  /* Accents */
+  --accent-rose: #f43f5e;
+  --accent-cyan: #06b6d4;
+  --accent-violet: #8b5cf6;
+  --accent-emerald: #10b981;
+  --accent-amber: #f59e0b;
+
+  --grid-line: rgba(255, 255, 255, 0.02);
+  --table-th-bg: #090e18;
+  --table-hover: rgba(255, 255, 255, 0.03);
+  --pill-bg: rgba(255, 255, 255, 0.06);
+}
+
+:root.light, html.light {
+  /* Crisp Engineering Light Mode */
+  --bg-app: #f1f5f9;
+  --bg-sidebar: #e2e8f0;
+  --bg-panel: #ffffff;
+  --bg-panel-subtle: #f8fafc;
+  --bg-panel-hover: #f1f5f9;
+  --bg-input: #ffffff;
+  --bg-statusbar: #e2e8f0;
+  --bg-codebox: #0f172a; /* Keep dark background for code editor high-contrast reading */
+  --bg-modal: #ffffff;
+
+  /* Borders */
+  --border-dev: rgba(0, 0, 0, 0.12);
+  --border-dev-subtle: rgba(0, 0, 0, 0.06);
+  --border-focus: #f43f5e;
+
+  /* Text */
+  --text-primary: #0f172a;
+  --text-secondary: #475569;
+  --text-muted: #64748b;
+  --text-code: #f8fafc;
+
+  --grid-line: rgba(0, 0, 0, 0.04);
+  --table-th-bg: #e2e8f0;
+  --table-hover: rgba(0, 0, 0, 0.03);
+  --pill-bg: rgba(0, 0, 0, 0.06);
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  font-family: var(--font-sans);
+  background-color: var(--bg-app);
+  color: var(--text-primary);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+#root {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* Engineering Grid Background */
+.bg-dev-grid {
+  background-size: 32px 32px;
+  background-image: 
+    linear-gradient(to right, var(--grid-line) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--grid-line) 1px, transparent 1px);
+}
+
+/* Custom Sleek Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--border-dev);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-muted);
+}
+
+/* Developer High-Density Panel */
+.dev-panel {
+  background: var(--bg-panel);
+  border: 1px solid var(--border-dev);
+  border-radius: 8px;
+}
+
+/* Monospace Code & Data Box */
+.dev-codebox {
+  background: var(--bg-codebox);
+  border: 1px solid var(--border-dev);
+  font-family: var(--font-mono);
+  color: var(--text-code);
+}
+
+/* Terminal Status Bar */
+.dev-statusbar {
+  height: 28px;
+  background: var(--bg-statusbar);
+  border-top: 1px solid var(--border-dev);
+  font-family: var(--font-mono);
+  font-size: 11px;
+}
+
+/* Form Inputs for Devs */
+.dev-input {
+  background: var(--bg-input);
+  border: 1px solid var(--border-dev);
+  color: var(--text-primary);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  outline: none;
+  transition: border-color 0.15s ease;
+}
+
+.dev-input:focus {
+  border-color: var(--border-focus);
+  box-shadow: 0 0 0 1px rgba(244, 63, 94, 0.3);
+}
+
+/* Data Table Styling */
+.dev-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+}
+
+.dev-table th {
+  background: var(--table-th-bg);
+  color: var(--text-secondary);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  border-bottom: 1px solid var(--border-dev);
+  padding: 8px 12px;
+  text-align: left;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.dev-table td {
+  padding: 6px 12px;
+  border-bottom: 1px solid var(--border-dev-subtle);
+  color: var(--text-primary);
+  white-space: nowrap;
+}
+
+.dev-table tr:hover td {
+  background: var(--table-hover);
+}
