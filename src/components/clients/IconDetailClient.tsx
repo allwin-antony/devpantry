@@ -262,11 +262,11 @@ export function Example() {
         </div>
 
         {/* Selected Icon Hero Display */}
-        <div className="bg-[var(--bg-codebox)] border border-[var(--border-dev)] rounded-lg p-6 flex flex-col sm:flex-row items-center justify-between gap-6">
+        <div className="bg-[var(--bg-panel-subtle)] border border-[var(--border-dev)] rounded-lg p-6 flex flex-col sm:flex-row items-center justify-between gap-6 shadow-sm">
           <div className="flex items-center gap-6">
             <div 
               style={{ width: `${iconSize + 24}px`, height: `${iconSize + 24}px` }} 
-              className="p-3 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center shadow-inner"
+              className="p-3 rounded-xl bg-[var(--bg-panel)] border border-[var(--border-dev)] flex items-center justify-center shadow-sm"
             >
               <img
                 src={getSvgUrl(currentIcon)}

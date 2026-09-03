@@ -485,13 +485,13 @@ export function MyComponent() {
           </div>
 
           {/* 🌟 SELECTED ICON HERO DETAILS BENCH (Visual Preview + Full Metadata) 🌟 */}
-          <div className="bg-[var(--bg-codebox)] border border-[var(--border-dev)] rounded-lg p-3.5 flex flex-col md:flex-row items-start md:items-center justify-between gap-4 transition-colors shadow-inner">
+          <div className="bg-[var(--bg-panel-subtle)] border border-[var(--border-dev)] rounded-lg p-3.5 flex flex-col md:flex-row items-start md:items-center justify-between gap-4 transition-colors shadow-sm">
             {/* Left: Live Visual SVG Canvas & Details */}
             <div className="flex items-center gap-3.5">
               {/* Live Preview Box */}
               <div 
                 style={{ width: `${Math.max(iconSize + 20, 52)}px`, height: `${Math.max(iconSize + 20, 52)}px` }}
-                className="p-2 rounded-xl bg-white/5 border border-[var(--border-dev)] flex items-center justify-center shadow-sm shrink-0"
+                className="p-2 rounded-xl bg-[var(--bg-panel)] border border-[var(--border-dev)] flex items-center justify-center shadow-sm shrink-0"
               >
                 <img
                   src={getSvgUrl(activeIcon.prefix, activeIcon.name)}
@@ -508,7 +508,7 @@ export function MyComponent() {
                   <span className="text-sm font-bold text-[var(--text-primary)] font-mono">
                     {activeIcon.name}
                   </span>
-                  <span className="text-[10px] px-1.5 py-0.2 rounded font-bold bg-cyan-500/20 text-cyan-600 dark:text-cyan-300 border border-cyan-500/30">
+                  <span className="text-[10px] px-1.5 py-0.2 rounded font-bold bg-cyan-500/15 text-cyan-600 dark:text-cyan-300 border border-cyan-500/30">
                     {activeIcon.prefix}
                   </span>
                 </div>
@@ -670,7 +670,7 @@ export function MyComponent() {
           </div>
 
           {/* Actual SVG Icon Grid */}
-          <div className="flex-1 overflow-y-auto p-4 bg-[var(--bg-codebox)]">
+          <div className="flex-1 overflow-y-auto p-4 bg-[var(--bg-panel-subtle)]">
             <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-3">
               {displayedItems.map(item => {
                 const isSelected = activeIcon.fullKey === item.fullKey;
