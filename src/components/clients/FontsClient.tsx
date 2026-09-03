@@ -377,28 +377,18 @@ font-family: '${activeFont.name}', ${activeFont.category === 'Serif' ? 'serif' :
                   <div className="flex items-center gap-1.5">
                     <span className="font-bold text-[var(--text-secondary)]">{font.styles_count} styles</span>
                     <span>•</span>
-                    <span className="truncate max-w-[90px]">{font.license_type}</span>
+                    <span className="truncate max-w-[120px]">{font.license_type}</span>
                   </div>
 
-                  <div className="flex items-center gap-1">
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        setActiveFont(font);
-                      }}
-                      className="px-2 py-0.5 rounded bg-[var(--bg-sidebar)] border border-[var(--border-dev)] hover:bg-rose-500 hover:text-white transition-colors cursor-pointer"
-                    >
-                      Test
-                    </button>
-                    <Link
-                      href={`/fonts/${font.slug}`}
-                      onClick={(e) => e.stopPropagation()}
-                      className="p-1 rounded bg-[var(--bg-sidebar)] border border-[var(--border-dev)] hover:text-rose-500 transition-colors"
-                      title={`View ${font.name} dedicated page`}
-                    >
-                      <ArrowRight className="w-3 h-3" />
-                    </Link>
-                  </div>
+                  <Link
+                    href={`/fonts/${font.slug}`}
+                    onClick={(e) => e.stopPropagation()}
+                    className="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-[var(--bg-sidebar)] border border-[var(--border-dev)] text-[var(--text-secondary)] hover:text-rose-500 hover:border-rose-500/40 transition-colors"
+                    title={`View ${font.name} dedicated page`}
+                  >
+                    <span>Full Page</span>
+                    <ArrowRight className="w-3 h-3" />
+                  </Link>
                 </div>
               </div>
             );
