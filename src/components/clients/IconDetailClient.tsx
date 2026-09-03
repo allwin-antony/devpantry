@@ -42,14 +42,41 @@ export function IconDetailClient({ collection }: { collection: IconCollectionIte
     { name: 'White', hex: '#ffffff' }
   ];
 
+  // Read initial hash on load/refresh
+  const requestedHashRef = useRef<string | null>(null);
+
+  useEffect(() => {
+    const parseHash = () => {
+      const hash = window.location.hash.replace(/^#/, '').trim();
+      if (hash) {
+        const iconName = hash.includes(':') ? hash.split(':')[1] : hash;
+        if (iconName) {
+          requestedHashRef.current = iconName;
+          setSelectedIcon(iconName);
+        }
+      }
+    };
+    parseHash();
+    window.addEventListener('hashchange', parseHash);
+    return () => window.removeEventListener('hashchange', parseHash);
+  }, []);
+
   // Fetch full icon list from Iconify Collection API
   useEffect(() => {
     let isCancelled = false;
     setIsLoading(true);
     setDisplayLimit(144);
     const initialSamples = collection.samples || ['home', 'user', 'settings', 'search', 'bell', 'check', 'mail'];
-    setLoadedIcons(initialSamples);
-    setSelectedIcon(initialSamples[0] || 'icon');
+    
+    const reqIcon = requestedHashRef.current;
+    if (reqIcon) {
+      const ordered = [reqIcon, ...initialSamples.filter(s => s !== reqIcon)];
+      setLoadedIcons(ordered);
+      setSelectedIcon(reqIcon);
+    } else {
+      setLoadedIcons(initialSamples);
+      setSelectedIcon(initialSamples[0] || 'icon');
+    }
 
     fetch(`https://api.iconify.design/collection?prefix=${collection.prefix}`)
       .then(res => res.json())
@@ -70,9 +97,13 @@ export function IconDetailClient({ collection }: { collection: IconCollectionIte
             list.push(...data.hidden);
           }
           if (list.length > 0) {
-            const unique = Array.from(new Set(list));
+            let unique = Array.from(new Set(list));
+            const req = requestedHashRef.current;
+            if (req) {
+              unique = [req, ...unique.filter(n => n !== req)];
+              requestedHashRef.current = null;
+            }
             setLoadedIcons(unique);
-            if (unique.length > 0) setSelectedIcon(unique[0]);
           }
         }
       })

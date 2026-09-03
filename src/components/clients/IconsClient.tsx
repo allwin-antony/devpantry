@@ -94,7 +94,9 @@ export function IconsClient() {
     });
   }, [allCollections, collectionSearch, selectedCategory]);
 
-  // ── URL Hash Synchronization (e.g. #lucide:a-arrow-down or #tabler:settings) ──
+  // ── URL Hash Tracking on Load/Refresh (e.g. #lucide:a-arrow-down) ──
+  const requestedHashIconRef = useRef<{ prefix: string; name: string; fullKey: string } | null>(null);
+
   useEffect(() => {
     const parseUrlHash = () => {
       const hash = window.location.hash.replace(/^#/, '').trim();
@@ -103,6 +105,7 @@ export function IconsClient() {
         const prefix = parts[0];
         const name = parts.slice(1).join(':');
         if (prefix && name) {
+          requestedHashIconRef.current = { prefix, name, fullKey: hash };
           setSelectedPrefix(prefix);
           setSelectedIconItem({
             fullKey: hash,
@@ -125,15 +128,22 @@ export function IconsClient() {
     setDisplayLimit(144);
 
     const initialSamples = activeCollection.samples || ['home', 'user', 'settings', 'search', 'bell', 'check', 'mail'];
-    setLoadedIcons(initialSamples);
     
-    // Only set default if no icon already active from URL hash or master search
-    if (!selectedIconItem || (selectedIconItem.prefix !== activeCollection.prefix && !window.location.hash)) {
-      setSelectedIconItem({
-        fullKey: `${activeCollection.prefix}:${initialSamples[0] || 'icon'}`,
-        prefix: activeCollection.prefix,
-        name: initialSamples[0] || 'icon'
-      });
+    // Check if an initial URL hash was requested for this collection on load/refresh
+    const requested = requestedHashIconRef.current;
+    if (requested && requested.prefix === activeCollection.prefix) {
+      const reorderedSamples = [requested.name, ...initialSamples.filter(s => s !== requested.name)];
+      setLoadedIcons(reorderedSamples);
+      setSelectedIconItem(requested);
+    } else {
+      setLoadedIcons(initialSamples);
+      if (!selectedIconItem || selectedIconItem.prefix !== activeCollection.prefix) {
+        setSelectedIconItem({
+          fullKey: `${activeCollection.prefix}:${initialSamples[0] || 'icon'}`,
+          prefix: activeCollection.prefix,
+          name: initialSamples[0] || 'icon'
+        });
+      }
     }
 
     fetch(`https://api.iconify.design/collection?prefix=${activeCollection.prefix}`)
@@ -150,7 +160,14 @@ export function IconsClient() {
           if (Array.isArray(data.hidden)) list.push(...data.hidden);
 
           if (list.length > 0) {
-            const unique = Array.from(new Set(list));
+            let unique = Array.from(new Set(list));
+            // Prioritize the requested icon at index 0 on load/refresh
+            const req = requestedHashIconRef.current;
+            if (req && req.prefix === activeCollection.prefix) {
+              unique = [req.name, ...unique.filter(n => n !== req.name)];
+              // Consume the ref so subsequent in-page interactions won't reorder again
+              requestedHashIconRef.current = null;
+            }
             setLoadedIcons(unique);
           }
         }
