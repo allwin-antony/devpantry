@@ -8,54 +8,40 @@ import {
   Box, 
   Radio, 
   ArrowRight, 
-  ShieldCheck, 
-  Sparkles, 
   Code2, 
-  Layers, 
-  Terminal, 
-  CheckCircle2, 
-  Copy,
   Search,
   Zap,
-  Globe,
-  RefreshCw,
-  Cpu,
-  Download,
-  Check
+  Check,
+  Github,
+  ShieldCheck
 } from 'lucide-react';
 
 export function HomeClient() {
   const [activeTab, setActiveTab] = useState<'fonts' | 'icons'>('fonts');
-  
-  // Font widget state
-  const [fontSampleText, setFontSampleText] = useState('Build fast. Break nothing.');
+  const [fontSampleText, setFontSampleText] = useState('The quick brown fox jumps over the lazy dog.');
   const [copiedId, setCopiedId] = useState<string | null>(null);
-
-  // Icon widget state
-  const [iconQuery, setIconQuery] = useState('cart');
+  const [iconQuery, setIconQuery] = useState('arrow');
   const [iconResults, setIconResults] = useState<{ fullKey: string; prefix: string; name: string }[]>([
-    { fullKey: 'lucide:shopping-cart', prefix: 'lucide', name: 'shopping-cart' },
-    { fullKey: 'tabler:shopping-cart', prefix: 'tabler', name: 'shopping-cart' },
-    { fullKey: 'solar:cart-bold', prefix: 'solar', name: 'cart-bold' },
-    { fullKey: 'ph:shopping-cart-bold', prefix: 'ph', name: 'shopping-cart-bold' },
-    { fullKey: 'bi:cart-check-fill', prefix: 'bi', name: 'cart-check-fill' },
-    { fullKey: 'ri:shopping-cart-2-line', prefix: 'ri', name: 'shopping-cart-2-line' },
-    { fullKey: 'material-symbols:shopping-bag', prefix: 'material-symbols', name: 'shopping-bag' },
-    { fullKey: 'heroicons:shopping-bag-solid', prefix: 'heroicons', name: 'shopping-bag-solid' }
+    { fullKey: 'lucide:arrow-right', prefix: 'lucide', name: 'arrow-right' },
+    { fullKey: 'tabler:arrow-up', prefix: 'tabler', name: 'arrow-up' },
+    { fullKey: 'ph:arrow-circle-down-bold', prefix: 'ph', name: 'arrow-circle-down-bold' },
+    { fullKey: 'ri:arrow-left-line', prefix: 'ri', name: 'arrow-left-line' },
+    { fullKey: 'material-symbols:arrow-forward', prefix: 'material-symbols', name: 'arrow-forward' },
+    { fullKey: 'heroicons:arrow-path', prefix: 'heroicons', name: 'arrow-path' },
+    { fullKey: 'bi:arrow-repeat', prefix: 'bi', name: 'arrow-repeat' },
+    { fullKey: 'solar:arrow-to-top-right-bold', prefix: 'solar', name: 'arrow-to-top-right-bold' }
   ]);
   const [isLoadingIcons, setIsLoadingIcons] = useState(false);
 
-  // Hero Quick Specimen Fonts
   const heroFonts = [
-    { name: 'Inter', slug: 'inter', category: 'Sans', cdn: 'https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap' },
-    { name: 'Satoshi', slug: 'satoshi', category: 'Sans', cdn: 'https://api.fontshare.com/v2/css?f[]=satoshi@400,700&display=swap' },
-    { name: 'JetBrains Mono', slug: 'jetbrains-mono', category: 'Mono', cdn: 'https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap' },
+    { name: 'Inter', slug: 'inter', category: 'Sans Serif', cdn: 'https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap' },
+    { name: 'Satoshi', slug: 'satoshi', category: 'Sans Serif', cdn: 'https://api.fontshare.com/v2/css?f[]=satoshi@400,700&display=swap' },
+    { name: 'JetBrains Mono', slug: 'jetbrains-mono', category: 'Monospace', cdn: 'https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap' },
     { name: 'Clash Display', slug: 'clash-display', category: 'Display', cdn: 'https://api.fontshare.com/v2/css?f[]=clash-display@600,700&display=swap' },
-    { name: 'Fira Code', slug: 'fira-code', category: 'Mono', cdn: 'https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;700&display=swap' },
+    { name: 'Fira Code', slug: 'fira-code', category: 'Monospace', cdn: 'https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;700&display=swap' },
     { name: 'Cabinet Grotesk', slug: 'cabinet-grotesk', category: 'Display', cdn: 'https://api.fontshare.com/v2/css?f[]=cabinet-grotesk@700,800&display=swap' }
   ];
 
-  // Load hero font stylesheets
   useEffect(() => {
     heroFonts.forEach(f => {
       if (!document.querySelector(`link[data-font-slug="${f.slug}"]`)) {
@@ -68,7 +54,6 @@ export function HomeClient() {
     });
   }, []);
 
-  // Icon search on type
   useEffect(() => {
     if (!iconQuery.trim() || iconQuery.trim().length < 2) return;
     setIsLoadingIcons(true);
@@ -77,21 +62,15 @@ export function HomeClient() {
         .then(res => res.json())
         .then(data => {
           if (data && Array.isArray(data.icons) && data.icons.length > 0) {
-            const parsed = data.icons.map((item: string) => {
+            setIconResults(data.icons.slice(0, 8).map((item: string) => {
               const parts = item.split(':');
-              return {
-                fullKey: item,
-                prefix: parts[0] || 'icon',
-                name: parts[1] || parts[0]
-              };
-            });
-            setIconResults(parsed);
+              return { fullKey: item, prefix: parts[0] || 'icon', name: parts[1] || parts[0] };
+            }));
           }
         })
         .catch(() => {})
         .finally(() => setIsLoadingIcons(false));
     }, 300);
-
     return () => clearTimeout(timer);
   }, [iconQuery]);
 
@@ -101,451 +80,300 @@ export function HomeClient() {
     setTimeout(() => setCopiedId(null), 1800);
   };
 
-  const coreStudios = [
+  const tools = [
     {
-      id: 'chaos-data',
-      title: 'Chaos Mock Data & Schema Studio',
-      badge: 'Synthetic Tables',
-      badgeColor: 'text-rose-600 dark:text-rose-400 bg-rose-500/15 border-rose-500/30',
-      description: 'Generate dirty, high-entropy test datasets across E-Commerce, B2B Users, Invoicing, and 100+ BLNS attack payloads. Compose custom tables with 13+ field types and per-column entropy sliders.',
       icon: Flame,
       iconColor: 'text-rose-500',
+      title: 'Chaos Data Studio',
+      desc: 'Generate high-entropy test datasets with 13+ field types, BLNS attack payloads, and per-column chaos sliders. Export to JSON, CSV, Zod & SQL.',
       href: '/chaos-data',
-      stats: '100+ BLNS Strings • 13 Types • JSON / CSV / Zod / SQL',
-      cta: 'Launch Data Studio'
+      badge: 'Schema GUI',
+      badgeColor: 'text-rose-600 dark:text-rose-400 bg-rose-500/10 border-rose-500/20',
     },
     {
-      id: 'chaos-templates',
-      title: 'API Chaos Templates & Blueprints',
-      badge: '17 Production APIs',
-      badgeColor: 'text-violet-600 dark:text-violet-400 bg-violet-500/15 border-violet-500/30',
-      description: 'Production API response schemas for Stripe Billing, Google SSO, GitHub OAuth, Supabase Auth, Resend, and Twilio — injected with chaotic mock payloads. Build custom JSON chaos blueprints and export TypeScript fixtures.',
       icon: Radio,
       iconColor: 'text-violet-500',
+      title: 'API Chaos Templates',
+      desc: 'Real-world API schemas for Stripe, Google SSO, GitHub OAuth, Supabase Auth, Resend, and Twilio — injected with dirty mock payloads.',
       href: '/chaos-templates',
-      stats: '17 Production Schemas • Custom JSON Builder • TypeScript SDK',
-      cta: 'Test API Schemas'
+      badge: '17 APIs',
+      badgeColor: 'text-violet-600 dark:text-violet-400 bg-violet-500/10 border-violet-500/20',
     },
     {
-      id: 'fonts',
-      title: 'Open Source Fonts Studio',
-      badge: '2,180+ Fonts',
-      badgeColor: 'text-amber-600 dark:text-amber-400 bg-amber-500/15 border-amber-500/30',
-      description: 'Search, test, and integrate 2,180+ open-source typefaces from Fontsource, Google Fonts, Fontshare, and GitHub. Live typography tester with interactive sizing, weights, tracking, and CSS @import generation.',
       icon: Type,
       iconColor: 'text-amber-500',
+      title: 'Open Source Fonts Studio',
+      desc: 'Browse, test, and integrate 2,180+ typefaces from Google Fonts, Fontsource, Fontshare, and GitHub with live CDN injection & CSS copy.',
       href: '/fonts',
-      stats: '2,180+ Typefaces • OFL & Commercial Free • CDN Injection',
-      cta: 'Explore Fonts Studio'
+      badge: '2,180+ Fonts',
+      badgeColor: 'text-amber-600 dark:text-amber-400 bg-amber-500/10 border-amber-500/20',
     },
     {
-      id: 'icons',
-      title: 'Vector Icons Studio & Master Search',
-      badge: '353K+ SVGs',
-      badgeColor: 'text-cyan-600 dark:text-cyan-400 bg-cyan-500/15 border-cyan-500/30',
-      description: 'Search and inspect 353,000+ vector icons across 238 icon packs: Lucide, Tabler, Google Material Symbols, Heroicons, Phosphor, and Simple Icons. Master search, live SVG customizer, and one-click React JSX copy.',
       icon: Box,
       iconColor: 'text-cyan-500',
+      title: 'Vector Icons Studio',
+      desc: 'Search 353,000+ vector icons across 238 libraries. Master search, live SVG customizer, deep-link hash navigation, and one-click React copy.',
       href: '/icons',
-      stats: '353,000+ SVGs • 238 Libraries • Live Master Search',
-      cta: 'Open Icon Browser'
-    }
-  ];
-
-  const popularFonts = [
-    { name: 'Inter', slug: 'inter', category: 'Sans' },
-    { name: 'Satoshi', slug: 'satoshi', category: 'Sans' },
-    { name: 'JetBrains Mono', slug: 'jetbrains-mono', category: 'Mono' },
-    { name: 'Fira Code', slug: 'fira-code', category: 'Mono' },
-    { name: 'Clash Display', slug: 'clash-display', category: 'Display' },
-    { name: 'Cabinet Grotesk', slug: 'cabinet-grotesk', category: 'Display' },
-    { name: 'Poppins', slug: 'poppins', category: 'Sans' },
-    { name: 'Roboto', slug: 'roboto', category: 'Sans' }
-  ];
-
-  const popularIconLibs = [
-    { name: 'Lucide Icons', prefix: 'lucide', count: '1,866' },
-    { name: 'Tabler Icons', prefix: 'tabler', count: '6,184' },
-    { name: 'Material Symbols', prefix: 'material-symbols', count: '15,611' },
-    { name: 'Heroicons', prefix: 'heroicons', count: '1,200' },
-    { name: 'Phosphor', prefix: 'ph', count: '7,488' },
-    { name: 'Simple Icons', prefix: 'simple-icons', count: '3,275' }
+      badge: '353K+ Icons',
+      badgeColor: 'text-cyan-600 dark:text-cyan-400 bg-cyan-500/10 border-cyan-500/20',
+    },
   ];
 
   return (
-    <div className="h-full overflow-y-auto p-4 md:p-6 flex flex-col gap-6 max-w-7xl mx-auto w-full font-mono">
-      {/* ── 1. HERO COMMAND BANNER ── */}
-      <section className="bg-[var(--bg-panel)] border border-[var(--border-dev)] rounded-2xl p-6 md:p-8 relative overflow-hidden shadow-sm transition-colors">
-        <div className="absolute -right-16 -top-16 w-96 h-96 bg-gradient-to-br from-rose-500/15 via-cyan-500/10 to-transparent rounded-full blur-3xl pointer-events-none" />
+    <div className="h-full overflow-y-auto">
+      {/* ═══════════════════════════════════════════════════════════════════ */}
+      {/* HERO                                                              */}
+      {/* ═══════════════════════════════════════════════════════════════════ */}
+      <section className="relative overflow-hidden">
+        {/* Ambient glow */}
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[900px] h-[500px] bg-gradient-to-b from-rose-500/8 via-cyan-500/5 to-transparent rounded-full blur-3xl pointer-events-none" />
 
-        <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6 relative z-10">
-          <div className="max-w-3xl">
-            {/* Project Name & Animated Tagline Badge */}
-            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[var(--bg-panel-subtle)] border border-rose-500/30 text-xs font-bold mb-4 shadow-sm relative overflow-hidden group">
-              {/* Animated Glowing Shimmer Background */}
-              <div className="absolute inset-0 bg-gradient-to-r from-rose-500/10 via-amber-500/10 via-cyan-500/10 to-rose-500/10 animate-shimmer pointer-events-none" />
-
-              {/* Glowing Pulse Dot */}
-              <div className="relative flex items-center justify-center">
-                <span className="w-2 h-2 rounded-full bg-rose-500 relative z-10" />
-                <span className="absolute w-4 h-4 rounded-full bg-rose-500 animate-ping-slow pointer-events-none" />
-              </div>
-
-              {/* Project Name */}
-              <span className="font-mono text-rose-500 font-extrabold uppercase tracking-wider text-[11px] relative z-10">
-                FAILSTATE <span className="text-[var(--text-muted)] font-normal">•</span> DEVPLAYGROUND.IO
-              </span>
-
-              <span className="hidden sm:inline text-[var(--text-muted)] text-[10px] relative z-10">|</span>
-
-              {/* Tagline */}
-              <span className="text-[var(--text-secondary)] font-sans font-medium text-[11px] hidden sm:inline relative z-10">
-                The Open-Source Developer Asset Engine & Chaos Sandbox
-              </span>
-
-              {/* Sparkle Icon */}
-              <Sparkles className="w-3.5 h-3.5 text-amber-500 animate-pulse ml-0.5 relative z-10" />
-            </div>
-
-            <h1 className="text-2xl sm:text-3xl md:text-4xl font-extrabold tracking-tight text-[var(--text-primary)] font-sans mb-3 leading-tight">
-              The Open-Source Developer Engine for <span className="text-transparent bg-clip-text bg-gradient-to-r from-rose-500 via-amber-500 to-cyan-500">Typography, Vector Icons & API Chaos</span>
-            </h1>
-
-            <p className="text-xs md:text-sm text-[var(--text-secondary)] leading-relaxed font-sans max-w-2xl">
-              Consolidating <strong>2,180+ typefaces</strong> with live font CDN injection, <strong>353,000+ vector icons</strong> across 238 libraries with global master search, and high-entropy <strong>dirty synthetic data engines</strong> for frontend resilience.
-            </p>
-
-            {/* Quick Stats Badges */}
-            <div className="flex flex-wrap items-center gap-2 mt-5 pt-4 border-t border-[var(--border-dev-subtle)] text-xs text-[var(--text-secondary)]">
-              <span className="px-2.5 py-1 rounded-md bg-[var(--bg-panel-subtle)] border border-[var(--border-dev)] font-mono">
-                🔤 <strong className="text-[var(--text-primary)]">2,180+</strong> Fonts
-              </span>
-              <span className="px-2.5 py-1 rounded-md bg-[var(--bg-panel-subtle)] border border-[var(--border-dev)] font-mono">
-                🎨 <strong className="text-[var(--text-primary)]">353,000+</strong> Icons (238 Libs)
-              </span>
-              <span className="px-2.5 py-1 rounded-md bg-[var(--bg-panel-subtle)] border border-[var(--border-dev)] font-mono">
-                ⚡ <strong className="text-[var(--text-primary)]">17</strong> API Schemas
-              </span>
-              <span className="px-2.5 py-1 rounded-md bg-[var(--bg-panel-subtle)] border border-[var(--border-dev)] font-mono">
-                🧪 <strong className="text-[var(--text-primary)]">100+</strong> BLNS Naughty Strings
-              </span>
-              <span className="px-2.5 py-1 rounded-md bg-emerald-500/10 border border-emerald-500/20 text-emerald-600 dark:text-emerald-400 font-bold flex items-center gap-1">
-                <ShieldCheck className="w-3.5 h-3.5" /> 100% Client-Side Privacy
-              </span>
-            </div>
+        <div className="relative z-10 max-w-5xl mx-auto px-6 pt-16 pb-12 flex flex-col items-start gap-6">
+          {/* Version pill */}
+          <div className="inline-flex items-center gap-2.5 px-3.5 py-1.5 rounded-full bg-[var(--bg-panel)] border border-[var(--border-dev)] text-[11px] font-mono shadow-sm">
+            <span className="relative flex h-2 w-2">
+              <span className="animate-ping-slow absolute inline-flex h-full w-full rounded-full bg-rose-500 opacity-75" />
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-rose-500" />
+            </span>
+            <span className="text-[var(--text-secondary)] font-semibold">v1.0.0</span>
+            <span className="text-[var(--border-dev)]">·</span>
+            <span className="text-rose-600 dark:text-rose-400 font-bold">Next.js 16</span>
+            <ArrowRight className="w-3 h-3 text-[var(--text-muted)]" />
           </div>
 
-          {/* Direct CTA Buttons */}
-          <div className="flex flex-col sm:flex-row lg:flex-col gap-2.5 w-full sm:w-auto shrink-0">
+          {/* Headline */}
+          <h1 className="text-4xl sm:text-5xl md:text-[3.5rem] lg:text-[4rem] font-black tracking-tight leading-[1.08] text-[var(--text-primary)] font-sans max-w-3xl">
+            <span className="text-rose-500">Developer assets</span> &<br />
+            chaos testing toolkit.
+          </h1>
+
+          {/* Tagline */}
+          <p className="text-base sm:text-lg text-[var(--text-muted)] font-sans max-w-xl leading-relaxed">
+            Made for developers who build resilient frontends.
+          </p>
+
+          {/* CTAs */}
+          <div className="flex flex-wrap items-center gap-3 mt-2">
             <Link
               href="/fonts"
-              className="px-4 py-2.5 rounded-xl bg-rose-500 text-white font-bold text-xs flex items-center justify-center gap-2 hover:bg-rose-600 transition-all shadow-md shadow-rose-500/20 cursor-pointer"
+              className="px-5 py-2.5 rounded-lg bg-rose-500 text-white font-bold text-sm flex items-center gap-2 hover:bg-rose-600 transition-all shadow-lg shadow-rose-500/20 cursor-pointer"
             >
-              <Type className="w-4 h-4" />
-              <span>Explore 2,180+ Fonts</span>
-              <ArrowRight className="w-3.5 h-3.5" />
+              Browse All Fonts
             </Link>
-
             <Link
               href="/icons"
-              className="px-4 py-2.5 rounded-xl bg-cyan-500 text-white font-bold text-xs flex items-center justify-center gap-2 hover:bg-cyan-600 transition-all shadow-md shadow-cyan-500/20 cursor-pointer"
+              className="px-5 py-2.5 rounded-lg bg-[var(--bg-panel)] border border-[var(--border-dev)] text-[var(--text-primary)] font-bold text-sm flex items-center gap-2 hover:border-[var(--text-muted)] transition-colors cursor-pointer"
             >
-              <Box className="w-4 h-4" />
-              <span>Search 353K+ Icons</span>
-              <ArrowRight className="w-3.5 h-3.5" />
+              Search Icons
             </Link>
-
             <Link
               href="/chaos-data"
-              className="px-4 py-2 rounded-xl bg-[var(--bg-sidebar)] border border-[var(--border-dev)] text-[var(--text-primary)] font-bold text-xs flex items-center justify-center gap-2 hover:border-rose-500/50 transition-colors"
+              className="px-5 py-2.5 rounded-lg bg-[var(--bg-panel)] border border-[var(--border-dev)] text-[var(--text-primary)] font-bold text-sm flex items-center gap-2 hover:border-[var(--text-muted)] transition-colors cursor-pointer"
             >
-              <Flame className="w-3.5 h-3.5 text-rose-500" />
-              <span>Chaos Data Studio</span>
+              Chaos Data
             </Link>
+          </div>
+
+          {/* Trust bar */}
+          <div className="flex items-center gap-4 text-xs text-[var(--text-muted)] mt-4 font-mono">
+            <span className="flex items-center gap-1.5">
+              <ShieldCheck className="w-3.5 h-3.5 text-emerald-500" />
+              100% client-side
+            </span>
+            <span className="text-[var(--border-dev)]">·</span>
+            <span>2,180+ fonts</span>
+            <span className="text-[var(--border-dev)]">·</span>
+            <span>353K+ icons</span>
+            <span className="text-[var(--border-dev)]">·</span>
+            <span>238 libraries</span>
           </div>
         </div>
       </section>
 
-      {/* ── 2. INTERACTIVE LIVE QUICK-WORKBENCH WIDGET (FONTS & ICONS) ── */}
-      <section className="bg-[var(--bg-panel)] border border-[var(--border-dev)] rounded-2xl p-5 shadow-sm transition-colors flex flex-col gap-4">
-        <div className="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-[var(--border-dev)]">
-          <div className="flex items-center gap-2">
-            <Zap className="w-4 h-4 text-amber-500" />
-            <span className="text-xs font-bold text-[var(--text-primary)] font-sans uppercase">
-              Instant Interactive Quick-Playground
-            </span>
+      {/* ═══════════════════════════════════════════════════════════════════ */}
+      {/* LIVE PLAYGROUND                                                    */}
+      {/* ═══════════════════════════════════════════════════════════════════ */}
+      <section className="max-w-5xl mx-auto px-6 pb-10">
+        <div className="bg-[var(--bg-panel)] border border-[var(--border-dev)] rounded-2xl shadow-sm overflow-hidden">
+          {/* Tab bar */}
+          <div className="flex items-center justify-between px-5 py-3 border-b border-[var(--border-dev)]">
+            <div className="flex items-center gap-1 bg-[var(--bg-sidebar)] p-0.5 rounded-lg border border-[var(--border-dev)] text-xs">
+              <button
+                onClick={() => setActiveTab('fonts')}
+                className={`px-3 py-1.5 rounded-md text-[11px] font-bold flex items-center gap-1.5 transition-colors cursor-pointer ${
+                  activeTab === 'fonts'
+                    ? 'bg-rose-500 text-white shadow-sm'
+                    : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
+                }`}
+              >
+                <Type className="w-3.5 h-3.5" />
+                Try Fonts
+              </button>
+              <button
+                onClick={() => setActiveTab('icons')}
+                className={`px-3 py-1.5 rounded-md text-[11px] font-bold flex items-center gap-1.5 transition-colors cursor-pointer ${
+                  activeTab === 'icons'
+                    ? 'bg-cyan-500 text-white shadow-sm'
+                    : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
+                }`}
+              >
+                <Box className="w-3.5 h-3.5" />
+                Try Icons
+              </button>
+            </div>
+
+            <Link
+              href={activeTab === 'fonts' ? '/fonts' : '/icons'}
+              className="text-[11px] font-bold text-[var(--text-muted)] hover:text-[var(--text-primary)] flex items-center gap-1 transition-colors"
+            >
+              View all <ArrowRight className="w-3 h-3" />
+            </Link>
           </div>
 
-          {/* Playground Tabs */}
-          <div className="flex items-center gap-1 bg-[var(--bg-sidebar)] p-1 rounded-lg border border-[var(--border-dev)] text-xs">
-            <button
-              onClick={() => setActiveTab('fonts')}
-              className={`px-3 py-1 rounded-md text-[11px] font-bold flex items-center gap-1.5 transition-colors cursor-pointer ${
-                activeTab === 'fonts'
-                  ? 'bg-rose-500 text-white shadow-sm'
-                  : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
-              }`}
-            >
-              <Type className="w-3.5 h-3.5" />
-              <span>Instant Fonts</span>
-            </button>
-
-            <button
-              onClick={() => setActiveTab('icons')}
-              className={`px-3 py-1 rounded-md text-[11px] font-bold flex items-center gap-1.5 transition-colors cursor-pointer ${
-                activeTab === 'icons'
-                  ? 'bg-cyan-500 text-white shadow-sm'
-                  : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
-              }`}
-            >
-              <Box className="w-3.5 h-3.5" />
-              <span>Instant Icons</span>
-            </button>
-          </div>
-        </div>
-
-        {/* Tab 1: Instant Fonts Live Tester */}
-        {activeTab === 'fonts' && (
-          <div className="flex flex-col gap-3">
-            <div className="flex items-center gap-2 bg-[var(--bg-panel-subtle)] border border-[var(--border-dev)] rounded-lg px-3 py-2">
-              <span className="text-[10px] text-[var(--text-muted)] font-bold">TYPE TO TEST:</span>
+          {/* Font playground */}
+          {activeTab === 'fonts' && (
+            <div className="p-5 flex flex-col gap-4">
               <input
                 type="text"
                 value={fontSampleText}
                 onChange={e => setFontSampleText(e.target.value)}
-                placeholder="Type anything to test across all fonts simultaneously..."
-                className="dev-input flex-1 px-2.5 py-1 rounded text-xs"
+                placeholder="Type to preview across fonts..."
+                className="dev-input w-full px-4 py-2.5 rounded-lg text-sm"
               />
-            </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-              {heroFonts.map(f => (
-                <div
-                  key={f.slug}
-                  className="bg-[var(--bg-panel-subtle)] border border-[var(--border-dev)] rounded-xl p-3.5 flex flex-col justify-between gap-2 hover:border-rose-500/40 transition-colors group"
-                >
-                  <div className="flex items-center justify-between">
-                    <Link
-                      href={`/fonts/${f.slug}`}
-                      className="text-xs font-bold text-[var(--text-primary)] font-sans hover:text-rose-500 transition-colors"
-                    >
-                      {f.name}
-                    </Link>
-                    <span className="text-[9px] px-1.5 py-0.2 rounded font-bold bg-[var(--pill-bg)] text-[var(--text-muted)]">
-                      {f.category}
-                    </span>
-                  </div>
-
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+                {heroFonts.map(f => (
                   <div
-                    style={{ fontFamily: `'${f.name}', sans-serif` }}
-                    className="text-lg text-[var(--text-primary)] truncate py-1 font-semibold"
+                    key={f.slug}
+                    className="bg-[var(--bg-panel-subtle)] border border-[var(--border-dev)] rounded-xl p-4 flex flex-col gap-2.5 hover:border-rose-500/40 transition-colors group"
                   >
-                    {fontSampleText || f.name}
-                  </div>
+                    <div className="flex items-center justify-between">
+                      <Link
+                        href={`/fonts/${f.slug}`}
+                        className="text-xs font-bold text-[var(--text-primary)] font-sans hover:text-rose-500 transition-colors"
+                      >
+                        {f.name}
+                      </Link>
+                      <span className="text-[9px] px-1.5 py-0.5 rounded bg-[var(--pill-bg)] text-[var(--text-muted)] font-mono">
+                        {f.category}
+                      </span>
+                    </div>
 
-                  <div className="pt-2 border-t border-[var(--border-dev-subtle)] flex items-center justify-between text-[10px]">
-                    <button
-                      onClick={() => copyText(`@import url('${f.cdn}');\nfont-family: '${f.name}', sans-serif;`, `css-${f.slug}`)}
-                      className="text-rose-500 hover:underline flex items-center gap-1 cursor-pointer font-bold"
+                    <div
+                      style={{ fontFamily: `'${f.name}', sans-serif` }}
+                      className="text-lg text-[var(--text-primary)] truncate font-semibold leading-snug min-h-[28px]"
                     >
-                      {copiedId === `css-${f.slug}` ? <Check className="w-3 h-3 text-emerald-500" /> : <Code2 className="w-3 h-3" />}
-                      <span>{copiedId === `css-${f.slug}` ? 'Copied CSS' : 'Copy CSS'}</span>
-                    </button>
+                      {fontSampleText || f.name}
+                    </div>
 
-                    <Link
-                      href={`/fonts/${f.slug}`}
-                      className="text-[var(--text-secondary)] hover:text-rose-500 flex items-center gap-1"
-                    >
-                      <span>Full Specs</span>
-                      <ArrowRight className="w-3 h-3" />
-                    </Link>
+                    <div className="pt-2 border-t border-[var(--border-dev-subtle)] flex items-center justify-between text-[10px]">
+                      <button
+                        onClick={() => copyText(`@import url('${f.cdn}');\nfont-family: '${f.name}', sans-serif;`, `css-${f.slug}`)}
+                        className="text-rose-500 hover:underline flex items-center gap-1 cursor-pointer font-bold"
+                      >
+                        {copiedId === `css-${f.slug}` ? <Check className="w-3 h-3 text-emerald-500" /> : <Code2 className="w-3 h-3" />}
+                        <span>{copiedId === `css-${f.slug}` ? 'Copied!' : 'Copy CSS'}</span>
+                      </button>
+                      <Link
+                        href={`/fonts/${f.slug}`}
+                        className="text-[var(--text-muted)] hover:text-rose-500 flex items-center gap-1 transition-colors"
+                      >
+                        Specs <ArrowRight className="w-3 h-3" />
+                      </Link>
+                    </div>
                   </div>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
+          )}
 
-            <div className="text-center pt-2">
-              <Link
-                href="/fonts"
-                className="inline-flex items-center gap-1.5 text-xs font-bold text-rose-500 hover:underline cursor-pointer"
-              >
-                <span>Browse All 2,180+ Open-Source Fonts with Full Weight Specimens & Sliders</span>
-                <ArrowRight className="w-3.5 h-3.5" />
-              </Link>
+          {/* Icon playground */}
+          {activeTab === 'icons' && (
+            <div className="p-5 flex flex-col gap-4">
+              <div className="flex items-center gap-2 bg-[var(--bg-panel-subtle)] border border-[var(--border-dev)] rounded-lg px-4 py-2.5">
+                <Search className="w-4 h-4 text-cyan-500 shrink-0" />
+                <input
+                  type="text"
+                  value={iconQuery}
+                  onChange={e => setIconQuery(e.target.value)}
+                  placeholder="Search 353,000+ icons..."
+                  className="dev-input flex-1 px-2 py-0.5 rounded text-sm border-none bg-transparent"
+                />
+                {isLoadingIcons && <span className="text-[10px] text-cyan-500 animate-pulse shrink-0">Searching...</span>}
+              </div>
+
+              <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-2.5">
+                {iconResults.slice(0, 8).map(item => (
+                  <button
+                    key={item.fullKey}
+                    onClick={() => copyText(`<Icon icon="${item.fullKey}" />`, `icon-${item.fullKey}`)}
+                    title={`Copy <Icon icon="${item.fullKey}" />`}
+                    className="bg-[var(--bg-panel-subtle)] border border-[var(--border-dev)] rounded-xl p-3 flex flex-col items-center justify-center gap-2 hover:border-cyan-500 transition-all cursor-pointer group"
+                  >
+                    <div className="w-7 h-7 flex items-center justify-center group-hover:scale-110 transition-transform">
+                      <img
+                        src={`https://api.iconify.design/${item.prefix}/${item.name}.svg?color=%2306b6d4`}
+                        alt={item.name}
+                        width={24}
+                        height={24}
+                        className="pointer-events-none"
+                      />
+                    </div>
+                    <span className={`text-[10px] font-mono truncate max-w-full text-center ${
+                      copiedId === `icon-${item.fullKey}`
+                        ? 'text-emerald-500 font-bold'
+                        : 'text-[var(--text-muted)] group-hover:text-[var(--text-primary)]'
+                    }`}>
+                      {copiedId === `icon-${item.fullKey}` ? 'Copied!' : item.name}
+                    </span>
+                  </button>
+                ))}
+              </div>
             </div>
-          </div>
-        )}
-
-        {/* Tab 2: Instant Icons Live Search & Copy */}
-        {activeTab === 'icons' && (
-          <div className="flex flex-col gap-3">
-            <div className="flex items-center gap-2 bg-[var(--bg-panel-subtle)] border border-[var(--border-dev)] rounded-lg px-3 py-2">
-              <Search className="w-3.5 h-3.5 text-cyan-500" />
-              <input
-                type="text"
-                value={iconQuery}
-                onChange={e => setIconQuery(e.target.value)}
-                placeholder="Search across 353K+ icons (cart, user, lock, github, shield, star)..."
-                className="dev-input flex-1 px-2.5 py-1 rounded text-xs"
-              />
-              {isLoadingIcons && <span className="text-[10px] text-cyan-500 animate-pulse">Searching...</span>}
-            </div>
-
-            <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-2.5">
-              {iconResults.slice(0, 8).map(item => (
-                <button
-                  key={item.fullKey}
-                  onClick={() => copyText(`<Icon icon="${item.fullKey}" />`, `icon-${item.fullKey}`)}
-                  title={`Click to copy <Icon icon="${item.fullKey}" />`}
-                  className="bg-[var(--bg-panel-subtle)] border border-[var(--border-dev)] rounded-xl p-3 flex flex-col items-center justify-center gap-1.5 hover:border-cyan-500 hover:bg-[var(--bg-sidebar)] transition-all cursor-pointer group"
-                >
-                  <div className="w-8 h-8 flex items-center justify-center group-hover:scale-110 transition-transform">
-                    <img
-                      src={`https://api.iconify.design/${item.prefix}/${item.name}.svg?color=%2306b6d4`}
-                      alt={item.name}
-                      width={28}
-                      height={28}
-                      className="pointer-events-none"
-                    />
-                  </div>
-
-                  <span className={`text-[10px] font-mono truncate max-w-full text-center px-1 rounded ${
-                    copiedId === `icon-${item.fullKey}`
-                      ? 'bg-emerald-500 text-white font-bold'
-                      : 'text-[var(--text-secondary)] group-hover:text-[var(--text-primary)]'
-                  }`}>
-                    {copiedId === `icon-${item.fullKey}` ? 'Copied!' : item.name}
-                  </span>
-
-                  <span className="text-[8px] px-1 rounded bg-[var(--pill-bg)] text-cyan-600 dark:text-cyan-400 font-mono font-bold truncate max-w-full">
-                    {item.prefix}
-                  </span>
-                </button>
-              ))}
-            </div>
-
-            <div className="text-center pt-2">
-              <Link
-                href={`/icons#${iconResults[0]?.fullKey || 'lucide:shopping-cart'}`}
-                className="inline-flex items-center gap-1.5 text-xs font-bold text-cyan-500 hover:underline"
-              >
-                <span>Open Full Vector Icon Browser with 353K+ SVGs & Customizer</span>
-                <ArrowRight className="w-3.5 h-3.5" />
-              </Link>
-            </div>
-          </div>
-        )}
+          )}
+        </div>
       </section>
 
-      {/* ── 3. BENTO GRID: 4 CORE STUDIOS ── */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {coreStudios.map(s => {
-          const IconComp = s.icon;
-          return (
-            <div
-              key={s.id}
-              className="bg-[var(--bg-panel)] border border-[var(--border-dev)] rounded-2xl p-6 flex flex-col justify-between gap-4 shadow-sm hover:shadow-md transition-all group relative overflow-hidden"
-            >
-              <div>
-                <div className="flex items-start justify-between gap-3 mb-3">
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-xl bg-[var(--bg-panel-subtle)] border border-[var(--border-dev)] flex items-center justify-center shadow-sm">
-                      <IconComp className={`w-5 h-5 ${s.iconColor}`} />
-                    </div>
-                    <div>
-                      <h2 className="text-base font-bold text-[var(--text-primary)] font-sans group-hover:text-rose-500 transition-colors">
-                        {s.title}
-                      </h2>
-                      <span className="text-[10px] text-[var(--text-muted)] font-mono">{s.stats}</span>
-                    </div>
+      {/* ═══════════════════════════════════════════════════════════════════ */}
+      {/* TOOLS GRID                                                        */}
+      {/* ═══════════════════════════════════════════════════════════════════ */}
+      <section className="max-w-5xl mx-auto px-6 pb-16">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {tools.map(t => {
+            const Icon = t.icon;
+            return (
+              <Link
+                key={t.title}
+                href={t.href}
+                className="bg-[var(--bg-panel)] border border-[var(--border-dev)] rounded-2xl p-6 flex flex-col gap-4 shadow-sm hover:border-rose-500/40 transition-all group cursor-pointer"
+              >
+                <div className="flex items-start justify-between">
+                  <div className="w-10 h-10 rounded-xl bg-[var(--bg-panel-subtle)] border border-[var(--border-dev)] flex items-center justify-center">
+                    <Icon className={`w-5 h-5 ${t.iconColor}`} />
                   </div>
-
-                  <span className={`text-[10px] px-2 py-0.5 rounded-full font-bold border shrink-0 ${s.badgeColor}`}>
-                    {s.badge}
+                  <span className={`text-[10px] px-2 py-0.5 rounded-full font-bold border ${t.badgeColor}`}>
+                    {t.badge}
                   </span>
                 </div>
 
-                <p className="text-xs text-[var(--text-secondary)] leading-relaxed font-sans">
-                  {s.description}
-                </p>
-              </div>
+                <div>
+                  <h3 className="text-sm font-bold text-[var(--text-primary)] font-sans mb-1 group-hover:text-rose-500 transition-colors">
+                    {t.title}
+                  </h3>
+                  <p className="text-xs text-[var(--text-muted)] leading-relaxed font-sans">
+                    {t.desc}
+                  </p>
+                </div>
 
-              <div className="pt-3 border-t border-[var(--border-dev-subtle)] flex items-center justify-between">
-                <span className="text-[10px] text-[var(--text-muted)] font-mono">100% Free & Open-Source</span>
-
-                <Link
-                  href={s.href}
-                  className="px-3.5 py-1.5 rounded-lg bg-[var(--bg-sidebar)] border border-[var(--border-dev)] text-xs font-bold text-[var(--text-primary)] hover:border-rose-500 hover:text-rose-500 flex items-center gap-1.5 transition-colors"
-                >
-                  <span>{s.cta}</span>
-                  <ArrowRight className="w-3.5 h-3.5" />
-                </Link>
-              </div>
-            </div>
-          );
-        })}
-      </div>
-
-      {/* ── 4. POPULAR FONTS & ICON DIRECTORY QUICK-TAGS ── */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {/* Popular Fonts Quick Links */}
-        <div className="bg-[var(--bg-panel)] border border-[var(--border-dev)] rounded-2xl p-4 flex flex-col gap-3 shadow-sm">
-          <div className="flex items-center justify-between text-xs pb-2 border-b border-[var(--border-dev-subtle)]">
-            <span className="font-bold text-[var(--text-primary)] flex items-center gap-1.5 font-sans">
-              <Type className="w-3.5 h-3.5 text-amber-500" />
-              <span>Trending Developer & Design Fonts</span>
-            </span>
-            <Link href="/fonts" className="text-[11px] text-rose-500 hover:underline flex items-center gap-1 font-bold">
-              <span>View All 2,180+</span>
-              <ArrowRight className="w-3.5 h-3.5" />
-            </Link>
-          </div>
-
-          <div className="flex flex-wrap gap-1.5">
-            {popularFonts.map(f => (
-              <Link
-                key={f.slug}
-                href={`/fonts/${f.slug}`}
-                className="px-2.5 py-1 rounded-lg bg-[var(--bg-sidebar)] border border-[var(--border-dev)] text-xs text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:border-rose-500/50 transition-colors flex items-center gap-1.5 shadow-sm"
-              >
-                <span className="font-bold">{f.name}</span>
-                <span className="text-[9px] px-1 py-0.2 rounded bg-[var(--pill-bg)] text-[var(--text-muted)] font-mono">
-                  {f.category}
-                </span>
+                <div className="flex items-center gap-1.5 text-[11px] font-bold text-[var(--text-muted)] group-hover:text-rose-500 transition-colors mt-auto">
+                  <span>Open</span>
+                  <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
+                </div>
               </Link>
-            ))}
-          </div>
+            );
+          })}
         </div>
-
-        {/* Popular Icon Libraries Quick Links */}
-        <div className="bg-[var(--bg-panel)] border border-[var(--border-dev)] rounded-2xl p-4 flex flex-col gap-3 shadow-sm">
-          <div className="flex items-center justify-between text-xs pb-2 border-b border-[var(--border-dev-subtle)]">
-            <span className="font-bold text-[var(--text-primary)] flex items-center gap-1.5 font-sans">
-              <Box className="w-3.5 h-3.5 text-cyan-500" />
-              <span>Popular Icon Packages (353K+ SVGs)</span>
-            </span>
-            <Link href="/icons" className="text-[11px] text-cyan-500 hover:underline flex items-center gap-1 font-bold">
-              <span>View All 238 Libs</span>
-              <ArrowRight className="w-3.5 h-3.5" />
-            </Link>
-          </div>
-
-          <div className="flex flex-wrap gap-1.5">
-            {popularIconLibs.map(l => (
-              <Link
-                key={l.prefix}
-                href={`/icons/${l.prefix}`}
-                className="px-2.5 py-1 rounded-lg bg-[var(--bg-sidebar)] border border-[var(--border-dev)] text-xs text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:border-cyan-500/50 transition-colors flex items-center gap-1.5 shadow-sm"
-              >
-                <span className="font-bold">{l.name}</span>
-                <span className="text-[9px] px-1 py-0.2 rounded bg-[var(--pill-bg)] text-cyan-600 dark:text-cyan-400 font-mono font-bold">
-                  {l.count}
-                </span>
-              </Link>
-            ))}
-          </div>
-        </div>
-      </div>
+      </section>
     </div>
   );
 }
