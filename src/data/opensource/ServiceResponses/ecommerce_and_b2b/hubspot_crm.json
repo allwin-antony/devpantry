@@ -1,0 +1,86 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "service": "HubSpot CRM v3 API",
+  "provider": "HubSpot",
+  "documentation_url": "https://developers.hubspot.com/docs/api/crm/contacts",
+  "responses": {
+    "contact_object": {
+      "description": "Returned by GET /crm/v3/objects/contacts/{contactId}",
+      "payload": {
+        "id": "5123984",
+        "properties": {
+          "createdate": "2026-02-14T15:20:10.123Z",
+          "email": "sarah.connor@cyberdyne.io",
+          "firstname": "Sarah",
+          "hs_object_id": "5123984",
+          "lastmodifieddate": "2026-03-02T11:45:00.000Z",
+          "lastname": "Connor",
+          "company": "Cyberdyne Systems",
+          "phone": "+16175550144",
+          "lifecyclestage": "customer",
+          "jobtitle": "Head of Security & Defense"
+        },
+        "createdAt": "2026-02-14T15:20:10.123Z",
+        "updatedAt": "2026-03-02T11:45:00.000Z",
+        "archived": false
+      },
+      "data_types": {
+        "id": "string (numeric string representing HubSpot record ID)",
+        "properties": {
+          "createdate": "string (ISO 8601 UTC timestamp)",
+          "email": "string",
+          "firstname": "string",
+          "hs_object_id": "string (numeric string)",
+          "lastmodifieddate": "string (ISO 8601 UTC timestamp)",
+          "lastname": "string",
+          "company": "string | null",
+          "phone": "string | null",
+          "lifecyclestage": "string (\"subscriber\" | \"lead\" | \"marketingqualifiedlead\" | \"salesqualifiedlead\" | \"opportunity\" | \"customer\" | \"evangelist\" | \"other\")",
+          "jobtitle": "string | null"
+        },
+        "createdAt": "string (ISO 8601 UTC timestamp)",
+        "updatedAt": "string (ISO 8601 UTC timestamp)",
+        "archived": "boolean"
+      }
+    },
+    "deal_object": {
+      "description": "Returned by GET /crm/v3/objects/deals/{dealId}",
+      "payload": {
+        "id": "987456123",
+        "properties": {
+          "amount": "250000.00",
+          "closedate": "2026-03-31T23:59:59.000Z",
+          "createdate": "2026-01-05T10:00:00.000Z",
+          "dealname": "Enterprise Security Contract (Annual Renewal)",
+          "dealstage": "contractsent",
+          "pipeline": "default",
+          "hs_object_id": "987456123"
+        },
+        "createdAt": "2026-01-05T10:00:00.000Z",
+        "updatedAt": "2026-03-01T09:30:00.000Z",
+        "archived": false
+      },
+      "data_types": {
+        "id": "string (numeric string representing HubSpot deal record ID)",
+        "properties": {
+          "amount": "string (decimal formatted string, e.g. \"250000.00\")",
+          "closedate": "string (ISO 8601 timestamp)",
+          "createdate": "string (ISO 8601 timestamp)",
+          "dealname": "string",
+          "dealstage": "string (internal stage pipeline ID)",
+          "pipeline": "string (pipeline identifier)",
+          "hs_object_id": "string"
+        },
+        "createdAt": "string (ISO 8601 timestamp)",
+        "updatedAt": "string (ISO 8601 timestamp)",
+        "archived": "boolean"
+      }
+    }
+  },
+  "endpoints": {
+    "contacts_list": "GET /crm/v3/objects/contacts",
+    "contact_detail": "GET /crm/v3/objects/contacts/{contactId}",
+    "deals_list": "GET /crm/v3/objects/deals",
+    "deal_detail": "GET /crm/v3/objects/deals/{dealId}"
+  }
+}

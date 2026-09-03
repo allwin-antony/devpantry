@@ -1,0 +1,117 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "service": "Microsoft Entra ID (Azure AD) & Microsoft Graph",
+  "provider": "Microsoft Identity Platform (MSAL)",
+  "documentation_url": "https://learn.microsoft.com/en-us/entra/identity-platform/v2-overview",
+  "discovery_url": "https://login.microsoftonline.com/common/v2.0/.well-known/openid-configuration",
+  "endpoints": {
+    "authorization": "https://login.microsoftonline.com/{tenant_id}/oauth2/v2.0/authorize",
+    "token": "https://login.microsoftonline.com/{tenant_id}/oauth2/v2.0/token",
+    "graph_me": "https://graph.microsoft.com/v1.0/me",
+    "jwks_uri": "https://login.microsoftonline.com/{tenant_id}/discovery/v2.0/keys"
+  },
+  "responses": {
+    "token_endpoint_response": {
+      "description": "Returned by POST https://login.microsoftonline.com/{tenant}/oauth2/v2.0/token upon code exchange.",
+      "http_status": 200,
+      "payload": {
+        "token_type": "Bearer",
+        "scope": "User.Read openid profile email",
+        "expires_in": 3599,
+        "ext_expires_in": 3599,
+        "access_token": "eyJ0eXAiOiJKV1QiLCJub25jZSI...sample_ms_access_token...",
+        "refresh_token": "0.AUAAoG3z...sample_ms_refresh_token...",
+        "id_token": "eyJ0eXAiOiJKV1QiLCJhbGci...sample_ms_id_token_jwt..."
+      },
+      "data_types": {
+        "token_type": "string (always \"Bearer\")",
+        "scope": "string (space-delimited list of granted scopes)",
+        "expires_in": "integer (lifetime in seconds, usually 3599)",
+        "ext_expires_in": "integer (extended lifetime in seconds during outages)",
+        "access_token": "string (opaque or JWT access token)",
+        "refresh_token": "string (long-lived refresh token)",
+        "id_token": "string (compact serialized JWT format)"
+      }
+    },
+    "id_token_decoded_jwt_claims": {
+      "description": "Decoded claims payload from the Microsoft Entra ID id_token JWT.",
+      "fields_explained": {
+        "aud": "Your Application / Client ID in Microsoft Azure Entra portal",
+        "iss": "Token issuer (e.g. 'https://login.microsoftonline.com/{tenant_id}/v2.0')",
+        "oid": "Object ID — Immutable unique user GUID in Microsoft Entra tenant",
+        "tid": "Tenant ID — Unique GUID of the organization / directory tenant",
+        "sub": "Pairwise identifier unique to the user and the client application",
+        "preferred_username": "Primary sign-in name / corporate email (e.g., alex@company.onmicrosoft.com)",
+        "name": "User's full display name",
+        "roles": "Array of assigned enterprise application roles (if configured in App Registrations)",
+        "groups": "Array of security group GUIDs user belongs to (if group claims requested)"
+      },
+      "payload": {
+        "aud": "00000000-0000-0000-c000-000000000000",
+        "iss": "https://login.microsoftonline.com/9188040d-6c67-4c5b-b112-36a304b66dad/v2.0",
+        "iat": 1772618400,
+        "nbf": 1772618400,
+        "exp": 1772622000,
+        "name": "Alex Morgan",
+        "nonce": "123456-nonce",
+        "oid": "24b3c99a-1122-3344-5566-778899aabbcc",
+        "preferred_username": "alex.morgan@enterprise.com",
+        "email": "alex.morgan@enterprise.com",
+        "rh": "0.ARAAoG3z...",
+        "sub": "vXz7qL90kM_sample_pairwise_sub",
+        "tid": "9188040d-6c67-4c5b-b112-36a304b66dad",
+        "ver": "2.0"
+      },
+      "data_types": {
+        "aud": "string (Application / Client ID GUID)",
+        "iss": "string (issuer URI containing tenant ID GUID)",
+        "iat": "integer (Unix epoch timestamp when issued)",
+        "nbf": "integer (Unix epoch timestamp not-before)",
+        "exp": "integer (Unix epoch timestamp expiration)",
+        "name": "string (user display name)",
+        "nonce": "string",
+        "oid": "string (Object ID GUID — unique immutable user identifier)",
+        "preferred_username": "string (primary corporate sign-in email / UPN)",
+        "email": "string (user primary email)",
+        "rh": "string",
+        "sub": "string (pairwise subject identifier)",
+        "tid": "string (Tenant ID GUID of the Azure AD directory)",
+        "ver": "string (token version: \"2.0\")"
+      }
+    },
+    "microsoft_graph_me_response": {
+      "description": "Returned by GET https://graph.microsoft.com/v1.0/me with Bearer access_token.",
+      "http_status": 200,
+      "payload": {
+        "@odata.context": "https://graph.microsoft.com/v1.0/$metadata#users/$entity",
+        "id": "24b3c99a-1122-3344-5566-778899aabbcc",
+        "businessPhones": [
+          "+1 425 555 0100"
+        ],
+        "displayName": "Alex Morgan",
+        "givenName": "Alex",
+        "jobTitle": "Principal Cloud Architect",
+        "mail": "alex.morgan@enterprise.com",
+        "mobilePhone": "+1 206 555 0199",
+        "officeLocation": "Building 34/2040",
+        "preferredLanguage": "en-US",
+        "surname": "Morgan",
+        "userPrincipalName": "alex.morgan@enterprise.com"
+      },
+      "data_types": {
+        "@odata.context": "string (OData metadata schema URL)",
+        "id": "string (user Object ID GUID)",
+        "businessPhones": "array[string]",
+        "displayName": "string (full name)",
+        "givenName": "string (first name)",
+        "jobTitle": "string | null",
+        "mail": "string | null",
+        "mobilePhone": "string | null",
+        "officeLocation": "string | null",
+        "preferredLanguage": "string | null (e.g. \"en-US\")",
+        "surname": "string (last name)",
+        "userPrincipalName": "string (User Principal Name email format)"
+      }
+    }
+  }
+}

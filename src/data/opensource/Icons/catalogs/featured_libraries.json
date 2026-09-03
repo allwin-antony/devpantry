@@ -1,0 +1,201 @@
+[
+  {
+    "id": "lucide",
+    "name": "Lucide",
+    "tagline": "Beautiful & consistent icon toolkit made by the community, forked from Feather.",
+    "total_icons": "1,800+",
+    "license": "ISC / MIT",
+    "license_note": "100% free for commercial and personal projects. No mandatory attribution.",
+    "website": "https://lucide.dev/",
+    "github": "https://github.com/lucide-icons/lucide",
+    "releases_url": "https://github.com/lucide-icons/lucide/releases",
+    "npm_packages": {
+      "vanilla": "lucide",
+      "static": "lucide-static",
+      "react": "lucide-react",
+      "vue": "lucide-vue-next",
+      "svelte": "lucide-svelte",
+      "angular": "lucide-angular",
+      "flutter": "lucide_icons"
+    },
+    "cdn_svg_template": "https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/{name}.svg",
+    "api_prefix": "lucide"
+  },
+  {
+    "id": "tabler-icons",
+    "name": "Tabler Icons",
+    "tagline": "Massive library of 6,100+ highly customizable stroke-based vector icons for SaaS & dashboards.",
+    "total_icons": "6,100+",
+    "license": "MIT",
+    "license_note": "100% free for commercial use. No attribution required.",
+    "website": "https://tabler.io/icons",
+    "github": "https://github.com/tabler/tabler-icons",
+    "releases_url": "https://github.com/tabler/tabler-icons/releases",
+    "npm_packages": {
+      "core": "@tabler/icons",
+      "react": "@tabler/icons-react",
+      "vue": "@tabler/icons-vue",
+      "svelte": "@tabler/icons-svelte",
+      "webfont": "@tabler/icons-webfont"
+    },
+    "cdn_svg_template": "https://cdn.jsdelivr.net/npm/@tabler/icons@latest/icons/{name}.svg",
+    "api_prefix": "tabler"
+  },
+  {
+    "id": "google-material-symbols",
+    "name": "Google Material Symbols",
+    "tagline": "Google's official variable icon library with optical size, weight, and grade controls.",
+    "total_icons": "15,000+ variants",
+    "license": "Apache 2.0",
+    "license_note": "100% free for commercial use. Open source under Apache 2.0 license.",
+    "website": "https://fonts.google.com/icons",
+    "github": "https://github.com/google/material-design-icons",
+    "releases_url": "https://github.com/google/material-design-icons/releases",
+    "npm_packages": {
+      "font": "material-symbols",
+      "svg_24": "@material-symbols/svg-24",
+      "svg_48": "@material-symbols/svg-48"
+    },
+    "cdn_svg_template": "https://cdn.jsdelivr.net/npm/@material-symbols/svg-24@latest/{style}/{name}.svg",
+    "api_prefix": "material-symbols"
+  },
+  {
+    "id": "heroicons",
+    "name": "Heroicons",
+    "tagline": "Hand-crafted vector icons by the Tailwind CSS team. 24px outline, 24px solid, and 20px solid/mini.",
+    "total_icons": "1,200+ variants",
+    "license": "MIT",
+    "license_note": "100% free for commercial and personal projects. Attribution not required.",
+    "website": "https://heroicons.com/",
+    "github": "https://github.com/tailwindlabs/heroicons",
+    "releases_url": "https://github.com/tailwindlabs/heroicons/releases",
+    "npm_packages": {
+      "core": "heroicons",
+      "react": "@heroicons/react",
+      "vue": "@heroicons/vue"
+    },
+    "cdn_svg_template": "https://cdn.jsdelivr.net/npm/heroicons@latest/24/outline/{name}.svg",
+    "api_prefix": "heroicons"
+  },
+  {
+    "id": "iconoir",
+    "name": "Iconoir",
+    "tagline": "High-quality open-source geometric icons with no paywalls or premium tiers.",
+    "total_icons": "1,600+",
+    "license": "MIT",
+    "license_note": "100% open source under MIT. Free for commercial and personal usage.",
+    "website": "https://iconoir.com/",
+    "github": "https://github.com/iconoir-icons/iconoir",
+    "releases_url": "https://github.com/iconoir-icons/iconoir/releases",
+    "npm_packages": {
+      "core": "iconoir",
+      "react": "iconoir-react",
+      "vue": "iconoir-vue",
+      "svelte": "iconoir-svelte",
+      "flutter": "iconoir_flutter"
+    },
+    "cdn_svg_template": "https://cdn.jsdelivr.net/npm/iconoir@latest/icons/regular/{name}.svg",
+    "api_prefix": "iconoir"
+  },
+  {
+    "id": "phosphor-icons",
+    "name": "Phosphor Icons",
+    "tagline": "Flexible icon family for interfaces, diagrams, and presentations in 6 weights (thin, light, regular, bold, fill, duotone).",
+    "total_icons": "7,000+ variants (1,200+ unique shapes)",
+    "license": "MIT",
+    "license_note": "100% open source under MIT license.",
+    "website": "https://phosphoricons.com/",
+    "github": "https://github.com/phosphor-icons/core",
+    "releases_url": "https://github.com/phosphor-icons/core/releases",
+    "npm_packages": {
+      "core": "@phosphor-icons/core",
+      "react": "@phosphor-icons/react",
+      "vue": "@phosphor-icons/vue",
+      "web": "@phosphor-icons/web"
+    },
+    "cdn_svg_template": "https://cdn.jsdelivr.net/npm/@phosphor-icons/core@latest/assets/regular/{name}.svg",
+    "api_prefix": "ph"
+  },
+  {
+    "id": "remix-icon",
+    "name": "Remix Icon",
+    "tagline": "Elaborately crafted open-source neutral style system symbols for designers and developers.",
+    "total_icons": "2,800+",
+    "license": "Apache 2.0",
+    "license_note": "100% free for commercial use under Apache 2.0.",
+    "website": "https://remixicon.com/",
+    "github": "https://github.com/Remix-Design/RemixIcon",
+    "releases_url": "https://github.com/Remix-Design/RemixIcon/releases",
+    "npm_packages": {
+      "core": "remixicon",
+      "react": "remixicon-react"
+    },
+    "cdn_svg_template": "https://cdn.jsdelivr.net/npm/remixicon@latest/fonts/remixicon.symbol.svg",
+    "api_prefix": "ri"
+  },
+  {
+    "id": "simple-icons",
+    "name": "Simple Icons",
+    "tagline": "Over 3,200 free SVG icons for popular global brands, tech stacks, and open-source tools.",
+    "total_icons": "3,200+",
+    "license": "CC0 1.0 (Public Domain)",
+    "license_note": "Public Domain (subject to trademark fair use).",
+    "website": "https://simpleicons.org/",
+    "github": "https://github.com/simple-icons/simple-icons",
+    "releases_url": "https://github.com/simple-icons/simple-icons/releases",
+    "npm_packages": {
+      "core": "simple-icons"
+    },
+    "cdn_svg_template": "https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/{name}.svg",
+    "api_prefix": "simple-icons"
+  },
+  {
+    "id": "radix-icons",
+    "name": "Radix Icons",
+    "tagline": "A crisp set of 15x15 icons designed by WorkOS for clean, dense UI components.",
+    "total_icons": "318",
+    "license": "MIT",
+    "license_note": "100% open source under MIT.",
+    "website": "https://icons.radix-ui.com/",
+    "github": "https://github.com/radix-ui/icons",
+    "releases_url": "https://github.com/radix-ui/icons/releases",
+    "npm_packages": {
+      "react": "@radix-ui/react-icons"
+    },
+    "cdn_svg_template": "https://cdn.jsdelivr.net/npm/@radix-ui/react-icons@latest/dist/module/{name}.js",
+    "api_prefix": "radix-icons"
+  },
+  {
+    "id": "feather-icons",
+    "name": "Feather Icons",
+    "tagline": "Simply beautiful open source icons designed on a 24x24 grid by Cole Bemis.",
+    "total_icons": "287",
+    "license": "MIT",
+    "license_note": "100% free under MIT.",
+    "website": "https://feathericons.com/",
+    "github": "https://github.com/feathericons/feather",
+    "releases_url": "https://github.com/feathericons/feather/releases",
+    "npm_packages": {
+      "core": "feather-icons"
+    },
+    "cdn_svg_template": "https://cdn.jsdelivr.net/npm/feather-icons@latest/dist/icons/{name}.svg",
+    "api_prefix": "feather"
+  },
+  {
+    "id": "bootstrap-icons",
+    "name": "Bootstrap Icons",
+    "tagline": "Official open-source SVG icon library for Bootstrap with over 2,000 icons.",
+    "total_icons": "2,000+",
+    "license": "MIT",
+    "license_note": "100% free for commercial use. No attribution required.",
+    "website": "https://icons.getbootstrap.com/",
+    "github": "https://github.com/twbs/icons",
+    "releases_url": "https://github.com/twbs/icons/releases",
+    "npm_packages": {
+      "core": "bootstrap-icons",
+      "font": "bootstrap-icons"
+    },
+    "cdn_svg_template": "https://cdn.jsdelivr.net/npm/bootstrap-icons@latest/icons/{name}.svg",
+    "api_prefix": "bi"
+  }
+]

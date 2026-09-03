@@ -1,0 +1,144 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "name": "Open-Source Fonts Repository Index",
+  "description": "Comprehensive registry of verified open-source typography sources, API endpoints, download patterns, and licenses.",
+  "version": "1.0.0",
+  "last_updated": "2026-09-03",
+  "sources": [
+    {
+      "id": "google-fonts",
+      "name": "Google Fonts",
+      "website": "https://fonts.google.com/",
+      "repository": "https://github.com/google/fonts",
+      "license_types": ["SIL OFL 1.1", "Apache 2.0", "Ubuntu Font License 1.0"],
+      "font_count": "1,700+ families",
+      "is_fully_open_source": true,
+      "query_methods": {
+        "web_api": {
+          "endpoint": "https://www.googleapis.com/webfonts/v1/webfonts?key={API_KEY}",
+          "description": "Returns full list of families, subsets, variants, and direct TTF file URLs."
+        },
+        "fontsource_mirror_api": {
+          "endpoint": "https://api.fontsource.org/v1/fonts",
+          "item_endpoint": "https://api.fontsource.org/v1/fonts/{id}",
+          "description": "Free open REST API with full metadata, weights, styles, subsets, and direct CDN URLs."
+        },
+        "github_metadata": {
+          "raw_metadata_url_template": "https://raw.githubusercontent.com/google/fonts/main/{license_dir}/{family_dir}/METADATA.pb",
+          "description": "Protobuf metadata in google/fonts repository containing designer, date, copyright, and file details."
+        }
+      },
+      "download_patterns": {
+        "direct_family_zip": {
+          "url_template": "https://fonts.google.com/download?family={Family+Name}",
+          "example": "https://fonts.google.com/download?family=Roboto",
+          "format": "ZIP archive containing TTF or OTF files and OFL.txt license file."
+        },
+        "fontsource_cdn_files": {
+          "css_url_template": "https://cdn.jsdelivr.net/npm/@fontsource/{id}/index.css",
+          "woff2_template": "https://cdn.jsdelivr.net/npm/@fontsource/{id}/files/{id}-{subset}-{weight}-{style}.woff2"
+        },
+        "git_sparse_checkout": {
+          "command": "git clone --depth 1 --filter=blob:none --sparse https://github.com/google/fonts.git; cd fonts; git sparse-checkout set ofl/{family_name}"
+        }
+      }
+    },
+    {
+      "id": "fontshare",
+      "name": "Fontshare (Indian Type Foundry)",
+      "website": "https://www.fontshare.com/",
+      "license_types": ["SIL OFL 1.1", "ITF Free Font License"],
+      "font_count": "100+ families (36+ SIL OFL)",
+      "is_fully_open_source": false,
+      "license_note": "Carefully filter by 'sil_ofl' license type if strict open-source redistribution/modification is needed. Fonts marked 'itf_ffl' are free for personal and commercial use but are proprietary freeware.",
+      "query_methods": {
+        "api": {
+          "catalog_endpoint": "https://api.fontshare.com/v2/fonts",
+          "item_endpoint": "https://api.fontshare.com/v2/fonts/{slug}",
+          "description": "REST API returning typography metadata, designer biographies, styles, OpenType features, and license types."
+        }
+      },
+      "download_patterns": {
+        "direct_zip": {
+          "url_template": "https://api.fontshare.com/v2/fonts/download/{slug}",
+          "example": "https://api.fontshare.com/v2/fonts/download/poppins",
+          "format": "ZIP archive with OTF, TTF, WOFF, WOFF2 font files."
+        }
+      }
+    },
+    {
+      "id": "github-foundries",
+      "name": "Independent Open-Source Foundries & Repositories",
+      "website": "https://github.com/showcases/fonts",
+      "license_types": ["SIL OFL 1.1", "Apache 2.0", "MIT"],
+      "is_fully_open_source": true,
+      "notable_organizations": [
+        {
+          "name": "The League of Moveable Type",
+          "website": "https://www.theleagueofmoveabletype.com/",
+          "github": "https://github.com/theleagueof",
+          "description": "The first open-source font foundry. Pioneer of decentralized open typography."
+        },
+        {
+          "name": "Velvetyne Type Foundry (VTF)",
+          "website": "https://velvetyne.fr/",
+          "github": "https://github.com/velvetyne",
+          "description": "French collective designing open-source experimental and display typography."
+        },
+        {
+          "name": "Collletttivo",
+          "website": "http://www.collletttivo.it/",
+          "github": "https://github.com/collletttivo",
+          "description": "Open-source type design collective promoting libre type design and education."
+        },
+        {
+          "name": "Adobe Fonts Open Source",
+          "website": "https://adobe-fonts.github.io/",
+          "github": "https://github.com/adobe-fonts",
+          "description": "Adobe Source Sans 3, Source Code Pro, Source Serif 4, Source Han Sans (CJK)."
+        },
+        {
+          "name": "IBM Plex",
+          "website": "https://www.ibm.com/plex/",
+          "github": "https://github.com/IBM/plex",
+          "description": "IBM's official open-source corporate superfamily (Sans, Serif, Mono, Arabic, Thai, Math)."
+        },
+        {
+          "name": "Microsoft Typography (Open Source)",
+          "github": "https://github.com/microsoft/cascadia-code",
+          "description": "Cascadia Code programming typeface."
+        },
+        {
+          "name": "GitHub Next & Brand",
+          "github": "https://github.com/github/mona-sans",
+          "description": "Mona Sans & Hubot Sans variable font families."
+        },
+        {
+          "name": "JetBrains",
+          "website": "https://www.jetbrains.com/lp/mono/",
+          "github": "https://github.com/JetBrains/JetBrainsMono",
+          "description": "JetBrains Mono open-source developer typeface."
+        }
+      ]
+    },
+    {
+      "id": "open-font-library",
+      "name": "Open Font Library",
+      "website": "https://fontlibrary.org/",
+      "license_types": ["SIL OFL 1.1", "GPL with Font Exception", "Public Domain / CC0", "MIT"],
+      "font_count": "1,000+ fonts",
+      "is_fully_open_source": true,
+      "description": "Public catalog explicitly dedicated to hosting open-source font software."
+    },
+    {
+      "id": "fontsource",
+      "name": "Fontsource Registry",
+      "website": "https://fontsource.org/",
+      "github": "https://github.com/fontsource/fontsource",
+      "license_types": ["OFL-1.1", "Apache-2.0", "UFL-1.0", "mit", "CC0-1.0"],
+      "font_count": "2,100+ packages",
+      "is_fully_open_source": true,
+      "description": "Self-host Open Source fonts with NPM packages or direct CDN downloads."
+    }
+  ]
+}

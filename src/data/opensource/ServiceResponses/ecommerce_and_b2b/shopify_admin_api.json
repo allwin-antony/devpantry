@@ -1,0 +1,268 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "service": "Shopify Admin REST & GraphQL API",
+  "provider": "Shopify",
+  "documentation_url": "https://shopify.dev/docs/api/admin-rest",
+  "responses": {
+    "customer_object": {
+      "description": "Returned by GET /admin/api/2026-01/customers/{customer_id}.json",
+      "payload": {
+        "customer": {
+          "id": 7891234567890,
+          "email": "customer@example.com",
+          "created_at": "2026-01-10T12:34:56-05:00",
+          "updated_at": "2026-03-01T08:20:00-05:00",
+          "first_name": "Eleanor",
+          "last_name": "Vance",
+          "orders_count": 4,
+          "state": "enabled",
+          "total_spent": "459.95",
+          "last_order_id": 9876543210123,
+          "note": "VIP Customer - wholesale inquiry",
+          "verified_email": true,
+          "tags": "VIP, newsletter_subscriber, repeat_buyer",
+          "currency": "USD",
+          "addresses": [
+            {
+              "id": 112233445566,
+              "customer_id": 7891234567890,
+              "first_name": "Eleanor",
+              "last_name": "Vance",
+              "company": "Vance Enterprises",
+              "address1": "100 Market St",
+              "address2": "Suite 400",
+              "city": "San Francisco",
+              "province": "California",
+              "country": "United States",
+              "zip": "94105",
+              "phone": "+14155552671",
+              "country_code": "US",
+              "default": true
+            }
+          ]
+        }
+      },
+      "data_types": {
+        "customer": {
+          "id": "integer (64-bit int / BigInt: must be parsed as BigInt or string in JS)",
+          "email": "string (email address)",
+          "created_at": "string (ISO 8601 with timezone offset, e.g. \"2026-01-10T12:34:56-05:00\")",
+          "updated_at": "string (ISO 8601 with timezone offset)",
+          "first_name": "string",
+          "last_name": "string",
+          "orders_count": "integer (lifetime order count)",
+          "state": "string (\"disabled\" | \"invited\" | \"enabled\" | \"declined\")",
+          "total_spent": "string (decimal formatted amount, e.g. \"459.95\" — string, NOT float)",
+          "last_order_id": "integer (64-bit int / BigInt) | null",
+          "note": "string | null",
+          "verified_email": "boolean",
+          "tags": "string (comma-separated tags)",
+          "currency": "string (ISO 4217 3-letter currency code, e.g. \"USD\")",
+          "addresses": "array[object] (list of customer shipping/billing addresses)",
+          "addresses[].id": "integer (64-bit int / BigInt)",
+          "addresses[].customer_id": "integer (64-bit int / BigInt)",
+          "addresses[].company": "string | null",
+          "addresses[].address1": "string",
+          "addresses[].city": "string",
+          "addresses[].province": "string",
+          "addresses[].country": "string",
+          "addresses[].zip": "string",
+          "addresses[].phone": "string | null",
+          "addresses[].default": "boolean"
+        }
+      }
+    },
+    "order_object": {
+      "description": "Returned by GET /admin/api/2026-01/orders/{order_id}.json",
+      "payload": {
+        "order": {
+          "id": 9876543210123,
+          "name": "#1042",
+          "email": "customer@example.com",
+          "created_at": "2026-03-01T08:15:00-05:00",
+          "financial_status": "paid",
+          "fulfillment_status": "unfulfilled",
+          "currency": "USD",
+          "subtotal_price": "120.00",
+          "total_tax": "9.90",
+          "total_shipping_price_set": {
+            "shop_money": {
+              "amount": "10.00",
+              "currency_code": "USD"
+            }
+          },
+          "total_price": "139.90",
+          "line_items": [
+            {
+              "id": 14523698745,
+              "title": "Ergonomic Mechanical Keyboard",
+              "quantity": 1,
+              "price": "120.00",
+              "sku": "KB-ERG-01",
+              "variant_title": "Wireless / Space Gray",
+              "vendor": "KeyForge Labs",
+              "product_id": 887766554433
+            }
+          ],
+          "shipping_address": {
+            "name": "Eleanor Vance",
+            "address1": "100 Market St",
+            "city": "San Francisco",
+            "province": "California",
+            "country": "United States",
+            "zip": "94105"
+          }
+        }
+      },
+      "data_types": {
+        "order": {
+          "id": "integer (64-bit int / BigInt)",
+          "name": "string (human-readable order name with prefix, e.g. \"#1042\")",
+          "email": "string (customer contact email)",
+          "created_at": "string (ISO 8601 with timezone offset)",
+          "financial_status": "string (\"pending\" | \"authorized\" | \"partially_paid\" | \"paid\" | \"partially_refunded\" | \"refunded\" | \"voided\")",
+          "fulfillment_status": "string (\"fulfilled\" | \"null\" | \"partial\" | \"restocked\")",
+          "currency": "string (ISO 4217 currency code)",
+          "subtotal_price": "string (decimal formatted string, e.g. \"120.00\")",
+          "total_tax": "string (decimal formatted string, e.g. \"9.90\")",
+          "total_shipping_price_set": {
+            "shop_money": {
+              "amount": "string (decimal formatted string, e.g. \"10.00\")",
+              "currency_code": "string (ISO 4217 code)"
+            }
+          },
+          "total_price": "string (decimal formatted string, e.g. \"139.90\")",
+          "line_items": "array[object]",
+          "line_items[].id": "integer (64-bit int / BigInt)",
+          "line_items[].title": "string",
+          "line_items[].quantity": "integer",
+          "line_items[].price": "string (decimal formatted unit price)",
+          "line_items[].sku": "string | null",
+          "line_items[].variant_title": "string | null",
+          "line_items[].vendor": "string | null",
+          "line_items[].product_id": "integer (64-bit int / BigInt)",
+          "shipping_address": "object with name (str), address1 (str), city (str), province (str), country (str), zip (str)"
+        }
+      }
+    },
+    "webhook_orders_create": {
+      "description": "Payload received on your server webhook endpoint for topic: orders/create (Header: X-Shopify-Hmac-Sha256).",
+      "payload": {
+        "id": 9876543210123,
+        "admin_graphql_api_id": "gid://shopify/Order/9876543210123",
+        "browser_ip": "198.51.100.42",
+        "buyer_accepts_marketing": true,
+        "cancel_reason": null,
+        "cancelled_at": null,
+        "cart_token": "c1-a8b2c3d4e5f67890",
+        "checkout_token": "bd8923471029384710",
+        "closed_at": null,
+        "confirmation_number": "CF1042-990",
+        "confirmed": true,
+        "currency": "USD",
+        "current_total_price": "139.90",
+        "financial_status": "paid",
+        "customer": {
+          "id": 7891234567890,
+          "email": "customer@example.com",
+          "first_name": "Eleanor",
+          "last_name": "Vance"
+        }
+      },
+      "data_types": {
+        "id": "integer (64-bit int / BigInt)",
+        "admin_graphql_api_id": "string (GraphQL Global ID: \"gid://shopify/Order/...\")",
+        "browser_ip": "string (IPv4/IPv6 address) | null",
+        "buyer_accepts_marketing": "boolean",
+        "cancel_reason": "string | null",
+        "cancelled_at": "string (ISO 8601) | null",
+        "cart_token": "string | null",
+        "checkout_token": "string | null",
+        "closed_at": "string (ISO 8601) | null",
+        "confirmation_number": "string",
+        "confirmed": "boolean",
+        "currency": "string (ISO 4217 code)",
+        "current_total_price": "string (decimal string)",
+        "financial_status": "string",
+        "customer": {
+          "id": "integer (64-bit int / BigInt)",
+          "email": "string",
+          "first_name": "string",
+          "last_name": "string"
+        }
+      }
+    },
+    "product_object": {
+      "description": "Returned by GET /admin/api/2026-01/products/{product_id}.json",
+      "payload": {
+        "product": {
+          "id": 887766554433,
+          "title": "Ergonomic Mechanical Keyboard",
+          "body_html": "<p>Premium split ergonomic mechanical keyboard with Cherry MX switches.</p>",
+          "vendor": "KeyForge Labs",
+          "product_type": "Keyboards",
+          "created_at": "2026-01-15T10:00:00-05:00",
+          "handle": "ergonomic-mechanical-keyboard",
+          "updated_at": "2026-03-01T08:20:00-05:00",
+          "published_at": "2026-01-15T10:30:00-05:00",
+          "status": "active",
+          "tags": "mechanical, ergonomic, split, cherry-mx, wireless",
+          "variants": [
+            {
+              "id": 44556677889900,
+              "product_id": 887766554433,
+              "title": "Wireless / Space Gray",
+              "price": "120.00",
+              "sku": "KB-ERG-01",
+              "inventory_quantity": 85,
+              "weight": 1.2,
+              "weight_unit": "kg"
+            }
+          ],
+          "images": [
+            {
+              "id": 112233001122,
+              "product_id": 887766554433,
+              "src": "https://cdn.shopify.com/s/files/1/keyboard-hero.webp",
+              "width": 1200,
+              "height": 800
+            }
+          ]
+        }
+      },
+      "data_types": {
+        "product": {
+          "id": "integer (64-bit int / BigInt)",
+          "title": "string",
+          "body_html": "string (rich HTML product description)",
+          "vendor": "string",
+          "product_type": "string",
+          "created_at": "string (ISO 8601)",
+          "handle": "string (URL slug)",
+          "updated_at": "string (ISO 8601)",
+          "published_at": "string (ISO 8601)",
+          "status": "string (\"active\" | \"archived\" | \"draft\")",
+          "tags": "string (comma-separated)",
+          "variants": "array[object]",
+          "variants[].id": "integer (64-bit int / BigInt)",
+          "variants[].product_id": "integer (64-bit int / BigInt)",
+          "variants[].title": "string",
+          "variants[].price": "string (decimal amount, e.g. \"120.00\")",
+          "variants[].sku": "string | null",
+          "variants[].inventory_quantity": "integer",
+          "variants[].weight": "number (float)",
+          "variants[].weight_unit": "string (\"g\" | \"kg\" | \"oz\" | \"lb\")",
+          "images": "array[object] with id (int), product_id (int), src (URL str), width (int), height (int)"
+        }
+      }
+    }
+  },
+  "endpoints": {
+    "customers_list": "GET /admin/api/2026-01/customers.json",
+    "customer_detail": "GET /admin/api/2026-01/customers/{customer_id}.json",
+    "orders_list": "GET /admin/api/2026-01/orders.json",
+    "order_detail": "GET /admin/api/2026-01/orders/{order_id}.json",
+    "products_list": "GET /admin/api/2026-01/products.json",
+    "webhooks": "POST /admin/api/2026-01/webhooks.json"
+  }
+}

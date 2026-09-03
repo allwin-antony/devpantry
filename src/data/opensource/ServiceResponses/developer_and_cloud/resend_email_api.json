@@ -1,0 +1,63 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "service": "Resend Transactional Email API & Webhooks",
+  "provider": "Resend",
+  "documentation_url": "https://resend.com/docs/api-reference/emails/send-email",
+  "responses": {
+    "send_email_response": {
+      "description": "Returned by POST https://api.resend.com/emails with Authorization: Bearer re_...",
+      "http_status": 200,
+      "payload": {
+        "id": "49a3999c-0ce1-4ea6-ab68-afcd6dc2e794",
+        "from": "Acme Auth <onboarding@resend.dev>",
+        "to": [
+          "developer@example.com"
+        ],
+        "created_at": "2026-03-03T10:00:00.000Z"
+      },
+      "data_types": {
+        "id": "string (UUID v4 message ID assigned by Resend)",
+        "from": "string (sender address, e.g. \"Acme <onboarding@resend.dev>\")",
+        "to": "array[string] (list of recipient email addresses)",
+        "created_at": "string (ISO 8601 UTC timestamp)"
+      }
+    },
+    "webhook_email_delivered": {
+      "description": "Payload sent when an email is successfully delivered to recipient mailbox (Header: svix-signature).",
+      "payload": {
+        "type": "email.delivered",
+        "created_at": "2026-03-03T10:00:05.123Z",
+        "data": {
+          "email_id": "49a3999c-0ce1-4ea6-ab68-afcd6dc2e794",
+          "from": "Acme Auth <onboarding@resend.dev>",
+          "to": [
+            "developer@example.com"
+          ],
+          "subject": "Verify your developer account",
+          "tags": [
+            {
+              "name": "category",
+              "value": "auth_verification"
+            }
+          ]
+        }
+      },
+      "data_types": {
+        "type": "string (\"email.sent\" | \"email.delivered\" | \"email.delivery_delayed\" | \"email.complained\" | \"email.bounced\" | \"email.opened\" | \"email.clicked\")",
+        "created_at": "string (ISO 8601 timestamp)",
+        "data": {
+          "email_id": "string (UUID v4)",
+          "from": "string",
+          "to": "array[string]",
+          "subject": "string",
+          "tags": "array[object] with name (str) and value (str)"
+        }
+      }
+    }
+  },
+  "endpoints": {
+    "send_email": "POST https://api.resend.com/emails",
+    "get_email": "GET https://api.resend.com/emails/{id}",
+    "list_domains": "GET https://api.resend.com/domains"
+  }
+}

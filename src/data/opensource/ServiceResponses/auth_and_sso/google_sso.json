@@ -1,0 +1,121 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "service": "Google OAuth 2.0 & OpenID Connect",
+  "provider": "Google Identity Services",
+  "documentation_url": "https://developers.google.com/identity/protocols/oauth2/openid-connect",
+  "discovery_url": "https://accounts.google.com/.well-known/openid-configuration",
+  "endpoints": {
+    "authorization": "https://accounts.google.com/o/oauth2/v2/auth",
+    "token": "https://oauth2.googleapis.com/token",
+    "userinfo": "https://openidconnect.googleapis.com/v1/userinfo",
+    "jwks_uri": "https://www.googleapis.com/oauth2/v3/certs"
+  },
+  "responses": {
+    "token_exchange_response": {
+      "description": "Returned by POST https://oauth2.googleapis.com/token upon exchanging authorization_code.",
+      "http_status": 200,
+      "content_type": "application/json; charset=utf-8",
+      "payload": {
+        "access_token": "ya29.a0AfH6SMD...sample_google_access_token...",
+        "expires_in": 3599,
+        "refresh_token": "1//04hW8rK...sample_google_refresh_token...",
+        "scope": "openid https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile",
+        "token_type": "Bearer",
+        "id_token": "eyJhbGciOiJSUzI1NiIsImtpZCI6IjRiOWE...sample_google_id_token_jwt..."
+      },
+      "data_types": {
+        "access_token": "string (opaque OAuth 2.0 Bearer token)",
+        "expires_in": "integer (lifetime in seconds, typically 3599)",
+        "refresh_token": "string (long-lived refresh token)",
+        "scope": "string (space-delimited list of granted scopes)",
+        "token_type": "string (always \"Bearer\")",
+        "id_token": "string (compact serialized JWS/JWT format)"
+      }
+    },
+    "id_token_decoded_jwt_payload": {
+      "description": "Decoded claims payload from the Google id_token JWT.",
+      "fields_explained": {
+        "iss": "Token issuer (must be 'https://accounts.google.com' or 'accounts.google.com')",
+        "sub": "Unique, immutable Google user ID across all Google accounts",
+        "aud": "Your application's Google OAuth Client ID",
+        "email": "User primary email address",
+        "email_verified": "Boolean indicating if Google has verified this email",
+        "name": "User full display name",
+        "picture": "URL of user Google profile picture",
+        "given_name": "First name",
+        "family_name": "Last name",
+        "locale": "User preferred language/locale code (e.g. 'en')",
+        "iat": "Issued at timestamp (seconds since epoch)",
+        "exp": "Expiration timestamp (seconds since epoch)"
+      },
+      "payload": {
+        "iss": "https://accounts.google.com",
+        "azp": "123456789012-abc123def456.apps.googleusercontent.com",
+        "aud": "123456789012-abc123def456.apps.googleusercontent.com",
+        "sub": "109876543210987654321",
+        "email": "developer.user@gmail.com",
+        "email_verified": true,
+        "at_hash": "ABc123DeF456GhI789JkL_",
+        "name": "Jane Developer",
+        "picture": "https://lh3.googleusercontent.com/a/ACg8ocL...=s96-c",
+        "given_name": "Jane",
+        "family_name": "Developer",
+        "locale": "en",
+        "iat": 1772618400,
+        "exp": 1772622000
+      },
+      "data_types": {
+        "iss": "string (issuer URI: \"https://accounts.google.com\")",
+        "azp": "string (authorized party client ID)",
+        "aud": "string (OAuth 2.0 Client ID of your app)",
+        "sub": "string (immutable unique numeric Google User ID)",
+        "email": "string (user primary email address)",
+        "email_verified": "boolean",
+        "at_hash": "string (access token hash)",
+        "name": "string (user full display name)",
+        "picture": "string (URI to Google avatar image)",
+        "given_name": "string (first name)",
+        "family_name": "string (last name)",
+        "locale": "string (BCP 47 language tag, e.g. \"en\")",
+        "iat": "integer (Unix epoch timestamp in seconds when token was issued)",
+        "exp": "integer (Unix epoch timestamp in seconds when token expires)"
+      }
+    },
+    "userinfo_endpoint_response": {
+      "description": "Returned by GET https://openidconnect.googleapis.com/v1/userinfo with Bearer access_token.",
+      "http_status": 200,
+      "payload": {
+        "sub": "109876543210987654321",
+        "name": "Jane Developer",
+        "given_name": "Jane",
+        "family_name": "Developer",
+        "picture": "https://lh3.googleusercontent.com/a/ACg8ocL...=s96-c",
+        "email": "developer.user@gmail.com",
+        "email_verified": true,
+        "locale": "en"
+      },
+      "data_types": {
+        "sub": "string (immutable unique numeric Google User ID)",
+        "name": "string (full name)",
+        "given_name": "string (first name)",
+        "family_name": "string (last name)",
+        "picture": "string (URI to avatar image)",
+        "email": "string (primary email)",
+        "email_verified": "boolean",
+        "locale": "string (locale code)"
+      }
+    },
+    "error_response": {
+      "description": "Standard error response when authorization code is expired or invalid.",
+      "http_status": 400,
+      "payload": {
+        "error": "invalid_grant",
+        "error_description": "Bad Request or Token has expired or been revoked."
+      },
+      "data_types": {
+        "error": "string (error code: \"invalid_request\" | \"invalid_client\" | \"invalid_grant\")",
+        "error_description": "string (human-readable error description)"
+      }
+    }
+  }
+}

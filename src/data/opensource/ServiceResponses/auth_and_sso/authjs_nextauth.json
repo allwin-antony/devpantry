@@ -1,0 +1,58 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "service": "Auth.js (NextAuth.js)",
+  "provider": "Open Source Universal Authentication Library",
+  "documentation_url": "https://authjs.dev/",
+  "responses": {
+    "useSession_client_response": {
+      "description": "Returned by useSession() hook in React/Next.js client components.",
+      "payload": {
+        "data": {
+          "user": {
+            "name": "Sam Altman",
+            "email": "sam@openai.com",
+            "image": "https://avatars.githubusercontent.com/u/12345?v=4"
+          },
+          "expires": "2026-04-03T09:00:00.000Z"
+        },
+        "status": "authenticated"
+      },
+      "data_types": {
+        "data": {
+          "user": {
+            "name": "string | null",
+            "email": "string | null",
+            "image": "string | null (avatar image URL)"
+          },
+          "expires": "string (ISO 8601 UTC session expiration timestamp)"
+        },
+        "status": "string (\"authenticated\" | \"unauthenticated\" | \"loading\")"
+      }
+    },
+    "getServerSession_extended_response": {
+      "description": "Standard session object inside getServerSession() with custom callbacks (e.g., adding user ID and role).",
+      "payload": {
+        "user": {
+          "id": "usr_992837482910",
+          "name": "Sam Altman",
+          "email": "sam@openai.com",
+          "image": "https://avatars.githubusercontent.com/u/12345?v=4",
+          "role": "workspace_owner",
+          "organization_id": "org_5544332211"
+        },
+        "expires": "2026-04-03T09:00:00.000Z"
+      },
+      "data_types": {
+        "user": {
+          "id": "string (custom user identifier in database)",
+          "name": "string | null",
+          "email": "string | null",
+          "image": "string | null",
+          "role": "string (e.g. \"workspace_owner\", \"admin\", \"member\")",
+          "organization_id": "string | null"
+        },
+        "expires": "string (ISO 8601 UTC session expiration timestamp)"
+      }
+    }
+  }
+}

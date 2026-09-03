@@ -1,0 +1,176 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "service": "Stripe Payments & Billing API",
+  "provider": "Stripe",
+  "documentation_url": "https://docs.stripe.com/api",
+  "responses": {
+    "payment_intent_object": {
+      "description": "Returned by POST /v1/payment_intents or GET /v1/payment_intents/{id}",
+      "payload": {
+        "id": "pi_3MtwBwLkdIwHu7ix28a3tqPa",
+        "object": "payment_intent",
+        "amount": 2000,
+        "amount_received": 2000,
+        "capture_method": "automatic",
+        "client_secret": "pi_3MtwBwLkdIwHu7ix28a3tqPa_secret_YrZk1f0...",
+        "currency": "usd",
+        "customer": "cus_NffrFeUfNV2Hib",
+        "description": "Monthly SaaS Pro Subscription Tier",
+        "status": "succeeded",
+        "payment_method": "pm_1MtwBvLkdIwHu7ix9H2rXjKa",
+        "payment_method_types": [
+          "card"
+        ],
+        "metadata": {
+          "order_id": "ORD-67890",
+          "user_id": "usr_112233"
+        },
+        "created": 1772618400
+      },
+      "data_types": {
+        "id": "string (PaymentIntent ID starting with \"pi_\")",
+        "object": "string (always \"payment_intent\")",
+        "amount": "integer (amount in smallest currency unit, e.g. 2000 = 0.00)",
+        "amount_received": "integer (captured amount in smallest currency unit)",
+        "capture_method": "string (\"automatic\" | \"manual\")",
+        "client_secret": "string (confidential token for frontend Stripe Elements integration)",
+        "currency": "string (3-letter ISO code in lowercase, e.g. \"usd\")",
+        "customer": "string (Customer ID starting with \"cus_\") | null",
+        "description": "string | null",
+        "status": "string (\"requires_payment_method\" | \"requires_confirmation\" | \"requires_action\" | \"processing\" | \"requires_capture\" | \"canceled\" | \"succeeded\")",
+        "payment_method": "string (PaymentMethod ID starting with \"pm_\") | null",
+        "payment_method_types": "array[string] (e.g. [\"card\"])",
+        "metadata": "object (key-value dictionary of strings)",
+        "created": "integer (Unix epoch timestamp in seconds)"
+      }
+    },
+    "customer_object": {
+      "description": "Returned by POST /v1/customers or GET /v1/customers/{id}",
+      "payload": {
+        "id": "cus_NffrFeUfNV2Hib",
+        "object": "customer",
+        "name": "Acme Global Inc",
+        "email": "billing@acmeglobal.com",
+        "balance": 0,
+        "currency": "usd",
+        "delinquent": false,
+        "invoice_prefix": "7489ABC",
+        "invoice_settings": {
+          "custom_fields": null,
+          "default_payment_method": "pm_1MtwBvLkdIwHu7ix9H2rXjKa"
+        },
+        "created": 1772618000
+      },
+      "data_types": {
+        "id": "string (Customer ID starting with \"cus_\")",
+        "object": "string (always \"customer\")",
+        "name": "string | null",
+        "email": "string | null",
+        "balance": "integer (current balance in smallest currency unit, negative = credit)",
+        "currency": "string (3-letter ISO code in lowercase) | null",
+        "delinquent": "boolean (true if customer has past-due invoices)",
+        "invoice_prefix": "string (prefix for generated invoices)",
+        "invoice_settings": {
+          "custom_fields": "array[object] | null",
+          "default_payment_method": "string (\"pm_...\") | null"
+        },
+        "created": "integer (Unix epoch timestamp in seconds)"
+      }
+    },
+    "subscription_object": {
+      "description": "Returned by POST /v1/subscriptions or Webhooks",
+      "payload": {
+        "id": "sub_1MtwC0LkdIwHu7ixg4hK1Plo",
+        "object": "subscription",
+        "customer": "cus_NffrFeUfNV2Hib",
+        "status": "active",
+        "current_period_start": 1772618400,
+        "current_period_end": 1775210400,
+        "items": {
+          "object": "list",
+          "data": [
+            {
+              "id": "si_Nffr2bLkdIwHu7",
+              "price": {
+                "id": "price_1MtwAELkdIwHu7ixH4gA7jkl",
+                "currency": "usd",
+                "unit_amount": 4900,
+                "recurring": {
+                  "interval": "month",
+                  "interval_count": 1
+                }
+              },
+              "quantity": 5
+            }
+          ]
+        },
+        "latest_invoice": "in_1MtwC0LkdIwHu7ixu5vW8xYz"
+      },
+      "data_types": {
+        "id": "string (Subscription ID starting with \"sub_\")",
+        "object": "string (always \"subscription\")",
+        "customer": "string (Customer ID: \"cus_...\")",
+        "status": "string (\"incomplete\" | \"incomplete_expired\" | \"trialing\" | \"active\" | \"past_due\" | \"canceled\" | \"unpaid\" | \"paused\")",
+        "current_period_start": "integer (Unix epoch timestamp in seconds)",
+        "current_period_end": "integer (Unix epoch timestamp in seconds)",
+        "items": {
+          "object": "string (\"list\")",
+          "data": "array[object] (list of subscription line items with price, quantity, interval)"
+        },
+        "latest_invoice": "string (Invoice ID starting with \"in_\")"
+      }
+    },
+    "webhook_checkout_session_completed": {
+      "description": "Payload sent to your webhook endpoint for event: checkout.session.completed (Header: Stripe-Signature).",
+      "payload": {
+        "id": "evt_1MtwC5LkdIwHu7ixW2zY3A4b",
+        "object": "event",
+        "api_version": "2024-06-20",
+        "created": 1772618405,
+        "type": "checkout.session.completed",
+        "data": {
+          "object": {
+            "id": "cs_test_a1b2c3d4e5f6g7h8i9j0",
+            "object": "checkout.session",
+            "amount_total": 4900,
+            "currency": "usd",
+            "customer": "cus_NffrFeUfNV2Hib",
+            "customer_email": "billing@acmeglobal.com",
+            "payment_status": "paid",
+            "status": "complete",
+            "mode": "subscription",
+            "subscription": "sub_1MtwC0LkdIwHu7ixg4hK1Plo"
+          }
+        }
+      },
+      "data_types": {
+        "id": "string (Event ID starting with \"evt_\")",
+        "object": "string (always \"event\")",
+        "api_version": "string (Stripe API version date string, e.g. \"2024-06-20\")",
+        "created": "integer (Unix epoch timestamp in seconds)",
+        "type": "string (event topic: \"checkout.session.completed\")",
+        "data": {
+          "object": {
+            "id": "string (Checkout Session ID: \"cs_...\")",
+            "object": "string (\"checkout.session\")",
+            "amount_total": "integer (total in cents / smallest currency unit)",
+            "currency": "string (lowercase 3-letter ISO code)",
+            "customer": "string (\"cus_...\")",
+            "customer_email": "string | null",
+            "payment_status": "string (\"paid\" | \"unpaid\" | \"no_payment_required\")",
+            "status": "string (\"complete\" | \"expired\" | \"open\")",
+            "mode": "string (\"payment\" | \"setup\" | \"subscription\")",
+            "subscription": "string (\"sub_...\") | null"
+          }
+        }
+      }
+    }
+  },
+  "endpoints": {
+    "payment_intents": "POST /v1/payment_intents",
+    "customers": "POST /v1/customers",
+    "subscriptions": "POST /v1/subscriptions",
+    "checkout_sessions": "POST /v1/checkout/sessions",
+    "webhooks": "POST (your server webhook endpoint)"
+  }
+}

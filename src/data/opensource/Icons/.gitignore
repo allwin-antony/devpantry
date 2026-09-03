@@ -1,0 +1,10 @@
+# Ignore downloaded SVG icons & archives
+downloads/
+*.svg
+*.zip
+*.tar.gz
+*.tgz
+
+# Python cache
+__pycache__/
+*.pyc

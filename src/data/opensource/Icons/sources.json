@@ -1,0 +1,137 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "name": "Open-Source Icons Repository Index",
+  "description": "Comprehensive registry of verified 100% open-source, attribution-free icon libraries, API endpoints, download patterns, and framework bindings.",
+  "version": "1.0.0",
+  "last_updated": "2026-09-03",
+  "featured_libraries": [
+    {
+      "id": "lucide",
+      "name": "Lucide Icons",
+      "website": "https://lucide.dev/",
+      "repository": "https://github.com/lucide-icons/lucide",
+      "license": "ISC / MIT",
+      "attribution_required": false,
+      "icon_count": "1,800+ icons",
+      "description": "A community-run fork of Feather Icons. Crisp, modern 24x24 vector shapes with active ongoing maintenance.",
+      "api_endpoints": {
+        "svg": "https://api.iconify.design/lucide/{icon_name}.svg",
+        "json_manifest": "https://api.iconify.design/lucide.json",
+        "cdn_raw": "https://cdn.jsdelivr.net/npm/lucide-static@latest/icons/{icon_name}.svg"
+      },
+      "download_patterns": {
+        "release_zip": "https://github.com/lucide-icons/lucide/releases/latest",
+        "npm_tarball": "https://registry.npmjs.org/lucide-static"
+      }
+    },
+    {
+      "id": "tabler-icons",
+      "name": "Tabler Icons",
+      "website": "https://tabler.io/icons",
+      "repository": "https://github.com/tabler/tabler-icons",
+      "license": "MIT",
+      "attribution_required": false,
+      "icon_count": "6,100+ icons",
+      "description": "Powerhouse library featuring over 6,100 stroke-based vector icons for SaaS dashboards and modern web apps.",
+      "api_endpoints": {
+        "svg": "https://api.iconify.design/tabler/{icon_name}.svg",
+        "json_manifest": "https://api.iconify.design/tabler.json",
+        "cdn_raw": "https://cdn.jsdelivr.net/npm/@tabler/icons@latest/icons/{icon_name}.svg"
+      },
+      "download_patterns": {
+        "release_zip": "https://github.com/tabler/tabler-icons/releases/latest",
+        "npm_tarball": "https://registry.npmjs.org/@tabler/icons"
+      }
+    },
+    {
+      "id": "material-symbols",
+      "name": "Google Material Symbols",
+      "website": "https://fonts.google.com/icons",
+      "repository": "https://github.com/google/material-design-icons",
+      "license": "Apache 2.0",
+      "attribution_required": false,
+      "icon_count": "15,000+ variants",
+      "description": "Google's official variable icon library with optical size, weight, and grade controls.",
+      "api_endpoints": {
+        "svg": "https://api.iconify.design/material-symbols/{icon_name}.svg",
+        "json_manifest": "https://api.iconify.design/material-symbols.json"
+      },
+      "download_patterns": {
+        "release_zip": "https://github.com/google/material-design-icons/releases",
+        "npm_tarball": "https://registry.npmjs.org/material-symbols"
+      }
+    },
+    {
+      "id": "heroicons",
+      "name": "Heroicons",
+      "website": "https://heroicons.com/",
+      "repository": "https://github.com/tailwindlabs/heroicons",
+      "license": "MIT",
+      "attribution_required": false,
+      "icon_count": "1,200+ variants",
+      "description": "Designed by the creators of Tailwind CSS. Handcrafted 24px outline, 24px solid, and 20px solid icons.",
+      "api_endpoints": {
+        "svg": "https://api.iconify.design/heroicons/{icon_name}.svg",
+        "json_manifest": "https://api.iconify.design/heroicons.json"
+      },
+      "download_patterns": {
+        "release_zip": "https://github.com/tailwindlabs/heroicons/releases/latest",
+        "npm_tarball": "https://registry.npmjs.org/heroicons"
+      }
+    },
+    {
+      "id": "iconoir",
+      "name": "Iconoir",
+      "website": "https://iconoir.com/",
+      "repository": "https://github.com/iconoir-icons/iconoir",
+      "license": "MIT",
+      "attribution_required": false,
+      "icon_count": "1,600+ icons",
+      "description": "Pristine geometric collection of 1,600+ SVGs with zero paywalls, premium tiers, or ads.",
+      "api_endpoints": {
+        "svg": "https://api.iconify.design/iconoir/{icon_name}.svg",
+        "json_manifest": "https://api.iconify.design/iconoir.json"
+      },
+      "download_patterns": {
+        "release_zip": "https://github.com/iconoir-icons/iconoir/releases/latest",
+        "npm_tarball": "https://registry.npmjs.org/iconoir"
+      }
+    },
+    {
+      "id": "phosphor-icons",
+      "name": "Phosphor Icons",
+      "website": "https://phosphoricons.com/",
+      "repository": "https://github.com/phosphor-icons/core",
+      "license": "MIT",
+      "attribution_required": false,
+      "icon_count": "7,000+ variants (1,200+ shapes)",
+      "description": "Clean, flexible icon system in 6 weights: thin, light, regular, bold, fill, and duotone.",
+      "api_endpoints": {
+        "svg": "https://api.iconify.design/ph/{icon_name}.svg",
+        "json_manifest": "https://api.iconify.design/ph.json"
+      },
+      "download_patterns": {
+        "release_zip": "https://github.com/phosphor-icons/core/releases/latest",
+        "npm_tarball": "https://registry.npmjs.org/@phosphor-icons/core"
+      }
+    },
+    {
+      "id": "simple-icons",
+      "name": "Simple Icons",
+      "website": "https://simpleicons.org/",
+      "repository": "https://github.com/simple-icons/simple-icons",
+      "license": "CC0 1.0 (Public Domain)",
+      "attribution_required": false,
+      "icon_count": "3,200+ brand logos",
+      "description": "Free SVG icons for popular global tech brands, social platforms, languages, and open-source tools.",
+      "api_endpoints": {
+        "svg": "https://api.iconify.design/simple-icons/{icon_name}.svg",
+        "json_manifest": "https://api.iconify.design/simple-icons.json"
+      },
+      "download_patterns": {
+        "release_zip": "https://github.com/simple-icons/simple-icons/releases/latest",
+        "npm_tarball": "https://registry.npmjs.org/simple-icons"
+      }
+    }
+  ]
+}

@@ -1,0 +1,108 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "service": "Strapi Open Source Headless CMS",
+  "provider": "Strapi",
+  "documentation_url": "https://docs.strapi.io/dev-docs/api/rest",
+  "responses": {
+    "collection_response": {
+      "description": "Standardized REST API collection response structure in Strapi v4/v5.",
+      "http_status": 200,
+      "payload": {
+        "data": [
+          {
+            "id": 1,
+            "attributes": {
+              "title": "Getting Started with Open Source Auth",
+              "slug": "getting-started-open-source-auth",
+              "content": "Comprehensive overview of OIDC and OAuth 2.0 implementations...",
+              "author": "Antigravity Team",
+              "readingTime": 6,
+              "createdAt": "2026-02-10T14:00:00.000Z",
+              "updatedAt": "2026-03-01T09:15:00.000Z",
+              "publishedAt": "2026-02-10T14:30:00.000Z",
+              "cover": {
+                "data": {
+                  "id": 12,
+                  "attributes": {
+                    "url": "/uploads/cover_image_123.webp",
+                    "width": 1200,
+                    "height": 630
+                  }
+                }
+              }
+            }
+          }
+        ],
+        "meta": {
+          "pagination": {
+            "page": 1,
+            "pageSize": 25,
+            "pageCount": 1,
+            "total": 1
+          }
+        }
+      },
+      "data_types": {
+        "data": "array[object] (list of content entries)",
+        "data[].id": "integer (numeric primary key ID)",
+        "data[].attributes": {
+          "title": "string",
+          "slug": "string",
+          "content": "string (markdown or rich text)",
+          "author": "string",
+          "readingTime": "integer",
+          "createdAt": "string (ISO 8601 UTC timestamp)",
+          "updatedAt": "string (ISO 8601 UTC timestamp)",
+          "publishedAt": "string (ISO 8601 UTC timestamp) | null",
+          "cover": "object with data: {id: int, attributes: {url: str, width: int, height: int}}"
+        },
+        "meta": {
+          "pagination": {
+            "page": "integer (1-indexed current page)",
+            "pageSize": "integer (items per page)",
+            "pageCount": "integer (total available pages)",
+            "total": "integer (total count of entries matching filter)"
+          }
+        }
+      }
+    },
+    "error_response": {
+      "description": "Strapi standardized error format.",
+      "http_status": 400,
+      "payload": {
+        "data": null,
+        "error": {
+          "status": 400,
+          "name": "ValidationError",
+          "message": "Title is a required field",
+          "details": {
+            "errors": [
+              {
+                "path": [
+                  "title"
+                ],
+                "message": "title must be defined."
+              }
+            ]
+          }
+        }
+      },
+      "data_types": {
+        "data": "null",
+        "error": {
+          "status": "integer (HTTP status code, e.g. 400, 403, 404, 500)",
+          "name": "string (error type name, e.g. \"ValidationError\", \"NotFoundError\")",
+          "message": "string (human-readable error description)",
+          "details": {
+            "errors": "array[object] with path: array[str] and message: str"
+          }
+        }
+      }
+    }
+  },
+  "endpoints": {
+    "collection_list": "GET /api/{collection-type}",
+    "single_entry": "GET /api/{collection-type}/{id}",
+    "create_entry": "POST /api/{collection-type}"
+  }
+}

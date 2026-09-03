@@ -1,0 +1,117 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "service": "Facebook Login / Meta OAuth 2.0",
+  "provider": "Meta Platforms (Facebook, Instagram)",
+  "documentation_url": "https://developers.facebook.com/docs/facebook-login/guides/advanced/manual-flow",
+  "endpoints": {
+    "authorization": "https://www.facebook.com/v21.0/dialog/oauth",
+    "token": "https://graph.facebook.com/v21.0/oauth/access_token",
+    "user_profile": "https://graph.facebook.com/v21.0/me?fields=id,name,email,picture",
+    "debug_token": "https://graph.facebook.com/debug_token?input_token={token}&access_token={app_token}"
+  },
+  "responses": {
+    "token_exchange_response": {
+      "description": "Returned by GET https://graph.facebook.com/v21.0/oauth/access_token?code={code}&client_id={app_id}&client_secret={secret}&redirect_uri={uri}",
+      "http_status": 200,
+      "payload": {
+        "access_token": "EAAGm0PX4ZCps...sample_facebook_access_token...",
+        "token_type": "bearer",
+        "expires_in": 5183944
+      },
+      "data_types": {
+        "access_token": "string (Facebook User Access Token)",
+        "token_type": "string (always \"bearer\")",
+        "expires_in": "integer (seconds until expiry, ~5184000 for 60-day long-lived tokens)"
+      }
+    },
+    "user_profile_response": {
+      "description": "Returned by GET https://graph.facebook.com/v21.0/me?fields=id,name,email,picture&access_token={token}",
+      "http_status": 200,
+      "fields_explained": {
+        "id": "Facebook-scoped numeric user ID (unique to your App, NOT their global profile ID since v13.0+)",
+        "name": "User display name",
+        "email": "User primary email (requires 'email' scope; may be absent if user never verified email on Facebook)",
+        "picture.data.url": "Profile photo URL (defaults to 50x50; use ?width=200&height=200 for larger)"
+      },
+      "payload": {
+        "id": "10224336789012345",
+        "name": "Morgan Blake",
+        "email": "morgan.blake@example.com",
+        "picture": {
+          "data": {
+            "height": 50,
+            "is_silhouette": false,
+            "url": "https://platform-lookaside.fbsbx.com/platform/profilepic/?asid=10224336789012345&height=50&width=50",
+            "width": 50
+          }
+        }
+      },
+      "data_types": {
+        "id": "string (numeric app-scoped user ID, unique per Meta App)",
+        "name": "string (user display name)",
+        "email": "string (primary email; requires \"email\" scope)",
+        "picture": {
+          "data": {
+            "height": "integer (pixels)",
+            "is_silhouette": "boolean (true if default avatar placeholder)",
+            "url": "string (CDN image URL)",
+            "width": "integer (pixels)"
+          }
+        }
+      }
+    },
+    "debug_token_response": {
+      "description": "Returned by GET https://graph.facebook.com/debug_token for server-side token verification.",
+      "http_status": 200,
+      "payload": {
+        "data": {
+          "app_id": "123456789012345",
+          "type": "USER",
+          "application": "My Awesome App",
+          "data_access_expires_at": 1780394400,
+          "expires_at": 1777802344,
+          "is_valid": true,
+          "scopes": [
+            "email",
+            "public_profile"
+          ],
+          "user_id": "10224336789012345"
+        }
+      },
+      "data_types": {
+        "data": {
+          "app_id": "string (numeric App ID)",
+          "type": "string (\"USER\" | \"APP\")",
+          "application": "string (App display name)",
+          "data_access_expires_at": "integer (Unix timestamp)",
+          "expires_at": "integer (Unix timestamp)",
+          "is_valid": "boolean",
+          "scopes": "array[string] (list of granted permission names)",
+          "user_id": "string (app-scoped user ID)"
+        }
+      }
+    },
+    "error_response": {
+      "description": "Standard Facebook Graph API error format.",
+      "http_status": 400,
+      "payload": {
+        "error": {
+          "message": "Invalid OAuth 2.0 Access Token",
+          "type": "OAuthException",
+          "code": 190,
+          "error_subcode": 463,
+          "fbtrace_id": "AbCdEfGhIjKlMnOp"
+        }
+      },
+      "data_types": {
+        "error": {
+          "message": "string (error description)",
+          "type": "string (error class, e.g. \"OAuthException\")",
+          "code": "integer (numeric error code, e.g. 190)",
+          "error_subcode": "integer (subcode, e.g. 463 for expired token)",
+          "fbtrace_id": "string (Facebook diagnostic trace ID)"
+        }
+      }
+    }
+  }
+}

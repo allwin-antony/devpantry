@@ -1,0 +1,65 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "service": "PostgREST (Supabase Database API)",
+  "provider": "PostgREST (Open Source PostgreSQL Web Server)",
+  "documentation_url": "https://postgrest.org/en/stable/references/api.html",
+  "responses": {
+    "select_query_response": {
+      "description": "Returned by GET /rest/v1/projects?select=id,name,created_at,owner:users(email)",
+      "http_status": 200,
+      "headers": {
+        "Content-Range": "0-1/2",
+        "Content-Type": "application/json; charset=utf-8"
+      },
+      "payload": [
+        {
+          "id": 101,
+          "name": "Cloud Infrastructure Migration",
+          "created_at": "2026-01-10T12:00:00+00:00",
+          "owner": {
+            "email": "lead.architect@company.com"
+          }
+        },
+        {
+          "id": 102,
+          "name": "Single Sign-On Integration",
+          "created_at": "2026-02-15T08:30:00+00:00",
+          "owner": {
+            "email": "security.admin@company.com"
+          }
+        }
+      ],
+      "data_types": {
+        "[]": "array[object] (list of database table rows returned as JSON objects)",
+        "[].id": "integer (primary key int / bigint)",
+        "[].name": "string",
+        "[].created_at": "string (ISO 8601 with timezone offset)",
+        "[].owner": "object (joined relation from foreign key query users(email))",
+        "[].owner.email": "string"
+      }
+    },
+    "postgrest_error_response": {
+      "description": "PostgREST standard error format when a database constraint or RLS violation occurs.",
+      "http_status": 409,
+      "payload": {
+        "code": "23505",
+        "details": "Key (email)=(lead.architect@company.com) already exists.",
+        "hint": null,
+        "message": "duplicate key value violates unique constraint \"users_email_key\""
+      },
+      "data_types": {
+        "code": "string (5-character PostgreSQL SQLSTATE error code, e.g. \"23505\" for unique_violation, \"42P01\" for undefined_table)",
+        "details": "string | null (PostgreSQL internal error detail statement)",
+        "hint": "string | null (Postgres engine suggestion on how to fix query)",
+        "message": "string (human-readable error description message)"
+      }
+    }
+  },
+  "endpoints": {
+    "select": "GET /rest/v1/{table}?select={columns}",
+    "insert": "POST /rest/v1/{table}",
+    "update": "PATCH /rest/v1/{table}?{filter}",
+    "delete": "DELETE /rest/v1/{table}?{filter}",
+    "rpc": "POST /rest/v1/rpc/{function_name}"
+  }
+}

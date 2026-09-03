@@ -1,0 +1,160 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "service": "GitHub Webhooks",
+  "provider": "GitHub",
+  "documentation_url": "https://docs.github.com/en/webhooks/webhook-events-and-payloads",
+  "responses": {
+    "push_event_payload": {
+      "description": "Payload sent when commits are pushed to a repository (Header: X-GitHub-Event: push, X-Hub-Signature-256).",
+      "payload": {
+        "ref": "refs/heads/main",
+        "before": "a1b2c3d4e5f67890123456789012345678901234",
+        "after": "b2c3d4e5f67890123456789012345678901234a1",
+        "repository": {
+          "id": 123456789,
+          "node_id": "MDEwOlJlcG9zaXRvcnkxMjM0NTY3ODk=",
+          "name": "my-awesome-app",
+          "full_name": "acme/my-awesome-app",
+          "private": false,
+          "owner": {
+            "name": "acme",
+            "email": "dev@acme.com",
+            "login": "acme"
+          },
+          "html_url": "https://github.com/acme/my-awesome-app",
+          "default_branch": "main"
+        },
+        "pusher": {
+          "name": "octocat",
+          "email": "octocat@github.com"
+        },
+        "sender": {
+          "login": "octocat",
+          "id": 583231,
+          "avatar_url": "https://avatars.githubusercontent.com/u/583231?v=4"
+        },
+        "commits": [
+          {
+            "id": "b2c3d4e5f67890123456789012345678901234a1",
+            "message": "feat: integrate single sign-on authentication flow",
+            "timestamp": "2026-03-03T10:15:30Z",
+            "url": "https://github.com/acme/my-awesome-app/commit/b2c3d4e5f6",
+            "author": {
+              "name": "The Octocat",
+              "email": "octocat@github.com",
+              "username": "octocat"
+            },
+            "added": [
+              "src/auth/sso.ts"
+            ],
+            "removed": [],
+            "modified": [
+              "package.json"
+            ]
+          }
+        ],
+        "head_commit": {
+          "id": "b2c3d4e5f67890123456789012345678901234a1",
+          "message": "feat: integrate single sign-on authentication flow"
+        }
+      },
+      "data_types": {
+        "ref": "string (Git ref branch or tag, e.g. \"refs/heads/main\")",
+        "before": "string (40-character SHA hash before push)",
+        "after": "string (40-character SHA hash after push)",
+        "repository": {
+          "id": "integer (numeric repo ID)",
+          "node_id": "string (GraphQL Node ID)",
+          "name": "string (repository name)",
+          "full_name": "string (owner/repo)",
+          "private": "boolean",
+          "owner": "object with name (str), email (str), login (str)",
+          "html_url": "string (web URL)",
+          "default_branch": "string"
+        },
+        "pusher": {
+          "name": "string (git username)",
+          "email": "string"
+        },
+        "sender": {
+          "login": "string (GitHub username)",
+          "id": "integer (user ID)",
+          "avatar_url": "string (URI)"
+        },
+        "commits": "array[object]",
+        "commits[].id": "string (40-char SHA)",
+        "commits[].message": "string (commit message)",
+        "commits[].timestamp": "string (ISO 8601 timestamp)",
+        "commits[].url": "string (web URL)",
+        "commits[].author": "object with name (str), email (str), username (str)",
+        "commits[].added": "array[string] (list of added file paths)",
+        "commits[].removed": "array[string] (list of deleted file paths)",
+        "commits[].modified": "array[string] (list of modified file paths)",
+        "head_commit": "object (commit details of latest commit in push)"
+      }
+    },
+    "pull_request_event_payload": {
+      "description": "Payload sent when a pull request is opened, closed, or synchronized (Header: X-GitHub-Event: pull_request).",
+      "payload": {
+        "action": "opened",
+        "number": 42,
+        "pull_request": {
+          "id": 987654321,
+          "html_url": "https://github.com/acme/my-awesome-app/pull/42",
+          "number": 42,
+          "state": "open",
+          "locked": false,
+          "title": "Fix: resolve OAuth token refresh expiration bug",
+          "user": {
+            "login": "developer-jane",
+            "id": 44556677
+          },
+          "body": "Resolves issue #39 by automatically requesting new refresh tokens prior to expiry.",
+          "head": {
+            "label": "acme:fix-token-refresh",
+            "ref": "fix-token-refresh",
+            "sha": "c3d4e5f67890123456789012345678901234a1b2"
+          },
+          "base": {
+            "label": "acme:main",
+            "ref": "main"
+          },
+          "merged": false,
+          "mergeable": true,
+          "comments": 0,
+          "commits": 1,
+          "additions": 15,
+          "deletions": 4,
+          "changed_files": 2
+        }
+      },
+      "data_types": {
+        "action": "string (\"opened\" | \"closed\" | \"reopened\" | \"synchronize\" | \"edited\" | \"assigned\" | \"labeled\")",
+        "number": "integer (Pull Request issue number)",
+        "pull_request": {
+          "id": "integer (numeric PR ID)",
+          "html_url": "string (web URL)",
+          "number": "integer (PR number)",
+          "state": "string (\"open\" | \"closed\")",
+          "locked": "boolean",
+          "title": "string (PR title text)",
+          "user": "object with login (str), id (int)",
+          "body": "string | null (markdown description body)",
+          "head": "object with label (str), ref (str), sha (str)",
+          "base": "object with label (str), ref (str)",
+          "merged": "boolean (true if PR has been merged into base branch)",
+          "mergeable": "boolean | null (true if no merge conflicts)",
+          "comments": "integer (comment count)",
+          "commits": "integer (commit count)",
+          "additions": "integer (lines added)",
+          "deletions": "integer (lines removed)",
+          "changed_files": "integer (files modified)"
+        }
+      }
+    }
+  },
+  "endpoints": {
+    "webhook_config": "POST /repos/{owner}/{repo}/hooks",
+    "webhook_delivery": "GET /repos/{owner}/{repo}/hooks/{hook_id}/deliveries"
+  }
+}

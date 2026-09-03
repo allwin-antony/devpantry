@@ -1,0 +1,60 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "service": "Salesforce REST API (SOQL Query & SObject)",
+  "provider": "Salesforce",
+  "documentation_url": "https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/",
+  "responses": {
+    "soql_query_account_response": {
+      "description": "Returned by GET /services/data/v60.0/query/?q=SELECT+Id,Name,BillingCity,Industry,AnnualRevenue+FROM+Account",
+      "payload": {
+        "totalSize": 1,
+        "done": true,
+        "records": [
+          {
+            "attributes": {
+              "type": "Account",
+              "url": "/services/data/v60.0/sobjects/Account/0015g00000XyZ12AAD"
+            },
+            "Id": "0015g00000XyZ12AAD",
+            "Name": "Global Logistics Corp",
+            "BillingCity": "Chicago",
+            "Industry": "Transportation",
+            "AnnualRevenue": 15000000.0
+          }
+        ]
+      },
+      "data_types": {
+        "totalSize": "integer (total number of records matching query)",
+        "done": "boolean (true if all rows have been retrieved in current page)",
+        "records": "array[object]",
+        "records[].attributes": {
+          "type": "string (SObject type: \"Account\")",
+          "url": "string (relative REST URL for record)"
+        },
+        "records[].Id": "string (18-character case-safe Salesforce record ID)",
+        "records[].Name": "string",
+        "records[].BillingCity": "string | null",
+        "records[].Industry": "string | null",
+        "records[].AnnualRevenue": "number (float / double | null)"
+      }
+    },
+    "sobject_lead_create_response": {
+      "description": "Returned by POST /services/data/v60.0/sobjects/Lead/",
+      "payload": {
+        "id": "00Q5g00000AbC12EAF",
+        "success": true,
+        "errors": []
+      },
+      "data_types": {
+        "id": "string (18-character Salesforce record ID)",
+        "success": "boolean",
+        "errors": "array[object] (empty array on success; list of error messages on failure)"
+      }
+    }
+  },
+  "endpoints": {
+    "soql_query": "GET /services/data/v60.0/query/?q={SOQL}",
+    "sobject_create": "POST /services/data/v60.0/sobjects/{ObjectType}/",
+    "sobject_detail": "GET /services/data/v60.0/sobjects/{ObjectType}/{id}"
+  }
+}

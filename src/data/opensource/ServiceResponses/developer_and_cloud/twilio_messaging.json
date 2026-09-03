@@ -1,0 +1,125 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "service": "Twilio Programmable Messaging API (SMS & WhatsApp)",
+  "provider": "Twilio",
+  "documentation_url": "https://www.twilio.com/docs/messaging/api/message-resource",
+  "endpoints": {
+    "send_message": "POST https://api.twilio.com/2010-04-01/Accounts/{AccountSid}/Messages.json",
+    "get_message": "GET https://api.twilio.com/2010-04-01/Accounts/{AccountSid}/Messages/{MessageSid}.json",
+    "list_messages": "GET https://api.twilio.com/2010-04-01/Accounts/{AccountSid}/Messages.json"
+  },
+  "responses": {
+    "send_sms_response": {
+      "description": "Returned by POST /Messages.json when sending an SMS.",
+      "http_status": 201,
+      "payload": {
+        "account_sid": "ACa1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4",
+        "api_version": "2010-04-01",
+        "body": "Your verification code is: 847291",
+        "date_created": "Thu, 03 Sep 2026 10:00:00 +0000",
+        "date_sent": null,
+        "date_updated": "Thu, 03 Sep 2026 10:00:00 +0000",
+        "direction": "outbound-api",
+        "error_code": null,
+        "error_message": null,
+        "from": "+14155550123",
+        "messaging_service_sid": null,
+        "num_media": "0",
+        "num_segments": "1",
+        "price": null,
+        "price_unit": "USD",
+        "sid": "SM1a2b3c4d5e6f7a8b9c0d1e2f3a4b5c6d",
+        "status": "queued",
+        "to": "+16505551234",
+        "uri": "/2010-04-01/Accounts/ACa1b2c3d4.../Messages/SM1a2b3c4d5e6f....json"
+      },
+      "data_types": {
+        "account_sid": "string (34-character Account SID starting with \"AC\")",
+        "api_version": "string (API release date, e.g. \"2010-04-01\")",
+        "body": "string (SMS text message content)",
+        "date_created": "string (RFC 2822 date format, e.g. \"Thu, 03 Sep 2026 10:00:00 +0000\")",
+        "date_sent": "string (RFC 2822 date format) | null",
+        "date_updated": "string (RFC 2822 date format)",
+        "direction": "string (\"outbound-api\" | \"outbound-call\" | \"outbound-reply\" | \"inbound\")",
+        "error_code": "integer | null (Twilio 5-digit error code, e.g. 30008)",
+        "error_message": "string | null",
+        "from": "string (E.164 phone number, e.g. \"+14155550123\")",
+        "messaging_service_sid": "string (34-character SID starting with \"MG\") | null",
+        "num_media": "string (numeric string, e.g. \"0\")",
+        "num_segments": "string (numeric string count of SMS segments billed, e.g. \"1\")",
+        "price": "string | null (decimal amount charged, e.g. \"-0.0075\")",
+        "price_unit": "string (\"USD\" | null)",
+        "sid": "string (34-character Message SID starting with \"SM\" or \"MM\")",
+        "status": "string (\"queued\" | \"sending\" | \"sent\" | \"failed\" | \"delivered\" | \"undelivered\")",
+        "to": "string (E.164 destination phone number)",
+        "uri": "string (relative API resource URL)"
+      }
+    },
+    "send_whatsapp_response": {
+      "description": "Returned by POST /Messages.json when sending a WhatsApp message (prefix 'whatsapp:' to phone numbers).",
+      "http_status": 201,
+      "payload": {
+        "sid": "SM9f8e7d6c5b4a3928170123456789abcd",
+        "status": "queued",
+        "from": "whatsapp:+14155238886",
+        "to": "whatsapp:+16505551234",
+        "body": "Hello from your SaaS app! Your invoice #1042 is ready.",
+        "direction": "outbound-api",
+        "num_segments": "1"
+      },
+      "data_types": {
+        "sid": "string (34-character Message SID: \"SM...\")",
+        "status": "string (\"queued\" | \"sending\" | \"sent\" | \"delivered\" | \"read\" | \"failed\")",
+        "from": "string (WhatsApp format: \"whatsapp:+14155238886\")",
+        "to": "string (WhatsApp format: \"whatsapp:+16505551234\")",
+        "body": "string (message body text)",
+        "direction": "string (\"outbound-api\")",
+        "num_segments": "string (\"1\")"
+      }
+    },
+    "message_status_callback_webhook": {
+      "description": "POST payload sent to your StatusCallback URL as a message progresses through delivery stages. Content-Type: application/x-www-form-urlencoded.",
+      "fields_explained": {
+        "MessageSid": "Unique Twilio message identifier",
+        "MessageStatus": "Delivery status: queued → sent → delivered → read (WhatsApp) or failed/undelivered",
+        "ErrorCode": "Twilio error code if delivery failed (e.g., 30003 = unreachable, 30005 = unknown number)",
+        "To": "Recipient phone number",
+        "From": "Sender phone number or WhatsApp number"
+      },
+      "payload": {
+        "MessageSid": "SM1a2b3c4d5e6f7a8b9c0d1e2f3a4b5c6d",
+        "AccountSid": "ACa1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4",
+        "From": "+14155550123",
+        "To": "+16505551234",
+        "Body": "Your verification code is: 847291",
+        "MessageStatus": "delivered",
+        "ErrorCode": null
+      },
+      "data_types": {
+        "MessageSid": "string (Message SID identifier: \"SM...\")",
+        "AccountSid": "string (Account SID identifier: \"AC...\")",
+        "From": "string (E.164 phone number or \"whatsapp:+...\")",
+        "To": "string (E.164 phone number or \"whatsapp:+...\")",
+        "Body": "string | null",
+        "MessageStatus": "string (\"queued\" | \"sent\" | \"delivered\" | \"undelivered\" | \"failed\" | \"read\")",
+        "ErrorCode": "string (numeric string code, e.g. \"30003\") | null"
+      }
+    },
+    "error_response": {
+      "description": "Twilio REST API error response.",
+      "http_status": 400,
+      "payload": {
+        "code": 21211,
+        "message": "The 'To' number +1650555XXXX is not a valid phone number.",
+        "more_info": "https://www.twilio.com/docs/errors/21211",
+        "status": 400
+      },
+      "data_types": {
+        "code": "integer (Twilio error code, e.g. 21211 for invalid phone number)",
+        "message": "string (human-readable error description)",
+        "more_info": "string (documentation URL for error code)",
+        "status": "integer (HTTP status code, e.g. 400)"
+      }
+    }
+  }
+}

@@ -1,0 +1,138 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Unified Developer User Profile Schema",
+  "documentation_url": "https://openid.net/specs/openid-connect-core-1_0.html",
+  "description": "Recommended normalized schema to store in your database regardless of which SSO provider (Google, Microsoft, GitHub, Supabase, Keycloak) authenticated the user.",
+  "type": "object",
+  "required": [
+    "id",
+    "provider",
+    "provider_user_id",
+    "email",
+    "email_verified",
+    "created_at"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "format": "uuid",
+      "description": "Your internal application user UUID (primary key in your database)"
+    },
+    "provider": {
+      "type": "string",
+      "enum": [
+        "google",
+        "microsoft",
+        "github",
+        "supabase",
+        "keycloak",
+        "email_password"
+      ],
+      "description": "Authentication provider source"
+    },
+    "provider_user_id": {
+      "type": "string",
+      "description": "The unique immutable user ID from the provider (Google 'sub', Microsoft 'oid', GitHub 'id', Supabase 'id')"
+    },
+    "email": {
+      "type": "string",
+      "format": "email",
+      "description": "Primary user email"
+    },
+    "email_verified": {
+      "type": "boolean",
+      "description": "Whether the provider verified this email address"
+    },
+    "display_name": {
+      "type": "string",
+      "description": "Full name or display name"
+    },
+    "first_name": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "last_name": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "avatar_url": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "uri"
+    },
+    "tenant_id": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Organization or Microsoft Entra Tenant ID (for B2B multi-tenant apps)"
+    },
+    "roles": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Assigned application roles (e.g. ['admin', 'member'])"
+    },
+    "raw_provider_data": {
+      "type": "object",
+      "description": "Full unparsed JSON payload from provider for debugging/metadata"
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "last_login_at": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "provider_mapping_guide": {
+    "google": {
+      "provider_user_id": "sub",
+      "email": "email",
+      "email_verified": "email_verified",
+      "display_name": "name",
+      "first_name": "given_name",
+      "last_name": "family_name",
+      "avatar_url": "picture"
+    },
+    "microsoft": {
+      "provider_user_id": "oid",
+      "email": "preferred_username || mail || userPrincipalName",
+      "email_verified": "true (enterprise directories verify by default)",
+      "display_name": "displayName || name",
+      "first_name": "givenName",
+      "last_name": "surname",
+      "tenant_id": "tid",
+      "avatar_url": "Graph /photo/$value"
+    },
+    "github": {
+      "provider_user_id": "String(id)",
+      "email": "email (or primary verified email from /user/emails)",
+      "email_verified": "verified (from /user/emails)",
+      "display_name": "name || login",
+      "avatar_url": "avatar_url"
+    },
+    "supabase": {
+      "provider_user_id": "user.id",
+      "email": "user.email",
+      "email_verified": "Boolean(user.email_confirmed_at)",
+      "display_name": "user.user_metadata.full_name",
+      "avatar_url": "user.user_metadata.avatar_url"
+    },
+    "keycloak": {
+      "provider_user_id": "sub",
+      "email": "email",
+      "email_verified": "email_verified",
+      "display_name": "name",
+      "roles": "realm_access.roles"
+    }
+  }
+}

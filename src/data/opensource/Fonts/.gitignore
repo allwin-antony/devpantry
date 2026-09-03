@@ -1,0 +1,10 @@
+# Ignore downloaded font binaries & packages
+downloads/
+*.zip
+*.tar.gz
+*.tgz
+*.bin
+
+# Python cache
+__pycache__/
+*.pyc

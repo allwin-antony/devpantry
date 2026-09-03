@@ -1,0 +1,109 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "service": "GitHub OAuth App / GitHub Apps",
+  "provider": "GitHub REST API v3",
+  "documentation_url": "https://docs.github.com/en/apps/oauth-apps/building-oauth-apps",
+  "endpoints": {
+    "authorization": "https://github.com/login/oauth/authorize",
+    "token": "https://github.com/login/oauth/access_token",
+    "user_profile": "https://api.github.com/user",
+    "user_emails": "https://api.github.com/user/emails"
+  },
+  "responses": {
+    "token_exchange_response": {
+      "description": "Returned by POST https://github.com/login/oauth/access_token with Accept: application/json.",
+      "http_status": 200,
+      "payload": {
+        "access_token": "gho_16C7e42F292c6912E7710c838347Ae178B4a",
+        "token_type": "bearer",
+        "scope": "read:user,user:email"
+      },
+      "data_types": {
+        "access_token": "string (GitHub personal or user access token starting with gho_)",
+        "token_type": "string (always \"bearer\")",
+        "scope": "string (comma-separated list of scopes, e.g. \"read:user,user:email\")"
+      }
+    },
+    "user_profile_response": {
+      "description": "Returned by GET https://api.github.com/user with Authorization: Bearer {token}.",
+      "http_status": 200,
+      "payload": {
+        "login": "octocat",
+        "id": 583231,
+        "node_id": "MDQ6VXNlcjU4MzIzMQ==",
+        "avatar_url": "https://avatars.githubusercontent.com/u/583231?v=4",
+        "gravatar_id": "",
+        "url": "https://api.github.com/users/octocat",
+        "html_url": "https://github.com/octocat",
+        "followers_url": "https://api.github.com/users/octocat/followers",
+        "type": "User",
+        "site_admin": false,
+        "name": "The Octocat",
+        "company": "@github",
+        "blog": "https://github.blog",
+        "location": "San Francisco",
+        "email": "octocat@github.com",
+        "hireable": null,
+        "bio": "Open source passionate developer.",
+        "twitter_username": "monatheoctocat",
+        "public_repos": 8,
+        "public_gists": 8,
+        "followers": 15000,
+        "following": 9,
+        "created_at": "2011-01-25T18:44:36Z",
+        "updated_at": "2026-03-01T12:00:00Z"
+      },
+      "data_types": {
+        "login": "string (GitHub username handle)",
+        "id": "integer (unique numeric user ID)",
+        "node_id": "string (global GraphQL Node ID)",
+        "avatar_url": "string (URI to GitHub avatar)",
+        "gravatar_id": "string",
+        "url": "string (REST API user URL)",
+        "html_url": "string (web profile URL)",
+        "followers_url": "string (REST API URL)",
+        "type": "string (\"User\" | \"Organization\")",
+        "site_admin": "boolean",
+        "name": "string | null (display name)",
+        "company": "string | null",
+        "blog": "string | null (website URL)",
+        "location": "string | null",
+        "email": "string | null (public email)",
+        "hireable": "boolean | null",
+        "bio": "string | null",
+        "twitter_username": "string | null",
+        "public_repos": "integer",
+        "public_gists": "integer",
+        "followers": "integer",
+        "following": "integer",
+        "created_at": "string (ISO 8601 UTC timestamp)",
+        "updated_at": "string (ISO 8601 UTC timestamp)"
+      }
+    },
+    "user_emails_response": {
+      "description": "Returned by GET https://api.github.com/user/emails (crucial when user email is set to private in GitHub profile).",
+      "http_status": 200,
+      "payload": [
+        {
+          "email": "octocat@github.com",
+          "primary": true,
+          "verified": true,
+          "visibility": "public"
+        },
+        {
+          "email": "backup.octocat@gmail.com",
+          "primary": false,
+          "verified": true,
+          "visibility": "private"
+        }
+      ],
+      "data_types": {
+        "[]": "array[object]",
+        "[].email": "string (email address)",
+        "[].primary": "boolean (true for primary account email)",
+        "[].verified": "boolean (true if confirmed by user)",
+        "[].visibility": "string (\"public\" | \"private\" | null)"
+      }
+    }
+  }
+}

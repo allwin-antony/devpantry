@@ -1,0 +1,98 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "service": "Sign in with Apple (Apple ID OAuth 2.0 / OIDC)",
+  "provider": "Apple",
+  "documentation_url": "https://developer.apple.com/documentation/sign_in_with_apple/sign_in_with_apple_rest_api",
+  "endpoints": {
+    "authorization": "https://appleid.apple.com/auth/authorize",
+    "token": "https://appleid.apple.com/auth/token",
+    "revoke": "https://appleid.apple.com/auth/revoke",
+    "jwks_uri": "https://appleid.apple.com/auth/keys"
+  },
+  "responses": {
+    "token_exchange_response": {
+      "description": "Returned by POST https://appleid.apple.com/auth/token upon authorization_code exchange.",
+      "http_status": 200,
+      "payload": {
+        "access_token": "a1b2c3d4e5f6.0.sample_apple_access_token",
+        "token_type": "Bearer",
+        "expires_in": 3600,
+        "refresh_token": "r1e2f3r4e5s6h7.0.sample_apple_refresh_token",
+        "id_token": "eyJraWQiOiI4NkQ4OEtmIiwiYWxnIjoiUlMyNTYi...sample_apple_id_token_jwt..."
+      },
+      "data_types": {
+        "access_token": "string (short-lived access token)",
+        "token_type": "string (always \"Bearer\")",
+        "expires_in": "integer (seconds until expiration, typically 3600)",
+        "refresh_token": "string (long-lived refresh token)",
+        "id_token": "string (signed RS256 JWT format)"
+      }
+    },
+    "id_token_decoded_jwt_claims": {
+      "description": "Decoded claims from the Apple id_token JWT. IMPORTANT: Apple only sends the user's name and email on the FIRST login — your backend MUST persist them immediately.",
+      "fields_explained": {
+        "iss": "Token issuer (always 'https://appleid.apple.com')",
+        "sub": "Unique, stable, team-scoped Apple user ID (e.g., '001234.abc567def890.1234'). This is your primary identifier.",
+        "aud": "Your Apple Services ID (Client ID)",
+        "email": "User email (may be a Private Relay address like 'abc123@privaterelay.appleid.com')",
+        "email_verified": "Whether Apple has verified this email (string 'true'/'false', NOT a boolean)",
+        "is_private_email": "Whether the email is an Apple Private Relay forwarding address (string 'true'/'false')",
+        "real_user_status": "0 = unsupported, 1 = unknown, 2 = likely real (anti-fraud signal, first login only)",
+        "nonce_supported": "Whether the nonce claim was included in the authorization request"
+      },
+      "payload": {
+        "iss": "https://appleid.apple.com",
+        "aud": "com.yourapp.service",
+        "exp": 1772622000,
+        "iat": 1772618400,
+        "sub": "001234.abc567def890ghijklmn.1234",
+        "at_hash": "AbCdEfGhIjKlMnOp",
+        "email": "abc123@privaterelay.appleid.com",
+        "email_verified": "true",
+        "is_private_email": "true",
+        "auth_time": 1772618400,
+        "nonce_supported": true
+      },
+      "data_types": {
+        "iss": "string (issuer: always \"https://appleid.apple.com\")",
+        "aud": "string (your Apple Services ID / Client ID)",
+        "exp": "integer (Unix epoch expiration timestamp)",
+        "iat": "integer (Unix epoch issued timestamp)",
+        "sub": "string (unique, stable, pairwise team-scoped Apple User ID)",
+        "at_hash": "string (access token hash)",
+        "email": "string (user email or @privaterelay.appleid.com proxy email)",
+        "email_verified": "string (\"true\" | \"false\" — note: string, NOT boolean)",
+        "is_private_email": "string (\"true\" | \"false\")",
+        "auth_time": "integer (Unix epoch timestamp of authentication)",
+        "nonce_supported": "boolean"
+      }
+    },
+    "first_login_authorization_callback": {
+      "description": "Apple sends the user's name ONLY on the very first authorization via the form_post callback body. You must capture and store it immediately — Apple will NEVER send it again.",
+      "payload": {
+        "code": "c1a2b3c4d5e6.0.sample_authorization_code",
+        "id_token": "eyJraWQiOiI4NkQ4OEtmIiwiYWxnIjoiUlMyNTYi...sample_jwt...",
+        "state": "your_csrf_state_parameter",
+        "user": "{\"name\":{\"firstName\":\"Riley\",\"lastName\":\"Chen\"},\"email\":\"riley.chen@icloud.com\"}"
+      },
+      "data_types": {
+        "code": "string (single-use authorization code for token exchange)",
+        "id_token": "string (signed JWT format)",
+        "state": "string (CSRF state parameter string)",
+        "user": "string (JSON-encoded string containing firstName, lastName, and email; sent ONCE only)"
+      }
+    },
+    "error_response": {
+      "description": "Standard Apple OAuth error.",
+      "http_status": 400,
+      "payload": {
+        "error": "invalid_grant",
+        "error_description": "The code has expired or has been revoked."
+      },
+      "data_types": {
+        "error": "string (\"invalid_request\" | \"invalid_client\" | \"invalid_grant\" | \"unauthorized_client\")",
+        "error_description": "string (human-readable description)"
+      }
+    }
+  }
+}

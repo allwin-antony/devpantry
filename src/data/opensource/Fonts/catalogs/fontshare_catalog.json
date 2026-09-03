@@ -1,0 +1,1759 @@
+[
+  {
+    "id": "b1053935-ce3e-46a0-9eef-a1b74337212c",
+    "name": "Kihim",
+    "slug": "kihim",
+    "version": "1.0",
+    "license_type": "itf_ffl",
+    "is_sil_ofl": false,
+    "category": "Display",
+    "styles_count": 1,
+    "designers": [
+      "Rocky Malaviya"
+    ],
+    "publisher": "Indian Type Foundry",
+    "api_endpoint": "https://api.fontshare.com/v2/fonts/kihim",
+    "web_url": "https://www.fontshare.com/fonts/kihim",
+    "download_url": "https://api.fontshare.com/v2/fonts/download/kihim"
+  },
+  {
+    "id": "81dd9b44-32b9-4a78-be7a-f7a4d96bf991",
+    "name": "Synonym",
+    "slug": "synonym",
+    "version": "1.0",
+    "license_type": "itf_ffl",
+    "is_sil_ofl": false,
+    "category": "Sans",
+    "styles_count": 7,
+    "designers": [
+      "Hugo Dumont"
+    ],
+    "publisher": "Indian Type Foundry",
+    "api_endpoint": "https://api.fontshare.com/v2/fonts/synonym",
+    "web_url": "https://www.fontshare.com/fonts/synonym",
+    "download_url": "https://api.fontshare.com/v2/fonts/download/synonym"
+  },
+  {
+    "id": "d798178b-6d9c-4e5c-b7b7-c2c7d794cf27",
+    "name": "Comico",
+    "slug": "comico",
+    "version": "1.0",
+    "license_type": "itf_ffl",
+    "is_sil_ofl": false,
+    "category": "Handwritten",
+    "styles_count": 1,
+    "designers": [
+      "Frode Helland"
+    ],
+    "publisher": "Indian Type Foundry",
+    "api_endpoint": "https://api.fontshare.com/v2/fonts/comico",
+    "web_url": "https://www.fontshare.com/fonts/comico",
+    "download_url": "https://api.fontshare.com/v2/fonts/download/comico"
+  },
+  {
+    "id": "0be0d575-ed09-4d44-90df-c28ddb50fb10",
+    "name": "Gambetta",
+    "slug": "gambetta",
+    "version": "1.0",
+    "license_type": "itf_ffl",
+    "is_sil_ofl": false,
+    "category": "Serif",
+    "styles_count": 12,
+    "designers": [
+      "Paul Troppmar"
+    ],
+    "publisher": "Indian Type Foundry",
+    "api_endpoint": "https://api.fontshare.com/v2/fonts/gambetta",
+    "web_url": "https://www.fontshare.com/fonts/gambetta",
+    "download_url": "https://api.fontshare.com/v2/fonts/download/gambetta"
+  },
+  {
+    "id": "3ab82d39-193f-4fb3-b6c3-08638f0cf53b",
+    "name": "Technor",
+    "slug": "technor",
+    "version": "1.0",
+    "license_type": "itf_ffl",
+    "is_sil_ofl": false,
+    "category": "Sans",
+    "styles_count": 8,
+    "designers": [
+      "Jean-Baptiste Morizot"
+    ],
+    "publisher": "Indian Type Foundry",
+    "api_endpoint": "https://api.fontshare.com/v2/fonts/technor",
+    "web_url": "https://www.fontshare.com/fonts/technor",
+    "download_url": "https://api.fontshare.com/v2/fonts/download/technor"
+  },
+  {
+    "id": "7cc0dccb-747e-4150-a9fd-11e1c75f6c1a",
+    "name": "Rowan",
+    "slug": "rowan",
+    "version": "1.0",
+    "license_type": "itf_ffl",
+    "is_sil_ofl": false,
+    "category": "Serif",
+    "styles_count": 12,
+    "designers": [
+      "Inga Plönnigs"
+    ],
+    "publisher": "Indian Type Foundry",
+    "api_endpoint": "https://api.fontshare.com/v2/fonts/rowan",
+    "web_url": "https://www.fontshare.com/fonts/rowan",
+    "download_url": "https://api.fontshare.com/v2/fonts/download/rowan"
+  },
+  {
+    "id": "b37c8f3a-5635-4b57-9628-06c6cd25d7e3",
+    "name": "General Sans",
+    "slug": "general-sans",
+    "version": "1.0",
+    "license_type": "itf_ffl",
+    "is_sil_ofl": false,
+    "category": "Sans",
+    "styles_count": 14,
+    "designers": [
+      "Frode Helland"
+    ],
+    "publisher": "Indian Type Foundry",
+    "api_endpoint": "https://api.fontshare.com/v2/fonts/general-sans",
+    "web_url": "https://www.fontshare.com/fonts/general-sans",
+    "download_url": "https://api.fontshare.com/v2/fonts/download/general-sans"
+  },
+  {
+    "id": "f8889f66-da78-4f3e-a15c-085ad2cec671",
+    "name": "Gambarino",
+    "slug": "gambarino",
+    "version": "1.0",
+    "license_type": "itf_ffl",
+    "is_sil_ofl": false,
+    "category": "Serif",
+    "styles_count": 1,
+    "designers": [
+      "Théo Guillard"
+    ],
+    "publisher": "Indian Type Foundry",
+    "api_endpoint": "https://api.fontshare.com/v2/fonts/gambarino",
+    "web_url": "https://www.fontshare.com/fonts/gambarino",
+    "download_url": "https://api.fontshare.com/v2/fonts/download/gambarino"
+  },
+  {
+    "id": "297238ab-7a3e-44e0-af29-056f778c2728",
+    "name": "Sentient",
+    "slug": "sentient",
+    "version": "1.001",
+    "license_type": "itf_ffl",
+    "is_sil_ofl": false,
+    "category": "Serif",
+    "styles_count": 12,
+    "designers": [
+      "Noopur Choksi"
+    ],
+    "publisher": "Indian Type Foundry",
+    "api_endpoint": "https://api.fontshare.com/v2/fonts/sentient",
+    "web_url": "https://www.fontshare.com/fonts/sentient",
+    "download_url": "https://api.fontshare.com/v2/fonts/download/sentient"
+  },
+  {
+    "id": "14caccfb-cd3d-441d-8a8b-58dddecd4ee1",
+    "name": "Boska",
+    "slug": "boska",
+    "version": "1.0",
+    "license_type": "itf_ffl",
+    "is_sil_ofl": false,
+    "category": "Serif, Display",
+    "styles_count": 14,
+    "designers": [
+      "Barbara Bigosinska"
+    ],
+    "publisher": "Indian Type Foundry",
+    "api_endpoint": "https://api.fontshare.com/v2/fonts/boska",
+    "web_url": "https://www.fontshare.com/fonts/boska",
+    "download_url": "https://api.fontshare.com/v2/fonts/download/boska"
+  },
+  {
+    "id": "afedca02-6538-473f-9dd8-fcc945b859ab",
+    "name": "Switzer",
+    "slug": "switzer",
+    "version": "1.2",
+    "license_type": "itf_ffl",
+    "is_sil_ofl": false,
+    "category": "Sans",
+    "styles_count": 20,
+    "designers": [
+      "Jérémie Hornus"
+    ],
+    "publisher": "Indian Type Foundry",
+    "api_endpoint": "https://api.fontshare.com/v2/fonts/switzer",
+    "web_url": "https://www.fontshare.com/fonts/switzer",
+    "download_url": "https://api.fontshare.com/v2/fonts/download/switzer"
+  },
+  {
+    "id": "138956b4-60dc-4812-87a5-0a9866d48e4d",
+    "name": "Tabular",
+    "slug": "tabular",
+    "version": "1.15",
+    "license_type": "itf_ffl",
+    "is_sil_ofl": false,
+    "category": "Sans",
+    "styles_count": 12,
+    "designers": [
+      "Jérémie Hornus",
+      "Julie Soudanne"
+    ],
+    "publisher": "Indian Type Foundry",
+    "api_endpoint": "https://api.fontshare.com/v2/fonts/tabular",
+    "web_url": "https://www.fontshare.com/fonts/tabular",
+    "download_url": "https://api.fontshare.com/v2/fonts/download/tabular"
+  },
+  {
+    "id": "4f2f84d3-3a66-492f-b62c-b70446c565dd",
+    "name": "Tanker",
+    "slug": "tanker",
+    "version": "1.0",
+    "license_type": "itf_ffl",
+    "is_sil_ofl": false,
+    "category": "Sans",
+    "styles_count": 1,
+    "designers": [
+      "Ruosi Huang"
+    ],
+    "publisher": "Indian Type Foundry",
+    "api_endpoint": "https://api.fontshare.com/v2/fonts/tanker",
+    "web_url": "https://www.fontshare.com/fonts/tanker",
+    "download_url": "https://api.fontshare.com/v2/fonts/download/tanker"
+  },
+  {
+    "id": "2d37fde2-c5b5-4900-a250-de7b72e8c2cf",
+    "name": "Expose",
+    "slug": "expose",
+    "version": "1.0",
+    "license_type": "itf_ffl",
+    "is_sil_ofl": false,
+    "category": "Sans",
+    "styles_count": 5,
+    "designers": [
+      "Lukas Schneider"
+    ],
+    "publisher": "Indian Type Foundry",
+    "api_endpoint": "https://api.fontshare.com/v2/fonts/expose",
+    "web_url": "https://www.fontshare.com/fonts/expose",
+    "download_url": "https://api.fontshare.com/v2/fonts/download/expose"
+  },
+  {
+    "id": "9fac7940-f35a-4975-a273-9c398a7a9ec1",
+    "name": "Boxing",
+    "slug": "boxing",
+    "version": "1.0",
+    "license_type": "itf_ffl",
+    "is_sil_ofl": false,
+    "category": "Display",
+    "styles_count": 1,
+    "designers": [
+      "Ruosi Huang"
+    ],
+    "publisher": "Indian Type Foundry",
+    "api_endpoint": "https://api.fontshare.com/v2/fonts/boxing",
+    "web_url": "https://www.fontshare.com/fonts/boxing",
+    "download_url": "https://api.fontshare.com/v2/fonts/download/boxing"
+  },
+  {
+    "id": "d22e2ed9-07e1-4192-80a5-e4b028077815",
+    "name": "Striper",
+    "slug": "striper",
+    "version": "1.0",
+    "license_type": "itf_ffl",
+    "is_sil_ofl": false,
+    "category": "Display",
+    "styles_count": 1,
+    "designers": [
+      "Jitka Janečková"
+    ],
+    "publisher": "Indian Type Foundry",
+    "api_endpoint": "https://api.fontshare.com/v2/fonts/striper",
+    "web_url": "https://www.fontshare.com/fonts/striper",
+    "download_url": "https://api.fontshare.com/v2/fonts/download/striper"
+  },
+  {
+    "id": "a2587f86-6107-49df-bc70-5932ab09194b",
+    "name": "Pilcrow Rounded",
+    "slug": "pilcrow-rounded",
+    "version": "1.0",
+    "license_type": "itf_ffl",
+    "is_sil_ofl": false,
+    "category": "Sans",
+    "styles_count": 6,
+    "designers": [
+      "Satya Rajpurohit"
+    ],
+    "publisher": "Indian Type Foundry",
+    "api_endpoint": "https://api.fontshare.com/v2/fonts/pilcrow-rounded",
+    "web_url": "https://www.fontshare.com/fonts/pilcrow-rounded",
+    "download_url": "https://api.fontshare.com/v2/fonts/download/pilcrow-rounded"
+  },
+  {
+    "id": "3f61eed4-1a5d-4f6d-8824-f1d8b30c160c",
+    "name": "Melodrama",
+    "slug": "melodrama",
+    "version": "1.0",
+    "license_type": "itf_ffl",
+    "is_sil_ofl": false,
+    "category": "Sans, Display",
+    "styles_count": 6,
+    "designers": [
+      "Shaily Patel"
+    ],
+    "publisher": "Indian Type Foundry",
+    "api_endpoint": "https://api.fontshare.com/v2/fonts/melodrama",
+    "web_url": "https://www.fontshare.com/fonts/melodrama",
+    "download_url": "https://api.fontshare.com/v2/fonts/download/melodrama"
+  },
+  {
+    "id": "891eb680-b236-4495-a2b7-5ad236c34c79",
+    "name": "Kohinoor Zerone",
+    "slug": "kohinoor-zerone",
+    "version": "1.0",
+    "license_type": "itf_ffl",
+    "is_sil_ofl": false,
+    "category": "Display",
+    "styles_count": 2,
+    "designers": [
+      "Satya Rajpurohit"
+    ],
+    "publisher": "Indian Type Foundry",
+    "api_endpoint": "https://api.fontshare.com/v2/fonts/kohinoor-zerone",
+    "web_url": "https://www.fontshare.com/fonts/kohinoor-zerone",
+    "download_url": "https://api.fontshare.com/v2/fonts/download/kohinoor-zerone"
+  },
+  {
+    "id": "7b6eff69-a471-4534-96cc-74686dcda918",
+    "name": "New Title",
+    "slug": "new-title",
+    "version": "1.0",
+    "license_type": "itf_ffl",
+    "is_sil_ofl": false,
+    "category": "Sans, Display",
+    "styles_count": 6,
+    "designers": [
+      "Julie Soudanne",
+      "Jérémie Hornus"
+    ],
+    "publisher": "Indian Type Foundry",
+    "api_endpoint": "https://api.fontshare.com/v2/fonts/new-title",
+    "web_url": "https://www.fontshare.com/fonts/new-title",
+    "download_url": "https://api.fontshare.com/v2/fonts/download/new-title"
+  },
+  {
+    "id": "303c52e5-c54f-4d37-b01c-e287636f9314",
+    "name": "Aktura",
+    "slug": "aktura",
+    "version": "1.0",
+    "license_type": "itf_ffl",
+    "is_sil_ofl": false,
+    "category": "Serif,  Blackletter, Display",
+    "styles_count": 1,
+    "designers": [
+      "Gaetan Baehr"
+    ],
+    "publisher": "Indian Type Foundry",
+    "api_endpoint": "https://api.fontshare.com/v2/fonts/aktura",
+    "web_url": "https://www.fontshare.com/fonts/aktura",
+    "download_url": "https://api.fontshare.com/v2/fonts/download/aktura"
+  },
+  {
+    "id": "1ae36b89-ae95-45f1-b429-ca314a9b1684",
+    "name": "Alpino",
+    "slug": "alpino",
+    "version": "1.0",
+    "license_type": "itf_ffl",
+    "is_sil_ofl": false,
+    "category": "Sans",
+    "styles_count": 7,
+    "designers": [
+      "Alisa Nowak",
+      "Jérémie Hornus"
+    ],
+    "publisher": "Indian Type Foundry",
+    "api_endpoint": "https://api.fontshare.com/v2/fonts/alpino",
+    "web_url": "https://www.fontshare.com/fonts/alpino",
+    "download_url": "https://api.fontshare.com/v2/fonts/download/alpino"
+  },
+  {
+    "id": "28aa9e62-1337-4ded-9b86-ddaffc5e911d",
+    "name": "Amulya",
+    "slug": "amulya",
+    "version": "1.0",
+    "license_type": "itf_ffl",
+    "is_sil_ofl": false,
+    "category": "Sans",
+    "styles_count": 10,
+    "designers": [
+      "Joana Correia"
+    ],
+    "publisher": "Indian Type Foundry",
+    "api_endpoint": "https://api.fontshare.com/v2/fonts/amulya",
+    "web_url": "https://www.fontshare.com/fonts/amulya",
+    "download_url": "https://api.fontshare.com/v2/fonts/download/amulya"
+  },
+  {
+    "id": "4f11c41b-08ce-4155-99ad-277816d25e3c",
+    "name": "Array",
+    "slug": "array",
+    "version": "1.0",
+    "license_type": "itf_ffl",
+    "is_sil_ofl": false,
+    "category": "Display",
+    "styles_count": 6,
+    "designers": [
+      "Frode Helland"
+    ],
+    "publisher": "Indian Type Foundry",
+    "api_endpoint": "https://api.fontshare.com/v2/fonts/array",
+    "web_url": "https://www.fontshare.com/fonts/array",
+    "download_url": "https://api.fontshare.com/v2/fonts/download/array"
+  },
+  {
+    "id": "036e0f95-9213-443b-a655-262c192ec872",
+    "name": "Author",
+    "slug": "author",
+    "version": "1.0",
+    "license_type": "itf_ffl",
+    "is_sil_ofl": false,
+    "category": "Sans",
+    "styles_count": 14,
+    "designers": [
+      "Satya Rajpurohit"
+    ],
+    "publisher": "Indian Type Foundry",
+    "api_endpoint": "https://api.fontshare.com/v2/fonts/author",
+    "web_url": "https://www.fontshare.com/fonts/author",
+    "download_url": "https://api.fontshare.com/v2/fonts/download/author"
+  },
+  {
+    "id": "81d97f9f-5636-425d-898a-eee7328b49a4",
+    "name": "Bespoke Sans",
+    "slug": "bespoke-sans",
+    "version": "1.0",
+    "license_type": "itf_ffl",
+    "is_sil_ofl": false,
+    "category": "Sans",
+    "styles_count": 12,
+    "designers": [
+      "Jérémie Hornus",
+      "Théo Guillard",
+      "Morgane Pambrun",
+      "Alisa Nowak",
+      "Joachim Vu"
+    ],
+    "publisher": "Indian Type Foundry",
+    "api_endpoint": "https://api.fontshare.com/v2/fonts/bespoke-sans",
+    "web_url": "https://www.fontshare.com/fonts/bespoke-sans",
+    "download_url": "https://api.fontshare.com/v2/fonts/download/bespoke-sans"
+  },
+  {
+    "id": "0124245c-ae5c-4ff2-ba94-1b2adca01d91",
+    "name": "Bespoke Serif",
+    "slug": "bespoke-serif",
+    "version": "1.0",
+    "license_type": "itf_ffl",
+    "is_sil_ofl": false,
+    "category": "Serif",
+    "styles_count": 12,
+    "designers": [
+      "Jeremie Hornus",
+      "Theo Guillard",
+      "Morgane Pambrun",
+      "Alisa Nowak",
+      "Joachim Vu"
+    ],
+    "publisher": "Indian Type Foundry",
+    "api_endpoint": "https://api.fontshare.com/v2/fonts/bespoke-serif",
+    "web_url": "https://www.fontshare.com/fonts/bespoke-serif",
+    "download_url": "https://api.fontshare.com/v2/fonts/download/bespoke-serif"
+  },
+  {
+    "id": "d309819c-0407-4980-aeae-9bab6ca0abff",
+    "name": "Bespoke Slab",
+    "slug": "bespoke-slab",
+    "version": "1.0",
+    "license_type": "itf_ffl",
+    "is_sil_ofl": false,
+    "category": "Slab",
+    "styles_count": 12,
+    "designers": [
+      "Jérémie Hornus",
+      "Théo Guillard",
+      "Morgane Pambrun",
+      "Alisa Nowak",
+      "Joachim Vu"
+    ],
+    "publisher": "Indian Type Foundry",
+    "api_endpoint": "https://api.fontshare.com/v2/fonts/bespoke-slab",
+    "web_url": "https://www.fontshare.com/fonts/bespoke-slab",
+    "download_url": "https://api.fontshare.com/v2/fonts/download/bespoke-slab"
+  },
+  {
+    "id": "3b4052a8-321a-4b56-8426-cb7a84e66a81",
+    "name": "Bespoke Stencil",
+    "slug": "bespoke-stencil",
+    "version": "1.0",
+    "license_type": "itf_ffl",
+    "is_sil_ofl": false,
+    "category": "Sans",
+    "styles_count": 12,
+    "designers": [
+      "Jérémie Hornus",
+      "Théo Guillard",
+      "Morgane Pambrun",
+      "Alisa Nowak",
+      "Joachim Vu"
+    ],
+    "publisher": "Indian Type Foundry",
+    "api_endpoint": "https://api.fontshare.com/v2/fonts/bespoke-stencil",
+    "web_url": "https://www.fontshare.com/fonts/bespoke-stencil",
+    "download_url": "https://api.fontshare.com/v2/fonts/download/bespoke-stencil"
+  },
+  {
+    "id": "133e399e-482b-4df7-8801-d800ef2d94a5",
+    "name": "Clash Grotesk",
+    "slug": "clash-grotesk",
+    "version": "1.0",
+    "license_type": "itf_ffl",
+    "is_sil_ofl": false,
+    "category": "Sans",
+    "styles_count": 7,
+    "designers": [
+      "Indian Type Foundry"
+    ],
+    "publisher": "Indian Type Foundry",
+    "api_endpoint": "https://api.fontshare.com/v2/fonts/clash-grotesk",
+    "web_url": "https://www.fontshare.com/fonts/clash-grotesk",
+    "download_url": "https://api.fontshare.com/v2/fonts/download/clash-grotesk"
+  },
+  {
+    "id": "72a233b1-88ac-4f52-bc94-98dd11d2c3f2",
+    "name": "Clash Display",
+    "slug": "clash-display",
+    "version": "1.0",
+    "license_type": "itf_ffl",
+    "is_sil_ofl": false,
+    "category": "Sans",
+    "styles_count": 7,
+    "designers": [
+      "Indian Type Foundry"
+    ],
+    "publisher": "Indian Type Foundry",
+    "api_endpoint": "https://api.fontshare.com/v2/fonts/clash-display",
+    "web_url": "https://www.fontshare.com/fonts/clash-display",
+    "download_url": "https://api.fontshare.com/v2/fonts/download/clash-display"
+  },
+  {
+    "id": "25a6311f-0466-4265-bb34-bdd6ae3af791",
+    "name": "Chubbo",
+    "slug": "chubbo",
+    "version": "1.0",
+    "license_type": "itf_ffl",
+    "is_sil_ofl": false,
+    "category": "Display",
+    "styles_count": 12,
+    "designers": [
+      "Rafał Buchner"
+    ],
+    "publisher": "Indian Type Foundry",
+    "api_endpoint": "https://api.fontshare.com/v2/fonts/chubbo",
+    "web_url": "https://www.fontshare.com/fonts/chubbo",
+    "download_url": "https://api.fontshare.com/v2/fonts/download/chubbo"
+  },
+  {
+    "id": "4d62256c-486a-49b3-a359-dfaa69993f61",
+    "name": "Chillax",
+    "slug": "chillax",
+    "version": "1.0",
+    "license_type": "itf_ffl",
+    "is_sil_ofl": false,
+    "category": "Sans",
+    "styles_count": 7,
+    "designers": [
+      "Manushi Parikh"
+    ],
+    "publisher": "Indian Type Foundry",
+    "api_endpoint": "https://api.fontshare.com/v2/fonts/chillax",
+    "web_url": "https://www.fontshare.com/fonts/chillax",
+    "download_url": "https://api.fontshare.com/v2/fonts/download/chillax"
+  },
+  {
+    "id": "63bec2ab-d133-4148-8257-199232f89586",
+    "name": "Cabinet Grotesk",
+    "slug": "cabinet-grotesk",
+    "version": "1.0",
+    "license_type": "itf_ffl",
+    "is_sil_ofl": false,
+    "category": "Sans",
+    "styles_count": 9,
+    "designers": [
+      "ITF"
+    ],
+    "publisher": "Indian Type Foundry",
+    "api_endpoint": "https://api.fontshare.com/v2/fonts/cabinet-grotesk",
+    "web_url": "https://www.fontshare.com/fonts/cabinet-grotesk",
+    "download_url": "https://api.fontshare.com/v2/fonts/download/cabinet-grotesk"
+  },
+  {
+    "id": "ec7ac5bc-bb8c-4363-9a0a-d86f2be2054e",
+    "name": "Britney",
+    "slug": "britney",
+    "version": "1.0",
+    "license_type": "itf_ffl",
+    "is_sil_ofl": false,
+    "category": "Script",
+    "styles_count": 5,
+    "designers": [
+      "Diana Ovezea & Sabina Chipară"
+    ],
+    "publisher": "Indian Type Foundry",
+    "api_endpoint": "https://api.fontshare.com/v2/fonts/britney",
+    "web_url": "https://www.fontshare.com/fonts/britney",
+    "download_url": "https://api.fontshare.com/v2/fonts/download/britney"
+  },
+  {
+    "id": "6259bd93-1025-4941-8329-dee732b03605",
+    "name": "Bonny",
+    "slug": "bonny",
+    "version": "1.0",
+    "license_type": "itf_ffl",
+    "is_sil_ofl": false,
+    "category": "Serif",
+    "styles_count": 6,
+    "designers": [
+      "Barbara Bigosinska"
+    ],
+    "publisher": "Indian Type Foundry",
+    "api_endpoint": "https://api.fontshare.com/v2/fonts/bonny",
+    "web_url": "https://www.fontshare.com/fonts/bonny",
+    "download_url": "https://api.fontshare.com/v2/fonts/download/bonny"
+  },
+  {
+    "id": "45c9f439-8b2b-4968-b034-91c1d0190b04",
+    "name": "Bevellier",
+    "slug": "bevellier",
+    "version": "1.0",
+    "license_type": "itf_ffl",
+    "is_sil_ofl": false,
+    "category": "Display",
+    "styles_count": 18,
+    "designers": [
+      "Arya Purohit",
+      "Barbara Bigosinska"
+    ],
+    "publisher": "Indian Type Foundry",
+    "api_endpoint": "https://api.fontshare.com/v2/fonts/bevellier",
+    "web_url": "https://www.fontshare.com/fonts/bevellier",
+    "download_url": "https://api.fontshare.com/v2/fonts/download/bevellier"
+  },
+  {
+    "id": "f90c6b14-3fc1-4f3a-bb0e-7134443df65f",
+    "name": "Archivo",
+    "slug": "archivo",
+    "version": "2.001",
+    "license_type": "sil_ofl",
+    "is_sil_ofl": true,
+    "category": "Sans",
+    "styles_count": 20,
+    "designers": [
+      "Omnibus-Type"
+    ],
+    "publisher": null,
+    "api_endpoint": "https://api.fontshare.com/v2/fonts/archivo",
+    "web_url": "https://www.fontshare.com/fonts/archivo",
+    "download_url": "https://api.fontshare.com/v2/fonts/download/archivo"
+  },
+  {
+    "id": "fd8cbb40-5c77-47c3-9b08-b033a2761f18",
+    "name": "Dancing Script",
+    "slug": "dancing-script",
+    "version": "2.0",
+    "license_type": "sil_ofl",
+    "is_sil_ofl": true,
+    "category": "Script",
+    "styles_count": 3,
+    "designers": [
+      "Impallari Type"
+    ],
+    "publisher": null,
+    "api_endpoint": "https://api.fontshare.com/v2/fonts/dancing-script",
+    "web_url": "https://www.fontshare.com/fonts/dancing-script",
+    "download_url": "https://api.fontshare.com/v2/fonts/download/dancing-script"
+  },
+  {
+    "id": "0f6986a3-213c-4247-a2c7-728991f22f36",
+    "name": "Poppins",
+    "slug": "poppins",
+    "version": "6.0",
+    "license_type": "sil_ofl",
+    "is_sil_ofl": true,
+    "category": "Sans",
+    "styles_count": 20,
+    "designers": [
+      "Jonny Pinhorn",
+      "Indian Type Foundry"
+    ],
+    "publisher": "Indian Type Foundry",
+    "api_endpoint": "https://api.fontshare.com/v2/fonts/poppins",
+    "web_url": "https://www.fontshare.com/fonts/poppins",
+    "download_url": "https://api.fontshare.com/v2/fonts/download/poppins"
+  },
+  {
+    "id": "8f02953a-efc0-433c-b535-c558b2c8354f",
+    "name": "Bebas Neue",
+    "slug": "bebas-neue",
+    "version": "2.0",
+    "license_type": "sil_ofl",
+    "is_sil_ofl": true,
+    "category": "Sans",
+    "styles_count": 1,
+    "designers": [
+      "Ryoichi Tsunekawa",
+      "Dharma Type"
+    ],
+    "publisher": null,
+    "api_endpoint": "https://api.fontshare.com/v2/fonts/bebas-neue",
+    "web_url": "https://www.fontshare.com/fonts/bebas-neue",
+    "download_url": "https://api.fontshare.com/v2/fonts/download/bebas-neue"
+  },
+  {
+    "id": "47afebba-ef59-4db6-8719-d08bd78c79b8",
+    "name": "Anton",
+    "slug": "anton",
+    "version": "2.116",
+    "license_type": "sil_ofl",
+    "is_sil_ofl": true,
+    "category": "Sans, Display",
+    "styles_count": 1,
+    "designers": [
+      "Vernon Adams"
+    ],
+    "publisher": null,
+    "api_endpoint": "https://api.fontshare.com/v2/fonts/anton",
+    "web_url": "https://www.fontshare.com/fonts/anton",
+    "download_url": "https://api.fontshare.com/v2/fonts/download/anton"
+  },
+  {
+    "id": "ab3263c7-4cd2-4cd1-94a6-6a6c1a8a57e5",
+    "name": "Be Vietnam Pro",
+    "slug": "beVietnam-pro",
+    "version": "1.002",
+    "license_type": "sil_ofl",
+    "is_sil_ofl": true,
+    "category": "Sans",
+    "styles_count": 20,
+    "designers": [
+      "Lam Bao",
+      "Tony Le",
+      "Vietanh Nguyen"
+    ],
+    "publisher": null,
+    "api_endpoint": "https://api.fontshare.com/v2/fonts/beVietnam-pro",
+    "web_url": "https://www.fontshare.com/fonts/beVietnam-pro",
+    "download_url": "https://api.fontshare.com/v2/fonts/download/beVietnam-pro"
+  },
+  {
+    "id": "9e15d922-60bd-47ca-8d3e-7d4385206239",
+    "name": "Crimson Pro",
+    "slug": "crimson-pro",
+    "version": "1.003",
+    "license_type": "sil_ofl",
+    "is_sil_ofl": true,
+    "category": "Serif",
+    "styles_count": 18,
+    "designers": [
+      "Jacques Le Bailly"
+    ],
+    "publisher": null,
+    "api_endpoint": "https://api.fontshare.com/v2/fonts/crimson-pro",
+    "web_url": "https://www.fontshare.com/fonts/crimson-pro",
+    "download_url": "https://api.fontshare.com/v2/fonts/download/crimson-pro"
+  },
+  {
+    "id": "f0f22c23-2ffd-41fc-85cb-36f3c5767ece",
+    "name": "Work Sans",
+    "slug": "work-sans",
+    "version": "2.012",
+    "license_type": "sil_ofl",
+    "is_sil_ofl": true,
+    "category": "Sans",
+    "styles_count": 20,
+    "designers": [
+      "Wei Huang"
+    ],
+    "publisher": null,
+    "api_endpoint": "https://api.fontshare.com/v2/fonts/work-sans",
+    "web_url": "https://www.fontshare.com/fonts/work-sans",
+    "download_url": "https://api.fontshare.com/v2/fonts/download/work-sans"
+  },
+  {
+    "id": "3c90397f-36d2-4b4b-a906-12e34b9f5407",
+    "name": "Lora",
+    "slug": "lora",
+    "version": "3.004",
+    "license_type": "sil_ofl",
+    "is_sil_ofl": true,
+    "category": "Serif",
+    "styles_count": 10,
+    "designers": [
+      "Cyreal",
+      "Olga Karpushina",
+      "Alexei Vanyashin"
+    ],
+    "publisher": null,
+    "api_endpoint": "https://api.fontshare.com/v2/fonts/lora",
+    "web_url": "https://www.fontshare.com/fonts/lora",
+    "download_url": "https://api.fontshare.com/v2/fonts/download/lora"
+  },
+  {
+    "id": "cd536c92-9d8d-4495-aca8-d7cc59146b52",
+    "name": "Plus Jakarta Sans",
+    "slug": "plus-jakarta-sans",
+    "version": "2.006",
+    "license_type": "sil_ofl",
+    "is_sil_ofl": true,
+    "category": "Sans",
+    "styles_count": 16,
+    "designers": [
+      "Tokotype"
+    ],
+    "publisher": null,
+    "api_endpoint": "https://api.fontshare.com/v2/fonts/plus-jakarta-sans",
+    "web_url": "https://www.fontshare.com/fonts/plus-jakarta-sans",
+    "download_url": "https://api.fontshare.com/v2/fonts/download/plus-jakarta-sans"
+  },
+  {
+    "id": "9d65d648-8d75-4ffa-b7de-c62c876af32a",
+    "name": "Nunito",
+    "slug": "nunito",
+    "version": "3.602",
+    "license_type": "sil_ofl",
+    "is_sil_ofl": true,
+    "category": "Sans",
+    "styles_count": 18,
+    "designers": [
+      "Vernon Adams",
+      "Cyreal",
+      "Jacques Le Bailly"
+    ],
+    "publisher": null,
+    "api_endpoint": "https://api.fontshare.com/v2/fonts/nunito",
+    "web_url": "https://www.fontshare.com/fonts/nunito",
+    "download_url": "https://api.fontshare.com/v2/fonts/download/nunito"
+  },
+  {
+    "id": "57a39d83-a4e7-45c7-ab33-1046a5e98ea9",
+    "name": "Azeret Mono",
+    "slug": "azeret-mono",
+    "version": "1.002",
+    "license_type": "sil_ofl",
+    "is_sil_ofl": true,
+    "category": "Sans",
+    "styles_count": 20,
+    "designers": [
+      "Displaay",
+      "Martin Vácha",
+      "Daniel Quisek"
+    ],
+    "publisher": null,
+    "api_endpoint": "https://api.fontshare.com/v2/fonts/azeret-mono",
+    "web_url": "https://www.fontshare.com/fonts/azeret-mono",
+    "download_url": "https://api.fontshare.com/v2/fonts/download/azeret-mono"
+  },
+  {
+    "id": "0e9fe20c-395b-4945-b952-bdf7db5a85c6",
+    "name": "Spline Sans",
+    "slug": "spline-sans",
+    "version": "1.001",
+    "license_type": "sil_ofl",
+    "is_sil_ofl": true,
+    "category": "Sans",
+    "styles_count": 6,
+    "designers": [
+      "Eben Sorkin",
+      "Mirko Velimirović"
+    ],
+    "publisher": null,
+    "api_endpoint": "https://api.fontshare.com/v2/fonts/spline-sans",
+    "web_url": "https://www.fontshare.com/fonts/spline-sans",
+    "download_url": "https://api.fontshare.com/v2/fonts/download/spline-sans"
+  },
+  {
+    "id": "b650adc4-d225-4bc8-92d9-45f5d8590509",
+    "name": "Public Sans",
+    "slug": "public-sans",
+    "version": "2.001",
+    "license_type": "sil_ofl",
+    "is_sil_ofl": true,
+    "category": "Sans",
+    "styles_count": 20,
+    "designers": [
+      "Pablo Impallari",
+      "Rodrigo Fuenzalida",
+      "Dan Williams",
+      "USWDS"
+    ],
+    "publisher": null,
+    "api_endpoint": "https://api.fontshare.com/v2/fonts/public-sans",
+    "web_url": "https://www.fontshare.com/fonts/public-sans",
+    "download_url": "https://api.fontshare.com/v2/fonts/download/public-sans"
+  },
+  {
+    "id": "24fa6a90-e3fd-4d70-a72a-8adec7e0390f",
+    "name": "Epilogue",
+    "slug": "epilogue",
+    "version": "2.112",
+    "license_type": "sil_ofl",
+    "is_sil_ofl": true,
+    "category": "Sans",
+    "styles_count": 20,
+    "designers": [
+      "Tyler Finck",
+      "Etcetera Type Co"
+    ],
+    "publisher": null,
+    "api_endpoint": "https://api.fontshare.com/v2/fonts/epilogue",
+    "web_url": "https://www.fontshare.com/fonts/epilogue",
+    "download_url": "https://api.fontshare.com/v2/fonts/download/epilogue"
+  },
+  {
+    "id": "9c91b4c0-3fb8-44a2-b272-8df127fdc6a8",
+    "name": "JetBrains Mono",
+    "slug": "jet-brains-mono",
+    "version": "2.251",
+    "license_type": "sil_ofl",
+    "is_sil_ofl": true,
+    "category": "Sans",
+    "styles_count": 18,
+    "designers": [
+      "JetBrains",
+      "Philipp Nurullin",
+      "Konstantin Bulenkov"
+    ],
+    "publisher": null,
+    "api_endpoint": "https://api.fontshare.com/v2/fonts/jet-brains-mono",
+    "web_url": "https://www.fontshare.com/fonts/jet-brains-mono",
+    "download_url": "https://api.fontshare.com/v2/fonts/download/jet-brains-mono"
+  },
+  {
+    "id": "29ca43e9-fabe-4b98-aeaf-ff3197067bba",
+    "name": "Montserrat",
+    "slug": "montserrat",
+    "version": "7.222",
+    "license_type": "sil_ofl",
+    "is_sil_ofl": true,
+    "category": "Sans",
+    "styles_count": 20,
+    "designers": [
+      "Julieta Ulanovsky",
+      "Sol Matas",
+      "Juan Pablo del Peral",
+      "Jacques Le Bailly"
+    ],
+    "publisher": null,
+    "api_endpoint": "https://api.fontshare.com/v2/fonts/montserrat",
+    "web_url": "https://www.fontshare.com/fonts/montserrat",
+    "download_url": "https://api.fontshare.com/v2/fonts/download/montserrat"
+  },
+  {
+    "id": "f18eec69-d458-4f59-a2f6-e957d5b1550d",
+    "name": "Outfit",
+    "slug": "outfit",
+    "version": "1.0",
+    "license_type": "sil_ofl",
+    "is_sil_ofl": true,
+    "category": "Sans",
+    "styles_count": 10,
+    "designers": [
+      "On Brand Investments Pty Ltd",
+      "Rodrigo Fuenzalida"
+    ],
+    "publisher": null,
+    "api_endpoint": "https://api.fontshare.com/v2/fonts/outfit",
+    "web_url": "https://www.fontshare.com/fonts/outfit",
+    "download_url": "https://api.fontshare.com/v2/fonts/download/outfit"
+  },
+  {
+    "id": "24f45406-3545-46ff-8c0b-d2cd35895256",
+    "name": "Manrope",
+    "slug": "manrope",
+    "version": "4.505",
+    "license_type": "sil_ofl",
+    "is_sil_ofl": true,
+    "category": "Sans",
+    "styles_count": 8,
+    "designers": [
+      "Mikhail Sharanda"
+    ],
+    "publisher": null,
+    "api_endpoint": "https://api.fontshare.com/v2/fonts/manrope",
+    "web_url": "https://www.fontshare.com/fonts/manrope",
+    "download_url": "https://api.fontshare.com/v2/fonts/download/manrope"
+  },
+  {
+    "id": "6ac29dc2-69e8-4453-b762-d669a53252a1",
+    "name": "Asap",
+    "slug": "asap",
+    "version": "3.001",
+    "license_type": "sil_ofl",
+    "is_sil_ofl": true,
+    "category": "Sans",
+    "styles_count": 10,
+    "designers": [
+      "Omnibus-Type"
+    ],
+    "publisher": null,
+    "api_endpoint": "https://api.fontshare.com/v2/fonts/asap",
+    "web_url": "https://www.fontshare.com/fonts/asap",
+    "download_url": "https://api.fontshare.com/v2/fonts/download/asap"
+  },
+  {
+    "id": "45b41242-2036-449e-b09f-d428e489989f",
+    "name": "Oswald",
+    "slug": "oswald",
+    "version": "4.103",
+    "license_type": "sil_ofl",
+    "is_sil_ofl": true,
+    "category": "Sans, Display",
+    "styles_count": 7,
+    "designers": [
+      "Vernon Adams",
+      "Kalapi Gajjar",
+      "Cyreal"
+    ],
+    "publisher": null,
+    "api_endpoint": "https://api.fontshare.com/v2/fonts/oswald",
+    "web_url": "https://www.fontshare.com/fonts/oswald",
+    "download_url": "https://api.fontshare.com/v2/fonts/download/oswald"
+  },
+  {
+    "id": "3d584824-cf54-4a52-87de-550cddb260b0",
+    "name": "Fira Sans",
+    "slug": "fira-sans",
+    "version": "4.202",
+    "license_type": "sil_ofl",
+    "is_sil_ofl": true,
+    "category": "Sans",
+    "styles_count": 20,
+    "designers": [
+      "Carrois Apostrophe"
+    ],
+    "publisher": null,
+    "api_endpoint": "https://api.fontshare.com/v2/fonts/fira-sans",
+    "web_url": "https://www.fontshare.com/fonts/fira-sans",
+    "download_url": "https://api.fontshare.com/v2/fonts/download/fira-sans"
+  },
+  {
+    "id": "01ec88d0-2184-44c7-af12-42fb20b3a50e",
+    "name": "Familjen Grotesk",
+    "slug": "familjen-grotesk",
+    "version": "2.0",
+    "license_type": "sil_ofl",
+    "is_sil_ofl": true,
+    "category": "Sans",
+    "styles_count": 10,
+    "designers": [
+      "Familjen STHLM AB"
+    ],
+    "publisher": null,
+    "api_endpoint": "https://api.fontshare.com/v2/fonts/familjen-grotesk",
+    "web_url": "https://www.fontshare.com/fonts/familjen-grotesk",
+    "download_url": "https://api.fontshare.com/v2/fonts/download/familjen-grotesk"
+  },
+  {
+    "id": "e4607017-d095-44dc-aee3-705f6a1487cb",
+    "name": "Neco",
+    "slug": "neco",
+    "version": "1.0",
+    "license_type": "itf_ffl",
+    "is_sil_ofl": false,
+    "category": "Serif",
+    "styles_count": 10,
+    "designers": [
+      "Jitka Janečková"
+    ],
+    "publisher": "Indian Type Foundry",
+    "api_endpoint": "https://api.fontshare.com/v2/fonts/neco",
+    "web_url": "https://www.fontshare.com/fonts/neco",
+    "download_url": "https://api.fontshare.com/v2/fonts/download/neco"
+  },
+  {
+    "id": "243708bb-7208-41c2-8eb9-27dd1c503b51",
+    "name": "Erode",
+    "slug": "erode",
+    "version": "1.022",
+    "license_type": "itf_ffl",
+    "is_sil_ofl": false,
+    "category": "Serif",
+    "styles_count": 12,
+    "designers": [
+      "Nikhil Ranganathan"
+    ],
+    "publisher": "Indian Type Foundry",
+    "api_endpoint": "https://api.fontshare.com/v2/fonts/erode",
+    "web_url": "https://www.fontshare.com/fonts/erode",
+    "download_url": "https://api.fontshare.com/v2/fonts/download/erode"
+  },
+  {
+    "id": "ece21213-4ccd-44a0-aac5-265219bb18d2",
+    "name": "Panchang",
+    "slug": "panchang",
+    "version": "1.0",
+    "license_type": "itf_ffl",
+    "is_sil_ofl": false,
+    "category": "Sans",
+    "styles_count": 8,
+    "designers": [
+      "Barbara Bigosinska",
+      "Hitesh Malaviya"
+    ],
+    "publisher": "Indian Type Foundry",
+    "api_endpoint": "https://api.fontshare.com/v2/fonts/panchang",
+    "web_url": "https://www.fontshare.com/fonts/panchang",
+    "download_url": "https://api.fontshare.com/v2/fonts/download/panchang"
+  },
+  {
+    "id": "b819e3f7-778b-47ed-b25c-f39eff4a2eaf",
+    "name": "Excon",
+    "slug": "excon",
+    "version": "1.0",
+    "license_type": "itf_ffl",
+    "is_sil_ofl": false,
+    "category": "Sans",
+    "styles_count": 7,
+    "designers": [
+      "Alisa Nowak"
+    ],
+    "publisher": "Indian Type Foundry",
+    "api_endpoint": "https://api.fontshare.com/v2/fonts/excon",
+    "web_url": "https://www.fontshare.com/fonts/excon",
+    "download_url": "https://api.fontshare.com/v2/fonts/download/excon"
+  },
+  {
+    "id": "99210544-4020-4d82-a6d3-55d899074d61",
+    "name": "Kola",
+    "slug": "kola",
+    "version": "1.0",
+    "license_type": "itf_ffl",
+    "is_sil_ofl": false,
+    "category": "Display",
+    "styles_count": 1,
+    "designers": [
+      "Jean-Baptiste Morizot"
+    ],
+    "publisher": "Indian Type Foundry",
+    "api_endpoint": "https://api.fontshare.com/v2/fonts/kola",
+    "web_url": "https://www.fontshare.com/fonts/kola",
+    "download_url": "https://api.fontshare.com/v2/fonts/download/kola"
+  },
+  {
+    "id": "8aac9ffb-a2cb-4702-97ba-6b82555abcc9",
+    "name": "Pally",
+    "slug": "pally",
+    "version": "1.2",
+    "license_type": "itf_ffl",
+    "is_sil_ofl": false,
+    "category": "Sans",
+    "styles_count": 4,
+    "designers": [
+      "Indian Type Foundry"
+    ],
+    "publisher": "Indian Type Foundry",
+    "api_endpoint": "https://api.fontshare.com/v2/fonts/pally",
+    "web_url": "https://www.fontshare.com/fonts/pally",
+    "download_url": "https://api.fontshare.com/v2/fonts/download/pally"
+  },
+  {
+    "id": "013fceba-8e6e-481e-b229-ac5316f88902",
+    "name": "Kalam",
+    "slug": "kalam",
+    "version": "3.0",
+    "license_type": "sil_ofl",
+    "is_sil_ofl": true,
+    "category": "Handwritten",
+    "styles_count": 4,
+    "designers": [
+      "Indian Type Foundry"
+    ],
+    "publisher": "Indian Type Foundry",
+    "api_endpoint": "https://api.fontshare.com/v2/fonts/kalam",
+    "web_url": "https://www.fontshare.com/fonts/kalam",
+    "download_url": "https://api.fontshare.com/v2/fonts/download/kalam"
+  },
+  {
+    "id": "04427bc8-65ea-4fe9-9adf-8b62a42ae3a5",
+    "name": "Roundo",
+    "slug": "roundo",
+    "version": "2.0",
+    "license_type": "sil_ofl",
+    "is_sil_ofl": true,
+    "category": "Sans",
+    "styles_count": 7,
+    "designers": [
+      "Indian Type Foundry"
+    ],
+    "publisher": "Indian Type Foundry",
+    "api_endpoint": "https://api.fontshare.com/v2/fonts/roundo",
+    "web_url": "https://www.fontshare.com/fonts/roundo",
+    "download_url": "https://api.fontshare.com/v2/fonts/download/roundo"
+  },
+  {
+    "id": "04ba7229-f5f4-41ef-8e67-b648fa5e780d",
+    "name": "Hind",
+    "slug": "hind",
+    "version": "3.0",
+    "license_type": "sil_ofl",
+    "is_sil_ofl": true,
+    "category": "Sans",
+    "styles_count": 6,
+    "designers": [
+      "Manushi Parikh"
+    ],
+    "publisher": "Indian Type Foundry",
+    "api_endpoint": "https://api.fontshare.com/v2/fonts/hind",
+    "web_url": "https://www.fontshare.com/fonts/hind",
+    "download_url": "https://api.fontshare.com/v2/fonts/download/hind"
+  },
+  {
+    "id": "0c9666a2-a68f-4063-9151-24ba261d6b51",
+    "name": "Pencerio",
+    "slug": "pencerio",
+    "version": "1.1",
+    "license_type": "itf_ffl",
+    "is_sil_ofl": false,
+    "category": "Script",
+    "styles_count": 1,
+    "designers": [
+      "Manushi Parikh"
+    ],
+    "publisher": "Indian Type Foundry",
+    "api_endpoint": "https://api.fontshare.com/v2/fonts/pencerio",
+    "web_url": "https://www.fontshare.com/fonts/pencerio",
+    "download_url": "https://api.fontshare.com/v2/fonts/download/pencerio"
+  },
+  {
+    "id": "1fbee521-d727-44d6-8bb2-122b130e6baf",
+    "name": "Hoover",
+    "slug": "hoover",
+    "version": "1.0",
+    "license_type": "itf_ffl",
+    "is_sil_ofl": false,
+    "category": "Slab",
+    "styles_count": 6,
+    "designers": [
+      "Gaetan Baehr"
+    ],
+    "publisher": "Indian Type Foundry",
+    "api_endpoint": "https://api.fontshare.com/v2/fonts/hoover",
+    "web_url": "https://www.fontshare.com/fonts/hoover",
+    "download_url": "https://api.fontshare.com/v2/fonts/download/hoover"
+  },
+  {
+    "id": "198d1954-4b27-4022-8388-e4c941177af3",
+    "name": "Nippo",
+    "slug": "nippo",
+    "version": "1.0",
+    "license_type": "itf_ffl",
+    "is_sil_ofl": false,
+    "category": "Display",
+    "styles_count": 6,
+    "designers": [
+      "Manushi Parikh"
+    ],
+    "publisher": "Indian Type Foundry",
+    "api_endpoint": "https://api.fontshare.com/v2/fonts/nippo",
+    "web_url": "https://www.fontshare.com/fonts/nippo",
+    "download_url": "https://api.fontshare.com/v2/fonts/download/nippo"
+  },
+  {
+    "id": "a5fef280-6307-414c-8de3-d85c56949cb7",
+    "name": "Space Grotesk",
+    "slug": "space-grotesk",
+    "version": "2.0",
+    "license_type": "sil_ofl",
+    "is_sil_ofl": true,
+    "category": "Sans",
+    "styles_count": 6,
+    "designers": [
+      "Florian Karsten"
+    ],
+    "publisher": null,
+    "api_endpoint": "https://api.fontshare.com/v2/fonts/space-grotesk",
+    "web_url": "https://www.fontshare.com/fonts/space-grotesk",
+    "download_url": "https://api.fontshare.com/v2/fonts/download/space-grotesk"
+  },
+  {
+    "id": "078fc815-943e-4217-855b-f5baa8a50ba2",
+    "name": "Segment",
+    "slug": "segment",
+    "version": "1.0",
+    "license_type": "itf_ffl",
+    "is_sil_ofl": false,
+    "category": "Display",
+    "styles_count": 1,
+    "designers": [
+      "Frode Helland"
+    ],
+    "publisher": "Indian Type Foundry",
+    "api_endpoint": "https://api.fontshare.com/v2/fonts/segment",
+    "web_url": "https://www.fontshare.com/fonts/segment",
+    "download_url": "https://api.fontshare.com/v2/fonts/download/segment"
+  },
+  {
+    "id": "21cd9879-12f6-47ad-a0ea-33df7d5ab7d3",
+    "name": "Telma",
+    "slug": "telma",
+    "version": "1.0",
+    "license_type": "itf_ffl",
+    "is_sil_ofl": false,
+    "category": "Script",
+    "styles_count": 6,
+    "designers": [
+      "Jitka Janečková"
+    ],
+    "publisher": "Indian Type Foundry",
+    "api_endpoint": "https://api.fontshare.com/v2/fonts/telma",
+    "web_url": "https://www.fontshare.com/fonts/telma",
+    "download_url": "https://api.fontshare.com/v2/fonts/download/telma"
+  },
+  {
+    "id": "1bda6834-21e0-4dcb-8f46-6e21481c0e80",
+    "name": "Zina",
+    "slug": "zina",
+    "version": "1.1",
+    "license_type": "itf_ffl",
+    "is_sil_ofl": false,
+    "category": "Display",
+    "styles_count": 1,
+    "designers": [
+      "Théo Guillard"
+    ],
+    "publisher": "Indian Type Foundry",
+    "api_endpoint": "https://api.fontshare.com/v2/fonts/zina",
+    "web_url": "https://www.fontshare.com/fonts/zina",
+    "download_url": "https://api.fontshare.com/v2/fonts/download/zina"
+  },
+  {
+    "id": "690390f0-8c6a-444b-86c5-37175bf33338",
+    "name": "Zodiak",
+    "slug": "zodiak",
+    "version": "1.0",
+    "license_type": "itf_ffl",
+    "is_sil_ofl": false,
+    "category": "Serif",
+    "styles_count": 14,
+    "designers": [
+      "Jérémie Hornus",
+      "Gaetan Baehr",
+      "Jean-Baptiste Morizot",
+      "Alisa Nowak",
+      "Theo Guillard"
+    ],
+    "publisher": "Indian Type Foundry",
+    "api_endpoint": "https://api.fontshare.com/v2/fonts/zodiak",
+    "web_url": "https://www.fontshare.com/fonts/zodiak",
+    "download_url": "https://api.fontshare.com/v2/fonts/download/zodiak"
+  },
+  {
+    "id": "fb6b22d1-5ac7-4a88-842b-892122c1428c",
+    "name": "Rosaline",
+    "slug": "rosaline",
+    "version": "1.1",
+    "license_type": "itf_ffl",
+    "is_sil_ofl": false,
+    "category": "Script",
+    "styles_count": 1,
+    "designers": [
+      "Jérémie Hornus"
+    ],
+    "publisher": "Indian Type Foundry",
+    "api_endpoint": "https://api.fontshare.com/v2/fonts/rosaline",
+    "web_url": "https://www.fontshare.com/fonts/rosaline",
+    "download_url": "https://api.fontshare.com/v2/fonts/download/rosaline"
+  },
+  {
+    "id": "66b756cd-726e-41d1-afb3-b06bac996643",
+    "name": "Recia",
+    "slug": "recia",
+    "version": "1.0",
+    "license_type": "itf_ffl",
+    "is_sil_ofl": false,
+    "category": "Serif",
+    "styles_count": 12,
+    "designers": [
+      "Carlos de Toro"
+    ],
+    "publisher": "Indian Type Foundry",
+    "api_endpoint": "https://api.fontshare.com/v2/fonts/recia",
+    "web_url": "https://www.fontshare.com/fonts/recia",
+    "download_url": "https://api.fontshare.com/v2/fonts/download/recia"
+  },
+  {
+    "id": "efa2422b-2b88-4ef0-9eb2-b0320d776bda",
+    "name": "Trench Slab",
+    "slug": "trench-slab",
+    "version": "1.0",
+    "license_type": "itf_ffl",
+    "is_sil_ofl": false,
+    "category": "Slab",
+    "styles_count": 6,
+    "designers": [
+      "Shiva Nallaperumal"
+    ],
+    "publisher": "Indian Type Foundry",
+    "api_endpoint": "https://api.fontshare.com/v2/fonts/trench-slab",
+    "web_url": "https://www.fontshare.com/fonts/trench-slab",
+    "download_url": "https://api.fontshare.com/v2/fonts/download/trench-slab"
+  },
+  {
+    "id": "b8ad2ebd-2cb7-49bc-acf6-92168a4cf465",
+    "name": "Stardom",
+    "slug": "stardom",
+    "version": "1.0",
+    "license_type": "itf_ffl",
+    "is_sil_ofl": false,
+    "category": "Display",
+    "styles_count": 1,
+    "designers": [
+      "Indian Type Foundry"
+    ],
+    "publisher": "Indian Type Foundry",
+    "api_endpoint": "https://api.fontshare.com/v2/fonts/stardom",
+    "web_url": "https://www.fontshare.com/fonts/stardom",
+    "download_url": "https://api.fontshare.com/v2/fonts/download/stardom"
+  },
+  {
+    "id": "56fbcdeb-44b8-4b62-b256-1e4fa7b3b20b",
+    "name": "Sharpie",
+    "slug": "sharpie",
+    "version": "1.0",
+    "license_type": "itf_ffl",
+    "is_sil_ofl": false,
+    "category": "Display",
+    "styles_count": 6,
+    "designers": [
+      "Théo Guillard"
+    ],
+    "publisher": "Indian Type Foundry",
+    "api_endpoint": "https://api.fontshare.com/v2/fonts/sharpie",
+    "web_url": "https://www.fontshare.com/fonts/sharpie",
+    "download_url": "https://api.fontshare.com/v2/fonts/download/sharpie"
+  },
+  {
+    "id": "802fa1ed-271d-4af0-b9f4-18eff5f7e3e4",
+    "name": "Pramukh Rounded",
+    "slug": "pramukh-rounded",
+    "version": "1.0",
+    "license_type": "itf_ffl",
+    "is_sil_ofl": false,
+    "category": "Sans",
+    "styles_count": 18,
+    "designers": [
+      "Aarya Purohit",
+      "Indian Type Foundry"
+    ],
+    "publisher": "Indian Type Foundry",
+    "api_endpoint": "https://api.fontshare.com/v2/fonts/pramukh-rounded",
+    "web_url": "https://www.fontshare.com/fonts/pramukh-rounded",
+    "download_url": "https://api.fontshare.com/v2/fonts/download/pramukh-rounded"
+  },
+  {
+    "id": "cf0180f1-f693-48b6-b85f-8945d1806a07",
+    "name": "Styro",
+    "slug": "styro",
+    "version": "1.0",
+    "license_type": "itf_ffl",
+    "is_sil_ofl": false,
+    "category": "Display",
+    "styles_count": 9,
+    "designers": [
+      "Aarya Purohit",
+      "Indian Type Foundry"
+    ],
+    "publisher": "Indian Type Foundry",
+    "api_endpoint": "https://api.fontshare.com/v2/fonts/styro",
+    "web_url": "https://www.fontshare.com/fonts/styro",
+    "download_url": "https://api.fontshare.com/v2/fonts/download/styro"
+  },
+  {
+    "id": "e10d59ad-81ac-4105-a846-249f192f2982",
+    "name": "Paquito",
+    "slug": "paquito",
+    "version": "1.0",
+    "license_type": "itf_ffl",
+    "is_sil_ofl": false,
+    "category": "Serif, Slab",
+    "styles_count": 4,
+    "designers": [
+      "Juanjo Lopez"
+    ],
+    "publisher": "Indian Type Foundry",
+    "api_endpoint": "https://api.fontshare.com/v2/fonts/paquito",
+    "web_url": "https://www.fontshare.com/fonts/paquito",
+    "download_url": "https://api.fontshare.com/v2/fonts/download/paquito"
+  },
+  {
+    "id": "359fefd9-0ecf-4846-9071-a177ef693aaa",
+    "name": "Ranade",
+    "slug": "ranade",
+    "version": "1.0",
+    "license_type": "itf_ffl",
+    "is_sil_ofl": false,
+    "category": "Sans",
+    "styles_count": 12,
+    "designers": [
+      "Easha Ranade",
+      "Indian Type Foundry"
+    ],
+    "publisher": "Indian Type Foundry",
+    "api_endpoint": "https://api.fontshare.com/v2/fonts/ranade",
+    "web_url": "https://www.fontshare.com/fonts/ranade",
+    "download_url": "https://api.fontshare.com/v2/fonts/download/ranade"
+  },
+  {
+    "id": "aedd7d9e-25e9-4881-9ac3-f880dca0f90b",
+    "name": "Khand",
+    "slug": "khand",
+    "version": "3.0",
+    "license_type": "sil_ofl",
+    "is_sil_ofl": true,
+    "category": "Sans",
+    "styles_count": 6,
+    "designers": [
+      "Satya Rajpurohit"
+    ],
+    "publisher": "Indian Type Foundry",
+    "api_endpoint": "https://api.fontshare.com/v2/fonts/khand",
+    "web_url": "https://www.fontshare.com/fonts/khand",
+    "download_url": "https://api.fontshare.com/v2/fonts/download/khand"
+  },
+  {
+    "id": "3f70c7e4-4631-4e90-90ba-0fcd0fed8547",
+    "name": "Plein",
+    "slug": "plein",
+    "version": "1.0",
+    "license_type": "itf_ffl",
+    "is_sil_ofl": false,
+    "category": "Sans",
+    "styles_count": 12,
+    "designers": [
+      "Inga Plönnigs"
+    ],
+    "publisher": "Indian Type Foundry",
+    "api_endpoint": "https://api.fontshare.com/v2/fonts/plein",
+    "web_url": "https://www.fontshare.com/fonts/plein",
+    "download_url": "https://api.fontshare.com/v2/fonts/download/plein"
+  },
+  {
+    "id": "27167060-e4ad-4fb2-8413-901158e1add1",
+    "name": "Rajdhani",
+    "slug": "rajdhani",
+    "version": "3.0",
+    "license_type": "sil_ofl",
+    "is_sil_ofl": true,
+    "category": "Sans",
+    "styles_count": 6,
+    "designers": [
+      "Shiva Nallaperumal",
+      "Indian Type Foundry"
+    ],
+    "publisher": "Indian Type Foundry",
+    "api_endpoint": "https://api.fontshare.com/v2/fonts/rajdhani",
+    "web_url": "https://www.fontshare.com/fonts/rajdhani",
+    "download_url": "https://api.fontshare.com/v2/fonts/download/rajdhani"
+  },
+  {
+    "id": "85e0b38b-8a52-4b3f-9c9b-57767c66da8c",
+    "name": "Quilon",
+    "slug": "quilon",
+    "version": "1.0",
+    "license_type": "itf_ffl",
+    "is_sil_ofl": false,
+    "category": "Sans",
+    "styles_count": 5,
+    "designers": [
+      "Jonny Pinhorn"
+    ],
+    "publisher": "Indian Type Foundry",
+    "api_endpoint": "https://api.fontshare.com/v2/fonts/quilon",
+    "web_url": "https://www.fontshare.com/fonts/quilon",
+    "download_url": "https://api.fontshare.com/v2/fonts/download/quilon"
+  },
+  {
+    "id": "20e9fcdc-1e41-4559-a43d-1ede0adc8896",
+    "name": "Satoshi",
+    "slug": "satoshi",
+    "version": "1.0",
+    "license_type": "itf_ffl",
+    "is_sil_ofl": false,
+    "category": "Sans",
+    "styles_count": 12,
+    "designers": [
+      "Deni Anggara"
+    ],
+    "publisher": "Indian Type Foundry",
+    "api_endpoint": "https://api.fontshare.com/v2/fonts/satoshi",
+    "web_url": "https://www.fontshare.com/fonts/satoshi",
+    "download_url": "https://api.fontshare.com/v2/fonts/download/satoshi"
+  },
+  {
+    "id": "d8cde3d9-cacc-40a1-9747-7d26debcaa4c",
+    "name": "RX100",
+    "slug": "rx-100",
+    "version": "1.0",
+    "license_type": "itf_ffl",
+    "is_sil_ofl": false,
+    "category": "Sans",
+    "styles_count": 1,
+    "designers": [
+      "Anurag Gautam",
+      "Indian Type Foundry"
+    ],
+    "publisher": "Indian Type Foundry",
+    "api_endpoint": "https://api.fontshare.com/v2/fonts/rx-100",
+    "web_url": "https://www.fontshare.com/fonts/rx-100",
+    "download_url": "https://api.fontshare.com/v2/fonts/download/rx-100"
+  },
+  {
+    "id": "0be43cb0-a1bb-4b76-9356-9760fe446165",
+    "name": "Supreme",
+    "slug": "supreme",
+    "version": "1.1",
+    "license_type": "itf_ffl",
+    "is_sil_ofl": false,
+    "category": "Sans",
+    "styles_count": 16,
+    "designers": [
+      "Jérémie Hornus",
+      "Ilya Naumoff"
+    ],
+    "publisher": "Indian Type Foundry",
+    "api_endpoint": "https://api.fontshare.com/v2/fonts/supreme",
+    "web_url": "https://www.fontshare.com/fonts/supreme",
+    "download_url": "https://api.fontshare.com/v2/fonts/download/supreme"
+  },
+  {
+    "id": "6d442fdc-c73b-4f4c-aad7-3f261b645d59",
+    "name": "Red Hat Display",
+    "slug": "red-hat-display",
+    "version": "1.01",
+    "license_type": "sil_ofl",
+    "is_sil_ofl": true,
+    "category": "Sans",
+    "styles_count": 16,
+    "designers": [
+      "MCKL",
+      "Jeremy Mickel"
+    ],
+    "publisher": null,
+    "api_endpoint": "https://api.fontshare.com/v2/fonts/red-hat-display",
+    "web_url": "https://www.fontshare.com/fonts/red-hat-display",
+    "download_url": "https://api.fontshare.com/v2/fonts/download/red-hat-display"
+  },
+  {
+    "id": "c5c0d08a-e75f-4d18-9eb9-9b365aa79bca",
+    "name": "Sora",
+    "slug": "sora",
+    "version": "2.0",
+    "license_type": "sil_ofl",
+    "is_sil_ofl": true,
+    "category": "Sans",
+    "styles_count": 18,
+    "designers": [
+      "Jonathan Barnbrook",
+      "Julián Moncada"
+    ],
+    "publisher": null,
+    "api_endpoint": "https://api.fontshare.com/v2/fonts/sora",
+    "web_url": "https://www.fontshare.com/fonts/sora",
+    "download_url": "https://api.fontshare.com/v2/fonts/download/sora"
+  },
+  {
+    "id": "077b2d1e-0625-4452-a2ae-eb4d8b593bca",
+    "name": "Literata",
+    "slug": "literata",
+    "version": "3.021",
+    "license_type": "sil_ofl",
+    "is_sil_ofl": true,
+    "category": "Serif",
+    "styles_count": 18,
+    "designers": [
+      "TypeTogether"
+    ],
+    "publisher": null,
+    "api_endpoint": "https://api.fontshare.com/v2/fonts/literata",
+    "web_url": "https://www.fontshare.com/fonts/literata",
+    "download_url": "https://api.fontshare.com/v2/fonts/download/literata"
+  },
+  {
+    "id": "1928c108-82dc-4037-98dc-bf06a72282a2",
+    "name": "Merriweather Sans",
+    "slug": "merriweather-sans",
+    "version": "2.001",
+    "license_type": "sil_ofl",
+    "is_sil_ofl": true,
+    "category": "Sans",
+    "styles_count": 14,
+    "designers": [
+      "Eben Sorkin",
+      "Sorkin Type"
+    ],
+    "publisher": null,
+    "api_endpoint": "https://api.fontshare.com/v2/fonts/merriweather-sans",
+    "web_url": "https://www.fontshare.com/fonts/merriweather-sans",
+    "download_url": "https://api.fontshare.com/v2/fonts/download/merriweather-sans"
+  },
+  {
+    "id": "7ad054c4-ccca-4cf4-ac2c-c584482d2a64",
+    "name": "Quicksand",
+    "slug": "quicksand",
+    "version": "3.004",
+    "license_type": "sil_ofl",
+    "is_sil_ofl": true,
+    "category": "Sans",
+    "styles_count": 6,
+    "designers": [
+      "Andrew Paglinawan"
+    ],
+    "publisher": null,
+    "api_endpoint": "https://api.fontshare.com/v2/fonts/quicksand",
+    "web_url": "https://www.fontshare.com/fonts/quicksand",
+    "download_url": "https://api.fontshare.com/v2/fonts/download/quicksand"
+  },
+  {
+    "id": "fbfab3e2-21cf-4381-b342-0cbbfaab7891",
+    "name": "Teko",
+    "slug": "teko",
+    "version": "3.0",
+    "license_type": "sil_ofl",
+    "is_sil_ofl": true,
+    "category": "Sans",
+    "styles_count": 6,
+    "designers": [
+      "Manushi Parikh"
+    ],
+    "publisher": "Indian Type Foundry",
+    "api_endpoint": "https://api.fontshare.com/v2/fonts/teko",
+    "web_url": "https://www.fontshare.com/fonts/teko",
+    "download_url": "https://api.fontshare.com/v2/fonts/download/teko"
+  },
+  {
+    "id": "e323c3c8-0893-4129-953a-94cfd0dadfe9",
+    "name": "Karma",
+    "slug": "karma",
+    "version": "3.0",
+    "license_type": "sil_ofl",
+    "is_sil_ofl": true,
+    "category": "Serif",
+    "styles_count": 6,
+    "designers": [
+      "Joana Correia"
+    ],
+    "publisher": "Indian Type Foundry",
+    "api_endpoint": "https://api.fontshare.com/v2/fonts/karma",
+    "web_url": "https://www.fontshare.com/fonts/karma",
+    "download_url": "https://api.fontshare.com/v2/fonts/download/karma"
+  }
+]

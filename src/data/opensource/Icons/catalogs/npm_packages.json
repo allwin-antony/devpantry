@@ -1,0 +1,105 @@
+{
+  "react": [
+    {
+      "library": "Lucide",
+      "package": "lucide-react",
+      "command": "npm install lucide-react"
+    },
+    {
+      "library": "Tabler Icons",
+      "package": "@tabler/icons-react",
+      "command": "npm install @tabler/icons-react"
+    },
+    {
+      "library": "Heroicons",
+      "package": "@heroicons/react",
+      "command": "npm install @heroicons/react"
+    },
+    {
+      "library": "Iconoir",
+      "package": "iconoir-react",
+      "command": "npm install iconoir-react"
+    },
+    {
+      "library": "Phosphor Icons",
+      "package": "@phosphor-icons/react",
+      "command": "npm install @phosphor-icons/react"
+    },
+    {
+      "library": "Radix Icons",
+      "package": "@radix-ui/react-icons",
+      "command": "npm install @radix-ui/react-icons"
+    },
+    {
+      "library": "Remix Icon",
+      "package": "remixicon-react",
+      "command": "npm install remixicon-react"
+    }
+  ],
+  "vue": [
+    {
+      "library": "Lucide",
+      "package": "lucide-vue-next",
+      "command": "npm install lucide-vue-next"
+    },
+    {
+      "library": "Tabler Icons",
+      "package": "@tabler/icons-vue",
+      "command": "npm install @tabler/icons-vue"
+    },
+    {
+      "library": "Heroicons",
+      "package": "@heroicons/vue",
+      "command": "npm install @heroicons/vue"
+    },
+    {
+      "library": "Iconoir",
+      "package": "iconoir-vue",
+      "command": "npm install iconoir-vue"
+    },
+    {
+      "library": "Phosphor Icons",
+      "package": "@phosphor-icons/vue",
+      "command": "npm install @phosphor-icons/vue"
+    }
+  ],
+  "svelte": [
+    {
+      "library": "Lucide",
+      "package": "lucide-svelte",
+      "command": "npm install lucide-svelte"
+    },
+    {
+      "library": "Tabler Icons",
+      "package": "@tabler/icons-svelte",
+      "command": "npm install @tabler/icons-svelte"
+    },
+    {
+      "library": "Iconoir",
+      "package": "iconoir-svelte",
+      "command": "npm install iconoir-svelte"
+    },
+    {
+      "library": "Phosphor Icons",
+      "package": "@phosphor-icons/svelte",
+      "command": "npm install @phosphor-icons/svelte"
+    }
+  ],
+  "flutter": [
+    {
+      "library": "Lucide",
+      "package": "lucide_icons",
+      "command": "flutter pub add lucide_icons"
+    },
+    {
+      "library": "Iconoir",
+      "package": "iconoir_flutter",
+      "command": "flutter pub add iconoir_flutter"
+    },
+    {
+      "library": "Phosphor Icons",
+      "package": "phosphor_flutter",
+      "command": "flutter pub add phosphor_flutter"
+    }
+  ]
+}

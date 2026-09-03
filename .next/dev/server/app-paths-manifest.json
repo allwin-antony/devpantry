@@ -1,0 +1,9 @@
+{
+  "/api-vault/page": "app/api-vault/page.js",
+  "/chaos-data/page": "app/chaos-data/page.js",
+  "/fonts/page": "app/fonts/page.js",
+  "/icons/page": "app/icons/page.js",
+  "/page": "app/page.js",
+  "/robots.txt/route": "app/robots.txt/route.js",
+  "/sitemap.xml/route": "app/sitemap.xml/route.js"
+}

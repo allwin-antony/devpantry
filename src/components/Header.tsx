@@ -1,77 +1,80 @@
+'use client';
+
 import React from 'react';
-import { Flame, Layers, Sun, Moon, ShieldCheck } from 'lucide-react';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+import { Flame, Type, Sparkles, Box, Radio, Sun, Moon, ShieldCheck, Terminal } from 'lucide-react';
+import { useTheme } from './ThemeProvider';
 
-interface HeaderProps {
-  activeTab: string;
-  onSelectTab: (tabId: string) => void;
-  theme: 'dark' | 'light';
-  onToggleTheme: () => void;
-}
+export const Header: React.FC = () => {
+  const pathname = usePathname();
+  const { theme, toggleTheme } = useTheme();
 
-export const Header: React.FC<HeaderProps> = ({
-  activeTab,
-  onSelectTab,
-  theme,
-  onToggleTheme
-}) => {
+  const navItems = [
+    { href: '/', label: 'Overview', icon: Terminal },
+    { href: '/chaos-data', label: 'Chaos Data', icon: Flame, badge: 'Edge-Case' },
+    { href: '/fonts', label: 'Fonts Studio', icon: Type, badge: '120+' },
+    { href: '/icons', label: 'Vector Icons', icon: Box, badge: '25k+' },
+    { href: '/api-vault', label: 'API Vault', icon: Radio, badge: 'Live SSO' },
+  ];
+
   return (
-    <header className="w-full h-11 bg-[var(--bg-panel)] border-b border-[var(--border-dev)] px-4 flex items-center justify-between gap-4 select-none shrink-0 z-30 transition-colors shadow-sm">
+    <header className="w-full h-12 bg-[var(--bg-panel)] border-b border-[var(--border-dev)] px-4 flex items-center justify-between gap-4 select-none shrink-0 z-30 transition-colors shadow-sm">
       {/* Left: Brand */}
-      <div className="flex items-center gap-3 shrink-0">
-        <div className="flex items-center gap-2">
-          <div className="w-5 h-5 rounded bg-gradient-to-tr from-rose-600 to-amber-500 flex items-center justify-center shadow shadow-rose-500/30">
-            <Flame className="w-3 h-3 text-white" />
+      <div className="flex items-center gap-4 shrink-0">
+        <Link href="/" className="flex items-center gap-2 group cursor-pointer">
+          <div className="w-6 h-6 rounded bg-gradient-to-tr from-rose-600 via-amber-500 to-rose-500 flex items-center justify-center shadow shadow-rose-500/30 group-hover:scale-105 transition-transform">
+            <Flame className="w-3.5 h-3.5 text-white" />
           </div>
           <span className="font-bold text-xs tracking-tight text-[var(--text-primary)] font-mono">
-            FAILSTATE<span className="text-rose-500">.DEV</span>
+            DEVPLAYGROUND<span className="text-rose-500">.IO</span>
           </span>
-        </div>
+        </Link>
       </div>
 
-      {/* Center: Core Studio Tabs */}
-      <div className="flex items-center bg-[var(--bg-sidebar)] p-0.5 rounded-lg border border-[var(--border-dev)] font-mono text-xs">
-        <button
-          onClick={() => onSelectTab('chaos-data')}
-          className={`px-3 py-1 rounded-md flex items-center gap-1.5 transition-colors cursor-pointer ${
-            activeTab === 'chaos-data'
-              ? 'bg-rose-500 text-white font-bold shadow-sm'
-              : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
-          }`}
-        >
-          <Flame className="w-3.5 h-3.5" />
-          <span>Domain Presets</span>
-        </button>
+      {/* Center: Top Navigation Tabs */}
+      <nav className="hidden md:flex items-center bg-[var(--bg-sidebar)] p-1 rounded-lg border border-[var(--border-dev)] font-mono text-xs gap-1">
+        {navItems.map(item => {
+          const Icon = item.icon;
+          const isActive = item.href === '/' ? pathname === '/' : pathname.startsWith(item.href);
 
-        <button
-          onClick={() => onSelectTab('schema-builder')}
-          className={`px-3 py-1 rounded-md flex items-center gap-1.5 transition-colors cursor-pointer ${
-            activeTab === 'schema-builder'
-              ? 'bg-rose-500 text-white font-bold shadow-sm'
-              : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
-          }`}
-        >
-          <Layers className="w-3.5 h-3.5" />
-          <span>Custom Schema Builder</span>
-          <span className={`text-[9px] px-1 py-0.2 rounded font-bold ${
-            activeTab === 'schema-builder' ? 'bg-black/20 text-white' : 'bg-rose-500/20 text-rose-500 dark:text-rose-300'
-          }`}>
-            NEW
-          </span>
-        </button>
-      </div>
+          return (
+            <Link
+              key={item.href}
+              href={item.href}
+              className={`px-3 py-1 rounded-md flex items-center gap-1.5 transition-all cursor-pointer ${
+                isActive
+                  ? 'bg-rose-500 text-white font-bold shadow-sm'
+                  : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--pill-bg)]'
+              }`}
+            >
+              <Icon className="w-3.5 h-3.5" />
+              <span>{item.label}</span>
+              {item.badge && (
+                <span className={`text-[9px] px-1 py-0.2 rounded font-mono font-bold ${
+                  isActive ? 'bg-black/25 text-white' : 'bg-rose-500/15 text-rose-500 dark:text-rose-300'
+                }`}>
+                  {item.badge}
+                </span>
+              )}
+            </Link>
+          );
+        })}
+      </nav>
 
-      {/* Right: Privacy Badge & Theme Switcher */}
+      {/* Right: Privacy Indicator & Theme Switcher */}
       <div className="flex items-center gap-3 shrink-0">
-        <div className="hidden sm:flex items-center gap-1 text-[10px] font-mono text-[var(--text-muted)] bg-[var(--bg-sidebar)] px-2 py-0.5 rounded border border-[var(--border-dev)]">
-          <ShieldCheck className="w-3 h-3 text-emerald-500" />
-          <span>100% Client-Side</span>
+        <div className="hidden sm:flex items-center gap-1.5 text-[10px] font-mono text-[var(--text-muted)] bg-[var(--bg-sidebar)] px-2.5 py-1 rounded border border-[var(--border-dev)]">
+          <ShieldCheck className="w-3.5 h-3.5 text-emerald-500" />
+          <span>100% Client-Side Sandbox</span>
         </div>
 
-        {/* Light / Dark Mode Toggle */}
+        {/* Dark / Light Mode Switcher */}
         <button
-          onClick={onToggleTheme}
-          title={theme === 'dark' ? "Switch to Light Mode" : "Switch to Dark Mode"}
-          className="p-1.5 rounded bg-[var(--bg-sidebar)] border border-[var(--border-dev)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:border-rose-500/40 transition-colors cursor-pointer"
+          onClick={toggleTheme}
+          aria-label={theme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
+          title={theme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
+          className="p-1.5 rounded-lg bg-[var(--bg-sidebar)] border border-[var(--border-dev)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:border-rose-500/40 transition-colors cursor-pointer"
         >
           {theme === 'dark' ? <Sun className="w-3.5 h-3.5 text-amber-400" /> : <Moon className="w-3.5 h-3.5 text-slate-700" />}
         </button>

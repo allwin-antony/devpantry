@@ -1,0 +1,170 @@
+@import "tailwindcss";
+
+/* FailState DevPlayground - High-Density Theme Tokens (Dark & Light) */
+
+:root {
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+
+  /* Default Dark Mode (Carbon Space) */
+  --bg-app: #06090f;
+  --bg-sidebar: #090d16;
+  --bg-panel: #0d131f;
+  --bg-panel-subtle: #080c14;
+  --bg-panel-hover: #131b2c;
+  --bg-input: #080c14;
+  --bg-statusbar: #05080e;
+  --bg-codebox: #04060a;
+  --bg-modal: #090e18;
+
+  /* Borders */
+  --border-dev: rgba(255, 255, 255, 0.08);
+  --border-dev-subtle: rgba(255, 255, 255, 0.04);
+  --border-focus: #f43f5e;
+
+  /* Text */
+  --text-primary: #f8fafc;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
+  --text-code: #e2e8f0;
+
+  /* Accents */
+  --accent-rose: #f43f5e;
+  --accent-cyan: #06b6d4;
+  --accent-violet: #8b5cf6;
+  --accent-emerald: #10b981;
+  --accent-amber: #f59e0b;
+
+  --grid-line: rgba(255, 255, 255, 0.02);
+  --table-th-bg: #090e18;
+  --table-hover: rgba(255, 255, 255, 0.03);
+  --pill-bg: rgba(255, 255, 255, 0.06);
+}
+
+:root.light, html.light {
+  /* Crisp Engineering Light Mode */
+  --bg-app: #f1f5f9;
+  --bg-sidebar: #e2e8f0;
+  --bg-panel: #ffffff;
+  --bg-panel-subtle: #f8fafc;
+  --bg-panel-hover: #f1f5f9;
+  --bg-input: #ffffff;
+  --bg-statusbar: #e2e8f0;
+  --bg-codebox: #0f172a; /* Keep dark background for code editor high-contrast reading */
+  --bg-modal: #ffffff;
+
+  /* Borders */
+  --border-dev: rgba(0, 0, 0, 0.12);
+  --border-dev-subtle: rgba(0, 0, 0, 0.06);
+  --border-focus: #f43f5e;
+
+  /* Text */
+  --text-primary: #0f172a;
+  --text-secondary: #475569;
+  --text-muted: #64748b;
+  --text-code: #f8fafc;
+
+  /* Accents */
+  --accent-rose: #e11d48;
+  --accent-cyan: #0891b2;
+  --accent-violet: #7c3aed;
+  --accent-emerald: #059669;
+  --accent-amber: #d97706;
+
+  --grid-line: rgba(0, 0, 0, 0.04);
+  --table-th-bg: #f8fafc;
+  --table-hover: rgba(0, 0, 0, 0.02);
+  --pill-bg: rgba(0, 0, 0, 0.05);
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--bg-app);
+  color: var(--text-primary);
+  margin: 0;
+  padding: 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Subtle IDE Grid Background */
+.bg-dev-grid {
+  background-size: 24px 24px;
+  background-image: 
+    linear-gradient(to right, var(--grid-line) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--grid-line) 1px, transparent 1px);
+}
+
+/* Custom High-Density Scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg-panel-subtle);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--border-dev);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-muted);
+}
+
+/* Developer High-Density Table */
+.dev-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: var(--font-mono);
+  font-size: 11px;
+}
+
+.dev-table th {
+  background: var(--table-th-bg);
+  color: var(--text-muted);
+  font-weight: 600;
+  text-align: left;
+  padding: 6px 10px;
+  border-bottom: 1px solid var(--border-dev);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  white-space: nowrap;
+}
+
+.dev-table td {
+  padding: 6px 10px;
+  border-bottom: 1px solid var(--border-dev-subtle);
+  color: var(--text-primary);
+  white-space: nowrap;
+}
+
+.dev-table tr:hover {
+  background-color: var(--table-hover);
+}
+
+/* Developer Input & Dropdown */
+.dev-input {
+  background-color: var(--bg-input);
+  border: 1px solid var(--border-dev);
+  color: var(--text-primary);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  outline: none;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.dev-input:focus {
+  border-color: var(--border-focus);
+  box-shadow: 0 0 0 1px var(--border-focus);
+}
+
+/* Developer Status Bar */
+.dev-statusbar {
+  height: 24px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.02em;
+}

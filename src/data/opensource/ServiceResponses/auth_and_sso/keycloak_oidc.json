@@ -1,0 +1,116 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "service": "Keycloak Open Source IAM",
+  "provider": "Keycloak (Red Hat / CNCF)",
+  "documentation_url": "https://www.keycloak.org/documentation",
+  "endpoints": {
+    "openid_config": "GET /realms/{realm}/.well-known/openid-configuration",
+    "token": "POST /realms/{realm}/protocol/openid-connect/token",
+    "userinfo": "GET /realms/{realm}/protocol/openid-connect/userinfo",
+    "certs": "GET /realms/{realm}/protocol/openid-connect/certs"
+  },
+  "responses": {
+    "token_response": {
+      "description": "Standard OIDC Token response returned by Keycloak.",
+      "http_status": 200,
+      "payload": {
+        "access_token": "eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUI...sample_keycloak_access_token...",
+        "expires_in": 300,
+        "refresh_expires_in": 1800,
+        "refresh_token": "eyJhbGciOiJIUzI1NiIsInR5cCIgOiAiSldUI...sample_keycloak_refresh_token...",
+        "token_type": "Bearer",
+        "id_token": "eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUI...sample_keycloak_id_token...",
+        "not-before-policy": 0,
+        "session_state": "c1f7a070-5b77-4c3e-9080-60b545d179ec",
+        "scope": "openid email profile"
+      },
+      "data_types": {
+        "access_token": "string (compact serialized JWT)",
+        "expires_in": "integer (seconds, e.g. 300)",
+        "refresh_expires_in": "integer (seconds, e.g. 1800)",
+        "refresh_token": "string (compact serialized JWT)",
+        "token_type": "string (always \"Bearer\")",
+        "id_token": "string (compact serialized JWT)",
+        "not-before-policy": "integer (seconds)",
+        "session_state": "string (UUID session identifier)",
+        "scope": "string (space-delimited granted scopes)"
+      }
+    },
+    "access_token_decoded_jwt": {
+      "description": "Decoded JWT payload showcasing Keycloak role-based access control (RBAC) claims.",
+      "payload": {
+        "exp": 1772622000,
+        "iat": 1772618400,
+        "jti": "8b515d91-3b74-4b5c-897b-9441ec9cbcf9",
+        "iss": "https://auth.company.internal/realms/enterprise",
+        "aud": [
+          "account",
+          "backend-api-client"
+        ],
+        "sub": "4bb94582-892a-4340-9a3b-285b0d0144f2",
+        "typ": "Bearer",
+        "azp": "backend-api-client",
+        "session_state": "c1f7a070-5b77-4c3e-9080-60b545d179ec",
+        "acr": "1",
+        "allowed-origins": [
+          "https://app.company.internal"
+        ],
+        "realm_access": {
+          "roles": [
+            "offline_access",
+            "default-roles-enterprise",
+            "admin",
+            "billing_manager"
+          ]
+        },
+        "resource_access": {
+          "backend-api-client": {
+            "roles": [
+              "read:reports",
+              "write:invoices"
+            ]
+          },
+          "account": {
+            "roles": [
+              "manage-account",
+              "view-profile"
+            ]
+          }
+        },
+        "scope": "openid email profile",
+        "sid": "c1f7a070-5b77-4c3e-9080-60b545d179ec",
+        "email_verified": true,
+        "name": "Jordan Lee",
+        "preferred_username": "jordan.lee",
+        "given_name": "Jordan",
+        "family_name": "Lee",
+        "email": "jordan.lee@company.internal"
+      },
+      "data_types": {
+        "exp": "integer (Unix epoch seconds expiration)",
+        "iat": "integer (Unix epoch seconds issued)",
+        "jti": "string (UUID token identifier)",
+        "iss": "string (Keycloak Realm URL)",
+        "aud": "array[string] (intended audiences/clients)",
+        "sub": "string (User UUID in Keycloak)",
+        "typ": "string (always \"Bearer\")",
+        "azp": "string (authorized party client ID)",
+        "session_state": "string (UUID)",
+        "acr": "string (authentication context class reference)",
+        "allowed-origins": "array[string] (CORS allowed origins)",
+        "realm_access": {
+          "roles": "array[string] (realm-level roles assigned to user)"
+        },
+        "resource_access": "object (client-level roles mapped by client_id)",
+        "scope": "string",
+        "sid": "string (UUID user session ID)",
+        "email_verified": "boolean",
+        "name": "string (full name)",
+        "preferred_username": "string (username handle)",
+        "given_name": "string (first name)",
+        "family_name": "string (last name)",
+        "email": "string (email address)"
+      }
+    }
+  }
+}

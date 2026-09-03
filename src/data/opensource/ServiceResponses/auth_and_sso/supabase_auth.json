@@ -1,0 +1,141 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "service": "Supabase Auth (GoTrue)",
+  "provider": "Supabase (Open Source Firebase Alternative)",
+  "documentation_url": "https://supabase.com/docs/guides/auth",
+  "endpoints": {
+    "signup": "POST https://<project-ref>.supabase.co/auth/v1/signup",
+    "token": "POST https://<project-ref>.supabase.co/auth/v1/token?grant_type=password",
+    "user": "GET https://<project-ref>.supabase.co/auth/v1/user",
+    "logout": "POST https://<project-ref>.supabase.co/auth/v1/logout"
+  },
+  "responses": {
+    "auth_session_response": {
+      "description": "Returned by Supabase JS SDK supabase.auth.signInWithPassword() or OAuth callback.",
+      "http_status": 200,
+      "payload": {
+        "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...sample_supabase_jwt...",
+        "token_type": "bearer",
+        "expires_in": 3600,
+        "expires_at": 1772622000,
+        "refresh_token": "dGhpcy1pcy1hLXJlZnJlc2gtdG9rZW4",
+        "user": {
+          "id": "e4b9d40e-7443-4416-9285-d852a4205566",
+          "aud": "authenticated",
+          "role": "authenticated",
+          "email": "dev@supabase.io",
+          "email_confirmed_at": "2026-01-15T09:30:00.000Z",
+          "phone": "",
+          "confirmation_sent_at": "2026-01-15T09:29:00.000Z",
+          "confirmed_at": "2026-01-15T09:30:00.000Z",
+          "last_sign_in_at": "2026-03-03T09:00:00.000Z",
+          "app_metadata": {
+            "provider": "email",
+            "providers": [
+              "email",
+              "github"
+            ]
+          },
+          "user_metadata": {
+            "full_name": "Taylor Swift",
+            "avatar_url": "https://example.com/avatar.jpg",
+            "theme": "dark"
+          },
+          "identities": [
+            {
+              "identity_id": "99f8e7d6-c5b4-a392-8170-123456789abc",
+              "id": "e4b9d40e-7443-4416-9285-d852a4205566",
+              "user_id": "e4b9d40e-7443-4416-9285-d852a4205566",
+              "identity_data": {
+                "email": "dev@supabase.io",
+                "email_verified": true,
+                "phone_verified": false,
+                "sub": "e4b9d40e-7443-4416-9285-d852a4205566"
+              },
+              "provider": "email",
+              "last_sign_in_at": "2026-03-03T09:00:00.000Z",
+              "created_at": "2026-01-15T09:30:00.000Z",
+              "updated_at": "2026-03-03T09:00:00.000Z"
+            }
+          ],
+          "created_at": "2026-01-15T09:30:00.000Z",
+          "updated_at": "2026-03-03T09:00:00.000Z",
+          "is_anonymous": false
+        }
+      },
+      "data_types": {
+        "access_token": "string (JWT signed with Supabase project secret)",
+        "token_type": "string (always \"bearer\")",
+        "expires_in": "integer (lifetime in seconds, typically 3600)",
+        "expires_at": "integer (Unix epoch seconds when access_token expires)",
+        "refresh_token": "string (opaque long-lived refresh token string)",
+        "user": {
+          "id": "string (UUID v4 user primary key in auth.users)",
+          "aud": "string (\"authenticated\")",
+          "role": "string (\"authenticated\")",
+          "email": "string (user email)",
+          "email_confirmed_at": "string (ISO 8601 UTC timestamp) | null",
+          "phone": "string (phone number or empty string)",
+          "confirmation_sent_at": "string (ISO 8601 UTC timestamp)",
+          "confirmed_at": "string (ISO 8601 UTC timestamp)",
+          "last_sign_in_at": "string (ISO 8601 UTC timestamp)",
+          "app_metadata": {
+            "provider": "string (primary provider, e.g. \"email\", \"google\")",
+            "providers": "array[string] (all linked providers)"
+          },
+          "user_metadata": "object (custom profile metadata dictionary)",
+          "identities": "array[object] (list of linked OAuth/email identity records)",
+          "created_at": "string (ISO 8601 UTC timestamp)",
+          "updated_at": "string (ISO 8601 UTC timestamp)",
+          "is_anonymous": "boolean"
+        }
+      }
+    },
+    "jwt_claims_payload": {
+      "description": "Claims inside Supabase access_token used for Row Level Security (RLS) policies in PostgreSQL.",
+      "payload": {
+        "iss": "https://<project-ref>.supabase.co/auth/v1",
+        "sub": "e4b9d40e-7443-4416-9285-d852a4205566",
+        "aud": "authenticated",
+        "exp": 1772622000,
+        "iat": 1772618400,
+        "email": "dev@supabase.io",
+        "phone": "",
+        "app_metadata": {
+          "provider": "email",
+          "providers": [
+            "email",
+            "github"
+          ]
+        },
+        "user_metadata": {
+          "full_name": "Taylor Swift"
+        },
+        "role": "authenticated",
+        "aal": "aal1",
+        "amr": [
+          {
+            "method": "password",
+            "timestamp": 1772618400
+          }
+        ],
+        "session_id": "a1b2c3d4-e5f6-7890-abcd-ef1234567890"
+      },
+      "data_types": {
+        "iss": "string (Supabase Auth URL endpoint)",
+        "sub": "string (User UUID v4)",
+        "aud": "string (\"authenticated\")",
+        "exp": "integer (Unix epoch seconds expiration)",
+        "iat": "integer (Unix epoch seconds issued)",
+        "email": "string",
+        "phone": "string",
+        "app_metadata": "object",
+        "user_metadata": "object",
+        "role": "string (\"authenticated\" | \"service_role\" | \"anon\")",
+        "aal": "string (authenticator assurance level: \"aal1\" | \"aal2\")",
+        "amr": "array[object] (authentication methods references)",
+        "session_id": "string (UUID v4 session identifier)"
+      }
+    }
+  }
+}

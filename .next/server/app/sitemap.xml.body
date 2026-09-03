@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<url>
+<loc>https://devplayground.io</loc>
+<lastmod>2026-09-03T14:37:16.848Z</lastmod>
+<changefreq>daily</changefreq>
+<priority>1</priority>
+</url>
+<url>
+<loc>https://devplayground.io/chaos-data</loc>
+<lastmod>2026-09-03T14:37:16.848Z</lastmod>
+<changefreq>daily</changefreq>
+<priority>0.95</priority>
+</url>
+<url>
+<loc>https://devplayground.io/fonts</loc>
+<lastmod>2026-09-03T14:37:16.848Z</lastmod>
+<changefreq>weekly</changefreq>
+<priority>0.9</priority>
+</url>
+<url>
+<loc>https://devplayground.io/icons</loc>
+<lastmod>2026-09-03T14:37:16.848Z</lastmod>
+<changefreq>weekly</changefreq>
+<priority>0.9</priority>
+</url>
+<url>
+<loc>https://devplayground.io/api-vault</loc>
+<lastmod>2026-09-03T14:37:16.848Z</lastmod>
+<changefreq>weekly</changefreq>
+<priority>0.9</priority>
+</url>
+</urlset>
