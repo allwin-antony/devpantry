@@ -24,7 +24,7 @@ import {
   Check
 } from 'lucide-react';
 import { getAllFonts, getFontCdnStylesheet } from '@/lib/datasetLoader';
-import { generateNaughtyString, generateFloatPrecisionTrap, generatePunycodeEmail, generateChaosDate } from '@/utilities/chaos-data/dirtyDataPools';
+import { NAUGHTY_STRINGS, DIRTY_EMAILS, DIRTY_URLS } from '@/utilities/chaos-data/chaosDataEngine';
 
 export function HomeClient() {
   const [activeTab, setActiveTab] = useState<'fonts' | 'icons' | 'chaos'>('fonts');
@@ -112,16 +112,18 @@ export function HomeClient() {
 
   const generateNewChaos = (type: 'blns' | 'punycode' | 'float' | 'date') => {
     if (type === 'blns') {
-      const val = generateNaughtyString(1.0);
+      const val = NAUGHTY_STRINGS[Math.floor(Math.random() * NAUGHTY_STRINGS.length)];
       setGeneratedChaos({ title: 'Big List of Naughty Strings (BLNS)', value: val, type: 'Security / Boundary Attack' });
     } else if (type === 'punycode') {
-      const val = generatePunycodeEmail();
-      setGeneratedChaos({ title: 'Punycode & Homoglyph Collision', value: val, type: 'Punycode Unicode Email' });
+      const val = DIRTY_EMAILS[Math.floor(Math.random() * DIRTY_EMAILS.length)];
+      setGeneratedChaos({ title: 'RFC 5321 & Punycode Homoglyph', value: val, type: 'Punycode Unicode Email' });
     } else if (type === 'float') {
-      const val = String(generateFloatPrecisionTrap());
+      const traps = [0.1 + 0.2, 0.30000000000000004, 1e-15, 9007199254740992, NaN, Infinity, -0];
+      const val = String(traps[Math.floor(Math.random() * traps.length)]);
       setGeneratedChaos({ title: 'IEEE 754 Floating Precision Trap', value: val, type: 'Floating Point Anomaly' });
     } else {
-      const val = generateChaosDate();
+      const dates = ['1970-01-01T00:00:00.000Z', '2038-01-19T03:14:07.000Z', '9999-12-31T23:59:59.999Z', '0000-00-00T00:00:00Z'];
+      const val = dates[Math.floor(Math.random() * dates.length)];
       setGeneratedChaos({ title: 'Epoch Edge Date / Y2038 Overflow', value: val, type: 'Timestamp Anomaly' });
     }
   };
