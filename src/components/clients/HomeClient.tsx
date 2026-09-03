@@ -135,9 +135,9 @@ export function HomeClient() {
               <span className="relative inline-flex rounded-full h-2 w-2 bg-rose-500" />
             </span>
             <span className="text-[var(--text-secondary)] font-semibold">v1.0.0</span>
-            <span className="text-[var(--border-dev)]">·</span>
-            <span className="text-rose-600 dark:text-rose-400 font-bold">Next.js 16</span>
-            <ArrowRight className="w-3 h-3 text-[var(--text-muted)]" />
+            {/* <span className="text-[var(--border-dev)]">·</span>
+            <span className="text-rose-600 dark:text-rose-400 font-bold">Next.js 16</span> */}
+            {/* <ArrowRight className="w-3 h-3 text-[var(--text-muted)]" /> */}
           </div>
 
           {/* Headline */}
