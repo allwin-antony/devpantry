@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useMemo, useEffect } from 'react';
+import Link from 'next/link';
 import { ALL_SERVICE_RESPONSES, type ServiceResponseItem } from '@/lib/datasetLoader';
 import { fillChaosPayload } from '@/utilities/chaos-data/chaosTemplateFiller';
 import { 
@@ -16,19 +17,124 @@ import {
   Sliders, 
   ShieldAlert,
   Terminal,
-  FileJson
+  FileJson,
+  Plus,
+  Trash2,
+  Save,
+  PenTool,
+  SlidersHorizontal,
+  Layers,
+  ArrowRight
 } from 'lucide-react';
+
+interface CustomTemplate {
+  id: string;
+  name: string;
+  category: string;
+  rawJson: string;
+  createdAt: number;
+}
+
+const DEFAULT_CUSTOM_JSON = `{
+  "event": "user.signup.completed",
+  "user": {
+    "id": "usr_998877",
+    "name": "Jane Developer",
+    "email": "jane.dev@startup.io",
+    "phone": "+1-555-0199",
+    "avatar_url": "https://images.example.com/avatar.png",
+    "age": 28,
+    "balance": 1500.50,
+    "is_verified": true,
+    "created_at": "2026-09-03T12:00:00Z"
+  },
+  "auth": {
+    "access_token": "tok_live_sec_8833992211aa",
+    "token_type": "Bearer",
+    "expires_in": 3600
+  },
+  "metadata": {
+    "ip_address": "192.168.1.1",
+    "user_agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7)"
+  }
+}`;
 
 export function ChaosTemplatesClient() {
   const [selectedServiceId, setSelectedServiceId] = useState<string>(ALL_SERVICE_RESPONSES[0].id);
+  const [isCustomMode, setIsCustomMode] = useState<boolean>(false);
   const [selectedCategory, setSelectedCategory] = useState<string>('All');
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [activeResponseKey, setActiveResponseKey] = useState<string>('');
   const [entropy, setEntropy] = useState<number>(75);
-  const [viewMode, setViewMode] = useState<'chaos' | 'clean' | 'typescript' | 'curl'>('chaos');
+  const [viewMode, setViewMode] = useState<'chaos' | 'clean' | 'typescript' | 'curl' | 'edit_custom'>('chaos');
   const [seed, setSeed] = useState<number>(0);
   const [simulatedStatus, setSimulatedStatus] = useState<number>(200);
   const [copiedCode, setCopiedCode] = useState<string | null>(null);
+
+  // Custom User Templates (stored in localStorage)
+  const [customTemplates, setCustomTemplates] = useState<CustomTemplate[]>([]);
+  const [activeCustomId, setActiveCustomId] = useState<string>('');
+  const [customTitle, setCustomTitle] = useState<string>('My Webhook Payload');
+  const [customRawJson, setCustomRawJson] = useState<string>(DEFAULT_CUSTOM_JSON);
+  const [jsonParseError, setJsonParseError] = useState<string | null>(null);
+
+  // Load custom templates on mount
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem('devplayground_custom_templates');
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          setCustomTemplates(parsed);
+          setActiveCustomId(parsed[0].id);
+          setCustomTitle(parsed[0].name);
+          setCustomRawJson(parsed[0].rawJson);
+        }
+      }
+    } catch {}
+  }, []);
+
+  // Save custom templates
+  const saveCustomTemplate = () => {
+    try {
+      JSON.parse(customRawJson); // validate
+      setJsonParseError(null);
+      const newTmpl: CustomTemplate = {
+        id: activeCustomId || `custom_${Date.now()}`,
+        name: customTitle || 'Untitled Custom Template',
+        category: 'Custom API',
+        rawJson: customRawJson,
+        createdAt: Date.now()
+      };
+
+      const updated = [newTmpl, ...customTemplates.filter(t => t.id !== newTmpl.id)];
+      setCustomTemplates(updated);
+      setActiveCustomId(newTmpl.id);
+      localStorage.setItem('devplayground_custom_templates', JSON.stringify(updated));
+      setViewMode('chaos');
+      setCopiedCode('saved');
+      setTimeout(() => setCopiedCode(null), 1500);
+    } catch (err: any) {
+      setJsonParseError(err.message || 'Invalid JSON syntax');
+    }
+  };
+
+  const deleteCustomTemplate = (id: string, e: React.MouseEvent) => {
+    e.stopPropagation();
+    const updated = customTemplates.filter(t => t.id !== id);
+    setCustomTemplates(updated);
+    localStorage.setItem('devplayground_custom_templates', JSON.stringify(updated));
+    if (activeCustomId === id) {
+      if (updated.length > 0) {
+        setActiveCustomId(updated[0].id);
+        setCustomTitle(updated[0].name);
+        setCustomRawJson(updated[0].rawJson);
+      } else {
+        setIsCustomMode(false);
+        setSelectedServiceId(ALL_SERVICE_RESPONSES[0].id);
+      }
+    }
+  };
 
   // Re-roll hotkey R
   useEffect(() => {
@@ -66,7 +172,6 @@ export function ChaosTemplatesClient() {
     return ALL_SERVICE_RESPONSES.find(s => s.id === selectedServiceId) || ALL_SERVICE_RESPONSES[0];
   }, [selectedServiceId]);
 
-  // Available responses in the selected service
   const responseKeys = useMemo(() => {
     if (!activeService.responses) return [];
     return Object.keys(activeService.responses);
@@ -78,10 +183,17 @@ export function ChaosTemplatesClient() {
 
   const activeResponseObj = activeService.responses?.[currentResponseKey];
 
-  // Clean original payload
+  // Clean original payload (built-in service or custom JSON)
   const cleanPayload = useMemo(() => {
+    if (isCustomMode) {
+      try {
+        return JSON.parse(customRawJson);
+      } catch {
+        return { error: "Invalid Custom JSON syntax" };
+      }
+    }
     return activeResponseObj?.payload || activeService.payload || { message: "Standard service payload" };
-  }, [activeResponseObj, activeService]);
+  }, [isCustomMode, customRawJson, activeResponseObj, activeService]);
 
   // Chaos-filled dirty payload generated by chaos engine
   const chaosPayload = useMemo(() => {
@@ -89,9 +201,9 @@ export function ChaosTemplatesClient() {
     if (simulatedStatus === 400) {
       return {
         type: "https://errors.api.io/bad-request",
-        title: "Bad Request — Schema Failure",
+        title: "Bad Request — Schema Validation Failure",
         status: 400,
-        detail: "The request payload failed validation against the chaos schema constraints.",
+        detail: "The payload failed validation against strict chaos schema constraints.",
         instance: `/requests/req_${Math.random().toString(36).substring(2, 9)}`,
         invalid_parameters: [
           { name: "token", reason: "Value contained zero-width Unicode injection" },
@@ -143,22 +255,23 @@ export function ChaosTemplatesClient() {
       return 'string';
     };
 
-    const typeName = activeService.service.replace(/[^a-zA-Z0-9]/g, '') + 'Fixture';
+    const titleStr = isCustomMode ? customTitle : activeService.service;
+    const typeName = titleStr.replace(/[^a-zA-Z0-9]/g, '') + 'Fixture';
     const fields = Object.entries(activeDisplayPayload)
       .map(([k, v]) => `  ${k}: ${inferType(v)};`)
       .join('\n');
 
     return `export interface ${typeName} {\n${fields}\n}\n\n// Chaos-Injected Test Fixture:\nexport const CHAOS_${typeName.toUpperCase()}: ${typeName} = ${JSON.stringify(activeDisplayPayload, null, 2)};`;
-  }, [activeDisplayPayload, activeService]);
+  }, [activeDisplayPayload, isCustomMode, customTitle, activeService]);
 
   // cURL generator
   const generatedCurl = useMemo(() => {
-    const endpointUrl = activeService.endpoints ? Object.values(activeService.endpoints)[0] : 'https://api.service.com/v1/endpoint';
+    const endpointUrl = isCustomMode ? 'https://api.myapp.com/v1/webhook' : (activeService.endpoints ? Object.values(activeService.endpoints)[0] : 'https://api.service.com/v1/endpoint');
     return `curl -X POST "${endpointUrl}" \\
   -H "Authorization: Bearer ${(chaosPayload.access_token || 'sample_chaos_token_' + Date.now()).slice(0, 32)}" \\
   -H "Content-Type: application/json" \\
-  -d '${JSON.stringify(chaosPayload).slice(0, 150)}...'`;
-  }, [activeService, chaosPayload]);
+  -d '${JSON.stringify(chaosPayload).slice(0, 160)}...'`;
+  }, [activeService, chaosPayload, isCustomMode]);
 
   const copyToClipboard = (text: string, id: string) => {
     navigator.clipboard.writeText(text);
@@ -174,53 +287,124 @@ export function ChaosTemplatesClient() {
 
   return (
     <div className="h-full flex flex-col md:flex-row p-3 overflow-hidden gap-3 font-mono">
-      {/* Left Sidebar: 17 Real Service Templates */}
+      {/* Left Sidebar: Templates & Custom Creator Button */}
       <div className="w-full md:w-80 bg-[var(--bg-panel)] border border-[var(--border-dev)] rounded-xl flex flex-col overflow-hidden shrink-0 shadow-sm transition-colors">
-        {/* Header & Search */}
+        {/* Top Header & Custom Creator Action Button */}
         <div className="p-3 border-b border-[var(--border-dev)] flex flex-col gap-2 bg-[var(--bg-panel-subtle)] shrink-0">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               <Flame className="w-4 h-4 text-rose-500" />
-              <span className="text-xs font-bold text-[var(--text-primary)] font-sans uppercase">API Chaos Templates</span>
+              <span className="text-xs font-bold text-[var(--text-primary)] font-sans uppercase">Chaos Templates</span>
             </div>
             <span className="text-[10px] px-1.5 py-0.2 rounded bg-[var(--pill-bg)] text-rose-500 font-bold">
-              17 Services
+              17 APIs + Custom
             </span>
           </div>
 
-          <div className="flex items-center gap-2">
+          {/* Prominent Custom Template Creator Button */}
+          <button
+            onClick={() => {
+              setIsCustomMode(true);
+              setViewMode('edit_custom');
+              setActiveCustomId('');
+              setCustomTitle('New Custom API Schema');
+              setCustomRawJson(DEFAULT_CUSTOM_JSON);
+            }}
+            className={`w-full py-2 px-3 rounded-lg text-xs font-bold flex items-center justify-center gap-2 transition-all cursor-pointer shadow-sm ${
+              isCustomMode
+                ? 'bg-rose-500 text-white shadow-rose-500/25 ring-2 ring-rose-500/40'
+                : 'bg-[var(--bg-sidebar)] border border-rose-500/40 text-rose-500 hover:bg-rose-500 hover:text-white'
+            }`}
+          >
+            <Plus className="w-3.5 h-3.5" />
+            <span>+ Create Custom Chaos Template</span>
+          </button>
+
+          {/* Quick link to Columnar Schema GUI */}
+          <Link
+            href="/chaos-data"
+            className="text-[11px] text-[var(--text-muted)] hover:text-[var(--text-primary)] flex items-center justify-between px-1 transition-colors"
+          >
+            <span>Need Columnar Tables GUI?</span>
+            <span className="text-cyan-500 flex items-center gap-0.5">
+              <span>Schema Studio</span>
+              <ArrowRight className="w-3 h-3" />
+            </span>
+          </Link>
+
+          <div className="flex items-center gap-2 pt-1">
             <Search className="w-3.5 h-3.5 text-[var(--text-muted)]" />
             <input
               type="text"
               value={searchQuery}
               onChange={e => setSearchQuery(e.target.value)}
-              placeholder="Search templates (Google, Stripe, Supabase...)"
+              placeholder="Search templates (Google, Stripe...)"
               className="dev-input flex-1 px-2 py-1 rounded text-xs"
             />
           </div>
-
-          <select
-            value={selectedCategory}
-            onChange={e => setSelectedCategory(e.target.value)}
-            className="dev-input px-2 py-1 rounded text-xs bg-[var(--bg-sidebar)]"
-          >
-            {categories.map(c => (
-              <option key={c.id} value={c.id}>{c.label}</option>
-            ))}
-          </select>
         </div>
 
         {/* Templates List */}
         <div className="flex-1 overflow-y-auto p-2 flex flex-col gap-1.5">
+          {/* Custom Templates Section */}
+          {customTemplates.length > 0 && (
+            <div className="mb-2 pb-2 border-b border-[var(--border-dev-subtle)]">
+              <div className="text-[10px] text-rose-500 font-bold px-2 py-1 uppercase tracking-wider flex items-center justify-between">
+                <span>My Custom Schemas ({customTemplates.length})</span>
+              </div>
+              {customTemplates.map(tmpl => {
+                const isSelected = isCustomMode && activeCustomId === tmpl.id;
+                return (
+                  <button
+                    key={tmpl.id}
+                    onClick={() => {
+                      setIsCustomMode(true);
+                      setActiveCustomId(tmpl.id);
+                      setCustomTitle(tmpl.name);
+                      setCustomRawJson(tmpl.rawJson);
+                      setViewMode('chaos');
+                    }}
+                    className={`w-full text-left p-2 rounded-lg border transition-all flex items-center justify-between gap-1 cursor-pointer my-0.5 ${
+                      isSelected 
+                        ? 'bg-[var(--bg-sidebar)] border-rose-500 shadow-sm' 
+                        : 'border-transparent hover:bg-[var(--bg-sidebar)]/60 text-[var(--text-secondary)]'
+                    }`}
+                  >
+                    <div className="truncate">
+                      <div className={`text-xs font-bold truncate ${isSelected ? 'text-rose-500' : 'text-[var(--text-primary)]'}`}>
+                        {tmpl.name}
+                      </div>
+                      <div className="text-[9px] text-[var(--text-muted)]">Custom Schema</div>
+                    </div>
+                    <button
+                      onClick={(e) => deleteCustomTemplate(tmpl.id, e)}
+                      title="Delete template"
+                      className="p-1 rounded text-[var(--text-muted)] hover:text-rose-500 hover:bg-rose-500/10 cursor-pointer"
+                    >
+                      <Trash2 className="w-3 h-3" />
+                    </button>
+                  </button>
+                );
+              })}
+            </div>
+          )}
+
+          {/* Built-in 17 Service Templates */}
+          <div className="text-[10px] text-[var(--text-muted)] font-bold px-2 py-0.5 uppercase tracking-wider">
+            <span>Production API Standards</span>
+          </div>
+
           {filteredServices.map(svc => {
-            const isSelected = svc.id === selectedServiceId;
+            const isSelected = !isCustomMode && svc.id === selectedServiceId;
             return (
               <button
                 key={svc.id}
                 onClick={() => {
+                  setIsCustomMode(false);
                   setSelectedServiceId(svc.id);
                   setActiveResponseKey('');
                   setSimulatedStatus(200);
+                  if (viewMode === 'edit_custom') setViewMode('chaos');
                 }}
                 className={`w-full text-left p-2.5 rounded-lg border transition-all flex flex-col gap-1 cursor-pointer ${
                   isSelected 
@@ -241,36 +425,60 @@ export function ChaosTemplatesClient() {
             );
           })}
         </div>
-
-        <div className="p-2 border-t border-[var(--border-dev)] text-[10px] text-[var(--text-muted)] text-center bg-[var(--bg-panel-subtle)]">
-          <strong>{filteredServices.length}</strong> real-world production schemas
-        </div>
       </div>
 
-      {/* Main Workbench: Chaos Template Generator */}
+      {/* Main Workbench */}
       <div className="flex-1 flex flex-col gap-3 min-w-0 overflow-hidden">
-        {/* Template Header & Sliders */}
+        {/* Top Control Bar */}
         <div className="bg-[var(--bg-panel)] border border-[var(--border-dev)] rounded-xl p-4 shrink-0 shadow-sm transition-colors flex flex-col gap-3">
           <div className="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-[var(--border-dev)]">
             <div>
-              <div className="flex items-center gap-2.5">
-                <h2 className="text-base font-bold text-[var(--text-primary)] font-sans">
-                  {activeService.service}
-                </h2>
-                <span className="text-[10px] px-2 py-0.5 rounded font-bold bg-[var(--pill-bg)] border border-[var(--border-dev)] text-[var(--text-muted)]">
-                  {activeService.provider}
-                </span>
-                <span className="text-[10px] px-2 py-0.5 rounded font-bold bg-rose-500/15 text-rose-500 border border-rose-500/30">
-                  Chaos Injected
-                </span>
-              </div>
+              {isCustomMode ? (
+                <div className="flex items-center gap-2">
+                  <input
+                    type="text"
+                    value={customTitle}
+                    onChange={e => setCustomTitle(e.target.value)}
+                    placeholder="Enter template name..."
+                    className="text-base font-bold text-[var(--text-primary)] font-sans bg-transparent border-b border-dashed border-rose-500 outline-none pb-0.5"
+                  />
+                  <span className="text-[10px] px-2 py-0.5 rounded font-bold bg-rose-500/15 text-rose-500 border border-rose-500/30">
+                    Custom Template Creator
+                  </span>
+                </div>
+              ) : (
+                <div className="flex items-center gap-2.5">
+                  <h2 className="text-base font-bold text-[var(--text-primary)] font-sans">
+                    {activeService.service}
+                  </h2>
+                  <span className="text-[10px] px-2 py-0.5 rounded font-bold bg-[var(--pill-bg)] border border-[var(--border-dev)] text-[var(--text-muted)]">
+                    {activeService.provider}
+                  </span>
+                  <span className="text-[10px] px-2 py-0.5 rounded font-bold bg-rose-500/15 text-rose-500 border border-rose-500/30">
+                    Chaos Injected
+                  </span>
+                </div>
+              )}
+
               <div className="text-xs text-[var(--text-secondary)] font-sans mt-0.5">
-                {activeResponseObj?.description || activeService.description || 'Production API response filled with high-entropy edge case test values.'}
+                {isCustomMode 
+                  ? 'Paste any JSON schema below. The engine will infer fields and inject high-entropy chaos edge cases.'
+                  : (activeResponseObj?.description || activeService.description || 'Production API response filled with high-entropy edge case test values.')}
               </div>
             </div>
 
-            {/* Re-roll and Links */}
+            {/* Actions: Save / Re-roll */}
             <div className="flex items-center gap-2">
+              {isCustomMode && (
+                <button
+                  onClick={saveCustomTemplate}
+                  className="px-3 py-1 text-xs font-bold rounded bg-emerald-500 text-white hover:bg-emerald-600 flex items-center gap-1.5 transition-colors shadow-sm cursor-pointer"
+                >
+                  <Save className="w-3.5 h-3.5" />
+                  <span>{copiedCode === 'saved' ? 'Saved!' : 'Save Template'}</span>
+                </button>
+              )}
+
               <button
                 onClick={() => setSeed(s => s + 1)}
                 className="px-3 py-1 text-xs font-bold rounded bg-rose-500 text-white hover:bg-rose-600 flex items-center gap-1.5 transition-colors shadow-sm shadow-rose-500/20 cursor-pointer"
@@ -279,25 +487,13 @@ export function ChaosTemplatesClient() {
                 <RefreshCw className="w-3.5 h-3.5" />
                 <span>Re-roll (R)</span>
               </button>
-
-              {activeService.documentation_url && (
-                <a
-                  href={activeService.documentation_url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="px-2.5 py-1 text-xs font-semibold rounded bg-[var(--bg-sidebar)] border border-[var(--border-dev)] text-[var(--text-primary)] hover:border-rose-500 flex items-center gap-1.5 transition-colors"
-                >
-                  <span>Docs</span>
-                  <ExternalLink className="w-3.5 h-3.5 text-rose-500" />
-                </a>
-              )}
             </div>
           </div>
 
-          {/* Chaos Sliders & Mode Switcher */}
+          {/* Sliders & Mode Switcher */}
           <div className="flex flex-wrap items-center justify-between gap-3 text-xs">
             <div className="flex flex-wrap items-center gap-3">
-              {/* Entropy Slider */}
+              {/* Chaos Entropy Slider */}
               <div className="flex items-center gap-1.5 bg-[var(--bg-sidebar)] px-2.5 py-1 rounded border border-[var(--border-dev)]">
                 <span className="text-[10px] text-[var(--text-muted)] flex items-center gap-1">
                   <Flame className="w-3 h-3 text-rose-500" />
@@ -313,29 +509,6 @@ export function ChaosTemplatesClient() {
                 />
                 <span className="text-[10px] font-bold text-rose-500 w-8 text-right">{entropy}%</span>
               </div>
-
-              {/* Response Sub-type Selector */}
-              {responseKeys.length > 1 && (
-                <div className="flex items-center gap-1 bg-[var(--bg-sidebar)] p-0.5 rounded border border-[var(--border-dev)]">
-                  <span className="text-[10px] text-[var(--text-muted)] px-1.5">RESPONSE:</span>
-                  {responseKeys.map(key => (
-                    <button
-                      key={key}
-                      onClick={() => {
-                        setActiveResponseKey(key);
-                        setSimulatedStatus(200);
-                      }}
-                      className={`px-2 py-0.5 rounded text-[11px] transition-colors cursor-pointer ${
-                        currentResponseKey === key
-                          ? 'bg-rose-500 text-white font-bold'
-                          : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
-                      }`}
-                    >
-                      {key.replace(/_/g, ' ')}
-                    </button>
-                  ))}
-                </div>
-              )}
 
               {/* Status Code Simulator */}
               <div className="flex items-center gap-1 bg-[var(--bg-sidebar)] p-0.5 rounded border border-[var(--border-dev)]">
@@ -356,9 +529,22 @@ export function ChaosTemplatesClient() {
               </div>
             </div>
 
-            {/* View Mode Switcher & Copy */}
+            {/* View Mode Switcher */}
             <div className="flex items-center gap-2">
               <div className="flex items-center gap-1 bg-[var(--bg-sidebar)] p-0.5 rounded border border-[var(--border-dev)]">
+                {isCustomMode && (
+                  <button
+                    onClick={() => setViewMode('edit_custom')}
+                    className={`px-2 py-0.5 rounded text-[11px] transition-colors cursor-pointer ${
+                      viewMode === 'edit_custom'
+                        ? 'bg-rose-500 text-white font-bold'
+                        : 'text-[var(--text-muted)] hover:text-[var(--text-primary)]'
+                    }`}
+                  >
+                    ✏️ Edit Schema
+                  </button>
+                )}
+
                 {(['chaos', 'clean', 'typescript', 'curl'] as const).map(mode => (
                   <button
                     key={mode}
@@ -391,38 +577,76 @@ export function ChaosTemplatesClient() {
           </div>
         </div>
 
-        {/* Output Code Viewer */}
+        {/* Editor or Viewer Body */}
         <div className="flex-1 min-h-0 bg-[var(--bg-panel)] border border-[var(--border-dev)] rounded-xl overflow-hidden flex flex-col shadow-sm">
-          <div className="px-4 py-2 border-b border-[var(--border-dev)] flex items-center justify-between text-xs bg-[var(--bg-panel-subtle)] shrink-0">
-            <div className="flex items-center gap-2">
-              <span className={`text-[10px] font-bold px-2 py-0.5 rounded border ${getStatusColor(simulatedStatus)}`}>
-                HTTP {simulatedStatus} {simulatedStatus === 200 ? 'OK' : simulatedStatus === 429 ? 'Rate Limited' : 'Error'}
-              </span>
-              <span className="text-[var(--text-muted)] text-[11px]">
-                mode: <strong className="text-rose-500">{viewMode}</strong>
-              </span>
+          {viewMode === 'edit_custom' ? (
+            <div className="flex-1 flex flex-col p-4 bg-[var(--bg-codebox)] gap-3">
+              <div className="flex items-center justify-between text-xs text-[var(--text-muted)] pb-2 border-b border-[var(--border-dev)]">
+                <span>Paste or write your JSON blueprint below:</span>
+                {jsonParseError && <span className="text-rose-500 font-bold">{jsonParseError}</span>}
+              </div>
+              <textarea
+                value={customRawJson}
+                onChange={e => {
+                  setCustomRawJson(e.target.value);
+                  try {
+                    JSON.parse(e.target.value);
+                    setJsonParseError(null);
+                  } catch (err: any) {
+                    setJsonParseError(err.message);
+                  }
+                }}
+                className="flex-1 w-full bg-transparent border-none outline-none font-mono text-xs text-[var(--text-code)] resize-none leading-relaxed"
+                placeholder="Paste your JSON schema here..."
+                spellCheck={false}
+              />
+              <div className="flex items-center justify-between pt-2 border-t border-[var(--border-dev)]">
+                <span className="text-[10px] text-[var(--text-muted)]">
+                  The chaos engine automatically recognizes keys like <code>email</code>, <code>name</code>, <code>url</code>, <code>token</code>, <code>price</code> and injects dirty values.
+                </span>
+                <button
+                  onClick={() => setViewMode('chaos')}
+                  className="px-4 py-1.5 rounded bg-rose-500 text-white text-xs font-bold hover:bg-rose-600 transition-colors flex items-center gap-1.5 cursor-pointer shadow-sm"
+                >
+                  <Flame className="w-3.5 h-3.5" />
+                  <span>Preview Chaos Payload</span>
+                </button>
+              </div>
             </div>
+          ) : (
+            <>
+              <div className="px-4 py-2 border-b border-[var(--border-dev)] flex items-center justify-between text-xs bg-[var(--bg-panel-subtle)] shrink-0">
+                <div className="flex items-center gap-2">
+                  <span className={`text-[10px] font-bold px-2 py-0.5 rounded border ${getStatusColor(simulatedStatus)}`}>
+                    HTTP {simulatedStatus} {simulatedStatus === 200 ? 'OK' : simulatedStatus === 429 ? 'Rate Limited' : 'Error'}
+                  </span>
+                  <span className="text-[var(--text-muted)] text-[11px]">
+                    mode: <strong className="text-rose-500">{viewMode}</strong>
+                  </span>
+                </div>
 
-            <div className="text-[11px] text-[var(--text-muted)]">
-              size: <strong className="text-cyan-500">{(new TextEncoder().encode(JSON.stringify(activeDisplayPayload)).length / 1024).toFixed(1)} KB</strong>
-            </div>
-          </div>
+                <div className="text-[11px] text-[var(--text-muted)]">
+                  size: <strong className="text-cyan-500">{(new TextEncoder().encode(JSON.stringify(activeDisplayPayload)).length / 1024).toFixed(1)} KB</strong>
+                </div>
+              </div>
 
-          <div className="flex-1 overflow-auto p-4 bg-[var(--bg-codebox)] font-mono text-xs leading-relaxed text-[var(--text-code)]">
-            {viewMode === 'typescript' ? (
-              <pre className="m-0 text-cyan-300">
-                <code>{generatedTypeScript}</code>
-              </pre>
-            ) : viewMode === 'curl' ? (
-              <pre className="m-0 text-emerald-400">
-                <code>{generatedCurl}</code>
-              </pre>
-            ) : (
-              <pre className="m-0">
-                <code>{JSON.stringify(activeDisplayPayload, null, 2)}</code>
-              </pre>
-            )}
-          </div>
+              <div className="flex-1 overflow-auto p-4 bg-[var(--bg-codebox)] font-mono text-xs leading-relaxed text-[var(--text-code)]">
+                {viewMode === 'typescript' ? (
+                  <pre className="m-0 text-cyan-300">
+                    <code>{generatedTypeScript}</code>
+                  </pre>
+                ) : viewMode === 'curl' ? (
+                  <pre className="m-0 text-emerald-400">
+                    <code>{generatedCurl}</code>
+                  </pre>
+                ) : (
+                  <pre className="m-0">
+                    <code>{JSON.stringify(activeDisplayPayload, null, 2)}</code>
+                  </pre>
+                )}
+              </div>
+            </>
+          )}
         </div>
       </div>
     </div>
