@@ -235,9 +235,67 @@ export function getAllFonts(): FontItem[] {
     });
   }
 
+  // Curated list of famous fonts prioritized at the top
+  const famousFontMap = new Map(FAMOUS_FONT_SLUGS.map((slug, idx) => [slug, idx]));
+
+  list.sort((a, b) => {
+    const aFamous = famousFontMap.has(a.slug) ? famousFontMap.get(a.slug)! : 999999;
+    const bFamous = famousFontMap.has(b.slug) ? famousFontMap.get(b.slug)! : 999999;
+    if (aFamous !== bFamous) return aFamous - bFamous;
+    return a.name.localeCompare(b.name);
+  });
+
   cachedFonts = list;
   return list;
 }
+
+export const FAMOUS_FONT_SLUGS = [
+  'inter',
+  'roboto',
+  'satoshi',
+  'jetbrains-mono',
+  'fira-code',
+  'clash-display',
+  'general-sans',
+  'cabinet-grotesk',
+  'poppins',
+  'montserrat',
+  'plus-jakarta-sans',
+  'manrope',
+  'space-grotesk',
+  'source-code-pro',
+  'open-sans',
+  'outfit',
+  'fira-sans',
+  'lato',
+  'be-vietnam-pro',
+  'dm-sans',
+  'syne',
+  'playfair-display',
+  'merriweather',
+  'hack',
+  'cascadia-code',
+  'orbitron',
+  'cinzel'
+];
+
+export const FAMOUS_ICON_PREFIXES = [
+  'lucide',
+  'tabler',
+  'material-symbols',
+  'material-symbols-light',
+  'heroicons',
+  'ph',
+  'simple-icons',
+  'bi',
+  'ri',
+  'feather',
+  'radix-icons',
+  'carbon',
+  'octicon',
+  'mingcute',
+  'iconoir'
+];
 
 export function getFontBySlug(slug: string): FontItem | undefined {
   const fonts = getAllFonts();
@@ -257,16 +315,31 @@ export function getAllIconLibraries(): IconLibraryItem[] {
   }));
 }
 
+let cachedCollections: IconCollectionItem[] | null = null;
+
 export function getAllIconCollections(): IconCollectionItem[] {
-  return iconCollectionsRaw as IconCollectionItem[];
+  if (cachedCollections) return cachedCollections;
+
+  const collections = [...(iconCollectionsRaw as IconCollectionItem[])];
+  const famousIconMap = new Map(FAMOUS_ICON_PREFIXES.map((prefix, idx) => [prefix, idx]));
+
+  collections.sort((a, b) => {
+    const aFamous = famousIconMap.has(a.prefix) ? famousIconMap.get(a.prefix)! : 999999;
+    const bFamous = famousIconMap.has(b.prefix) ? famousIconMap.get(b.prefix)! : 999999;
+    if (aFamous !== bFamous) return aFamous - bFamous;
+    return a.name.localeCompare(b.name);
+  });
+
+  cachedCollections = collections;
+  return collections;
 }
 
 export function getIconCollectionByPrefix(prefix: string): IconCollectionItem | undefined {
-  return (iconCollectionsRaw as IconCollectionItem[]).find(c => c.prefix === prefix);
+  return getAllIconCollections().find(c => c.prefix === prefix);
 }
 
 export function getAllIconPrefixes(): string[] {
-  return (iconCollectionsRaw as IconCollectionItem[]).map(c => c.prefix);
+  return getAllIconCollections().map(c => c.prefix);
 }
 
 export function getIconNpmPackages(): any {
