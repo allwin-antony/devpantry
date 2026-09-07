@@ -23,6 +23,8 @@ export interface ClaimDiagnostic {
   value: unknown;
   label: string;
   description: string;
+  hint?: string;
+  rfc?: string;
   isStandard: boolean;
   status?: 'normal' | 'expired' | 'future' | 'warning' | 'chaos';
   formattedTime?: string;

@@ -11,7 +11,6 @@ import {
   RefreshCw,
   Trash2,
   Clock,
-  Lock,
   Unlock,
   Sliders,
   Sparkles,
@@ -20,18 +19,28 @@ import {
   FileText,
   AlertTriangle,
   Zap,
+  Plus,
+  Lock,
+  Info,
+  HelpCircle,
+  X,
+  ChevronRight,
 } from 'lucide-react';
 import { parseJwt, buildCompactJwt } from '@/lib/jwt/codec';
-import { ParsedJwt } from '@/lib/jwt/types';
+import { ParsedJwt, ClaimDiagnostic } from '@/lib/jwt/types';
 import {
   expireTokenNow,
   expireTokenSoon,
+  renewTokenValid,
   injectClockSkewFuture,
   simulateAlgNone,
   corruptSignature,
   stripClaim,
   injectBlnsClaim,
   swapAlgorithmToHs256,
+  setCustomClaim,
+  CHAOS_EXPLOIT_HINTS,
+  ChaosExploitHint,
 } from '@/lib/jwt/chaos';
 import { signHmac, verifyHmac, generateTestRsaKeyPair, signRsa, SupportedHmacAlg } from '@/lib/jwt/crypto';
 import { getJwtPresets } from '@/lib/jwt/presets';
@@ -41,13 +50,23 @@ export const JwtInspectorClient: React.FC = () => {
   
   // 100% in-memory state — never stored in localStorage (safe for production tokens)
   const [rawToken, setRawToken] = useState<string>(presets[0].token);
-  const [activeTab, setActiveTab] = useState<'payload' | 'header' | 'crypto'>('payload');
+  const [activeTab, setActiveTab] = useState<'claims' | 'json' | 'crypto' | 'export'>('claims');
   const [copyFeedback, setCopyFeedback] = useState<string | null>(null);
   
+  // Active Interactive Hints on Click
+  const [selectedClaimKey, setSelectedClaimKey] = useState<string | null>('exp');
+  const [activeChaosHint, setActiveChaosHint] = useState<ChaosExploitHint | null>(null);
+  const [activePartHint, setActivePartHint] = useState<'header' | 'payload' | 'signature' | null>(null);
+
   // JSON Editor strings for two-way synchronization
   const [headerJsonDraft, setHeaderJsonDraft] = useState<string | null>(null);
   const [payloadJsonDraft, setPayloadJsonDraft] = useState<string | null>(null);
   const [jsonError, setJsonError] = useState<string | null>(null);
+
+  // New claim modal state
+  const [isAddingClaim, setIsAddingClaim] = useState<boolean>(false);
+  const [newClaimKey, setNewClaimKey] = useState<string>('');
+  const [newClaimValue, setNewClaimValue] = useState<string>('');
 
   // WebCrypto signing & verification state
   const [hmacSecret, setHmacSecret] = useState<string>(presets[0].sampleSecret || 'secret-key-123');
@@ -61,7 +80,7 @@ export const JwtInspectorClient: React.FC = () => {
     return parseJwt(rawToken);
   }, [rawToken]);
 
-  // Derived JSON editor strings: use active draft if user is editing, otherwise pretty-print parsed token
+  // Derived JSON editor strings
   const headerJsonStr = headerJsonDraft !== null 
     ? headerJsonDraft 
     : (parsed.isValidStructure ? JSON.stringify(parsed.header, null, 2) : '');
@@ -69,6 +88,12 @@ export const JwtInspectorClient: React.FC = () => {
   const payloadJsonStr = payloadJsonDraft !== null 
     ? payloadJsonDraft 
     : (parsed.isValidStructure ? JSON.stringify(parsed.payload, null, 2) : '');
+
+  // Selected claim object for the active hint drawer
+  const selectedClaim = useMemo<ClaimDiagnostic | null>(() => {
+    if (!selectedClaimKey) return parsed.diagnostics[0] || null;
+    return parsed.diagnostics.find(d => d.key === selectedClaimKey) || parsed.diagnostics[0] || null;
+  }, [parsed.diagnostics, selectedClaimKey]);
 
   // Live timer tick for seconds countdown
   const [, setTick] = useState(0);
@@ -123,15 +148,51 @@ export const JwtInspectorClient: React.FC = () => {
       }
       setVerifyResult(null);
       setRsaStatus(null);
+      setActiveChaosHint(null);
+      setSelectedClaimKey('exp');
     }
   };
 
-  // Chaos Mutations
-  const runChaosMutation = (action: () => string, label: string) => {
+  // Chaos Mutations with auto-activated Hint Drawer
+  const runChaosMutation = (action: () => string, label: string, hintId?: string) => {
     const updated = action();
     setRawToken(updated);
     setVerifyResult(null);
     triggerCopy(updated, `⚡ ${label}`);
+    if (hintId && CHAOS_EXPLOIT_HINTS[hintId]) {
+      setActiveChaosHint(CHAOS_EXPLOIT_HINTS[hintId]);
+    }
+  };
+
+  // Add custom claim
+  const handleAddCustomClaim = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!newClaimKey.trim()) return;
+
+    let finalVal: unknown = newClaimValue;
+    try {
+      finalVal = JSON.parse(newClaimValue);
+    } catch {
+      // String fallback
+    }
+
+    const updated = setCustomClaim(parsed, newClaimKey.trim(), finalVal);
+    setRawToken(updated);
+    setSelectedClaimKey(newClaimKey.trim());
+    setNewClaimKey('');
+    setNewClaimValue('');
+    setIsAddingClaim(false);
+    triggerCopy(updated, `Added claim: ${newClaimKey}`);
+  };
+
+  // Delete claim
+  const handleDeleteClaim = (claimKey: string) => {
+    const updated = stripClaim(parsed, claimKey);
+    setRawToken(updated);
+    if (selectedClaimKey === claimKey) {
+      setSelectedClaimKey(null);
+    }
+    triggerCopy(updated, `Stripped claim: ${claimKey}`);
   };
 
   // Cryptographic Verification
@@ -198,24 +259,43 @@ export const JwtInspectorClient: React.FC = () => {
   }, [parsed]);
 
   return (
-    <div className="w-full min-h-[calc(100vh-3rem)] bg-[var(--bg-app)] text-[var(--text-primary)] flex flex-col font-sans">
-      {/* Top Banner: 100% In-Memory Sandbox Guarantee */}
-      <div className="bg-[var(--bg-panel)] border-b border-[var(--border-dev)] px-4 py-2 flex flex-wrap items-center justify-between gap-3 text-xs">
+    <div className="w-full min-h-[calc(100vh-3rem)] bg-[var(--bg-app)] text-[var(--text-primary)] flex flex-col font-sans transition-colors">
+      
+      {/* 1. Studio Top Command Bar */}
+      <div className="bg-[var(--bg-panel)] border-b border-[var(--border-dev)] px-4 py-2 flex flex-wrap items-center justify-between gap-3 text-xs shrink-0 z-20">
+        
+        {/* Left: Security Sandbox Guarantee Badge */}
         <div className="flex items-center gap-2">
           <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-          <span className="font-semibold text-emerald-500 flex items-center gap-1">
-            <ShieldCheck className="w-3.5 h-3.5" /> 100% Client-Side In-Memory Sandbox
-          </span>
-          <span className="text-[var(--text-muted)] hidden sm:inline">|</span>
-          <span className="text-[var(--text-secondary)] hidden sm:inline">
-            Zero network transmission. Pasted tokens never leave your browser.
+          <div className="flex items-center gap-1.5 font-mono text-[11px] text-emerald-600 dark:text-emerald-400 font-semibold">
+            <ShieldCheck className="w-3.5 h-3.5" /> 100% IN-MEMORY SANDBOX
+          </div>
+          <span className="text-[var(--text-muted)] hidden sm:inline">•</span>
+          <span className="text-[var(--text-secondary)] hidden sm:inline text-[11px]">
+            Zero network requests. Safe for enterprise &amp; production tokens.
           </span>
         </div>
 
-        {/* Quick Actions & Clear */}
+        {/* Center: Presets Quick Bar */}
+        <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar py-0.5">
+          <span className="text-[11px] font-mono text-[var(--text-muted)] flex items-center gap-1 mr-1">
+            <Key className="w-3 h-3 text-rose-500" /> Presets:
+          </span>
+          {presets.map(p => (
+            <button
+              key={p.id}
+              onClick={() => handleSelectPreset(p.id)}
+              className="px-2.5 py-1 rounded-md text-[11px] font-mono bg-[var(--bg-sidebar)] hover:bg-[var(--pill-bg)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] border border-[var(--border-dev)] hover:border-rose-500/40 transition-colors whitespace-nowrap cursor-pointer shadow-2xs"
+            >
+              {p.name}
+            </button>
+          ))}
+        </div>
+
+        {/* Right: Quick Action Buttons & Feedback */}
         <div className="flex items-center gap-2">
           {copyFeedback && (
-            <span className="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 text-[11px] font-mono animate-fade-in flex items-center gap-1">
+            <span className="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30 text-[11px] font-mono flex items-center gap-1 animate-fade-in">
               <Check className="w-3 h-3" /> {copyFeedback}
             </span>
           )}
@@ -224,172 +304,259 @@ export const JwtInspectorClient: React.FC = () => {
               setRawToken('');
               setVerifyResult(null);
               setRsaStatus(null);
+              setActiveChaosHint(null);
+              setSelectedClaimKey(null);
             }}
-            className="px-2.5 py-1 rounded bg-[var(--bg-panel-subtle)] hover:bg-rose-500/20 text-[var(--text-secondary)] hover:text-rose-400 border border-[var(--border-dev)] hover:border-rose-500/30 transition-colors flex items-center gap-1 cursor-pointer font-mono"
-            title="Clear current token from memory"
+            className="px-2.5 py-1 rounded-md bg-[var(--bg-sidebar)] hover:bg-rose-500/20 text-[var(--text-secondary)] hover:text-rose-500 border border-[var(--border-dev)] hover:border-rose-500/30 transition-colors flex items-center gap-1 cursor-pointer font-mono text-[11px]"
+            title="Purge token from browser memory"
           >
             <Trash2 className="w-3 h-3" /> Clear
           </button>
         </div>
       </div>
 
-      {/* Preset Selector Pill Bar */}
-      <div className="bg-[var(--bg-sidebar)] border-b border-[var(--border-dev)] px-4 py-2.5 flex items-center justify-between gap-3 flex-wrap">
-        <div className="flex items-center gap-2">
-          <span className="text-xs font-mono text-[var(--text-muted)] flex items-center gap-1">
-            <Key className="w-3.5 h-3.5 text-rose-500" /> Presets:
-          </span>
-          <div className="flex flex-wrap items-center gap-1.5">
-            {presets.map(p => (
-              <button
-                key={p.id}
-                onClick={() => handleSelectPreset(p.id)}
-                className="px-2.5 py-1 rounded text-xs font-mono bg-[var(--bg-panel)] hover:bg-[var(--pill-bg)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] border border-[var(--border-dev)] hover:border-rose-500/40 transition-colors cursor-pointer"
-              >
-                {p.name}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        <div className="text-[11px] font-mono text-[var(--text-muted)] flex items-center gap-2">
-          <span className="px-1.5 py-0.5 rounded bg-[var(--bg-panel)] border border-[var(--border-dev)]">
-            UTC: {new Date().toISOString().slice(11, 19)}
-          </span>
-        </div>
-      </div>
-
-      {/* Main Studio Grid */}
-      <div className="flex-1 grid grid-cols-1 lg:grid-cols-12 gap-0 overflow-hidden">
+      {/* 2. Main Studio Workspace (2 Columns) */}
+      <div className="flex-1 grid grid-cols-1 lg:grid-cols-12 gap-0 overflow-y-auto lg:overflow-hidden">
         
-        {/* Left Column: Compact Token Input & Live Status Radar (5 cols) */}
-        <div className="lg:col-span-5 border-r border-[var(--border-dev)] flex flex-col bg-[var(--bg-panel)] overflow-y-auto">
-          {/* Section Header */}
-          <div className="p-3 border-b border-[var(--border-dev)] flex items-center justify-between bg-[var(--bg-panel-subtle)]">
-            <div className="flex items-center gap-2">
-              <Code2 className="w-4 h-4 text-rose-500" />
-              <h2 className="font-semibold text-xs uppercase tracking-wider font-mono">
-                Encoded JWT (Compact Token)
-              </h2>
+        {/* ============================================================ */}
+        {/* LEFT COLUMN: Visual Token Terminal & Expiry Radar (5 Cols)   */}
+        {/* ============================================================ */}
+        <div className="lg:col-span-5 border-r border-[var(--border-dev)] flex flex-col bg-[var(--bg-panel)] overflow-y-auto p-4 gap-4">
+          
+          {/* Card 1: Encoded Token (Compact JWT) */}
+          <div className="rounded-xl border border-[var(--border-dev)] bg-[var(--bg-panel-subtle)] p-3.5 flex flex-col gap-2.5 shadow-2xs">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-1.5 font-mono text-xs font-bold text-[var(--text-primary)] uppercase tracking-wider">
+                <Code2 className="w-4 h-4 text-rose-500" />
+                Encoded Token (Compact)
+              </div>
+              <div className="flex items-center gap-2 text-[11px] font-mono text-[var(--text-muted)]">
+                <span>{rawToken.trim().length} bytes</span>
+                <button
+                  onClick={() => triggerCopy(rawToken, 'Raw Token Copied')}
+                  className="p-1 rounded hover:bg-[var(--pill-bg)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors cursor-pointer"
+                  title="Copy Raw Token"
+                >
+                  <Copy className="w-3.5 h-3.5" />
+                </button>
+              </div>
             </div>
-            <button
-              onClick={() => triggerCopy(rawToken, 'Raw JWT Copied')}
-              className="p-1 rounded text-[var(--text-muted)] hover:text-[var(--text-primary)] hover:bg-[var(--pill-bg)] transition-colors cursor-pointer"
-              title="Copy Raw Compact JWT"
-            >
-              <Copy className="w-3.5 h-3.5" />
-            </button>
-          </div>
 
-          {/* Raw Input Textarea */}
-          <div className="p-3">
-            <label className="block text-[11px] font-mono text-[var(--text-muted)] mb-1">
-              Paste token here or select a preset:
-            </label>
+            {/* Textarea */}
             <textarea
               value={rawToken}
               onChange={e => setRawToken(e.target.value)}
-              placeholder="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
-              rows={5}
-              className="w-full p-2.5 rounded-lg bg-[var(--bg-codebox)] border border-[var(--border-dev)] text-[var(--text-code)] font-mono text-xs focus:outline-none focus:border-rose-500/80 resize-none transition-colors"
+              placeholder="Paste JWT here (header.payload.signature)..."
+              rows={4}
+              className="w-full p-2.5 rounded-lg bg-[var(--bg-app)] border border-[var(--border-dev)] text-[var(--text-primary)] font-mono text-xs focus:outline-none focus:border-rose-500/80 resize-none transition-colors leading-relaxed selection:bg-rose-500/30"
               spellCheck={false}
             />
-          </div>
 
-          {/* Color-Coded Token Anatomy Breakdown */}
-          {parsed.isValidStructure ? (
-            <div className="px-3 pb-3">
-              <div className="p-3 rounded-lg bg-[var(--bg-panel-subtle)] border border-[var(--border-dev)] font-mono text-xs break-all leading-relaxed">
-                <span className="text-rose-500 font-bold" title="Header (Algorithm & Type)">
-                  {parsed.headerB64}
-                </span>
-                <span className="text-[var(--text-muted)] font-bold">.</span>
-                <span className="text-purple-400 font-bold" title="Payload (Claims Data)">
-                  {parsed.payloadB64}
-                </span>
-                <span className="text-[var(--text-muted)] font-bold">.</span>
-                <span
-                  className={parsed.hasSignature ? 'text-cyan-400 font-bold' : 'text-amber-500 italic'}
-                  title={parsed.hasSignature ? 'Signature' : 'Unsigned / Signature Stripped'}
-                >
-                  {parsed.signatureB64 || '(empty signature)'}
-                </span>
-              </div>
-              <div className="flex items-center gap-3 mt-2 text-[10px] font-mono text-[var(--text-muted)]">
-                <span className="flex items-center gap-1">
-                  <span className="w-2 h-2 rounded-full bg-rose-500" /> Header
-                </span>
-                <span className="flex items-center gap-1">
-                  <span className="w-2 h-2 rounded-full bg-purple-400" /> Payload
-                </span>
-                <span className="flex items-center gap-1">
-                  <span className="w-2 h-2 rounded-full bg-cyan-400" /> Signature
-                </span>
-              </div>
-            </div>
-          ) : (
-            parsed.error && (
-              <div className="px-3 pb-3">
-                <div className="p-3 rounded-lg bg-rose-500/10 border border-rose-500/20 text-rose-400 text-xs font-mono flex items-start gap-2">
-                  <AlertTriangle className="w-4 h-4 shrink-0 mt-0.5" />
-                  <div>
-                    <div className="font-bold">Token Parsing Error</div>
-                    <div className="text-[11px] opacity-90 mt-0.5">{parsed.error}</div>
+            {/* 3-Part Colorized Anatomy Chips (Click to view hint) */}
+            {parsed.isValidStructure ? (
+              <div className="flex flex-col gap-2 pt-1 border-t border-[var(--border-dev)]">
+                <div className="flex items-center justify-between">
+                  <span className="text-[10px] font-mono font-bold text-[var(--text-muted)] uppercase tracking-wider">
+                    Click part to inspect hint:
+                  </span>
+                  <span className="text-[10px] font-mono text-[var(--text-muted)]">
+                    3 dot-separated segments
+                  </span>
+                </div>
+
+                <div className="grid grid-cols-1 gap-1.5 text-xs font-mono">
+                  
+                  {/* Header Part */}
+                  <div
+                    onClick={() => setActivePartHint(activePartHint === 'header' ? null : 'header')}
+                    className={`p-2 rounded-lg border transition-all cursor-pointer flex items-center justify-between gap-2 ${
+                      activePartHint === 'header'
+                        ? 'bg-rose-500/15 border-rose-500/50 shadow-xs'
+                        : 'bg-rose-500/10 border-rose-500/25 hover:border-rose-500/40'
+                    }`}
+                  >
+                    <div className="flex items-center gap-2 min-w-0">
+                      <span className="w-2 h-2 rounded-full bg-rose-500 shrink-0" />
+                      <span className="font-bold text-rose-600 dark:text-rose-400 shrink-0">Header:</span>
+                      <span className="truncate text-rose-500/90 text-[11px]" title={parsed.headerB64}>
+                        {parsed.headerB64}
+                      </span>
+                    </div>
+                    <div className="flex items-center gap-1.5 shrink-0">
+                      <span className="px-1.5 py-0.2 rounded bg-rose-500/20 text-rose-600 dark:text-rose-300 text-[10px] font-bold">
+                        {parsed.header.alg}
+                      </span>
+                      <span className="text-[10px] text-rose-400">ℹ️ Hint</span>
+                    </div>
                   </div>
+
+                  {/* Header Hint Drawer */}
+                  {activePartHint === 'header' && (
+                    <div className="p-2.5 rounded-lg bg-rose-500/10 border border-rose-500/30 text-xs font-mono text-rose-600 dark:text-rose-300 flex flex-col gap-1 animate-fade-in">
+                      <div className="font-bold flex items-center gap-1">
+                        <Info className="w-3.5 h-3.5" /> Header Segment (JOSE Header):
+                      </div>
+                      <p className="text-[11px] leading-relaxed text-[var(--text-secondary)]">
+                        Base64URL-encoded JSON specifying the cryptographic signing algorithm (<code>alg: &quot;{parsed.header.alg}&quot;</code>) and token format (<code>typ: &quot;{parsed.header.typ || 'JWT'}&quot;</code>). Key Hint (<code>kid</code>) is optional for JWKS matching.
+                      </p>
+                    </div>
+                  )}
+
+                  {/* Payload Part */}
+                  <div
+                    onClick={() => setActivePartHint(activePartHint === 'payload' ? null : 'payload')}
+                    className={`p-2 rounded-lg border transition-all cursor-pointer flex items-center justify-between gap-2 ${
+                      activePartHint === 'payload'
+                        ? 'bg-purple-500/15 border-purple-500/50 shadow-xs'
+                        : 'bg-purple-500/10 border-purple-500/25 hover:border-purple-500/40'
+                    }`}
+                  >
+                    <div className="flex items-center gap-2 min-w-0">
+                      <span className="w-2 h-2 rounded-full bg-purple-500 shrink-0" />
+                      <span className="font-bold text-purple-600 dark:text-purple-400 shrink-0">Payload:</span>
+                      <span className="truncate text-purple-500/90 text-[11px]" title={parsed.payloadB64}>
+                        {parsed.payloadB64}
+                      </span>
+                    </div>
+                    <div className="flex items-center gap-1.5 shrink-0">
+                      <span className="px-1.5 py-0.2 rounded bg-purple-500/20 text-purple-600 dark:text-purple-300 text-[10px] font-bold">
+                        {parsed.diagnostics.length} claims
+                      </span>
+                      <span className="text-[10px] text-purple-400">ℹ️ Hint</span>
+                    </div>
+                  </div>
+
+                  {/* Payload Hint Drawer */}
+                  {activePartHint === 'payload' && (
+                    <div className="p-2.5 rounded-lg bg-purple-500/10 border border-purple-500/30 text-xs font-mono text-purple-600 dark:text-purple-300 flex flex-col gap-1 animate-fade-in">
+                      <div className="font-bold flex items-center gap-1">
+                        <Info className="w-3.5 h-3.5" /> Payload Segment (JWT Claims):
+                      </div>
+                      <p className="text-[11px] leading-relaxed text-[var(--text-secondary)]">
+                        Base64URL-encoded claims containing identity assertions (<code>sub</code>, <code>email</code>, <code>roles</code>) and timestamps (<code>exp</code>, <code>iat</code>, <code>nbf</code>). Anyone with access to the token can read this data without a key. Never store raw passwords or sensitive PII here!
+                      </p>
+                    </div>
+                  )}
+
+                  {/* Signature Part */}
+                  <div
+                    onClick={() => setActivePartHint(activePartHint === 'signature' ? null : 'signature')}
+                    className={`p-2 rounded-lg border transition-all cursor-pointer flex items-center justify-between gap-2 ${
+                      activePartHint === 'signature'
+                        ? 'bg-cyan-500/15 border-cyan-500/50 shadow-xs'
+                        : 'bg-cyan-500/10 border-cyan-500/25 hover:border-cyan-500/40'
+                    }`}
+                  >
+                    <div className="flex items-center gap-2 min-w-0">
+                      <span className="w-2 h-2 rounded-full bg-cyan-500 shrink-0" />
+                      <span className="font-bold text-cyan-600 dark:text-cyan-400 shrink-0">Signature:</span>
+                      <span className="truncate text-cyan-500/90 text-[11px]" title={parsed.signatureB64 || '(none)'}>
+                        {parsed.signatureB64 || '(unsigned / signature stripped)'}
+                      </span>
+                    </div>
+                    <div className="flex items-center gap-1.5 shrink-0">
+                      <span
+                        className={`px-1.5 py-0.2 rounded text-[10px] font-bold ${
+                          parsed.hasSignature
+                            ? 'bg-cyan-500/20 text-cyan-600 dark:text-cyan-300'
+                            : 'bg-amber-500/20 text-amber-600 dark:text-amber-300'
+                        }`}
+                      >
+                        {parsed.hasSignature ? 'Present' : 'None'}
+                      </span>
+                      <span className="text-[10px] text-cyan-400">ℹ️ Hint</span>
+                    </div>
+                  </div>
+
+                  {/* Signature Hint Drawer */}
+                  {activePartHint === 'signature' && (
+                    <div className="p-2.5 rounded-lg bg-cyan-500/10 border border-cyan-500/30 text-xs font-mono text-cyan-600 dark:text-cyan-300 flex flex-col gap-1 animate-fade-in">
+                      <div className="font-bold flex items-center gap-1">
+                        <Info className="w-3.5 h-3.5" /> Signature Segment:
+                      </div>
+                      <p className="text-[11px] leading-relaxed text-[var(--text-secondary)]">
+                        Cryptographic signature generated by computing <code>algorithm(base64Url(header) + &quot;.&quot; + base64Url(payload), secretKey)</code>. Guarantees that neither the header nor payload was tampered with in transit.
+                      </p>
+                    </div>
+                  )}
+
                 </div>
               </div>
-            )
-          )}
+            ) : (
+              parsed.error && (
+                <div className="p-2.5 rounded-lg bg-rose-500/10 border border-rose-500/30 text-rose-500 text-xs font-mono flex items-start gap-2">
+                  <AlertTriangle className="w-4 h-4 shrink-0 mt-0.5" />
+                  <div>
+                    <div className="font-bold">Format Error:</div>
+                    <div className="text-[11px] opacity-90">{parsed.error}</div>
+                  </div>
+                </div>
+              )
+            )}
+          </div>
 
-          {/* Live Diagnostic Radar Card */}
-          <div className="p-3 m-3 rounded-xl bg-[var(--bg-panel-subtle)] border border-[var(--border-dev)] flex flex-col gap-3">
+          {/* Card 2: Live Expiry Radar & Timeline */}
+          <div className="rounded-xl border border-[var(--border-dev)] bg-[var(--bg-panel-subtle)] p-3.5 flex flex-col gap-3 shadow-2xs">
+            
+            {/* Status Radar Header */}
             <div className="flex items-center justify-between">
-              <span className="text-xs font-mono text-[var(--text-muted)] uppercase tracking-wider">
-                Status Radar
+              <span className="text-xs font-mono font-bold uppercase tracking-wider text-[var(--text-muted)] flex items-center gap-1.5">
+                <Clock className="w-3.5 h-3.5 text-rose-500" />
+                Live Status Radar
               </span>
+
               {parsed.status === 'valid' && (
-                <span className="px-2 py-0.5 rounded-full text-[11px] font-mono font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 flex items-center gap-1">
-                  <Check className="w-3 h-3" /> ACTIVE & VALID
+                <span className="px-2.5 py-0.5 rounded-full text-[11px] font-mono font-bold bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30 flex items-center gap-1">
+                  <Check className="w-3 h-3" /> ACTIVE &amp; VALID
                 </span>
               )}
               {parsed.status === 'expired' && (
-                <span className="px-2 py-0.5 rounded-full text-[11px] font-mono font-bold bg-rose-500/20 text-rose-400 border border-rose-500/30 flex items-center gap-1">
-                  <Clock className="w-3 h-3" /> EXPIRED
+                <span className="px-2.5 py-0.5 rounded-full text-[11px] font-mono font-bold bg-rose-500/15 text-rose-600 dark:text-rose-400 border border-rose-500/30 flex items-center gap-1">
+                  <Clock className="w-3 h-3" /> EXPIRED TOKEN
                 </span>
               )}
               {parsed.status === 'premature' && (
-                <span className="px-2 py-0.5 rounded-full text-[11px] font-mono font-bold bg-amber-500/20 text-amber-400 border border-amber-500/30 flex items-center gap-1">
+                <span className="px-2.5 py-0.5 rounded-full text-[11px] font-mono font-bold bg-amber-500/15 text-amber-600 dark:text-amber-400 border border-amber-500/30 flex items-center gap-1">
                   <Clock className="w-3 h-3" /> NOT YET VALID (nbf)
                 </span>
               )}
               {parsed.status === 'alg_none' && (
-                <span className="px-2 py-0.5 rounded-full text-[11px] font-mono font-bold bg-amber-500/20 text-amber-400 border border-amber-500/30 flex items-center gap-1">
-                  <ShieldAlert className="w-3 h-3" /> ALG: NONE (INSECURE)
+                <span className="px-2.5 py-0.5 rounded-full text-[11px] font-mono font-bold bg-purple-500/15 text-purple-600 dark:text-purple-400 border border-purple-500/30 flex items-center gap-1">
+                  <ShieldAlert className="w-3 h-3" /> ALG: NONE (EXPLOIT)
                 </span>
               )}
               {parsed.status === 'malformed' && (
-                <span className="px-2 py-0.5 rounded-full text-[11px] font-mono text-[var(--text-muted)] border border-[var(--border-dev)]">
+                <span className="px-2.5 py-0.5 rounded-full text-[11px] font-mono text-[var(--text-muted)] border border-[var(--border-dev)]">
                   WAITING FOR INPUT
                 </span>
               )}
             </div>
 
-            <div className="text-xs font-mono font-bold text-[var(--text-primary)]">
+            {/* Main Status Message */}
+            <div className="p-2.5 rounded-lg bg-[var(--bg-panel)] border border-[var(--border-dev)] font-mono text-xs font-semibold text-[var(--text-primary)]">
               {parsed.statusMessage}
             </div>
 
-            {/* Countdown Progress Bar */}
+            {/* Lifetime Timeline Gauge */}
             {parsed.secondsRemaining !== null && (
-              <div className="flex flex-col gap-1.5">
-                <div className="flex items-center justify-between text-[11px] font-mono text-[var(--text-muted)]">
-                  <span>Token Lifetime Remaining</span>
-                  <span className="font-bold text-[var(--text-primary)]">
+              <div className="flex flex-col gap-2 p-2.5 rounded-lg bg-[var(--bg-panel)] border border-[var(--border-dev)] font-mono">
+                <div className="flex items-center justify-between text-[11px]">
+                  <span className="text-[var(--text-secondary)]">Lifetime Countdown:</span>
+                  <span
+                    className={`font-bold ${
+                      parsed.secondsRemaining > 0
+                        ? 'text-emerald-600 dark:text-emerald-400'
+                        : 'text-rose-600 dark:text-rose-400'
+                    }`}
+                  >
                     {parsed.secondsRemaining > 0
-                      ? `${Math.floor(parsed.secondsRemaining / 60)}m ${parsed.secondsRemaining % 60}s`
-                      : '0s (Expired)'}
+                      ? `${Math.floor(parsed.secondsRemaining / 60)}m ${parsed.secondsRemaining % 60}s remaining`
+                      : 'Expired'}
                   </span>
                 </div>
-                <div className="w-full h-2 rounded-full bg-[var(--border-dev)] overflow-hidden">
+
+                {/* Progress Bar */}
+                <div className="w-full h-2.5 rounded-full bg-[var(--border-dev)] overflow-hidden">
                   <div
                     className={`h-full transition-all duration-1000 ${
                       parsed.secondsRemaining <= 0
@@ -401,421 +568,691 @@ export const JwtInspectorClient: React.FC = () => {
                     style={{ width: `${Math.max(0, Math.min(100, parsed.percentRemaining ?? 0))}%` }}
                   />
                 </div>
+
+                {/* Issued / Expiry timestamps */}
+                <div className="flex items-center justify-between text-[10px] text-[var(--text-muted)] pt-1">
+                  <span>
+                    iat: {parsed.payload.iat ? new Date(parsed.payload.iat * 1000).toLocaleTimeString() : 'N/A'}
+                  </span>
+                  <span>
+                    exp: {parsed.payload.exp ? new Date(parsed.payload.exp * 1000).toLocaleTimeString() : 'N/A'}
+                  </span>
+                </div>
               </div>
             )}
 
-            {/* Quick Metadata Specs */}
-            <div className="grid grid-cols-2 gap-2 pt-2 border-t border-[var(--border-dev)] text-[11px] font-mono">
-              <div>
-                <span className="text-[var(--text-muted)]">Algorithm (alg):</span>{' '}
-                <span className="font-bold text-rose-400">{parsed.header.alg || 'N/A'}</span>
+            {/* Standard Claims Metadata Grid */}
+            <div className="grid grid-cols-2 gap-2 text-xs font-mono pt-1">
+              <div
+                onClick={() => setSelectedClaimKey('iss')}
+                className={`p-2 rounded bg-[var(--bg-panel)] border transition-colors cursor-pointer ${
+                  selectedClaimKey === 'iss' ? 'border-purple-500/50' : 'border-[var(--border-dev)]'
+                }`}
+              >
+                <div className="text-[10px] text-[var(--text-muted)] uppercase flex items-center justify-between">
+                  <span>Issuer (iss)</span>
+                  <span className="text-purple-400 text-[9px]">Hint</span>
+                </div>
+                <div className="font-bold truncate text-[var(--text-primary)]" title={String(parsed.payload.iss || 'None')}>
+                  {parsed.payload.iss ? String(parsed.payload.iss) : 'None'}
+                </div>
               </div>
-              <div>
-                <span className="text-[var(--text-muted)]">Type (typ):</span>{' '}
-                <span className="font-bold text-[var(--text-primary)]">{parsed.header.typ || 'JWT'}</span>
+
+              <div
+                onClick={() => setSelectedClaimKey('sub')}
+                className={`p-2 rounded bg-[var(--bg-panel)] border transition-colors cursor-pointer ${
+                  selectedClaimKey === 'sub' ? 'border-purple-500/50' : 'border-[var(--border-dev)]'
+                }`}
+              >
+                <div className="text-[10px] text-[var(--text-muted)] uppercase flex items-center justify-between">
+                  <span>Subject (sub)</span>
+                  <span className="text-purple-400 text-[9px]">Hint</span>
+                </div>
+                <div className="font-bold truncate text-[var(--text-primary)]" title={String(parsed.payload.sub || 'None')}>
+                  {parsed.payload.sub ? String(parsed.payload.sub) : 'None'}
+                </div>
               </div>
-              <div>
-                <span className="text-[var(--text-muted)]">Key ID (kid):</span>{' '}
-                <span className="font-bold text-[var(--text-secondary)]">{parsed.header.kid || 'None'}</span>
+
+              <div
+                onClick={() => setSelectedClaimKey('aud')}
+                className={`p-2 rounded bg-[var(--bg-panel)] border transition-colors cursor-pointer ${
+                  selectedClaimKey === 'aud' ? 'border-purple-500/50' : 'border-[var(--border-dev)]'
+                }`}
+              >
+                <div className="text-[10px] text-[var(--text-muted)] uppercase flex items-center justify-between">
+                  <span>Audience (aud)</span>
+                  <span className="text-purple-400 text-[9px]">Hint</span>
+                </div>
+                <div className="font-bold truncate text-[var(--text-primary)]" title={String(parsed.payload.aud || 'None')}>
+                  {parsed.payload.aud ? String(parsed.payload.aud) : 'None'}
+                </div>
               </div>
-              <div>
-                <span className="text-[var(--text-muted)]">Signature:</span>{' '}
-                <span className={parsed.hasSignature ? 'text-emerald-400 font-bold' : 'text-amber-400 font-bold'}>
-                  {parsed.hasSignature ? 'Present' : 'None'}
-                </span>
+
+              <div
+                onClick={() => setSelectedClaimKey('exp')}
+                className={`p-2 rounded bg-[var(--bg-panel)] border transition-colors cursor-pointer ${
+                  selectedClaimKey === 'exp' ? 'border-purple-500/50' : 'border-[var(--border-dev)]'
+                }`}
+              >
+                <div className="text-[10px] text-[var(--text-muted)] uppercase flex items-center justify-between">
+                  <span>Algorithm (alg)</span>
+                  <span className="text-rose-400 text-[9px]">Hint</span>
+                </div>
+                <div className="font-bold text-rose-500">
+                  {parsed.header.alg || 'N/A'}
+                </div>
               </div>
             </div>
+
           </div>
+
         </div>
 
-        {/* Right Column: Chaos Tamperer & Interactive Editors (7 cols) */}
+        {/* ============================================================ */}
+        {/* RIGHT COLUMN: Pinned Chaos Deck & Workspace Tabs (7 Cols)   */}
+        {/* ============================================================ */}
         <div className="lg:col-span-7 flex flex-col bg-[var(--bg-panel-subtle)] overflow-y-auto">
           
-          {/* 🔥 1-Click Chaos Tamperer Bar (The FailState Feature) */}
-          <div className="p-3 border-b border-[var(--border-dev)] bg-[var(--bg-panel)] flex flex-col gap-2">
+          {/* 🔥 1. PINNED TOP: Chaos Mutations Deck (Always Visible) */}
+          <div className="p-4 border-b border-[var(--border-dev)] bg-[var(--bg-panel)] flex flex-col gap-3 sticky top-0 z-10 shadow-xs">
+            
             <div className="flex items-center justify-between">
-              <div className="flex items-center gap-1.5 text-xs font-mono font-bold text-rose-500 uppercase tracking-wider">
-                <Flame className="w-4 h-4" /> 1-Click Chaos Mutations
+              <div className="flex items-center gap-1.5 font-mono text-xs font-bold text-rose-500 uppercase tracking-wider">
+                <Flame className="w-4 h-4 text-rose-500" />
+                Chaos Mutations &mdash; Negative Path Simulator
               </div>
               <span className="text-[11px] font-mono text-[var(--text-muted)]">
-                Simulate edge-case auth failures
+                Click any action to apply &amp; view hint
               </span>
             </div>
 
-            <div className="flex flex-wrap items-center gap-2">
+            {/* Categorized Action Buttons with Hint triggers */}
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs font-mono">
+              
               {/* Expire Now */}
               <button
-                onClick={() => runChaosMutation(() => expireTokenNow(parsed, 300), 'Expired (-5m)')}
-                className="px-2.5 py-1.5 rounded-lg text-xs font-mono font-medium bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 border border-rose-500/30 hover:border-rose-500/50 transition-all flex items-center gap-1 cursor-pointer"
-                title="Sets exp = now - 5 minutes"
+                onClick={() => runChaosMutation(() => expireTokenNow(parsed, 300), 'Expired (-5m)', 'expire_now')}
+                className="p-2 rounded-lg bg-rose-500/10 hover:bg-rose-500/20 text-rose-600 dark:text-rose-400 border border-rose-500/30 hover:border-rose-500/50 transition-all flex items-center justify-center gap-1.5 cursor-pointer font-medium"
               >
-                <Clock className="w-3.5 h-3.5" /> Expire Now (-5m)
+                <Clock className="w-3.5 h-3.5 shrink-0" /> Expire (-5m)
               </button>
 
-              {/* Expire in 10s */}
+              {/* Race Condition (10s) */}
               <button
-                onClick={() => runChaosMutation(() => expireTokenSoon(parsed, 10), 'Expiring in 10s')}
-                className="px-2.5 py-1.5 rounded-lg text-xs font-mono font-medium bg-amber-500/10 hover:bg-amber-500/20 text-amber-400 border border-amber-500/30 hover:border-amber-500/50 transition-all flex items-center gap-1 cursor-pointer"
-                title="Sets exp = now + 10s to test race conditions & token refresh"
+                onClick={() => runChaosMutation(() => expireTokenSoon(parsed, 10), 'Expiring in 10s', 'race_expire')}
+                className="p-2 rounded-lg bg-amber-500/10 hover:bg-amber-500/20 text-amber-600 dark:text-amber-400 border border-amber-500/30 hover:border-amber-500/50 transition-all flex items-center justify-center gap-1.5 cursor-pointer font-medium"
               >
-                <Zap className="w-3.5 h-3.5" /> Expire in 10s
+                <Zap className="w-3.5 h-3.5 shrink-0" /> Race (10s)
               </button>
 
               {/* Clock Skew */}
               <button
-                onClick={() => runChaosMutation(() => injectClockSkewFuture(parsed, 300), 'Clock Skew Injected')}
-                className="px-2.5 py-1.5 rounded-lg text-xs font-mono font-medium bg-cyan-500/10 hover:bg-cyan-500/20 text-cyan-400 border border-cyan-500/30 hover:border-cyan-500/50 transition-all flex items-center gap-1 cursor-pointer"
-                title="Sets nbf & iat to now + 5 minutes to test clock-drift tolerance"
+                onClick={() => runChaosMutation(() => injectClockSkewFuture(parsed, 300), 'Clock Skew Injected', 'clock_skew')}
+                className="p-2 rounded-lg bg-cyan-500/10 hover:bg-cyan-500/20 text-cyan-600 dark:text-cyan-400 border border-cyan-500/30 hover:border-cyan-500/50 transition-all flex items-center justify-center gap-1.5 cursor-pointer font-medium"
               >
-                <Sliders className="w-3.5 h-3.5" /> Clock Skew (+5m)
+                <Sliders className="w-3.5 h-3.5 shrink-0" /> Clock Skew (+5m)
               </button>
 
-              {/* alg: none */}
+              {/* Renew (+1h) */}
               <button
-                onClick={() => runChaosMutation(() => simulateAlgNone(parsed), 'alg: none Exploit Active')}
-                className="px-2.5 py-1.5 rounded-lg text-xs font-mono font-medium bg-purple-500/10 hover:bg-purple-500/20 text-purple-400 border border-purple-500/30 hover:border-purple-500/50 transition-all flex items-center gap-1 cursor-pointer"
-                title="Sets alg = none and removes signature to test parser vulnerability (CVE-2015-9235)"
+                onClick={() => runChaosMutation(() => renewTokenValid(parsed, 3600), 'Renewed (+1h)', 'renew')}
+                className="p-2 rounded-lg bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30 hover:border-emerald-500/50 transition-all flex items-center justify-center gap-1.5 cursor-pointer font-medium"
               >
-                <Unlock className="w-3.5 h-3.5" /> alg: none Exploit
+                <RefreshCw className="w-3.5 h-3.5 shrink-0" /> Renew (+1h)
+              </button>
+
+              {/* alg: none Exploit */}
+              <button
+                onClick={() => runChaosMutation(() => simulateAlgNone(parsed), 'alg: none Exploit', 'alg_none')}
+                className="p-2 rounded-lg bg-purple-500/10 hover:bg-purple-500/20 text-purple-600 dark:text-purple-400 border border-purple-500/30 hover:border-purple-500/50 transition-all flex items-center justify-center gap-1.5 cursor-pointer font-medium"
+              >
+                <Unlock className="w-3.5 h-3.5 shrink-0" /> alg: none
               </button>
 
               {/* Corrupt Signature */}
               <button
-                onClick={() => runChaosMutation(() => corruptSignature(parsed), 'Signature Corrupted')}
-                className="px-2.5 py-1.5 rounded-lg text-xs font-mono font-medium bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 border border-rose-500/30 hover:border-rose-500/50 transition-all flex items-center gap-1 cursor-pointer"
-                title="Flips random characters in signature to trigger 401 Unauthorized"
+                onClick={() => runChaosMutation(() => corruptSignature(parsed), 'Signature Corrupted', 'corrupt_sig')}
+                className="p-2 rounded-lg bg-rose-500/10 hover:bg-rose-500/20 text-rose-600 dark:text-rose-400 border border-rose-500/30 hover:border-rose-500/50 transition-all flex items-center justify-center gap-1.5 cursor-pointer font-medium"
               >
-                <AlertTriangle className="w-3.5 h-3.5" /> Corrupt Signature
-              </button>
-
-              {/* Inject BLNS */}
-              <button
-                onClick={() => runChaosMutation(() => injectBlnsClaim(parsed, 'name'), 'Naughty String Injected')}
-                className="px-2.5 py-1.5 rounded-lg text-xs font-mono font-medium bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 hover:border-emerald-500/50 transition-all flex items-center gap-1 cursor-pointer"
-                title="Injects Big List of Naughty Strings into user claims"
-              >
-                <Sparkles className="w-3.5 h-3.5" /> Inject BLNS
+                <AlertTriangle className="w-3.5 h-3.5 shrink-0" /> Corrupt Sig
               </button>
 
               {/* Swap to HS256 */}
               <button
-                onClick={() => runChaosMutation(() => swapAlgorithmToHs256(parsed), 'Algorithm Swapped to HS256')}
-                className="px-2.5 py-1.5 rounded-lg text-xs font-mono font-medium bg-[var(--bg-panel)] hover:bg-[var(--pill-bg)] text-[var(--text-secondary)] border border-[var(--border-dev)] transition-all flex items-center gap-1 cursor-pointer"
-                title="Swaps alg from RS256 to HS256 to test Public Key Confusion"
+                onClick={() => runChaosMutation(() => swapAlgorithmToHs256(parsed), 'Swapped to HS256', 'swap_hs256')}
+                className="p-2 rounded-lg bg-[var(--bg-sidebar)] hover:bg-[var(--pill-bg)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] border border-[var(--border-dev)] transition-all flex items-center justify-center gap-1.5 cursor-pointer font-medium"
               >
-                <RefreshCw className="w-3.5 h-3.5" /> Swap to HS256
+                <RefreshCw className="w-3.5 h-3.5 shrink-0" /> To HS256
               </button>
 
-              {/* Strip Claim Dropdown / Quick buttons */}
+              {/* Inject BLNS */}
               <button
-                onClick={() => runChaosMutation(() => stripClaim(parsed, 'sub'), 'Stripped sub claim')}
-                className="px-2 py-1 rounded text-[11px] font-mono bg-[var(--bg-panel)] hover:bg-rose-500/20 text-[var(--text-muted)] hover:text-rose-400 border border-[var(--border-dev)] transition-colors cursor-pointer"
-                title="Strip sub (User ID)"
+                onClick={() => runChaosMutation(() => injectBlnsClaim(parsed, 'name'), 'Naughty String Injected', 'inject_blns')}
+                className="p-2 rounded-lg bg-indigo-500/10 hover:bg-indigo-500/20 text-indigo-600 dark:text-indigo-400 border border-indigo-500/30 hover:border-indigo-500/50 transition-all flex items-center justify-center gap-1.5 cursor-pointer font-medium"
               >
-                - Strip sub
+                <Sparkles className="w-3.5 h-3.5 shrink-0" /> Inject BLNS
               </button>
-              <button
-                onClick={() => runChaosMutation(() => stripClaim(parsed, 'roles'), 'Stripped roles claim')}
-                className="px-2 py-1 rounded text-[11px] font-mono bg-[var(--bg-panel)] hover:bg-rose-500/20 text-[var(--text-muted)] hover:text-rose-400 border border-[var(--border-dev)] transition-colors cursor-pointer"
-                title="Strip roles claim"
-              >
-                - Strip roles
-              </button>
+
             </div>
+
+            {/* Active Chaos Vulnerability & Testing Guide (Visible on Click) */}
+            {activeChaosHint && (
+              <div className="mt-1 p-3.5 rounded-xl bg-gradient-to-br from-[var(--bg-panel-subtle)] to-[var(--bg-panel)] border border-rose-500/40 text-xs font-mono flex flex-col gap-2 shadow-sm animate-fade-in">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <span className="font-bold text-sm text-rose-600 dark:text-rose-400 flex items-center gap-1.5">
+                      <Zap className="w-4 h-4 text-rose-500" />
+                      {activeChaosHint.title}
+                    </span>
+                    <span className={`text-[10px] px-2 py-0.5 rounded-full border font-bold ${activeChaosHint.badgeColor}`}>
+                      {activeChaosHint.badge}
+                    </span>
+                  </div>
+                  <button
+                    onClick={() => setActiveChaosHint(null)}
+                    className="p-1 rounded hover:bg-[var(--pill-bg)] text-[var(--text-muted)] hover:text-[var(--text-primary)] cursor-pointer"
+                    title="Dismiss Hint"
+                  >
+                    <X className="w-3.5 h-3.5" />
+                  </button>
+                </div>
+
+                <div className="grid grid-cols-1 gap-1.5 text-[11px] leading-relaxed">
+                  <div>
+                    <span className="text-[var(--text-muted)] font-semibold">What was modified: </span>
+                    <span className="text-[var(--text-primary)] font-mono">{activeChaosHint.mutation}</span>
+                  </div>
+                  <div>
+                    <span className="text-[var(--text-muted)] font-semibold">Security Impact: </span>
+                    <span className="text-[var(--text-secondary)]">{activeChaosHint.securityImpact}</span>
+                  </div>
+                  <div className="p-2 rounded bg-[var(--bg-app)] border border-[var(--border-dev)] text-[11px]">
+                    <span className="font-bold text-emerald-600 dark:text-emerald-400">How to test your app: </span>
+                    <span className="text-[var(--text-primary)]">{activeChaosHint.howToTest}</span>
+                  </div>
+                </div>
+              </div>
+            )}
+
           </div>
 
-          {/* Navigation Tabs (Payload / Header / WebCrypto Signer) */}
-          <div className="flex items-center justify-between px-3 border-b border-[var(--border-dev)] bg-[var(--bg-panel)]">
-            <div className="flex items-center gap-1 pt-2">
+          {/* 2. Workspace Tabs Navigation */}
+          <div className="flex items-center justify-between px-4 border-b border-[var(--border-dev)] bg-[var(--bg-panel)]">
+            <div className="flex items-center gap-2 pt-2">
+              
               <button
-                onClick={() => setActiveTab('payload')}
+                onClick={() => setActiveTab('claims')}
                 className={`px-3 py-2 text-xs font-mono font-semibold border-b-2 transition-colors cursor-pointer flex items-center gap-1.5 ${
-                  activeTab === 'payload'
-                    ? 'border-purple-400 text-purple-400'
+                  activeTab === 'claims'
+                    ? 'border-purple-500 text-purple-600 dark:text-purple-400'
                     : 'border-transparent text-[var(--text-muted)] hover:text-[var(--text-primary)]'
                 }`}
               >
-                <FileText className="w-3.5 h-3.5" /> Payload (Claims)
+                <FileText className="w-3.5 h-3.5" /> Decoded Claims ({parsed.diagnostics.length})
               </button>
+
               <button
-                onClick={() => setActiveTab('header')}
+                onClick={() => setActiveTab('json')}
                 className={`px-3 py-2 text-xs font-mono font-semibold border-b-2 transition-colors cursor-pointer flex items-center gap-1.5 ${
-                  activeTab === 'header'
-                    ? 'border-rose-500 text-rose-500'
+                  activeTab === 'json'
+                    ? 'border-rose-500 text-rose-600 dark:text-rose-400'
                     : 'border-transparent text-[var(--text-muted)] hover:text-[var(--text-primary)]'
                 }`}
               >
-                <Code2 className="w-3.5 h-3.5" /> Header (Alg/Typ)
+                <Code2 className="w-3.5 h-3.5" /> JSON Editors
               </button>
+
               <button
                 onClick={() => setActiveTab('crypto')}
                 className={`px-3 py-2 text-xs font-mono font-semibold border-b-2 transition-colors cursor-pointer flex items-center gap-1.5 ${
                   activeTab === 'crypto'
-                    ? 'border-cyan-400 text-cyan-400'
+                    ? 'border-cyan-500 text-cyan-600 dark:text-cyan-400'
                     : 'border-transparent text-[var(--text-muted)] hover:text-[var(--text-primary)]'
                 }`}
               >
                 <Lock className="w-3.5 h-3.5" /> WebCrypto Signer
               </button>
+
+              <button
+                onClick={() => setActiveTab('export')}
+                className={`px-3 py-2 text-xs font-mono font-semibold border-b-2 transition-colors cursor-pointer flex items-center gap-1.5 ${
+                  activeTab === 'export'
+                    ? 'border-emerald-500 text-emerald-600 dark:text-emerald-400'
+                    : 'border-transparent text-[var(--text-muted)] hover:text-[var(--text-primary)]'
+                }`}
+              >
+                <Terminal className="w-3.5 h-3.5" /> Export Snippets
+              </button>
+
             </div>
 
             {jsonError && (
-              <span className="text-[11px] font-mono text-rose-400 flex items-center gap-1">
+              <span className="text-[11px] font-mono text-rose-500 flex items-center gap-1">
                 <AlertTriangle className="w-3 h-3" /> {jsonError}
               </span>
             )}
           </div>
 
-          {/* Tab Content 1: Payload (Claims) */}
-          {activeTab === 'payload' && (
-            <div className="p-3 flex flex-col gap-3">
-              {/* Editable JSON Box */}
-              <div>
-                <div className="flex items-center justify-between text-xs font-mono text-[var(--text-muted)] mb-1">
-                  <span>Interactive JSON Payload (Two-Way Synced):</span>
+          {/* 3. Tab Content */}
+          <div className="p-4 flex-1">
+            
+            {/* TAB 1: Decoded Claims (Formatted Cards with Interactive Hint Drawer) */}
+            {activeTab === 'claims' && (
+              <div className="flex flex-col gap-3">
+                
+                {/* Header Action Row */}
+                <div className="flex items-center justify-between text-xs font-mono">
+                  <span className="text-[var(--text-muted)] flex items-center gap-1">
+                    <HelpCircle className="w-3.5 h-3.5 text-purple-400" />
+                    Click any claim to view RFC explanation &amp; security test hint:
+                  </span>
                   <button
-                    onClick={() => triggerCopy(payloadJsonStr, 'Payload JSON Copied')}
-                    className="hover:text-[var(--text-primary)] transition-colors cursor-pointer"
+                    onClick={() => setIsAddingClaim(!isAddingClaim)}
+                    className="px-2.5 py-1 rounded-md bg-purple-500/15 hover:bg-purple-500/25 text-purple-600 dark:text-purple-400 border border-purple-500/30 transition-colors flex items-center gap-1 cursor-pointer font-bold"
                   >
-                    <Copy className="w-3 h-3" />
+                    <Plus className="w-3 h-3" /> {isAddingClaim ? 'Cancel' : 'Add Custom Claim'}
                   </button>
                 </div>
-                <textarea
-                  value={payloadJsonStr}
-                  onChange={e => handlePayloadJsonChange(e.target.value)}
-                  rows={9}
-                  className="w-full p-2.5 rounded-lg bg-[var(--bg-codebox)] border border-[var(--border-dev)] text-purple-300 font-mono text-xs focus:outline-none focus:border-purple-400 resize-y"
-                  spellCheck={false}
-                />
-              </div>
 
-              {/* Decoded Claims Diagnostic Table */}
-              <div className="rounded-lg border border-[var(--border-dev)] overflow-hidden bg-[var(--bg-panel)]">
-                <div className="px-3 py-2 border-b border-[var(--border-dev)] bg-[var(--table-th-bg)] flex items-center justify-between text-xs font-mono">
-                  <span className="font-semibold uppercase tracking-wider text-[var(--text-muted)]">
-                    Decoded Claims Table ({parsed.diagnostics.length})
-                  </span>
-                </div>
-                <div className="overflow-x-auto max-h-72 overflow-y-auto">
-                  <table className="dev-table">
-                    <thead>
-                      <tr>
-                        <th>Claim Key</th>
-                        <th>Standard Name</th>
-                        <th>Value</th>
-                        <th>Human Readable / Expiry</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {parsed.diagnostics.map(claim => (
-                        <tr key={claim.key} className="hover:bg-[var(--table-hover)]">
-                          <td className="font-bold text-purple-400">{claim.key}</td>
-                          <td className="text-[var(--text-secondary)]">{claim.label}</td>
-                          <td className="max-w-xs truncate text-[var(--text-primary)]" title={String(claim.value)}>
+                {/* Add Custom Claim Inline Form */}
+                {isAddingClaim && (
+                  <form
+                    onSubmit={handleAddCustomClaim}
+                    className="p-3.5 rounded-xl bg-[var(--bg-panel)] border border-purple-500/40 flex flex-col gap-2.5 text-xs font-mono shadow-sm"
+                  >
+                    <div className="font-bold text-purple-600 dark:text-purple-400">
+                      Add Custom Claim to Payload:
+                    </div>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                      <input
+                        type="text"
+                        value={newClaimKey}
+                        onChange={e => setNewClaimKey(e.target.value)}
+                        placeholder="Claim Key (e.g., role, org_id, tier)..."
+                        className="px-2.5 py-1.5 rounded-md bg-[var(--bg-app)] border border-[var(--border-dev)] text-[var(--text-primary)] focus:outline-none focus:border-purple-500"
+                        required
+                      />
+                      <input
+                        type="text"
+                        value={newClaimValue}
+                        onChange={e => setNewClaimValue(e.target.value)}
+                        placeholder='Claim Value (e.g. "admin", 100, true)...'
+                        className="px-2.5 py-1.5 rounded-md bg-[var(--bg-app)] border border-[var(--border-dev)] text-[var(--text-primary)] focus:outline-none focus:border-purple-500"
+                        required
+                      />
+                    </div>
+                    <div className="flex justify-end gap-2">
+                      <button
+                        type="button"
+                        onClick={() => setIsAddingClaim(false)}
+                        className="px-3 py-1 rounded-md bg-[var(--bg-sidebar)] text-[var(--text-secondary)] cursor-pointer"
+                      >
+                        Cancel
+                      </button>
+                      <button
+                        type="submit"
+                        className="px-3 py-1 rounded-md bg-purple-600 hover:bg-purple-500 text-white font-bold cursor-pointer transition-colors"
+                      >
+                        Add to Payload
+                      </button>
+                    </div>
+                  </form>
+                )}
+
+                {/* Active Selected Claim Hint Drawer (Displayed prominently upon clicking any claim) */}
+                {selectedClaim && (
+                  <div className="p-3.5 rounded-xl bg-purple-500/10 border border-purple-500/40 text-xs font-mono flex flex-col gap-2 shadow-xs animate-fade-in">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        <span className="font-bold text-sm text-purple-600 dark:text-purple-300">
+                          {selectedClaim.key}
+                        </span>
+                        <span className="text-[10px] px-1.5 py-0.2 rounded bg-[var(--bg-panel)] text-[var(--text-secondary)] border border-[var(--border-dev)]">
+                          {selectedClaim.label}
+                        </span>
+                        {selectedClaim.rfc && (
+                          <span className="text-[9px] px-1.5 py-0.2 rounded bg-cyan-500/15 text-cyan-600 dark:text-cyan-400 font-bold border border-cyan-500/25">
+                            {selectedClaim.rfc}
+                          </span>
+                        )}
+                      </div>
+                      <span className="text-[11px] text-purple-500 font-medium">Claim Hint &amp; RFC Specs</span>
+                    </div>
+
+                    <div className="text-[11px] text-[var(--text-secondary)] leading-relaxed">
+                      {selectedClaim.description}
+                    </div>
+
+                    {selectedClaim.hint && (
+                      <div className="p-2.5 rounded-lg bg-[var(--bg-panel)] border border-[var(--border-dev)] text-[11px] flex items-start gap-2">
+                        <Info className="w-3.5 h-3.5 text-purple-400 shrink-0 mt-0.5" />
+                        <div>
+                          <span className="font-bold text-purple-600 dark:text-purple-400">Security &amp; Testing Hint: </span>
+                          <span className="text-[var(--text-primary)]">{selectedClaim.hint}</span>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                )}
+
+                {/* List of Decoded Claim Cards */}
+                <div className="flex flex-col gap-2">
+                  {parsed.diagnostics.map(claim => {
+                    const isSelected = selectedClaimKey === claim.key;
+                    return (
+                      <div
+                        key={claim.key}
+                        onClick={() => setSelectedClaimKey(isSelected ? null : claim.key)}
+                        className={`p-3 rounded-xl border transition-all cursor-pointer flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-2xs font-mono ${
+                          isSelected
+                            ? 'bg-purple-500/15 border-purple-500/60 shadow-xs'
+                            : 'bg-[var(--bg-panel)] border-[var(--border-dev)] hover:border-purple-500/40'
+                        }`}
+                      >
+                        <div className="flex flex-col gap-1 min-w-0 flex-1">
+                          <div className="flex items-center gap-2">
+                            <span className="font-bold text-sm text-purple-600 dark:text-purple-400">
+                              {claim.key}
+                            </span>
+                            <span className="text-[10px] px-1.5 py-0.2 rounded bg-[var(--pill-bg)] text-[var(--text-muted)] border border-[var(--border-dev)]">
+                              {claim.label}
+                            </span>
+                            {claim.isStandard && (
+                              <span className="text-[9px] px-1.5 py-0.2 rounded bg-cyan-500/10 text-cyan-600 dark:text-cyan-400 font-bold border border-cyan-500/20">
+                                Standard
+                              </span>
+                            )}
+                            <span className="text-[10px] text-purple-400 ml-auto flex items-center gap-0.5">
+                              {isSelected ? 'Hide Hint' : 'View Hint'} <ChevronRight className={`w-3 h-3 transition-transform ${isSelected ? 'rotate-90' : ''}`} />
+                            </span>
+                          </div>
+
+                          {/* Value Display */}
+                          <div className="text-xs text-[var(--text-primary)] break-all font-mono select-all bg-[var(--bg-panel-subtle)] p-1.5 rounded border border-[var(--border-dev-subtle)]">
                             {typeof claim.value === 'object'
                               ? JSON.stringify(claim.value)
                               : String(claim.value)}
-                          </td>
-                          <td>
-                            {claim.formattedTime ? (
+                          </div>
+
+                          {/* Human Readable Date info */}
+                          {claim.formattedTime && (
+                            <div className="text-[11px] flex items-center gap-2 mt-0.5">
+                              <span className="text-[var(--text-muted)]">{claim.formattedTime}</span>
                               <span
-                                className={`px-1.5 py-0.5 rounded text-[10px] font-bold ${
+                                className={`px-1.5 py-0.2 rounded text-[10px] font-bold ${
                                   claim.status === 'expired'
-                                    ? 'bg-rose-500/20 text-rose-400 border border-rose-500/30'
+                                    ? 'bg-rose-500/15 text-rose-600 dark:text-rose-400 border border-rose-500/20'
                                     : claim.status === 'future'
-                                    ? 'bg-amber-500/20 text-amber-400 border border-amber-500/30'
-                                    : 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30'
+                                    ? 'bg-amber-500/15 text-amber-600 dark:text-amber-400 border border-amber-500/20'
+                                    : 'bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20'
                                 }`}
                               >
-                                {claim.formattedTime} ({claim.relativeTime})
+                                {claim.relativeTime}
                               </span>
-                            ) : (
-                              <span className="text-[var(--text-muted)] text-[10px]">
-                                {claim.description}
-                              </span>
-                            )}
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-            </div>
-          )}
+                            </div>
+                          )}
+                        </div>
 
-          {/* Tab Content 2: Header (Alg / Typ) */}
-          {activeTab === 'header' && (
-            <div className="p-3 flex flex-col gap-3">
-              <div>
-                <div className="flex items-center justify-between text-xs font-mono text-[var(--text-muted)] mb-1">
-                  <span>Interactive JSON Header:</span>
-                  <button
-                    onClick={() => triggerCopy(headerJsonStr, 'Header JSON Copied')}
-                    className="hover:text-[var(--text-primary)] transition-colors cursor-pointer"
-                  >
-                    <Copy className="w-3 h-3" />
-                  </button>
-                </div>
-                <textarea
-                  value={headerJsonStr}
-                  onChange={e => handleHeaderJsonChange(e.target.value)}
-                  rows={8}
-                  className="w-full p-2.5 rounded-lg bg-[var(--bg-codebox)] border border-[var(--border-dev)] text-rose-300 font-mono text-xs focus:outline-none focus:border-rose-400 resize-y"
-                  spellCheck={false}
-                />
-              </div>
-
-              <div className="p-3 rounded-lg bg-[var(--bg-panel)] border border-[var(--border-dev)] text-xs font-mono text-[var(--text-secondary)] space-y-2">
-                <div className="font-bold text-[var(--text-primary)]">Header Parameters Guide:</div>
-                <div>• <span className="text-rose-400 font-bold">alg</span>: The cryptographic algorithm used to secure the token (e.g., HS256, RS256, or &quot;none&quot;).</div>
-                <div>• <span className="text-rose-400 font-bold">typ</span>: Media type of the token (typically &quot;JWT&quot;).</div>
-                <div>• <span className="text-rose-400 font-bold">kid</span>: Key ID hint indicating which specific public key in a JWKS validates the token.</div>
-              </div>
-            </div>
-          )}
-
-          {/* Tab Content 3: WebCrypto Signer & Verification */}
-          {activeTab === 'crypto' && (
-            <div className="p-3 flex flex-col gap-3">
-              {/* HMAC Verifier / Signer */}
-              <div className="p-3 rounded-lg bg-[var(--bg-panel)] border border-[var(--border-dev)] flex flex-col gap-3">
-                <div className="flex items-center justify-between">
-                  <span className="text-xs font-mono font-bold text-cyan-400 uppercase tracking-wider flex items-center gap-1.5">
-                    <Lock className="w-3.5 h-3.5" /> Client-Side HMAC (HS256 / HS384 / HS512)
-                  </span>
-                  <select
-                    value={cryptoAlg}
-                    onChange={e => setCryptoAlg(e.target.value as SupportedHmacAlg)}
-                    aria-label="Cryptographic HMAC Algorithm"
-                    className="px-2 py-1 rounded bg-[var(--bg-panel-subtle)] border border-[var(--border-dev)] text-xs font-mono text-[var(--text-primary)] focus:outline-none"
-                  >
-                    <option value="HS256">HMAC-SHA256 (HS256)</option>
-                    <option value="HS384">HMAC-SHA384 (HS384)</option>
-                    <option value="HS512">HMAC-SHA512 (HS512)</option>
-                  </select>
+                        {/* Right: Strip / Delete Claim Button */}
+                        <div
+                          className="flex items-center gap-2 self-end sm:self-center shrink-0"
+                          onClick={e => e.stopPropagation()}
+                        >
+                          <button
+                            onClick={() => handleDeleteClaim(claim.key)}
+                            className="px-2 py-1 rounded bg-[var(--bg-sidebar)] hover:bg-rose-500/20 text-[var(--text-muted)] hover:text-rose-500 border border-[var(--border-dev)] hover:border-rose-500/30 transition-colors text-[11px] flex items-center gap-1 cursor-pointer"
+                            title={`Remove "${claim.key}" claim to test missing field handling`}
+                          >
+                            <Trash2 className="w-3 h-3" /> Strip
+                          </button>
+                        </div>
+                      </div>
+                    );
+                  })}
                 </div>
 
-                <div>
-                  <label className="block text-[11px] font-mono text-[var(--text-muted)] mb-1">
-                    Signing Secret / Pre-shared Key:
-                  </label>
-                  <input
-                    type="text"
-                    value={hmacSecret}
-                    onChange={e => setHmacSecret(e.target.value)}
-                    placeholder="Enter HMAC secret..."
-                    className="w-full px-2.5 py-1.5 rounded bg-[var(--bg-codebox)] border border-[var(--border-dev)] text-xs font-mono text-[var(--text-code)] focus:outline-none focus:border-cyan-400"
+              </div>
+            )}
+
+            {/* TAB 2: JSON Editors (Header & Payload) */}
+            {activeTab === 'json' && (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                
+                {/* Header JSON Editor */}
+                <div className="flex flex-col gap-1.5">
+                  <div className="flex items-center justify-between text-xs font-mono text-rose-500 font-bold">
+                    <span className="flex items-center gap-1">
+                      <Code2 className="w-3.5 h-3.5" /> Header JSON:
+                    </span>
+                    <button
+                      onClick={() => triggerCopy(headerJsonStr, 'Header JSON Copied')}
+                      className="p-1 hover:bg-[var(--pill-bg)] rounded text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-colors cursor-pointer"
+                      title="Copy Header JSON"
+                    >
+                      <Copy className="w-3 h-3" />
+                    </button>
+                  </div>
+                  <textarea
+                    value={headerJsonStr}
+                    onChange={e => handleHeaderJsonChange(e.target.value)}
+                    rows={12}
+                    className="w-full p-3 rounded-xl bg-[var(--bg-panel)] border border-[var(--border-dev)] text-rose-600 dark:text-rose-400 font-mono text-xs focus:outline-none focus:border-rose-500 resize-none leading-relaxed shadow-2xs"
+                    spellCheck={false}
                   />
+                  <span className="text-[10px] font-mono text-[var(--text-muted)]">
+                    Edits auto-synchronize to compact token.
+                  </span>
                 </div>
 
-                <div className="flex items-center gap-2">
-                  <button
-                    onClick={handleVerifyHmac}
-                    className="px-3 py-1.5 rounded-lg text-xs font-mono font-bold bg-cyan-500/10 hover:bg-cyan-500/20 text-cyan-400 border border-cyan-500/30 hover:border-cyan-500/50 transition-colors flex items-center gap-1.5 cursor-pointer"
-                  >
-                    <ShieldCheck className="w-3.5 h-3.5" /> Verify Signature
-                  </button>
-                  <button
-                    onClick={handleSignHmac}
-                    disabled={isSigning}
-                    className="px-3 py-1.5 rounded-lg text-xs font-mono font-bold bg-gradient-to-r from-rose-600 to-amber-600 text-white shadow-sm hover:opacity-95 transition-opacity flex items-center gap-1.5 cursor-pointer disabled:opacity-50"
-                  >
-                    <Sparkles className="w-3.5 h-3.5" /> Sign with Secret
-                  </button>
-                </div>
-
-                {verifyResult && (
-                  <div
-                    className={`p-2.5 rounded text-xs font-mono border ${
-                      verifyResult.isValid
-                        ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-400'
-                        : 'bg-rose-500/10 border-rose-500/30 text-rose-400'
-                    }`}
-                  >
-                    {verifyResult.message}
+                {/* Payload JSON Editor */}
+                <div className="flex flex-col gap-1.5">
+                  <div className="flex items-center justify-between text-xs font-mono text-purple-500 font-bold">
+                    <span className="flex items-center gap-1">
+                      <FileText className="w-3.5 h-3.5" /> Payload JSON:
+                    </span>
+                    <button
+                      onClick={() => triggerCopy(payloadJsonStr, 'Payload JSON Copied')}
+                      className="p-1 hover:bg-[var(--pill-bg)] rounded text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-colors cursor-pointer"
+                      title="Copy Payload JSON"
+                    >
+                      <Copy className="w-3 h-3" />
+                    </button>
                   </div>
-                )}
-              </div>
-
-              {/* Ephemeral RSA-2048 Testing */}
-              <div className="p-3 rounded-lg bg-[var(--bg-panel)] border border-[var(--border-dev)] flex flex-col gap-2">
-                <span className="text-xs font-mono font-bold text-[var(--text-primary)] flex items-center gap-1.5">
-                  <Key className="w-3.5 h-3.5 text-purple-400" /> Ephemeral RSA-2048 Asymmetric Signer (RS256)
-                </span>
-                <p className="text-[11px] font-mono text-[var(--text-secondary)]">
-                  Generate an isolated RSA-2048 key pair directly in browser WebCrypto memory and sign the token with RS256. Zero external APIs or keys sent.
-                </p>
-                <div>
-                  <button
-                    onClick={handleGenerateRsaAndSign}
-                    disabled={isSigning}
-                    className="px-3 py-1.5 rounded-lg text-xs font-mono font-bold bg-purple-500/10 hover:bg-purple-500/20 text-purple-400 border border-purple-500/30 hover:border-purple-500/50 transition-colors flex items-center gap-1.5 cursor-pointer disabled:opacity-50"
-                  >
-                    <Zap className="w-3.5 h-3.5" /> Generate Key &amp; Sign RS256
-                  </button>
+                  <textarea
+                    value={payloadJsonStr}
+                    onChange={e => handlePayloadJsonChange(e.target.value)}
+                    rows={12}
+                    className="w-full p-3 rounded-xl bg-[var(--bg-panel)] border border-[var(--border-dev)] text-purple-600 dark:text-purple-400 font-mono text-xs focus:outline-none focus:border-purple-500 resize-none leading-relaxed shadow-2xs"
+                    spellCheck={false}
+                  />
+                  <span className="text-[10px] font-mono text-[var(--text-muted)]">
+                    Edits auto-synchronize to compact token.
+                  </span>
                 </div>
-                {rsaStatus && (
-                  <div className="p-2 rounded text-xs font-mono bg-purple-500/10 border border-purple-500/20 text-purple-300">
-                    {rsaStatus}
-                  </div>
-                )}
+
               </div>
-            </div>
-          )}
+            )}
 
-          {/* Bottom Export Workbench */}
-          <div className="mt-auto p-3 border-t border-[var(--border-dev)] bg-[var(--bg-panel)] flex flex-col gap-2">
-            <div className="flex items-center justify-between text-xs font-mono text-[var(--text-muted)] uppercase tracking-wider">
-              <span className="flex items-center gap-1 font-semibold">
-                <Terminal className="w-3.5 h-3.5" /> Quick Export Snippets
-              </span>
-            </div>
+            {/* TAB 3: WebCrypto Signer & Verification */}
+            {activeTab === 'crypto' && (
+              <div className="flex flex-col gap-4">
+                
+                {/* HMAC Verification / Signing Card */}
+                <div className="p-4 rounded-xl bg-[var(--bg-panel)] border border-[var(--border-dev)] flex flex-col gap-3 shadow-2xs">
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-mono font-bold text-cyan-500 uppercase tracking-wider flex items-center gap-1.5">
+                      <Lock className="w-4 h-4" /> Client-Side HMAC Signer &amp; Verifier
+                    </span>
+                    <select
+                      value={cryptoAlg}
+                      onChange={e => setCryptoAlg(e.target.value as SupportedHmacAlg)}
+                      aria-label="Select HMAC Algorithm"
+                      className="px-2.5 py-1 rounded-md bg-[var(--bg-app)] border border-[var(--border-dev)] text-xs font-mono text-[var(--text-primary)] focus:outline-none"
+                    >
+                      <option value="HS256">HMAC-SHA256 (HS256)</option>
+                      <option value="HS384">HMAC-SHA384 (HS384)</option>
+                      <option value="HS512">HMAC-SHA512 (HS512)</option>
+                    </select>
+                  </div>
 
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
-              <button
-                onClick={() => triggerCopy(`Bearer ${rawToken}`, 'Copied Bearer Token')}
-                className="px-2.5 py-1.5 rounded bg-[var(--bg-panel-subtle)] hover:bg-[var(--pill-bg)] border border-[var(--border-dev)] hover:border-rose-500/40 text-xs font-mono text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors flex items-center justify-center gap-1.5 cursor-pointer"
-              >
-                <Copy className="w-3 h-3" /> Bearer Token
-              </button>
+                  <div>
+                    <label className="block text-[11px] font-mono text-[var(--text-muted)] mb-1">
+                      Signing Secret / Pre-shared Key:
+                    </label>
+                    <input
+                      type="text"
+                      value={hmacSecret}
+                      onChange={e => setHmacSecret(e.target.value)}
+                      placeholder="Enter HMAC secret string..."
+                      className="w-full px-3 py-2 rounded-lg bg-[var(--bg-app)] border border-[var(--border-dev)] text-xs font-mono text-[var(--text-primary)] focus:outline-none focus:border-cyan-500 transition-colors"
+                    />
+                  </div>
 
-              <button
-                onClick={() =>
-                  triggerCopy(
-                    `curl -X GET "https://api.example.com/v1/user" \\\n  -H "Authorization: Bearer ${rawToken}"`,
-                    'Copied cURL Command'
-                  )
-                }
-                className="px-2.5 py-1.5 rounded bg-[var(--bg-panel-subtle)] hover:bg-[var(--pill-bg)] border border-[var(--border-dev)] hover:border-rose-500/40 text-xs font-mono text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors flex items-center justify-center gap-1.5 cursor-pointer"
-              >
-                <Terminal className="w-3 h-3" /> cURL Request
-              </button>
+                  <div className="flex items-center gap-2.5 pt-1">
+                    <button
+                      onClick={handleVerifyHmac}
+                      className="px-3.5 py-1.5 rounded-lg text-xs font-mono font-bold bg-cyan-500/15 hover:bg-cyan-500/25 text-cyan-600 dark:text-cyan-400 border border-cyan-500/30 hover:border-cyan-500/50 transition-colors flex items-center gap-1.5 cursor-pointer"
+                    >
+                      <ShieldCheck className="w-3.5 h-3.5" /> Verify HMAC Signature
+                    </button>
+                    <button
+                      onClick={handleSignHmac}
+                      disabled={isSigning}
+                      className="px-3.5 py-1.5 rounded-lg text-xs font-mono font-bold bg-gradient-to-r from-rose-600 to-amber-600 text-white shadow-xs hover:opacity-95 transition-opacity flex items-center gap-1.5 cursor-pointer disabled:opacity-50"
+                    >
+                      <Sparkles className="w-3.5 h-3.5" /> Sign with Secret
+                    </button>
+                  </div>
 
-              <button
-                onClick={() => triggerCopy(typeScriptDefinition, 'Copied TypeScript Types')}
-                className="px-2.5 py-1.5 rounded bg-[var(--bg-panel-subtle)] hover:bg-[var(--pill-bg)] border border-[var(--border-dev)] hover:border-rose-500/40 text-xs font-mono text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors flex items-center justify-center gap-1.5 cursor-pointer"
-              >
-                <Code2 className="w-3 h-3" /> TypeScript Interface
-              </button>
+                  {verifyResult && (
+                    <div
+                      className={`p-3 rounded-lg text-xs font-mono border ${
+                        verifyResult.isValid
+                          ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-600 dark:text-emerald-400'
+                          : 'bg-rose-500/10 border-rose-500/30 text-rose-600 dark:text-rose-400'
+                      }`}
+                    >
+                      {verifyResult.message}
+                    </div>
+                  )}
+                </div>
 
-              <button
-                onClick={() =>
-                  triggerCopy(
-                    `await page.setExtraHTTPHeaders({\n  'Authorization': 'Bearer ${rawToken}'\n});`,
-                    'Copied Playwright Snippet'
-                  )
-                }
-                className="px-2.5 py-1.5 rounded bg-[var(--bg-panel-subtle)] hover:bg-[var(--pill-bg)] border border-[var(--border-dev)] hover:border-rose-500/40 text-xs font-mono text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors flex items-center justify-center gap-1.5 cursor-pointer"
-              >
-                <FileText className="w-3 h-3" /> Playwright Header
-              </button>
-            </div>
+                {/* Ephemeral RSA-2048 Testing Card */}
+                <div className="p-4 rounded-xl bg-[var(--bg-panel)] border border-[var(--border-dev)] flex flex-col gap-2.5 shadow-2xs">
+                  <span className="text-xs font-mono font-bold text-[var(--text-primary)] flex items-center gap-1.5">
+                    <Key className="w-4 h-4 text-purple-500" /> Ephemeral RSA-2048 Asymmetric Signer (RS256)
+                  </span>
+                  <p className="text-xs font-mono text-[var(--text-secondary)] leading-relaxed">
+                    Generate an isolated, real RSA-2048 public/private key pair in browser memory using WebCrypto, sign the JWT with RS256, and test your backend asymmetric verification.
+                  </p>
+                  <div>
+                    <button
+                      onClick={handleGenerateRsaAndSign}
+                      disabled={isSigning}
+                      className="px-3.5 py-1.5 rounded-lg text-xs font-mono font-bold bg-purple-500/15 hover:bg-purple-500/25 text-purple-600 dark:text-purple-400 border border-purple-500/30 hover:border-purple-500/50 transition-colors flex items-center gap-1.5 cursor-pointer disabled:opacity-50"
+                    >
+                      <Zap className="w-3.5 h-3.5" /> Generate RSA Key Pair &amp; Sign RS256
+                    </button>
+                  </div>
+                  {rsaStatus && (
+                    <div className="p-2.5 rounded-lg text-xs font-mono bg-purple-500/10 border border-purple-500/20 text-purple-600 dark:text-purple-300">
+                      {rsaStatus}
+                    </div>
+                  )}
+                </div>
+
+              </div>
+            )}
+
+            {/* TAB 4: Export Snippets */}
+            {activeTab === 'export' && (
+              <div className="flex flex-col gap-3">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs font-mono">
+                  
+                  {/* Bearer Token */}
+                  <div className="p-3 rounded-xl bg-[var(--bg-panel)] border border-[var(--border-dev)] flex flex-col justify-between gap-2 shadow-2xs">
+                    <div>
+                      <div className="font-bold text-[var(--text-primary)]">Authorization Header:</div>
+                      <div className="text-[11px] text-[var(--text-muted)] truncate mt-1">
+                        Bearer {rawToken}
+                      </div>
+                    </div>
+                    <button
+                      onClick={() => triggerCopy(`Bearer ${rawToken}`, 'Copied Bearer Token')}
+                      className="px-3 py-1.5 rounded-md bg-[var(--bg-sidebar)] hover:bg-[var(--pill-bg)] border border-[var(--border-dev)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors flex items-center justify-center gap-1.5 cursor-pointer self-start"
+                    >
+                      <Copy className="w-3 h-3" /> Copy Bearer Header
+                    </button>
+                  </div>
+
+                  {/* cURL Command */}
+                  <div className="p-3 rounded-xl bg-[var(--bg-panel)] border border-[var(--border-dev)] flex flex-col justify-between gap-2 shadow-2xs">
+                    <div>
+                      <div className="font-bold text-[var(--text-primary)]">Executable cURL Request:</div>
+                      <div className="text-[11px] text-[var(--text-muted)] truncate mt-1">
+                        curl -H &quot;Authorization: Bearer ...&quot;
+                      </div>
+                    </div>
+                    <button
+                      onClick={() =>
+                        triggerCopy(
+                          `curl -X GET "https://api.example.com/v1/profile" \\\n  -H "Authorization: Bearer ${rawToken}"`,
+                          'Copied cURL Request'
+                        )
+                      }
+                      className="px-3 py-1.5 rounded-md bg-[var(--bg-sidebar)] hover:bg-[var(--pill-bg)] border border-[var(--border-dev)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors flex items-center justify-center gap-1.5 cursor-pointer self-start"
+                    >
+                      <Terminal className="w-3 h-3" /> Copy cURL Command
+                    </button>
+                  </div>
+
+                  {/* TypeScript Interface */}
+                  <div className="p-3 rounded-xl bg-[var(--bg-panel)] border border-[var(--border-dev)] flex flex-col justify-between gap-2 shadow-2xs">
+                    <div>
+                      <div className="font-bold text-[var(--text-primary)]">TypeScript Claims Interface:</div>
+                      <div className="text-[11px] text-[var(--text-muted)] truncate mt-1">
+                        export interface DecodedJwtPayload ...
+                      </div>
+                    </div>
+                    <button
+                      onClick={() => triggerCopy(typeScriptDefinition, 'Copied TypeScript Types')}
+                      className="px-3 py-1.5 rounded-md bg-[var(--bg-sidebar)] hover:bg-[var(--pill-bg)] border border-[var(--border-dev)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors flex items-center justify-center gap-1.5 cursor-pointer self-start"
+                    >
+                      <Code2 className="w-3 h-3" /> Copy TypeScript Interface
+                    </button>
+                  </div>
+
+                  {/* Playwright Header Snippet */}
+                  <div className="p-3 rounded-xl bg-[var(--bg-panel)] border border-[var(--border-dev)] flex flex-col justify-between gap-2 shadow-2xs">
+                    <div>
+                      <div className="font-bold text-[var(--text-primary)]">Playwright / Test Snippet:</div>
+                      <div className="text-[11px] text-[var(--text-muted)] truncate mt-1">
+                        await page.setExtraHTTPHeaders(...)
+                      </div>
+                    </div>
+                    <button
+                      onClick={() =>
+                        triggerCopy(
+                          `await page.setExtraHTTPHeaders({\n  'Authorization': 'Bearer ${rawToken}'\n});`,
+                          'Copied Playwright Snippet'
+                        )
+                      }
+                      className="px-3 py-1.5 rounded-md bg-[var(--bg-sidebar)] hover:bg-[var(--pill-bg)] border border-[var(--border-dev)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors flex items-center justify-center gap-1.5 cursor-pointer self-start"
+                    >
+                      <FileText className="w-3 h-3" /> Copy Playwright Header
+                    </button>
+                  </div>
+
+                </div>
+              </div>
+            )}
+
           </div>
 
         </div>
 
       </div>
+
     </div>
   );
 };

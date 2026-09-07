@@ -58,23 +58,92 @@ export function encodeJsonToBase64Url(obj: unknown): string {
   return encodeBase64UrlString(JSON.stringify(obj));
 }
 
-/**
- * Standard JWT Claim metadata dictionary.
- */
-export const STANDARD_CLAIMS: Record<string, { label: string; description: string }> = {
-  iss: { label: 'Issuer', description: 'Identifies the principal that issued the JWT' },
-  sub: { label: 'Subject', description: 'Identifies the principal that is the subject of the JWT (user ID)' },
-  aud: { label: 'Audience', description: 'Identifies the recipients that the JWT is intended for' },
-  exp: { label: 'Expiration Time', description: 'Time after which the JWT MUST NOT be accepted for processing' },
-  nbf: { label: 'Not Before', description: 'Time before which the JWT MUST NOT be accepted for processing' },
-  iat: { label: 'Issued At', description: 'Time at which the JWT was issued' },
-  jti: { label: 'JWT ID', description: 'Unique identifier for the JWT to prevent replay attacks' },
-  azp: { label: 'Authorized Party', description: 'The party to which the ID token was issued (client ID)' },
-  scope: { label: 'OAuth Scopes', description: 'Granted permissions or resource access scopes' },
-  roles: { label: 'User Roles', description: 'RBAC user role assignments' },
-  email: { label: 'User Email', description: 'Primary verified email address' },
-  email_verified: { label: 'Email Verified', description: 'Whether the subject email address is verified' },
-  name: { label: 'Display Name', description: 'Full name of the authenticated user' },
+export interface StandardClaimMeta {
+  label: string;
+  description: string;
+  rfc: string;
+  hint: string;
+}
+
+export const STANDARD_CLAIMS: Record<string, StandardClaimMeta> = {
+  iss: {
+    label: 'Issuer',
+    description: 'Identifies the principal/authority that issued the JWT.',
+    rfc: 'RFC 7519 § 4.1.1',
+    hint: 'Must match your auth provider authority URL exactly. Check trailing slashes (e.g. https://xyz.auth0.com/ vs https://xyz.auth0.com).',
+  },
+  sub: {
+    label: 'Subject',
+    description: 'Identifies the principal that is the subject of the JWT (typically unique user UUID/ID).',
+    rfc: 'RFC 7519 § 4.1.2',
+    hint: 'Missing sub breaks user database lookups. Test how your frontend responds if sub is missing or null.',
+  },
+  aud: {
+    label: 'Audience',
+    description: 'Identifies the target recipient/resource server the token is intended for.',
+    rfc: 'RFC 7519 § 4.1.3',
+    hint: 'Resource servers MUST reject tokens where audience does not match their API audience or client ID.',
+  },
+  exp: {
+    label: 'Expiration Time',
+    description: 'UNIX timestamp after which the JWT MUST NOT be accepted.',
+    rfc: 'RFC 7519 § 4.1.4',
+    hint: 'Test if your Axios/Fetch interceptor intercepts 401s to refresh the token, or if it enters an infinite re-render loop.',
+  },
+  nbf: {
+    label: 'Not Before',
+    description: 'UNIX timestamp before which the JWT MUST NOT be accepted.',
+    rfc: 'RFC 7519 § 4.1.5',
+    hint: 'Clock drift test: Servers without leeway will reject tokens created on clients with slight clock differences. Recommended leeway is 60 seconds.',
+  },
+  iat: {
+    label: 'Issued At',
+    description: 'UNIX timestamp when the token was cryptographically signed.',
+    rfc: 'RFC 7519 § 4.1.6',
+    hint: 'Used to reject tokens issued before a user changed their password or revoked active sessions.',
+  },
+  jti: {
+    label: 'JWT ID',
+    description: 'Unique identifier for the token.',
+    rfc: 'RFC 7519 § 4.1.7',
+    hint: 'Essential for token revocation blacklists and preventing replay attacks on sensitive endpoints.',
+  },
+  azp: {
+    label: 'Authorized Party',
+    description: 'The client ID to which the ID token was issued (OIDC).',
+    rfc: 'OpenID Connect Core § 3.1.3.7',
+    hint: 'When aud contains multiple values, azp must be present and match the OAuth client ID.',
+  },
+  scope: {
+    label: 'OAuth Scopes',
+    description: 'Space-delimited permissions granted to the client application.',
+    rfc: 'RFC 6749 § 3.3',
+    hint: 'Test API routes with insufficient scopes (e.g. read-only token calling a DELETE endpoint) to verify 403 Forbidden handling.',
+  },
+  roles: {
+    label: 'User Roles',
+    description: 'Array of RBAC role identifiers assigned to the subject.',
+    rfc: 'Enterprise RBAC',
+    hint: 'Never trust client-side role inspection without verifying cryptographic signature server-side.',
+  },
+  email: {
+    label: 'User Email',
+    description: 'Primary email address associated with the authenticated account.',
+    rfc: 'OIDC Standard Claims',
+    hint: 'Always pair with email_verified check before granting access to account recovery or sensitive features.',
+  },
+  email_verified: {
+    label: 'Email Verified',
+    description: 'Boolean indicator whether email address has been verified.',
+    rfc: 'OIDC Standard Claims',
+    hint: 'Unverified emails can lead to account takeover if signups allow arbitrary email addresses without verification.',
+  },
+  name: {
+    label: 'Display Name',
+    description: 'Full display name of the authenticated user.',
+    rfc: 'OIDC Standard Claims',
+    hint: 'Test layout bounds with long strings, RTL characters, or Zalgo text to ensure UI elements do not break.',
+  },
 };
 
 /**
@@ -244,6 +313,8 @@ export function parseJwt(rawToken: string): ParsedJwt {
       value,
       label,
       description,
+      hint: standard?.hint || 'Custom application-specific claim.',
+      rfc: standard?.rfc,
       isStandard,
       status: statusType,
       formattedTime,
