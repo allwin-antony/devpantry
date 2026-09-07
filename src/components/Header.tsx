@@ -12,6 +12,7 @@ export const Header: React.FC = () => {
 
   const navItems = [
     { href: '/', label: 'Overview', icon: Terminal },
+    { href: '/background-removal', label: 'AI BG & Resizing', icon: Sparkles, badge: 'Edge AI' },
     { href: '/fonts', label: 'Fonts Studio', icon: Type, badge: '2,180+' },
     { href: '/icons', label: 'Vector Icons', icon: Box, badge: '353K+' },
     { href: '/chaos-data', label: 'Chaos Data', icon: Flame, badge: 'Schema GUI' },
@@ -36,7 +37,11 @@ export const Header: React.FC = () => {
       <nav className="hidden md:flex items-center bg-[var(--bg-sidebar)] p-1 rounded-lg border border-[var(--border-dev)] text-xs gap-1">
         {navItems.map(item => {
           const Icon = item.icon;
-          const isActive = item.href === '/' ? pathname === '/' : pathname.startsWith(item.href);
+          const isActive = item.href === '/'
+            ? pathname === '/'
+            : item.href === '/background-removal'
+            ? (pathname === '/background-removal' || pathname === '/image-resizer' || pathname === '/image-compressor')
+            : pathname.startsWith(item.href);
 
           return (
             <Link

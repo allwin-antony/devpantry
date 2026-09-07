@@ -12,7 +12,10 @@ import {
   Search,
   Zap,
   Check,
-  ShieldCheck
+  ShieldCheck,
+  Sparkles,
+  Maximize2,
+  HardDrive
 } from 'lucide-react';
 
 export function HomeClient() {
@@ -81,6 +84,33 @@ export function HomeClient() {
 
   const tools = [
     {
+      icon: Sparkles,
+      iconColor: 'text-rose-500',
+      title: 'Edge AI Background Removal',
+      desc: 'Instant, private background removal powered entirely in your browser via WebGPU. Unlimited cutouts, no signup, zero server uploads, and lossless PNG/WebP exports.',
+      href: '/background-removal',
+      badge: 'No Signup • Edge AI',
+      badgeColor: 'text-rose-600 dark:text-rose-400 bg-rose-500/10 border-rose-500/20',
+    },
+    {
+      icon: Maximize2,
+      iconColor: 'text-amber-500',
+      title: 'Edge Image Resizer & Artboard',
+      desc: 'Resize, pad, scale, and frame unlimited images to exact pixel dimensions and aspect ratios locally with no signup and instant download.',
+      href: '/image-resizer',
+      badge: 'No Signup • Resizer',
+      badgeColor: 'text-amber-600 dark:text-amber-400 bg-amber-500/10 border-amber-500/20',
+    },
+    {
+      icon: HardDrive,
+      iconColor: 'text-emerald-500',
+      title: 'Edge Image Compressor & WebP',
+      desc: 'Compress unlimited images under target budgets (<500 KB, <1 MB) and convert between WebP, PNG, and JPEG with no signup and zero cloud uploads.',
+      href: '/image-compressor',
+      badge: 'No Signup • Budgeting',
+      badgeColor: 'text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 border-emerald-500/20',
+    },
+    {
       icon: Type,
       iconColor: 'text-amber-500',
       title: 'Open Source Fonts Studio',
@@ -135,14 +165,11 @@ export function HomeClient() {
               <span className="relative inline-flex rounded-full h-2 w-2 bg-rose-500" />
             </span>
             <span className="text-[var(--text-secondary)] font-semibold">v1.0.0</span>
-            {/* <span className="text-[var(--border-dev)]">·</span>
-            <span className="text-rose-600 dark:text-rose-400 font-bold">Next.js 16</span> */}
-            {/* <ArrowRight className="w-3 h-3 text-[var(--text-muted)]" /> */}
           </div>
 
           {/* Headline */}
           <h1 className="text-4xl sm:text-5xl md:text-[3.5rem] lg:text-[4rem] font-black tracking-tight leading-[1.08] text-[var(--text-primary)] font-sans max-w-3xl">
-            <span className="text-rose-500">Developer assets</span> &<br />
+            <span className="text-rose-500">Developer assets</span> &amp;<br />
             chaos testing toolkit.
           </h1>
 
@@ -154,10 +181,17 @@ export function HomeClient() {
           {/* CTAs */}
           <div className="flex flex-wrap items-center gap-3 mt-2">
             <Link
-              href="/fonts"
+              href="/background-removal"
               className="px-5 py-2.5 rounded-lg bg-rose-500 text-white font-bold text-sm flex items-center gap-2 hover:bg-rose-600 transition-all shadow-lg shadow-rose-500/20 cursor-pointer"
             >
-              Browse All Fonts
+              <Sparkles className="w-4 h-4" />
+              AI BG &amp; Resizer
+            </Link>
+            <Link
+              href="/fonts"
+              className="px-5 py-2.5 rounded-lg bg-[var(--bg-panel)] border border-[var(--border-dev)] text-[var(--text-primary)] font-bold text-sm flex items-center gap-2 hover:border-[var(--text-muted)] transition-colors cursor-pointer"
+            >
+              Browse Fonts
             </Link>
             <Link
               href="/icons"
@@ -175,6 +209,8 @@ export function HomeClient() {
 
           {/* Metrics bar */}
           <div className="flex flex-wrap items-center gap-4 text-xs text-[var(--text-muted)] mt-4 font-mono">
+            <span className="text-rose-500 font-bold">Edge AI Studio</span>
+            <span className="text-[var(--border-dev)]">·</span>
             <span>2,180+ fonts</span>
             <span className="text-[var(--border-dev)]">·</span>
             <span>353K+ vector icons</span>
