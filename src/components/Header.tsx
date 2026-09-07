@@ -56,12 +56,8 @@ export const Header: React.FC = () => {
             >
               <Icon className="w-3.5 h-3.5 shrink-0" />
               <span>{item.label}</span>
-              {item.badge && (
-                <span className={`hidden xl:inline-flex text-[9px] px-1.5 py-0.2 rounded font-mono font-medium transition-colors ${
-                  isActive 
-                    ? 'bg-rose-500/20 text-rose-700 dark:text-rose-300 border border-rose-500/30' 
-                    : 'bg-[var(--pill-bg)] text-[var(--text-muted)] border border-[var(--border-dev)]'
-                }`}>
+              {item.badge && !isActive && (
+                <span className="hidden xl:inline-flex text-[9px] px-1.5 py-0.2 rounded font-mono font-medium bg-[var(--pill-bg)] text-[var(--text-muted)] border border-[var(--border-dev)]">
                   {item.badge}
                 </span>
               )}

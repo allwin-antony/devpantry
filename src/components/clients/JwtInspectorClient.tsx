@@ -1,6 +1,15 @@
 'use client';
 
-import React, { useState, useEffect, useMemo, useCallback } from 'react';
+import React, { useState, useEffect, useMemo, useCallback, useSyncExternalStore } from 'react';
+
+const emptySubscribe = () => () => {};
+function useIsClient(): boolean {
+  return useSyncExternalStore(
+    emptySubscribe,
+    () => true,
+    () => false
+  );
+}
 import {
   Key,
   ShieldCheck,
@@ -22,12 +31,11 @@ import {
   Plus,
   Lock,
   Info,
-  HelpCircle,
   X,
-  ChevronRight,
+  ChevronDown,
 } from 'lucide-react';
 import { parseJwt, buildCompactJwt } from '@/lib/jwt/codec';
-import { ParsedJwt, ClaimDiagnostic } from '@/lib/jwt/types';
+import { ParsedJwt } from '@/lib/jwt/types';
 import {
   expireTokenNow,
   expireTokenSoon,
@@ -45,6 +53,15 @@ import {
 import { signHmac, verifyHmac, generateTestRsaKeyPair, signRsa, SupportedHmacAlg } from '@/lib/jwt/crypto';
 import { getJwtPresets } from '@/lib/jwt/presets';
 
+function formatDeterministicTime(sec: number | undefined): string {
+  if (!sec) return 'N/A';
+  const d = new Date(sec * 1000);
+  const hours = String(d.getUTCHours()).padStart(2, '0');
+  const mins = String(d.getUTCMinutes()).padStart(2, '0');
+  const secs = String(d.getUTCSeconds()).padStart(2, '0');
+  return `${hours}:${mins}:${secs} UTC`;
+}
+
 export const JwtInspectorClient: React.FC = () => {
   const presets = useMemo(() => getJwtPresets(), []);
   
@@ -53,8 +70,11 @@ export const JwtInspectorClient: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'claims' | 'json' | 'crypto' | 'export'>('claims');
   const [copyFeedback, setCopyFeedback] = useState<string | null>(null);
   
-  // Active Interactive Hints on Click
-  const [selectedClaimKey, setSelectedClaimKey] = useState<string | null>('exp');
+  // Client mount check to safely eliminate hydration mismatches
+  const mounted = useIsClient();
+
+  // Expanded claims tracking for in-place accordion hints (default 'exp' open)
+  const [expandedClaimKeys, setExpandedClaimKeys] = useState<Record<string, boolean>>({ exp: true });
   const [activeChaosHint, setActiveChaosHint] = useState<ChaosExploitHint | null>(null);
   const [activePartHint, setActivePartHint] = useState<'header' | 'payload' | 'signature' | null>(null);
 
@@ -88,12 +108,6 @@ export const JwtInspectorClient: React.FC = () => {
   const payloadJsonStr = payloadJsonDraft !== null 
     ? payloadJsonDraft 
     : (parsed.isValidStructure ? JSON.stringify(parsed.payload, null, 2) : '');
-
-  // Selected claim object for the active hint drawer
-  const selectedClaim = useMemo<ClaimDiagnostic | null>(() => {
-    if (!selectedClaimKey) return parsed.diagnostics[0] || null;
-    return parsed.diagnostics.find(d => d.key === selectedClaimKey) || parsed.diagnostics[0] || null;
-  }, [parsed.diagnostics, selectedClaimKey]);
 
   // Live timer tick for seconds countdown
   const [, setTick] = useState(0);
@@ -149,11 +163,11 @@ export const JwtInspectorClient: React.FC = () => {
       setVerifyResult(null);
       setRsaStatus(null);
       setActiveChaosHint(null);
-      setSelectedClaimKey('exp');
+      setExpandedClaimKeys({ exp: true });
     }
   };
 
-  // Chaos Mutations with auto-activated Hint Drawer
+  // Chaos Mutations with auto-activated Hint
   const runChaosMutation = (action: () => string, label: string, hintId?: string) => {
     const updated = action();
     setRawToken(updated);
@@ -162,6 +176,14 @@ export const JwtInspectorClient: React.FC = () => {
     if (hintId && CHAOS_EXPLOIT_HINTS[hintId]) {
       setActiveChaosHint(CHAOS_EXPLOIT_HINTS[hintId]);
     }
+  };
+
+  // Toggle in-place claim expansion
+  const toggleClaimExpansion = (key: string) => {
+    setExpandedClaimKeys(prev => ({
+      ...prev,
+      [key]: !prev[key],
+    }));
   };
 
   // Add custom claim
@@ -178,7 +200,7 @@ export const JwtInspectorClient: React.FC = () => {
 
     const updated = setCustomClaim(parsed, newClaimKey.trim(), finalVal);
     setRawToken(updated);
-    setSelectedClaimKey(newClaimKey.trim());
+    setExpandedClaimKeys(prev => ({ ...prev, [newClaimKey.trim()]: true }));
     setNewClaimKey('');
     setNewClaimValue('');
     setIsAddingClaim(false);
@@ -189,9 +211,6 @@ export const JwtInspectorClient: React.FC = () => {
   const handleDeleteClaim = (claimKey: string) => {
     const updated = stripClaim(parsed, claimKey);
     setRawToken(updated);
-    if (selectedClaimKey === claimKey) {
-      setSelectedClaimKey(null);
-    }
     triggerCopy(updated, `Stripped claim: ${claimKey}`);
   };
 
@@ -267,7 +286,7 @@ export const JwtInspectorClient: React.FC = () => {
         {/* Left: Security Sandbox Guarantee Badge */}
         <div className="flex items-center gap-2">
           <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-          <div className="flex items-center gap-1.5 font-mono text-[11px] text-emerald-600 dark:text-emerald-400 font-semibold">
+          <div className="flex items-center gap-1.5 font-mono text-[11px] text-emerald-700 dark:text-emerald-400 font-semibold">
             <ShieldCheck className="w-3.5 h-3.5" /> 100% IN-MEMORY SANDBOX
           </div>
           <span className="text-[var(--text-muted)] hidden sm:inline">•</span>
@@ -295,7 +314,7 @@ export const JwtInspectorClient: React.FC = () => {
         {/* Right: Quick Action Buttons & Feedback */}
         <div className="flex items-center gap-2">
           {copyFeedback && (
-            <span className="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30 text-[11px] font-mono flex items-center gap-1 animate-fade-in">
+            <span className="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-700 dark:text-emerald-300 border border-emerald-500/30 text-[11px] font-mono flex items-center gap-1 animate-fade-in">
               <Check className="w-3 h-3" /> {copyFeedback}
             </span>
           )}
@@ -305,9 +324,9 @@ export const JwtInspectorClient: React.FC = () => {
               setVerifyResult(null);
               setRsaStatus(null);
               setActiveChaosHint(null);
-              setSelectedClaimKey(null);
+              setExpandedClaimKeys({});
             }}
-            className="px-2.5 py-1 rounded-md bg-[var(--bg-sidebar)] hover:bg-rose-500/20 text-[var(--text-secondary)] hover:text-rose-500 border border-[var(--border-dev)] hover:border-rose-500/30 transition-colors flex items-center gap-1 cursor-pointer font-mono text-[11px]"
+            className="px-2.5 py-1 rounded-md bg-[var(--bg-sidebar)] hover:bg-rose-500/20 text-[var(--text-secondary)] hover:text-rose-600 dark:hover:text-rose-400 border border-[var(--border-dev)] hover:border-rose-500/30 transition-colors flex items-center gap-1 cursor-pointer font-mono text-[11px]"
             title="Purge token from browser memory"
           >
             <Trash2 className="w-3 h-3" /> Clear
@@ -352,15 +371,12 @@ export const JwtInspectorClient: React.FC = () => {
               spellCheck={false}
             />
 
-            {/* 3-Part Colorized Anatomy Chips (Click to view hint) */}
+            {/* 3-Part Token Anatomy Rows (Subtle, professional, non-distracting) */}
             {parsed.isValidStructure ? (
               <div className="flex flex-col gap-2 pt-1 border-t border-[var(--border-dev)]">
                 <div className="flex items-center justify-between">
                   <span className="text-[10px] font-mono font-bold text-[var(--text-muted)] uppercase tracking-wider">
-                    Click part to inspect hint:
-                  </span>
-                  <span className="text-[10px] font-mono text-[var(--text-muted)]">
-                    3 dot-separated segments
+                    Token Segments (Click to inspect):
                   </span>
                 </div>
 
@@ -369,35 +385,35 @@ export const JwtInspectorClient: React.FC = () => {
                   {/* Header Part */}
                   <div
                     onClick={() => setActivePartHint(activePartHint === 'header' ? null : 'header')}
-                    className={`p-2 rounded-lg border transition-all cursor-pointer flex items-center justify-between gap-2 ${
+                    className={`p-2 rounded-lg border transition-all cursor-pointer flex items-center justify-between gap-2 bg-[var(--bg-panel)] ${
                       activePartHint === 'header'
-                        ? 'bg-rose-500/15 border-rose-500/50 shadow-xs'
-                        : 'bg-rose-500/10 border-rose-500/25 hover:border-rose-500/40'
+                        ? 'border-rose-500/60 shadow-xs'
+                        : 'border-[var(--border-dev)] hover:border-rose-500/40'
                     }`}
                   >
                     <div className="flex items-center gap-2 min-w-0">
                       <span className="w-2 h-2 rounded-full bg-rose-500 shrink-0" />
-                      <span className="font-bold text-rose-600 dark:text-rose-400 shrink-0">Header:</span>
-                      <span className="truncate text-rose-500/90 text-[11px]" title={parsed.headerB64}>
+                      <span className="font-bold text-[var(--text-primary)] shrink-0">Header:</span>
+                      <span className="truncate text-[var(--text-secondary)] text-[11px]" title={parsed.headerB64}>
                         {parsed.headerB64}
                       </span>
                     </div>
                     <div className="flex items-center gap-1.5 shrink-0">
-                      <span className="px-1.5 py-0.2 rounded bg-rose-500/20 text-rose-600 dark:text-rose-300 text-[10px] font-bold">
+                      <span className="px-1.5 py-0.2 rounded bg-[var(--pill-bg)] text-[var(--text-primary)] text-[10px] font-bold border border-[var(--border-dev)]">
                         {parsed.header.alg}
                       </span>
-                      <span className="text-[10px] text-rose-400">ℹ️ Hint</span>
+                      <span className="text-[10px] text-rose-500">Hint</span>
                     </div>
                   </div>
 
                   {/* Header Hint Drawer */}
                   {activePartHint === 'header' && (
-                    <div className="p-2.5 rounded-lg bg-rose-500/10 border border-rose-500/30 text-xs font-mono text-rose-600 dark:text-rose-300 flex flex-col gap-1 animate-fade-in">
-                      <div className="font-bold flex items-center gap-1">
+                    <div className="p-3 rounded-lg bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-800 text-xs font-mono text-slate-900 dark:text-slate-100 flex flex-col gap-1.5 animate-fade-in shadow-xs">
+                      <div className="font-bold flex items-center gap-1 text-rose-700 dark:text-rose-400">
                         <Info className="w-3.5 h-3.5" /> Header Segment (JOSE Header):
                       </div>
-                      <p className="text-[11px] leading-relaxed text-[var(--text-secondary)]">
-                        Base64URL-encoded JSON specifying the cryptographic signing algorithm (<code>alg: &quot;{parsed.header.alg}&quot;</code>) and token format (<code>typ: &quot;{parsed.header.typ || 'JWT'}&quot;</code>). Key Hint (<code>kid</code>) is optional for JWKS matching.
+                      <p className="text-[11px] leading-relaxed text-slate-800 dark:text-slate-300">
+                        Base64URL-encoded JSON specifying the cryptographic signing algorithm (<code>alg: &quot;{parsed.header.alg}&quot;</code>) and token format (<code>typ: &quot;{parsed.header.typ || 'JWT'}&quot;</code>). Key ID hint (<code>kid</code>) is optional for JWKS matching.
                       </p>
                     </div>
                   )}
@@ -405,35 +421,35 @@ export const JwtInspectorClient: React.FC = () => {
                   {/* Payload Part */}
                   <div
                     onClick={() => setActivePartHint(activePartHint === 'payload' ? null : 'payload')}
-                    className={`p-2 rounded-lg border transition-all cursor-pointer flex items-center justify-between gap-2 ${
+                    className={`p-2 rounded-lg border transition-all cursor-pointer flex items-center justify-between gap-2 bg-[var(--bg-panel)] ${
                       activePartHint === 'payload'
-                        ? 'bg-purple-500/15 border-purple-500/50 shadow-xs'
-                        : 'bg-purple-500/10 border-purple-500/25 hover:border-purple-500/40'
+                        ? 'border-purple-500/60 shadow-xs'
+                        : 'border-[var(--border-dev)] hover:border-purple-500/40'
                     }`}
                   >
                     <div className="flex items-center gap-2 min-w-0">
                       <span className="w-2 h-2 rounded-full bg-purple-500 shrink-0" />
-                      <span className="font-bold text-purple-600 dark:text-purple-400 shrink-0">Payload:</span>
-                      <span className="truncate text-purple-500/90 text-[11px]" title={parsed.payloadB64}>
+                      <span className="font-bold text-[var(--text-primary)] shrink-0">Payload:</span>
+                      <span className="truncate text-[var(--text-secondary)] text-[11px]" title={parsed.payloadB64}>
                         {parsed.payloadB64}
                       </span>
                     </div>
                     <div className="flex items-center gap-1.5 shrink-0">
-                      <span className="px-1.5 py-0.2 rounded bg-purple-500/20 text-purple-600 dark:text-purple-300 text-[10px] font-bold">
+                      <span className="px-1.5 py-0.2 rounded bg-[var(--pill-bg)] text-[var(--text-primary)] text-[10px] font-bold border border-[var(--border-dev)]">
                         {parsed.diagnostics.length} claims
                       </span>
-                      <span className="text-[10px] text-purple-400">ℹ️ Hint</span>
+                      <span className="text-[10px] text-purple-500">Hint</span>
                     </div>
                   </div>
 
                   {/* Payload Hint Drawer */}
                   {activePartHint === 'payload' && (
-                    <div className="p-2.5 rounded-lg bg-purple-500/10 border border-purple-500/30 text-xs font-mono text-purple-600 dark:text-purple-300 flex flex-col gap-1 animate-fade-in">
-                      <div className="font-bold flex items-center gap-1">
+                    <div className="p-3 rounded-lg bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-800 text-xs font-mono text-slate-900 dark:text-slate-100 flex flex-col gap-1.5 animate-fade-in shadow-xs">
+                      <div className="font-bold flex items-center gap-1 text-purple-700 dark:text-purple-400">
                         <Info className="w-3.5 h-3.5" /> Payload Segment (JWT Claims):
                       </div>
-                      <p className="text-[11px] leading-relaxed text-[var(--text-secondary)]">
-                        Base64URL-encoded claims containing identity assertions (<code>sub</code>, <code>email</code>, <code>roles</code>) and timestamps (<code>exp</code>, <code>iat</code>, <code>nbf</code>). Anyone with access to the token can read this data without a key. Never store raw passwords or sensitive PII here!
+                      <p className="text-[11px] leading-relaxed text-slate-800 dark:text-slate-300">
+                        Base64URL-encoded claims containing identity assertions (<code>sub</code>, <code>email</code>, <code>roles</code>) and timestamps (<code>exp</code>, <code>iat</code>, <code>nbf</code>). Anyone with access to the token can decode and read this data without a key. Never store raw passwords or sensitive PII here!
                       </p>
                     </div>
                   )}
@@ -441,16 +457,16 @@ export const JwtInspectorClient: React.FC = () => {
                   {/* Signature Part */}
                   <div
                     onClick={() => setActivePartHint(activePartHint === 'signature' ? null : 'signature')}
-                    className={`p-2 rounded-lg border transition-all cursor-pointer flex items-center justify-between gap-2 ${
+                    className={`p-2 rounded-lg border transition-all cursor-pointer flex items-center justify-between gap-2 bg-[var(--bg-panel)] ${
                       activePartHint === 'signature'
-                        ? 'bg-cyan-500/15 border-cyan-500/50 shadow-xs'
-                        : 'bg-cyan-500/10 border-cyan-500/25 hover:border-cyan-500/40'
+                        ? 'border-cyan-500/60 shadow-xs'
+                        : 'border-[var(--border-dev)] hover:border-cyan-500/40'
                     }`}
                   >
                     <div className="flex items-center gap-2 min-w-0">
                       <span className="w-2 h-2 rounded-full bg-cyan-500 shrink-0" />
-                      <span className="font-bold text-cyan-600 dark:text-cyan-400 shrink-0">Signature:</span>
-                      <span className="truncate text-cyan-500/90 text-[11px]" title={parsed.signatureB64 || '(none)'}>
+                      <span className="font-bold text-[var(--text-primary)] shrink-0">Signature:</span>
+                      <span className="truncate text-[var(--text-secondary)] text-[11px]" title={parsed.signatureB64 || '(none)'}>
                         {parsed.signatureB64 || '(unsigned / signature stripped)'}
                       </span>
                     </div>
@@ -458,23 +474,23 @@ export const JwtInspectorClient: React.FC = () => {
                       <span
                         className={`px-1.5 py-0.2 rounded text-[10px] font-bold ${
                           parsed.hasSignature
-                            ? 'bg-cyan-500/20 text-cyan-600 dark:text-cyan-300'
-                            : 'bg-amber-500/20 text-amber-600 dark:text-amber-300'
+                            ? 'bg-emerald-500/15 text-emerald-700 dark:text-emerald-400'
+                            : 'bg-amber-500/15 text-amber-700 dark:text-amber-400'
                         }`}
                       >
                         {parsed.hasSignature ? 'Present' : 'None'}
                       </span>
-                      <span className="text-[10px] text-cyan-400">ℹ️ Hint</span>
+                      <span className="text-[10px] text-cyan-600 dark:text-cyan-400">Hint</span>
                     </div>
                   </div>
 
                   {/* Signature Hint Drawer */}
                   {activePartHint === 'signature' && (
-                    <div className="p-2.5 rounded-lg bg-cyan-500/10 border border-cyan-500/30 text-xs font-mono text-cyan-600 dark:text-cyan-300 flex flex-col gap-1 animate-fade-in">
-                      <div className="font-bold flex items-center gap-1">
+                    <div className="p-3 rounded-lg bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-800 text-xs font-mono text-slate-900 dark:text-slate-100 flex flex-col gap-1.5 animate-fade-in shadow-xs">
+                      <div className="font-bold flex items-center gap-1 text-cyan-700 dark:text-cyan-400">
                         <Info className="w-3.5 h-3.5" /> Signature Segment:
                       </div>
-                      <p className="text-[11px] leading-relaxed text-[var(--text-secondary)]">
+                      <p className="text-[11px] leading-relaxed text-slate-800 dark:text-slate-300">
                         Cryptographic signature generated by computing <code>algorithm(base64Url(header) + &quot;.&quot; + base64Url(payload), secretKey)</code>. Guarantees that neither the header nor payload was tampered with in transit.
                       </p>
                     </div>
@@ -484,7 +500,7 @@ export const JwtInspectorClient: React.FC = () => {
               </div>
             ) : (
               parsed.error && (
-                <div className="p-2.5 rounded-lg bg-rose-500/10 border border-rose-500/30 text-rose-500 text-xs font-mono flex items-start gap-2">
+                <div className="p-2.5 rounded-lg bg-rose-500/10 border border-rose-500/30 text-rose-600 dark:text-rose-400 text-xs font-mono flex items-start gap-2">
                   <AlertTriangle className="w-4 h-4 shrink-0 mt-0.5" />
                   <div>
                     <div className="font-bold">Format Error:</div>
@@ -506,22 +522,22 @@ export const JwtInspectorClient: React.FC = () => {
               </span>
 
               {parsed.status === 'valid' && (
-                <span className="px-2.5 py-0.5 rounded-full text-[11px] font-mono font-bold bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30 flex items-center gap-1">
+                <span className="px-2.5 py-0.5 rounded-full text-[11px] font-mono font-bold bg-emerald-500/15 text-emerald-700 dark:text-emerald-400 border border-emerald-500/30 flex items-center gap-1">
                   <Check className="w-3 h-3" /> ACTIVE &amp; VALID
                 </span>
               )}
               {parsed.status === 'expired' && (
-                <span className="px-2.5 py-0.5 rounded-full text-[11px] font-mono font-bold bg-rose-500/15 text-rose-600 dark:text-rose-400 border border-rose-500/30 flex items-center gap-1">
+                <span className="px-2.5 py-0.5 rounded-full text-[11px] font-mono font-bold bg-rose-500/15 text-rose-700 dark:text-rose-400 border border-rose-500/30 flex items-center gap-1">
                   <Clock className="w-3 h-3" /> EXPIRED TOKEN
                 </span>
               )}
               {parsed.status === 'premature' && (
-                <span className="px-2.5 py-0.5 rounded-full text-[11px] font-mono font-bold bg-amber-500/15 text-amber-600 dark:text-amber-400 border border-amber-500/30 flex items-center gap-1">
+                <span className="px-2.5 py-0.5 rounded-full text-[11px] font-mono font-bold bg-amber-500/15 text-amber-700 dark:text-amber-400 border border-amber-500/30 flex items-center gap-1">
                   <Clock className="w-3 h-3" /> NOT YET VALID (nbf)
                 </span>
               )}
               {parsed.status === 'alg_none' && (
-                <span className="px-2.5 py-0.5 rounded-full text-[11px] font-mono font-bold bg-purple-500/15 text-purple-600 dark:text-purple-400 border border-purple-500/30 flex items-center gap-1">
+                <span className="px-2.5 py-0.5 rounded-full text-[11px] font-mono font-bold bg-purple-500/15 text-purple-700 dark:text-purple-400 border border-purple-500/30 flex items-center gap-1">
                   <ShieldAlert className="w-3 h-3" /> ALG: NONE (EXPLOIT)
                 </span>
               )}
@@ -545,8 +561,8 @@ export const JwtInspectorClient: React.FC = () => {
                   <span
                     className={`font-bold ${
                       parsed.secondsRemaining > 0
-                        ? 'text-emerald-600 dark:text-emerald-400'
-                        : 'text-rose-600 dark:text-rose-400'
+                        ? 'text-emerald-700 dark:text-emerald-400'
+                        : 'text-rose-700 dark:text-rose-400'
                     }`}
                   >
                     {parsed.secondsRemaining > 0
@@ -569,13 +585,13 @@ export const JwtInspectorClient: React.FC = () => {
                   />
                 </div>
 
-                {/* Issued / Expiry timestamps */}
+                {/* Issued / Expiry timestamps (Hydration-Safe Deterministic Formatting) */}
                 <div className="flex items-center justify-between text-[10px] text-[var(--text-muted)] pt-1">
                   <span>
-                    iat: {parsed.payload.iat ? new Date(parsed.payload.iat * 1000).toLocaleTimeString() : 'N/A'}
+                    iat: {mounted ? formatDeterministicTime(parsed.payload.iat) : 'N/A'}
                   </span>
                   <span>
-                    exp: {parsed.payload.exp ? new Date(parsed.payload.exp * 1000).toLocaleTimeString() : 'N/A'}
+                    exp: {mounted ? formatDeterministicTime(parsed.payload.exp) : 'N/A'}
                   </span>
                 </div>
               </div>
@@ -584,14 +600,12 @@ export const JwtInspectorClient: React.FC = () => {
             {/* Standard Claims Metadata Grid */}
             <div className="grid grid-cols-2 gap-2 text-xs font-mono pt-1">
               <div
-                onClick={() => setSelectedClaimKey('iss')}
-                className={`p-2 rounded bg-[var(--bg-panel)] border transition-colors cursor-pointer ${
-                  selectedClaimKey === 'iss' ? 'border-purple-500/50' : 'border-[var(--border-dev)]'
-                }`}
+                onClick={() => toggleClaimExpansion('iss')}
+                className="p-2 rounded bg-[var(--bg-panel)] border border-[var(--border-dev)] hover:border-rose-500/40 transition-colors cursor-pointer"
               >
                 <div className="text-[10px] text-[var(--text-muted)] uppercase flex items-center justify-between">
                   <span>Issuer (iss)</span>
-                  <span className="text-purple-400 text-[9px]">Hint</span>
+                  <span className="text-rose-600 dark:text-rose-400 text-[9px]">Hint</span>
                 </div>
                 <div className="font-bold truncate text-[var(--text-primary)]" title={String(parsed.payload.iss || 'None')}>
                   {parsed.payload.iss ? String(parsed.payload.iss) : 'None'}
@@ -599,14 +613,12 @@ export const JwtInspectorClient: React.FC = () => {
               </div>
 
               <div
-                onClick={() => setSelectedClaimKey('sub')}
-                className={`p-2 rounded bg-[var(--bg-panel)] border transition-colors cursor-pointer ${
-                  selectedClaimKey === 'sub' ? 'border-purple-500/50' : 'border-[var(--border-dev)]'
-                }`}
+                onClick={() => toggleClaimExpansion('sub')}
+                className="p-2 rounded bg-[var(--bg-panel)] border border-[var(--border-dev)] hover:border-rose-500/40 transition-colors cursor-pointer"
               >
                 <div className="text-[10px] text-[var(--text-muted)] uppercase flex items-center justify-between">
                   <span>Subject (sub)</span>
-                  <span className="text-purple-400 text-[9px]">Hint</span>
+                  <span className="text-rose-600 dark:text-rose-400 text-[9px]">Hint</span>
                 </div>
                 <div className="font-bold truncate text-[var(--text-primary)]" title={String(parsed.payload.sub || 'None')}>
                   {parsed.payload.sub ? String(parsed.payload.sub) : 'None'}
@@ -614,14 +626,12 @@ export const JwtInspectorClient: React.FC = () => {
               </div>
 
               <div
-                onClick={() => setSelectedClaimKey('aud')}
-                className={`p-2 rounded bg-[var(--bg-panel)] border transition-colors cursor-pointer ${
-                  selectedClaimKey === 'aud' ? 'border-purple-500/50' : 'border-[var(--border-dev)]'
-                }`}
+                onClick={() => toggleClaimExpansion('aud')}
+                className="p-2 rounded bg-[var(--bg-panel)] border border-[var(--border-dev)] hover:border-rose-500/40 transition-colors cursor-pointer"
               >
                 <div className="text-[10px] text-[var(--text-muted)] uppercase flex items-center justify-between">
                   <span>Audience (aud)</span>
-                  <span className="text-purple-400 text-[9px]">Hint</span>
+                  <span className="text-rose-600 dark:text-rose-400 text-[9px]">Hint</span>
                 </div>
                 <div className="font-bold truncate text-[var(--text-primary)]" title={String(parsed.payload.aud || 'None')}>
                   {parsed.payload.aud ? String(parsed.payload.aud) : 'None'}
@@ -629,16 +639,14 @@ export const JwtInspectorClient: React.FC = () => {
               </div>
 
               <div
-                onClick={() => setSelectedClaimKey('exp')}
-                className={`p-2 rounded bg-[var(--bg-panel)] border transition-colors cursor-pointer ${
-                  selectedClaimKey === 'exp' ? 'border-purple-500/50' : 'border-[var(--border-dev)]'
-                }`}
+                onClick={() => toggleClaimExpansion('exp')}
+                className="p-2 rounded bg-[var(--bg-panel)] border border-[var(--border-dev)] hover:border-rose-500/40 transition-colors cursor-pointer"
               >
                 <div className="text-[10px] text-[var(--text-muted)] uppercase flex items-center justify-between">
                   <span>Algorithm (alg)</span>
-                  <span className="text-rose-400 text-[9px]">Hint</span>
+                  <span className="text-rose-600 dark:text-rose-400 text-[9px]">Hint</span>
                 </div>
-                <div className="font-bold text-rose-500">
+                <div className="font-bold text-rose-600 dark:text-rose-400">
                   {parsed.header.alg || 'N/A'}
                 </div>
               </div>
@@ -653,11 +661,11 @@ export const JwtInspectorClient: React.FC = () => {
         {/* ============================================================ */}
         <div className="lg:col-span-7 flex flex-col bg-[var(--bg-panel-subtle)] overflow-y-auto">
           
-          {/* 🔥 1. PINNED TOP: Chaos Mutations Deck (Always Visible) */}
+          {/* 🔥 1. PINNED TOP: Chaos Mutations Deck (Clean, Professional, Non-Rainbow) */}
           <div className="p-4 border-b border-[var(--border-dev)] bg-[var(--bg-panel)] flex flex-col gap-3 sticky top-0 z-10 shadow-xs">
             
             <div className="flex items-center justify-between">
-              <div className="flex items-center gap-1.5 font-mono text-xs font-bold text-rose-500 uppercase tracking-wider">
+              <div className="flex items-center gap-1.5 font-mono text-xs font-bold text-rose-600 dark:text-rose-400 uppercase tracking-wider">
                 <Flame className="w-4 h-4 text-rose-500" />
                 Chaos Mutations &mdash; Negative Path Simulator
               </div>
@@ -666,109 +674,109 @@ export const JwtInspectorClient: React.FC = () => {
               </span>
             </div>
 
-            {/* Categorized Action Buttons with Hint triggers */}
+            {/* Unified, sleek, professional action buttons */}
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs font-mono">
               
               {/* Expire Now */}
               <button
                 onClick={() => runChaosMutation(() => expireTokenNow(parsed, 300), 'Expired (-5m)', 'expire_now')}
-                className="p-2 rounded-lg bg-rose-500/10 hover:bg-rose-500/20 text-rose-600 dark:text-rose-400 border border-rose-500/30 hover:border-rose-500/50 transition-all flex items-center justify-center gap-1.5 cursor-pointer font-medium"
+                className="p-2 rounded-lg bg-[var(--bg-sidebar)] hover:bg-[var(--pill-bg)] text-[var(--text-primary)] border border-[var(--border-dev)] hover:border-rose-500/40 transition-all flex items-center justify-center gap-1.5 cursor-pointer font-medium"
               >
-                <Clock className="w-3.5 h-3.5 shrink-0" /> Expire (-5m)
+                <Clock className="w-3.5 h-3.5 text-rose-500 shrink-0" /> Expire (-5m)
               </button>
 
               {/* Race Condition (10s) */}
               <button
                 onClick={() => runChaosMutation(() => expireTokenSoon(parsed, 10), 'Expiring in 10s', 'race_expire')}
-                className="p-2 rounded-lg bg-amber-500/10 hover:bg-amber-500/20 text-amber-600 dark:text-amber-400 border border-amber-500/30 hover:border-amber-500/50 transition-all flex items-center justify-center gap-1.5 cursor-pointer font-medium"
+                className="p-2 rounded-lg bg-[var(--bg-sidebar)] hover:bg-[var(--pill-bg)] text-[var(--text-primary)] border border-[var(--border-dev)] hover:border-amber-500/40 transition-all flex items-center justify-center gap-1.5 cursor-pointer font-medium"
               >
-                <Zap className="w-3.5 h-3.5 shrink-0" /> Race (10s)
+                <Zap className="w-3.5 h-3.5 text-amber-500 shrink-0" /> Race (10s)
               </button>
 
               {/* Clock Skew */}
               <button
                 onClick={() => runChaosMutation(() => injectClockSkewFuture(parsed, 300), 'Clock Skew Injected', 'clock_skew')}
-                className="p-2 rounded-lg bg-cyan-500/10 hover:bg-cyan-500/20 text-cyan-600 dark:text-cyan-400 border border-cyan-500/30 hover:border-cyan-500/50 transition-all flex items-center justify-center gap-1.5 cursor-pointer font-medium"
+                className="p-2 rounded-lg bg-[var(--bg-sidebar)] hover:bg-[var(--pill-bg)] text-[var(--text-primary)] border border-[var(--border-dev)] hover:border-cyan-500/40 transition-all flex items-center justify-center gap-1.5 cursor-pointer font-medium"
               >
-                <Sliders className="w-3.5 h-3.5 shrink-0" /> Clock Skew (+5m)
+                <Sliders className="w-3.5 h-3.5 text-cyan-500 shrink-0" /> Clock Skew (+5m)
               </button>
 
               {/* Renew (+1h) */}
               <button
                 onClick={() => runChaosMutation(() => renewTokenValid(parsed, 3600), 'Renewed (+1h)', 'renew')}
-                className="p-2 rounded-lg bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30 hover:border-emerald-500/50 transition-all flex items-center justify-center gap-1.5 cursor-pointer font-medium"
+                className="p-2 rounded-lg bg-[var(--bg-sidebar)] hover:bg-[var(--pill-bg)] text-[var(--text-primary)] border border-[var(--border-dev)] hover:border-emerald-500/40 transition-all flex items-center justify-center gap-1.5 cursor-pointer font-medium"
               >
-                <RefreshCw className="w-3.5 h-3.5 shrink-0" /> Renew (+1h)
+                <RefreshCw className="w-3.5 h-3.5 text-emerald-500 shrink-0" /> Renew (+1h)
               </button>
 
               {/* alg: none Exploit */}
               <button
                 onClick={() => runChaosMutation(() => simulateAlgNone(parsed), 'alg: none Exploit', 'alg_none')}
-                className="p-2 rounded-lg bg-purple-500/10 hover:bg-purple-500/20 text-purple-600 dark:text-purple-400 border border-purple-500/30 hover:border-purple-500/50 transition-all flex items-center justify-center gap-1.5 cursor-pointer font-medium"
+                className="p-2 rounded-lg bg-[var(--bg-sidebar)] hover:bg-[var(--pill-bg)] text-[var(--text-primary)] border border-[var(--border-dev)] hover:border-purple-500/40 transition-all flex items-center justify-center gap-1.5 cursor-pointer font-medium"
               >
-                <Unlock className="w-3.5 h-3.5 shrink-0" /> alg: none
+                <Unlock className="w-3.5 h-3.5 text-purple-500 shrink-0" /> alg: none
               </button>
 
               {/* Corrupt Signature */}
               <button
                 onClick={() => runChaosMutation(() => corruptSignature(parsed), 'Signature Corrupted', 'corrupt_sig')}
-                className="p-2 rounded-lg bg-rose-500/10 hover:bg-rose-500/20 text-rose-600 dark:text-rose-400 border border-rose-500/30 hover:border-rose-500/50 transition-all flex items-center justify-center gap-1.5 cursor-pointer font-medium"
+                className="p-2 rounded-lg bg-[var(--bg-sidebar)] hover:bg-[var(--pill-bg)] text-[var(--text-primary)] border border-[var(--border-dev)] hover:border-rose-500/40 transition-all flex items-center justify-center gap-1.5 cursor-pointer font-medium"
               >
-                <AlertTriangle className="w-3.5 h-3.5 shrink-0" /> Corrupt Sig
+                <AlertTriangle className="w-3.5 h-3.5 text-rose-500 shrink-0" /> Corrupt Sig
               </button>
 
               {/* Swap to HS256 */}
               <button
                 onClick={() => runChaosMutation(() => swapAlgorithmToHs256(parsed), 'Swapped to HS256', 'swap_hs256')}
-                className="p-2 rounded-lg bg-[var(--bg-sidebar)] hover:bg-[var(--pill-bg)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] border border-[var(--border-dev)] transition-all flex items-center justify-center gap-1.5 cursor-pointer font-medium"
+                className="p-2 rounded-lg bg-[var(--bg-sidebar)] hover:bg-[var(--pill-bg)] text-[var(--text-primary)] border border-[var(--border-dev)] hover:border-amber-500/40 transition-all flex items-center justify-center gap-1.5 cursor-pointer font-medium"
               >
-                <RefreshCw className="w-3.5 h-3.5 shrink-0" /> To HS256
+                <RefreshCw className="w-3.5 h-3.5 text-amber-500 shrink-0" /> To HS256
               </button>
 
               {/* Inject BLNS */}
               <button
                 onClick={() => runChaosMutation(() => injectBlnsClaim(parsed, 'name'), 'Naughty String Injected', 'inject_blns')}
-                className="p-2 rounded-lg bg-indigo-500/10 hover:bg-indigo-500/20 text-indigo-600 dark:text-indigo-400 border border-indigo-500/30 hover:border-indigo-500/50 transition-all flex items-center justify-center gap-1.5 cursor-pointer font-medium"
+                className="p-2 rounded-lg bg-[var(--bg-sidebar)] hover:bg-[var(--pill-bg)] text-[var(--text-primary)] border border-[var(--border-dev)] hover:border-indigo-500/40 transition-all flex items-center justify-center gap-1.5 cursor-pointer font-medium"
               >
-                <Sparkles className="w-3.5 h-3.5 shrink-0" /> Inject BLNS
+                <Sparkles className="w-3.5 h-3.5 text-indigo-500 shrink-0" /> Inject BLNS
               </button>
 
             </div>
 
-            {/* Active Chaos Vulnerability & Testing Guide (Visible on Click) */}
+            {/* High-Contrast Active Chaos Scenario & Testing Guide (100% visible in light & dark mode) */}
             {activeChaosHint && (
-              <div className="mt-1 p-3.5 rounded-xl bg-gradient-to-br from-[var(--bg-panel-subtle)] to-[var(--bg-panel)] border border-rose-500/40 text-xs font-mono flex flex-col gap-2 shadow-sm animate-fade-in">
+              <div className="mt-1 p-3.5 rounded-xl bg-amber-50 dark:bg-amber-950/30 border-2 border-amber-300 dark:border-amber-700/60 text-xs font-mono flex flex-col gap-2 shadow-sm animate-fade-in text-slate-900 dark:text-slate-100">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
-                    <span className="font-bold text-sm text-rose-600 dark:text-rose-400 flex items-center gap-1.5">
-                      <Zap className="w-4 h-4 text-rose-500" />
+                    <span className="font-bold text-sm text-amber-900 dark:text-amber-300 flex items-center gap-1.5">
+                      <Zap className="w-4 h-4 text-amber-600 dark:text-amber-400" />
                       {activeChaosHint.title}
                     </span>
-                    <span className={`text-[10px] px-2 py-0.5 rounded-full border font-bold ${activeChaosHint.badgeColor}`}>
+                    <span className="text-[10px] px-2 py-0.5 rounded-full border font-bold bg-amber-200/60 dark:bg-amber-900/60 text-amber-900 dark:text-amber-200 border-amber-400/50">
                       {activeChaosHint.badge}
                     </span>
                   </div>
                   <button
                     onClick={() => setActiveChaosHint(null)}
-                    className="p-1 rounded hover:bg-[var(--pill-bg)] text-[var(--text-muted)] hover:text-[var(--text-primary)] cursor-pointer"
+                    className="p-1 rounded hover:bg-black/10 dark:hover:bg-white/10 text-slate-600 dark:text-slate-400 cursor-pointer"
                     title="Dismiss Hint"
                   >
                     <X className="w-3.5 h-3.5" />
                   </button>
                 </div>
 
-                <div className="grid grid-cols-1 gap-1.5 text-[11px] leading-relaxed">
+                <div className="grid grid-cols-1 gap-1.5 text-xs leading-relaxed">
                   <div>
-                    <span className="text-[var(--text-muted)] font-semibold">What was modified: </span>
-                    <span className="text-[var(--text-primary)] font-mono">{activeChaosHint.mutation}</span>
+                    <span className="text-slate-600 dark:text-slate-400 font-bold">What was modified: </span>
+                    <span className="font-semibold text-slate-900 dark:text-slate-100">{activeChaosHint.mutation}</span>
                   </div>
                   <div>
-                    <span className="text-[var(--text-muted)] font-semibold">Security Impact: </span>
-                    <span className="text-[var(--text-secondary)]">{activeChaosHint.securityImpact}</span>
+                    <span className="text-slate-600 dark:text-slate-400 font-bold">Security Impact: </span>
+                    <span className="text-slate-800 dark:text-slate-200">{activeChaosHint.securityImpact}</span>
                   </div>
-                  <div className="p-2 rounded bg-[var(--bg-app)] border border-[var(--border-dev)] text-[11px]">
-                    <span className="font-bold text-emerald-600 dark:text-emerald-400">How to test your app: </span>
-                    <span className="text-[var(--text-primary)]">{activeChaosHint.howToTest}</span>
+                  <div className="p-2.5 rounded-lg bg-white dark:bg-slate-900 border border-amber-300/80 dark:border-amber-700/40 text-xs shadow-2xs">
+                    <span className="font-bold text-emerald-700 dark:text-emerald-400">How to test your app: </span>
+                    <span className="text-slate-900 dark:text-slate-100">{activeChaosHint.howToTest}</span>
                   </div>
                 </div>
               </div>
@@ -784,7 +792,7 @@ export const JwtInspectorClient: React.FC = () => {
                 onClick={() => setActiveTab('claims')}
                 className={`px-3 py-2 text-xs font-mono font-semibold border-b-2 transition-colors cursor-pointer flex items-center gap-1.5 ${
                   activeTab === 'claims'
-                    ? 'border-purple-500 text-purple-600 dark:text-purple-400'
+                    ? 'border-rose-500 text-rose-600 dark:text-rose-400'
                     : 'border-transparent text-[var(--text-muted)] hover:text-[var(--text-primary)]'
                 }`}
               >
@@ -806,7 +814,7 @@ export const JwtInspectorClient: React.FC = () => {
                 onClick={() => setActiveTab('crypto')}
                 className={`px-3 py-2 text-xs font-mono font-semibold border-b-2 transition-colors cursor-pointer flex items-center gap-1.5 ${
                   activeTab === 'crypto'
-                    ? 'border-cyan-500 text-cyan-600 dark:text-cyan-400'
+                    ? 'border-rose-500 text-rose-600 dark:text-rose-400'
                     : 'border-transparent text-[var(--text-muted)] hover:text-[var(--text-primary)]'
                 }`}
               >
@@ -817,7 +825,7 @@ export const JwtInspectorClient: React.FC = () => {
                 onClick={() => setActiveTab('export')}
                 className={`px-3 py-2 text-xs font-mono font-semibold border-b-2 transition-colors cursor-pointer flex items-center gap-1.5 ${
                   activeTab === 'export'
-                    ? 'border-emerald-500 text-emerald-600 dark:text-emerald-400'
+                    ? 'border-rose-500 text-rose-600 dark:text-rose-400'
                     : 'border-transparent text-[var(--text-muted)] hover:text-[var(--text-primary)]'
                 }`}
               >
@@ -836,19 +844,18 @@ export const JwtInspectorClient: React.FC = () => {
           {/* 3. Tab Content */}
           <div className="p-4 flex-1">
             
-            {/* TAB 1: Decoded Claims (Formatted Cards with Interactive Hint Drawer) */}
+            {/* TAB 1: Decoded Claims (In-Place Expandable Hint Cards) */}
             {activeTab === 'claims' && (
               <div className="flex flex-col gap-3">
                 
                 {/* Header Action Row */}
                 <div className="flex items-center justify-between text-xs font-mono">
-                  <span className="text-[var(--text-muted)] flex items-center gap-1">
-                    <HelpCircle className="w-3.5 h-3.5 text-purple-400" />
-                    Click any claim to view RFC explanation &amp; security test hint:
+                  <span className="text-[var(--text-secondary)]">
+                    Click any claim to expand its RFC definition and security testing hint:
                   </span>
                   <button
                     onClick={() => setIsAddingClaim(!isAddingClaim)}
-                    className="px-2.5 py-1 rounded-md bg-purple-500/15 hover:bg-purple-500/25 text-purple-600 dark:text-purple-400 border border-purple-500/30 transition-colors flex items-center gap-1 cursor-pointer font-bold"
+                    className="px-2.5 py-1 rounded-md bg-[var(--bg-sidebar)] hover:bg-[var(--pill-bg)] text-[var(--text-primary)] border border-[var(--border-dev)] transition-colors flex items-center gap-1 cursor-pointer font-bold"
                   >
                     <Plus className="w-3 h-3" /> {isAddingClaim ? 'Cancel' : 'Add Custom Claim'}
                   </button>
@@ -858,9 +865,9 @@ export const JwtInspectorClient: React.FC = () => {
                 {isAddingClaim && (
                   <form
                     onSubmit={handleAddCustomClaim}
-                    className="p-3.5 rounded-xl bg-[var(--bg-panel)] border border-purple-500/40 flex flex-col gap-2.5 text-xs font-mono shadow-sm"
+                    className="p-3.5 rounded-xl bg-[var(--bg-panel)] border border-[var(--border-dev)] flex flex-col gap-2.5 text-xs font-mono shadow-sm"
                   >
-                    <div className="font-bold text-purple-600 dark:text-purple-400">
+                    <div className="font-bold text-[var(--text-primary)]">
                       Add Custom Claim to Payload:
                     </div>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
@@ -869,7 +876,7 @@ export const JwtInspectorClient: React.FC = () => {
                         value={newClaimKey}
                         onChange={e => setNewClaimKey(e.target.value)}
                         placeholder="Claim Key (e.g., role, org_id, tier)..."
-                        className="px-2.5 py-1.5 rounded-md bg-[var(--bg-app)] border border-[var(--border-dev)] text-[var(--text-primary)] focus:outline-none focus:border-purple-500"
+                        className="px-2.5 py-1.5 rounded-md bg-[var(--bg-app)] border border-[var(--border-dev)] text-[var(--text-primary)] focus:outline-none focus:border-rose-500"
                         required
                       />
                       <input
@@ -877,7 +884,7 @@ export const JwtInspectorClient: React.FC = () => {
                         value={newClaimValue}
                         onChange={e => setNewClaimValue(e.target.value)}
                         placeholder='Claim Value (e.g. "admin", 100, true)...'
-                        className="px-2.5 py-1.5 rounded-md bg-[var(--bg-app)] border border-[var(--border-dev)] text-[var(--text-primary)] focus:outline-none focus:border-purple-500"
+                        className="px-2.5 py-1.5 rounded-md bg-[var(--bg-app)] border border-[var(--border-dev)] text-[var(--text-primary)] focus:outline-none focus:border-rose-500"
                         required
                       />
                     </div>
@@ -891,7 +898,7 @@ export const JwtInspectorClient: React.FC = () => {
                       </button>
                       <button
                         type="submit"
-                        className="px-3 py-1 rounded-md bg-purple-600 hover:bg-purple-500 text-white font-bold cursor-pointer transition-colors"
+                        className="px-3 py-1 rounded-md bg-rose-600 hover:bg-rose-500 text-white font-bold cursor-pointer transition-colors"
                       >
                         Add to Payload
                       </button>
@@ -899,113 +906,116 @@ export const JwtInspectorClient: React.FC = () => {
                   </form>
                 )}
 
-                {/* Active Selected Claim Hint Drawer (Displayed prominently upon clicking any claim) */}
-                {selectedClaim && (
-                  <div className="p-3.5 rounded-xl bg-purple-500/10 border border-purple-500/40 text-xs font-mono flex flex-col gap-2 shadow-xs animate-fade-in">
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-2">
-                        <span className="font-bold text-sm text-purple-600 dark:text-purple-300">
-                          {selectedClaim.key}
-                        </span>
-                        <span className="text-[10px] px-1.5 py-0.2 rounded bg-[var(--bg-panel)] text-[var(--text-secondary)] border border-[var(--border-dev)]">
-                          {selectedClaim.label}
-                        </span>
-                        {selectedClaim.rfc && (
-                          <span className="text-[9px] px-1.5 py-0.2 rounded bg-cyan-500/15 text-cyan-600 dark:text-cyan-400 font-bold border border-cyan-500/25">
-                            {selectedClaim.rfc}
-                          </span>
-                        )}
-                      </div>
-                      <span className="text-[11px] text-purple-500 font-medium">Claim Hint &amp; RFC Specs</span>
-                    </div>
-
-                    <div className="text-[11px] text-[var(--text-secondary)] leading-relaxed">
-                      {selectedClaim.description}
-                    </div>
-
-                    {selectedClaim.hint && (
-                      <div className="p-2.5 rounded-lg bg-[var(--bg-panel)] border border-[var(--border-dev)] text-[11px] flex items-start gap-2">
-                        <Info className="w-3.5 h-3.5 text-purple-400 shrink-0 mt-0.5" />
-                        <div>
-                          <span className="font-bold text-purple-600 dark:text-purple-400">Security &amp; Testing Hint: </span>
-                          <span className="text-[var(--text-primary)]">{selectedClaim.hint}</span>
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                )}
-
-                {/* List of Decoded Claim Cards */}
-                <div className="flex flex-col gap-2">
+                {/* List of Decoded Claim Cards (With IN-PLACE expandable Hint Accordion) */}
+                <div className="flex flex-col gap-2.5">
                   {parsed.diagnostics.map(claim => {
-                    const isSelected = selectedClaimKey === claim.key;
+                    const isExpanded = Boolean(expandedClaimKeys[claim.key]);
+
                     return (
                       <div
                         key={claim.key}
-                        onClick={() => setSelectedClaimKey(isSelected ? null : claim.key)}
-                        className={`p-3 rounded-xl border transition-all cursor-pointer flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-2xs font-mono ${
-                          isSelected
-                            ? 'bg-purple-500/15 border-purple-500/60 shadow-xs'
-                            : 'bg-[var(--bg-panel)] border-[var(--border-dev)] hover:border-purple-500/40'
+                        className={`p-3.5 rounded-xl border transition-all flex flex-col gap-2.5 shadow-2xs font-mono bg-[var(--bg-panel)] ${
+                          isExpanded
+                            ? 'border-slate-400 dark:border-slate-600 shadow-xs'
+                            : 'border-[var(--border-dev)] hover:border-[var(--border-dev-subtle)]'
                         }`}
                       >
-                        <div className="flex flex-col gap-1 min-w-0 flex-1">
-                          <div className="flex items-center gap-2">
-                            <span className="font-bold text-sm text-purple-600 dark:text-purple-400">
+                        {/* Top Claim Row */}
+                        <div
+                          onClick={() => toggleClaimExpansion(claim.key)}
+                          className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 cursor-pointer select-none"
+                        >
+                          <div className="flex items-center gap-2 flex-wrap min-w-0">
+                            <span className="font-bold text-sm text-[var(--text-primary)]">
                               {claim.key}
                             </span>
                             <span className="text-[10px] px-1.5 py-0.2 rounded bg-[var(--pill-bg)] text-[var(--text-muted)] border border-[var(--border-dev)]">
                               {claim.label}
                             </span>
                             {claim.isStandard && (
-                              <span className="text-[9px] px-1.5 py-0.2 rounded bg-cyan-500/10 text-cyan-600 dark:text-cyan-400 font-bold border border-cyan-500/20">
+                              <span className="text-[9px] px-1.5 py-0.2 rounded bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-bold">
                                 Standard
                               </span>
                             )}
-                            <span className="text-[10px] text-purple-400 ml-auto flex items-center gap-0.5">
-                              {isSelected ? 'Hide Hint' : 'View Hint'} <ChevronRight className={`w-3 h-3 transition-transform ${isSelected ? 'rotate-90' : ''}`} />
+                          </div>
+
+                          <div className="flex items-center gap-3 shrink-0 text-xs">
+                            <span className="text-[11px] font-medium text-rose-600 dark:text-rose-400 flex items-center gap-1">
+                              {isExpanded ? 'Hide Hint' : 'View Hint'}
+                              <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-200 ${isExpanded ? 'rotate-180' : ''}`} />
+                            </span>
+                            <button
+                              onClick={e => {
+                                e.stopPropagation();
+                                handleDeleteClaim(claim.key);
+                              }}
+                              className="px-2 py-0.5 rounded bg-[var(--bg-sidebar)] hover:bg-rose-500/20 text-[var(--text-muted)] hover:text-rose-600 dark:hover:text-rose-400 border border-[var(--border-dev)] transition-colors text-[11px] flex items-center gap-1 cursor-pointer"
+                              title={`Remove "${claim.key}" claim`}
+                            >
+                              <Trash2 className="w-3 h-3" /> Strip
+                            </button>
+                          </div>
+                        </div>
+
+                        {/* Raw/Formatted Value Display */}
+                        <div className="text-xs text-[var(--text-primary)] break-all font-mono select-all bg-[var(--bg-app)] p-2 rounded-lg border border-[var(--border-dev)]">
+                          {typeof claim.value === 'object'
+                            ? JSON.stringify(claim.value)
+                            : String(claim.value)}
+                        </div>
+
+                        {/* Human-Readable Date Pill (if timestamp) */}
+                        {claim.formattedTime && (
+                          <div className="text-[11px] flex items-center gap-2">
+                            <span className="text-[var(--text-muted)]">{claim.formattedTime}</span>
+                            <span
+                              className={`px-2 py-0.5 rounded text-[10px] font-bold ${
+                                claim.status === 'expired'
+                                  ? 'bg-rose-500/15 text-rose-700 dark:text-rose-400 border border-rose-500/30'
+                                  : claim.status === 'future'
+                                  ? 'bg-amber-500/15 text-amber-700 dark:text-amber-400 border border-amber-500/30'
+                                  : 'bg-emerald-500/15 text-emerald-700 dark:text-emerald-400 border border-emerald-500/30'
+                              }`}
+                            >
+                              {claim.relativeTime}
                             </span>
                           </div>
+                        )}
 
-                          {/* Value Display */}
-                          <div className="text-xs text-[var(--text-primary)] break-all font-mono select-all bg-[var(--bg-panel-subtle)] p-1.5 rounded border border-[var(--border-dev-subtle)]">
-                            {typeof claim.value === 'object'
-                              ? JSON.stringify(claim.value)
-                              : String(claim.value)}
-                          </div>
-
-                          {/* Human Readable Date info */}
-                          {claim.formattedTime && (
-                            <div className="text-[11px] flex items-center gap-2 mt-0.5">
-                              <span className="text-[var(--text-muted)]">{claim.formattedTime}</span>
-                              <span
-                                className={`px-1.5 py-0.2 rounded text-[10px] font-bold ${
-                                  claim.status === 'expired'
-                                    ? 'bg-rose-500/15 text-rose-600 dark:text-rose-400 border border-rose-500/20'
-                                    : claim.status === 'future'
-                                    ? 'bg-amber-500/15 text-amber-600 dark:text-amber-400 border border-amber-500/20'
-                                    : 'bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20'
-                                }`}
-                              >
-                                {claim.relativeTime}
-                              </span>
+                        {/* ======================================================== */}
+                        {/* IN-PLACE EXPANDABLE HINT DRAWER (100% VISIBLE ON CLICK)   */}
+                        {/* ======================================================== */}
+                        {isExpanded && (
+                          <div className="mt-1 p-3 rounded-xl bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-800 text-xs font-mono text-slate-900 dark:text-slate-100 flex flex-col gap-2 animate-fade-in shadow-xs">
+                            
+                            <div className="flex items-center justify-between">
+                              <div className="flex items-center gap-1.5 font-bold text-slate-900 dark:text-slate-100">
+                                <Info className="w-4 h-4 text-rose-500 shrink-0" />
+                                <span>{claim.label} ({claim.key})</span>
+                              </div>
+                              {claim.rfc && (
+                                <span className="text-[10px] px-2 py-0.5 rounded bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-200 border border-slate-300 dark:border-slate-700 font-bold">
+                                  {claim.rfc}
+                                </span>
+                              )}
                             </div>
-                          )}
-                        </div>
 
-                        {/* Right: Strip / Delete Claim Button */}
-                        <div
-                          className="flex items-center gap-2 self-end sm:self-center shrink-0"
-                          onClick={e => e.stopPropagation()}
-                        >
-                          <button
-                            onClick={() => handleDeleteClaim(claim.key)}
-                            className="px-2 py-1 rounded bg-[var(--bg-sidebar)] hover:bg-rose-500/20 text-[var(--text-muted)] hover:text-rose-500 border border-[var(--border-dev)] hover:border-rose-500/30 transition-colors text-[11px] flex items-center gap-1 cursor-pointer"
-                            title={`Remove "${claim.key}" claim to test missing field handling`}
-                          >
-                            <Trash2 className="w-3 h-3" /> Strip
-                          </button>
-                        </div>
+                            {/* Definition */}
+                            <p className="text-[11px] leading-relaxed text-slate-800 dark:text-slate-300">
+                              {claim.description}
+                            </p>
+
+                            {/* Security & Testing Hint Callout */}
+                            {claim.hint && (
+                              <div className="p-2.5 rounded-lg bg-white dark:bg-slate-950 border border-slate-300 dark:border-slate-800 text-[11px] leading-relaxed shadow-2xs">
+                                <span className="font-bold text-rose-700 dark:text-rose-400">Security &amp; Testing Gotcha: </span>
+                                <span className="text-slate-900 dark:text-slate-100">{claim.hint}</span>
+                              </div>
+                            )}
+
+                          </div>
+                        )}
+
                       </div>
                     );
                   })}
@@ -1020,9 +1030,9 @@ export const JwtInspectorClient: React.FC = () => {
                 
                 {/* Header JSON Editor */}
                 <div className="flex flex-col gap-1.5">
-                  <div className="flex items-center justify-between text-xs font-mono text-rose-500 font-bold">
+                  <div className="flex items-center justify-between text-xs font-mono font-bold text-[var(--text-primary)]">
                     <span className="flex items-center gap-1">
-                      <Code2 className="w-3.5 h-3.5" /> Header JSON:
+                      <Code2 className="w-3.5 h-3.5 text-rose-500" /> Header JSON:
                     </span>
                     <button
                       onClick={() => triggerCopy(headerJsonStr, 'Header JSON Copied')}
@@ -1036,7 +1046,7 @@ export const JwtInspectorClient: React.FC = () => {
                     value={headerJsonStr}
                     onChange={e => handleHeaderJsonChange(e.target.value)}
                     rows={12}
-                    className="w-full p-3 rounded-xl bg-[var(--bg-panel)] border border-[var(--border-dev)] text-rose-600 dark:text-rose-400 font-mono text-xs focus:outline-none focus:border-rose-500 resize-none leading-relaxed shadow-2xs"
+                    className="w-full p-3 rounded-xl bg-[var(--bg-panel)] border border-[var(--border-dev)] text-[var(--text-primary)] font-mono text-xs focus:outline-none focus:border-rose-500 resize-none leading-relaxed shadow-2xs"
                     spellCheck={false}
                   />
                   <span className="text-[10px] font-mono text-[var(--text-muted)]">
@@ -1046,9 +1056,9 @@ export const JwtInspectorClient: React.FC = () => {
 
                 {/* Payload JSON Editor */}
                 <div className="flex flex-col gap-1.5">
-                  <div className="flex items-center justify-between text-xs font-mono text-purple-500 font-bold">
+                  <div className="flex items-center justify-between text-xs font-mono font-bold text-[var(--text-primary)]">
                     <span className="flex items-center gap-1">
-                      <FileText className="w-3.5 h-3.5" /> Payload JSON:
+                      <FileText className="w-3.5 h-3.5 text-purple-500" /> Payload JSON:
                     </span>
                     <button
                       onClick={() => triggerCopy(payloadJsonStr, 'Payload JSON Copied')}
@@ -1062,7 +1072,7 @@ export const JwtInspectorClient: React.FC = () => {
                     value={payloadJsonStr}
                     onChange={e => handlePayloadJsonChange(e.target.value)}
                     rows={12}
-                    className="w-full p-3 rounded-xl bg-[var(--bg-panel)] border border-[var(--border-dev)] text-purple-600 dark:text-purple-400 font-mono text-xs focus:outline-none focus:border-purple-500 resize-none leading-relaxed shadow-2xs"
+                    className="w-full p-3 rounded-xl bg-[var(--bg-panel)] border border-[var(--border-dev)] text-[var(--text-primary)] font-mono text-xs focus:outline-none focus:border-purple-500 resize-none leading-relaxed shadow-2xs"
                     spellCheck={false}
                   />
                   <span className="text-[10px] font-mono text-[var(--text-muted)]">
@@ -1080,8 +1090,8 @@ export const JwtInspectorClient: React.FC = () => {
                 {/* HMAC Verification / Signing Card */}
                 <div className="p-4 rounded-xl bg-[var(--bg-panel)] border border-[var(--border-dev)] flex flex-col gap-3 shadow-2xs">
                   <div className="flex items-center justify-between">
-                    <span className="text-xs font-mono font-bold text-cyan-500 uppercase tracking-wider flex items-center gap-1.5">
-                      <Lock className="w-4 h-4" /> Client-Side HMAC Signer &amp; Verifier
+                    <span className="text-xs font-mono font-bold text-[var(--text-primary)] uppercase tracking-wider flex items-center gap-1.5">
+                      <Lock className="w-4 h-4 text-cyan-500" /> Client-Side HMAC Signer &amp; Verifier
                     </span>
                     <select
                       value={cryptoAlg}
@@ -1104,21 +1114,21 @@ export const JwtInspectorClient: React.FC = () => {
                       value={hmacSecret}
                       onChange={e => setHmacSecret(e.target.value)}
                       placeholder="Enter HMAC secret string..."
-                      className="w-full px-3 py-2 rounded-lg bg-[var(--bg-app)] border border-[var(--border-dev)] text-xs font-mono text-[var(--text-primary)] focus:outline-none focus:border-cyan-500 transition-colors"
+                      className="w-full px-3 py-2 rounded-lg bg-[var(--bg-app)] border border-[var(--border-dev)] text-xs font-mono text-[var(--text-primary)] focus:outline-none focus:border-rose-500 transition-colors"
                     />
                   </div>
 
                   <div className="flex items-center gap-2.5 pt-1">
                     <button
                       onClick={handleVerifyHmac}
-                      className="px-3.5 py-1.5 rounded-lg text-xs font-mono font-bold bg-cyan-500/15 hover:bg-cyan-500/25 text-cyan-600 dark:text-cyan-400 border border-cyan-500/30 hover:border-cyan-500/50 transition-colors flex items-center gap-1.5 cursor-pointer"
+                      className="px-3.5 py-1.5 rounded-lg text-xs font-mono font-bold bg-[var(--bg-sidebar)] hover:bg-[var(--pill-bg)] text-[var(--text-primary)] border border-[var(--border-dev)] transition-colors flex items-center gap-1.5 cursor-pointer"
                     >
-                      <ShieldCheck className="w-3.5 h-3.5" /> Verify HMAC Signature
+                      <ShieldCheck className="w-3.5 h-3.5 text-cyan-500" /> Verify HMAC Signature
                     </button>
                     <button
                       onClick={handleSignHmac}
                       disabled={isSigning}
-                      className="px-3.5 py-1.5 rounded-lg text-xs font-mono font-bold bg-gradient-to-r from-rose-600 to-amber-600 text-white shadow-xs hover:opacity-95 transition-opacity flex items-center gap-1.5 cursor-pointer disabled:opacity-50"
+                      className="px-3.5 py-1.5 rounded-lg text-xs font-mono font-bold bg-rose-600 hover:bg-rose-500 text-white shadow-xs transition-colors flex items-center gap-1.5 cursor-pointer disabled:opacity-50"
                     >
                       <Sparkles className="w-3.5 h-3.5" /> Sign with Secret
                     </button>
@@ -1128,8 +1138,8 @@ export const JwtInspectorClient: React.FC = () => {
                     <div
                       className={`p-3 rounded-lg text-xs font-mono border ${
                         verifyResult.isValid
-                          ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-600 dark:text-emerald-400'
-                          : 'bg-rose-500/10 border-rose-500/30 text-rose-600 dark:text-rose-400'
+                          ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-700 dark:text-emerald-400'
+                          : 'bg-rose-500/10 border-rose-500/30 text-rose-700 dark:text-rose-400'
                       }`}
                     >
                       {verifyResult.message}
@@ -1149,13 +1159,13 @@ export const JwtInspectorClient: React.FC = () => {
                     <button
                       onClick={handleGenerateRsaAndSign}
                       disabled={isSigning}
-                      className="px-3.5 py-1.5 rounded-lg text-xs font-mono font-bold bg-purple-500/15 hover:bg-purple-500/25 text-purple-600 dark:text-purple-400 border border-purple-500/30 hover:border-purple-500/50 transition-colors flex items-center gap-1.5 cursor-pointer disabled:opacity-50"
+                      className="px-3.5 py-1.5 rounded-lg text-xs font-mono font-bold bg-[var(--bg-sidebar)] hover:bg-[var(--pill-bg)] text-[var(--text-primary)] border border-[var(--border-dev)] transition-colors flex items-center gap-1.5 cursor-pointer disabled:opacity-50"
                     >
-                      <Zap className="w-3.5 h-3.5" /> Generate RSA Key Pair &amp; Sign RS256
+                      <Zap className="w-3.5 h-3.5 text-purple-500" /> Generate RSA Key Pair &amp; Sign RS256
                     </button>
                   </div>
                   {rsaStatus && (
-                    <div className="p-2.5 rounded-lg text-xs font-mono bg-purple-500/10 border border-purple-500/20 text-purple-600 dark:text-purple-300">
+                    <div className="p-2.5 rounded-lg text-xs font-mono bg-[var(--bg-panel-subtle)] border border-[var(--border-dev)] text-[var(--text-primary)]">
                       {rsaStatus}
                     </div>
                   )}
