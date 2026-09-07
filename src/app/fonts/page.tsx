@@ -18,7 +18,7 @@ export const metadata: Metadata = {
     'tailwind font family generator'
   ],
   openGraph: {
-    title: 'Open Source Fonts Studio & Typography Playground | DevPlayground',
+    title: 'Open Source Fonts Studio & Typography Playground | DevPantry',
     description: 'Explore, test, and integrate 2,180+ open-source typefaces with live typing playground, weight controls, and CSS @import snippets.',
   }
 };

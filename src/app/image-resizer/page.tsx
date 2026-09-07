@@ -20,17 +20,17 @@ export const metadata: Metadata = {
     'free image scaler unlimited'
   ],
   openGraph: {
-    title: 'Free Unlimited Image Resizer & Artboard Studio — No Signup | DevPlayground',
+    title: 'Free Unlimited Image Resizer & Artboard Studio — No Signup | DevPantry',
     description: 'Instant, unlimited image resizing, aspect ratio framing, and padding directly in your browser. No signup required, zero cloud uploads, 100% private.',
     type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Free Unlimited Image Resizer & Artboard Studio — No Signup | DevPlayground',
+    title: 'Free Unlimited Image Resizer & Artboard Studio — No Signup | DevPantry',
     description: 'Resize and frame unlimited images directly in your browser with no signup. 100% private, zero uploads, custom aspect ratios and target pixel sizes.',
   },
   alternates: {
-    canonical: 'https://devplayground.io/image-resizer',
+    canonical: 'https://devpantry.dev/image-resizer',
   },
 };
 

@@ -1,6 +1,6 @@
-# DevPlayground.io ⚡
+# DevPantry.dev ⚡
 
-> **The Ultimate Developer Playground, Edge Image Studio & Open-Source Asset Suite.**  
+> **The Developer Asset Pantry, Edge Image Studio & Chaos Mock Data Suite.**  
 > *Built with Next.js 16 (App Router), React 19, TypeScript, and Tailwind CSS v4. 100% Client-Side Sandbox.*
 
 [![MIT License](https://img.shields.io/badge/License-MIT-emerald.svg)](LICENSE)
@@ -9,7 +9,7 @@
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.9-blue.svg)](https://www.typescriptlang.org)
 [![Author](https://img.shields.io/badge/Author-Allwin%20S%20Antony-violet.svg)](https://github.com/allwin-antony)
 
-DevPlayground is a fast, high-density developer suite consolidating the essential image editing utilities, edge-case mock data generators, open-source typography catalogs, vector icons, and real-world API fixtures developers need every single day.
+DevPantry is a fast, high-density developer suite consolidating the essential image editing utilities, edge-case mock data generators, open-source typography catalogs, vector icons, and real-world API fixtures developers need every single day.
 
 All processing occurs **100% client-side in your browser** with zero network tracking, no account required, and unlimited usage — safe for proprietary designs, internal schemas, and enterprise assets.
 
@@ -196,7 +196,7 @@ To ensure minimal client bundle sizes and sub-second page loads:
 
 ## 🔍 SEO & Discovery Architecture
 
-DevPlayground is built from the ground up for search engine indexing:
+DevPantry is built from the ground up for search engine indexing:
 * **2,450+ Pre-Rendered Static Pages**: Generated via Next.js SSG (`generateStaticParams`) for instantaneous First Contentful Paint.
 * **Dedicated Targeted URLs**: Independent routes (`/background-removal`, `/image-resizer`, `/image-compressor`, `/fonts/[slug]`, `/icons/[prefix]`, `/chaos-templates/[id]`) targeting specific high-volume developer search intents.
 * **No Signup / Unlimited Keywords**: Explicit search intent keyword placement across titles, meta tags, and structured data.

@@ -13,13 +13,15 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://devplayground.io'),
+  metadataBase: new URL('https://devpantry.dev'),
   title: {
-    default: 'DevPlayground | Developer Edge-Case & Open-Source Asset Studio',
-    template: '%s | DevPlayground'
+    default: 'DevPantry | Developer Edge-Case & Open-Source Asset Studio',
+    template: '%s | DevPantry'
   },
-  description: 'The ultimate developer playground and utility suite: high-entropy mock data synthesis, custom schema builder, 2,180+ open-source typography studio, 353,000+ vector icons across 238 libraries, client-side zero-leak JWT inspector, and real-world API response vault.',
+  description: 'The ultimate developer pantry and utility suite: high-entropy mock data synthesis, custom schema builder, 2,180+ open-source typography studio, 353,000+ vector icons across 238 libraries, client-side zero-leak JWT inspector, and real-world API response vault.',
   keywords: [
+    'devpantry',
+    'developer pantry',
     'developer playground',
     'mock data generator',
     'jwt inspector',
@@ -44,9 +46,9 @@ export const metadata: Metadata = {
     'zod schema generator',
     'developer asset studio'
   ],
-  authors: [{ name: 'FailState Community' }],
-  creator: 'FailState',
-  publisher: 'FailState Studio',
+  authors: [{ name: 'DevPantry Community' }],
+  creator: 'DevPantry',
+  publisher: 'DevPantry Studio',
   robots: {
     index: true,
     follow: true,
@@ -61,27 +63,27 @@ export const metadata: Metadata = {
   openGraph: {
     type: 'website',
     locale: 'en_US',
-    url: 'https://devplayground.io',
-    siteName: 'FailState Studio',
-    title: 'FailState | Developer Asset Engine & Chaos Testing Studio',
+    url: 'https://devpantry.dev',
+    siteName: 'DevPantry Studio',
+    title: 'DevPantry | Developer Asset Engine & Chaos Testing Studio',
     description: 'High-entropy mock data, 2,180+ open-source typefaces, 353K+ vector icons, zero-leak JWT inspector, and 19 production API & SSO response schemas.',
     images: [
       {
         url: '/og-image.png',
         width: 1200,
         height: 630,
-        alt: 'DevPlayground Developer Suite',
+        alt: 'DevPantry Developer Suite',
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'DevPlayground | Developer Edge-Case & Open-Source Asset Studio',
+    title: 'DevPantry | Developer Edge-Case & Open-Source Asset Studio',
     description: 'High-entropy mock data, 2,180+ open-source typefaces, 353K+ vector icons, zero-leak JWT inspector, and real-world API & SSO response vault.',
-    creator: '@devplayground',
+    creator: '@devpantry',
   },
   alternates: {
-    canonical: 'https://devplayground.io',
+    canonical: 'https://devpantry.dev',
   },
 };
 
@@ -93,10 +95,10 @@ export default function RootLayout({
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'SoftwareApplication',
-    name: 'DevPlayground Studio',
+    name: 'DevPantry Studio',
     operatingSystem: 'Any',
     applicationCategory: 'DeveloperApplication',
-    description: 'Developer playground and edge-case testing studio featuring chaos data synthesis, custom schema builder, open-source font testing, vector icon customization, client-side zero-leak JWT inspection, and real-world API response fixtures.',
+    description: 'Developer pantry and edge-case testing studio featuring chaos data synthesis, custom schema builder, open-source font testing, vector icon customization, client-side zero-leak JWT inspection, and real-world API response fixtures.',
     offers: {
       '@type': 'Offer',
       price: '0',

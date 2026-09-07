@@ -21,7 +21,7 @@ import {
   Share2
 } from 'lucide-react';
 
-const STORAGE_KEY = 'failstate-custom-schema';
+const STORAGE_KEY = 'devpantry-custom-schema';
 
 const emptySubscribe = () => () => {};
 const useMounted = () => React.useSyncExternalStore(emptySubscribe, () => true, () => false);
@@ -37,7 +37,7 @@ const getInitialFields = (): SchemaFieldConfig[] => {
         return parsed;
       }
     }
-    const saved = localStorage.getItem(STORAGE_KEY);
+    const saved = localStorage.getItem(STORAGE_KEY) || localStorage.getItem('failstate-custom-schema');
     if (saved) {
       const parsed = JSON.parse(saved);
       if (Array.isArray(parsed) && parsed.length > 0) return parsed;

@@ -7,6 +7,6 @@ export default function robots(): MetadataRoute.Robots {
       allow: '/',
       disallow: ['/api/'],
     },
-    sitemap: 'https://devplayground.io/sitemap.xml',
+    sitemap: 'https://devpantry.dev/sitemap.xml',
   };
 }

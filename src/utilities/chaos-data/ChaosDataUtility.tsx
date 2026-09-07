@@ -84,7 +84,7 @@ export const ChaosDataUtility: React.FC = () => {
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.href = url;
-    link.download = `failstate-${selectedPreset.id}-${Date.now()}.${ext}`;
+    link.download = `devpantry-${selectedPreset.id}-${Date.now()}.${ext}`;
     link.click();
     URL.revokeObjectURL(url);
   };

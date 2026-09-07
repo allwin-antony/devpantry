@@ -21,18 +21,18 @@ export const metadata: Metadata = {
     'google oidc id token debugger',
     'clerk auth0 token inspector',
     'test negative auth paths',
-    'failstate jwt'
+    'devpantry jwt'
   ],
   openGraph: {
-    title: 'Client-Side JWT Inspector & Chaos Tamperer — No Signup & Zero Leak | DevPlayground',
+    title: 'Client-Side JWT Inspector & Chaos Tamperer — No Signup & Zero Leak | DevPantry',
     description:
       'Zero-leak in-memory JWT inspector and chaos simulator. Decode tokens, verify signatures locally with WebCrypto, and test edge-case authentication failures.',
-    url: 'https://devplayground.io/jwt-inspector',
+    url: 'https://devpantry.dev/jwt-inspector',
     type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Client-Side JWT Inspector & Chaos Tamperer — DevPlayground',
+    title: 'Client-Side JWT Inspector & Chaos Tamperer — DevPantry',
     description:
       'Zero-leak client-side JWT debugger and chaos tamperer. 100% in-memory sandbox, zero network requests, and 1-click edge-case simulations.',
   },

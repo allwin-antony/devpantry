@@ -120,4 +120,4 @@ python3 scripts/sync_catalog.py
 - **MIT / CC0**: Ultra-permissive open source / public domain.
 - **Fontshare Note**: Filter with `--license ofl` if your project requires strict open-source redistribution. Fontshare's `itf_ffl` fonts are free for commercial use but are closed-source freeware.
 
-👉 See [guides/licenses_explained.md](file:///home/allwin.antony@acsiatech.com/Downloads/OpenSourceDataset/Fonts/guides/licenses_explained.md) for full compliance details.
+👉 See [guides/licenses_explained.md](guides/licenses_explained.md) for full compliance details.

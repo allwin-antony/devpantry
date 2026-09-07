@@ -18,7 +18,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   if (!font) {
     return {
-      title: 'Font Not Found | DevPlayground',
+      title: 'Font Not Found | DevPantry',
       description: 'The requested open-source font could not be found.',
     };
   }
@@ -37,7 +37,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       'commercial use font'
     ],
     openGraph: {
-      title: `${font.name} Font — Free Open-Source Typography | DevPlayground`,
+      title: `${font.name} Font — Free Open-Source Typography | DevPantry`,
       description: `Live interactive tester, weight specimens, and copy-paste code snippets for ${font.name}.`,
     },
   };

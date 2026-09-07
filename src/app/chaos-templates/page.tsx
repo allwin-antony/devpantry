@@ -16,7 +16,7 @@ export const metadata: Metadata = {
     'naughty strings mock generator'
   ],
   openGraph: {
-    title: 'API Chaos Templates — Real-World API Payloads Injected with Chaos Mock Data | DevPlayground',
+    title: 'API Chaos Templates — Real-World API Payloads Injected with Chaos Mock Data | DevPantry',
     description: '17 real-world production API templates (Google, GitHub, Stripe, Supabase) filled with high-entropy edge cases, Unicode injections, and floating-point traps.',
   },
 };

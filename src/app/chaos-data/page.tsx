@@ -18,7 +18,7 @@ export const metadata: Metadata = {
     'sql insert generator'
   ],
   openGraph: {
-    title: 'Chaos Mock Data Synthesizer & Visual Schema Builder | DevPlayground',
+    title: 'Chaos Mock Data Synthesizer & Visual Schema Builder | DevPantry',
     description: 'High-entropy edge-case testing: 100+ BLNS naughty strings, custom schemas, 13+ field types, and 5 export formats.',
   }
 };

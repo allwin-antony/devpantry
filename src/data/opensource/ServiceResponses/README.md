@@ -68,7 +68,6 @@ The included CLI scripts run with standard Python 3 (`python3`) with zero extern
 
 ### 1. List All Available Schemas
 ```bash
-cd /home/allwin.antony@acsiatech.com/Downloads/OpenSourceDataset/ServiceResponses
 python3 scripts/inspect_response.py list
 ```
 
@@ -106,6 +105,6 @@ python3 scripts/normalize_user.py
 ---
 
 ## 🛡️ Implementation & Security Guides
-- [sso_token_validation.md](file:///home/allwin.antony@acsiatech.com/Downloads/OpenSourceDataset/ServiceResponses/guides/sso_token_validation.md): Cryptographic JWT verification guide with JWKS endpoints.
-- [webhook_signature_guide.md](file:///home/allwin.antony@acsiatech.com/Downloads/OpenSourceDataset/ServiceResponses/guides/webhook_signature_guide.md): Verification cheat sheet for Shopify HMAC, Stripe Signatures, GitHub Webhooks, and Resend.
-- [error_handling_standards.md](file:///home/allwin.antony@acsiatech.com/Downloads/OpenSourceDataset/ServiceResponses/guides/error_handling_standards.md): Handling RFC 7807 problem details, rate limits, and exponential backoff.
+- [sso_token_validation.md](guides/sso_token_validation.md): Cryptographic JWT verification guide with JWKS endpoints.
+- [webhook_signature_guide.md](guides/webhook_signature_guide.md): Verification cheat sheet for Shopify HMAC, Stripe Signatures, GitHub Webhooks, and Resend.
+- [error_handling_standards.md](guides/error_handling_standards.md): Handling RFC 7807 problem details, rate limits, and exponential backoff.

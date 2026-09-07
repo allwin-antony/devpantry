@@ -19,7 +19,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   if (!collection) {
     return {
-      title: 'Icon Library Not Found | DevPlayground',
+      title: 'Icon Library Not Found | DevPantry',
       description: 'The requested vector icon library could not be found.',
     };
   }
@@ -37,7 +37,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       'commercial use icons'
     ],
     openGraph: {
-      title: `${collection.name} (${collection.total_icons.toLocaleString()} Icons) | DevPlayground`,
+      title: `${collection.name} (${collection.total_icons.toLocaleString()} Icons) | DevPantry`,
       description: `Live SVG customizer, React JSX generator, and searchable icon library for ${collection.name}.`,
     },
   };

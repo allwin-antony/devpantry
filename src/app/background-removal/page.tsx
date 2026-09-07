@@ -23,17 +23,17 @@ export const metadata: Metadata = {
     'no upload background remover'
   ],
   openGraph: {
-    title: 'Free Client-Side AI Background Remover — No Signup & Unlimited | DevPlayground',
+    title: 'Free Client-Side AI Background Remover — No Signup & Unlimited | DevPantry',
     description: 'Instant, unlimited background removal powered by Edge AI & ONNX WebAssembly. No signup, zero server uploads, high-resolution PNG/WebP exports, and interactive before/after comparison.',
     type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Free Client-Side AI Background Remover — No Signup & Unlimited | DevPlayground',
+    title: 'Free Client-Side AI Background Remover — No Signup & Unlimited | DevPantry',
     description: 'Remove image backgrounds from unlimited photos entirely inside your browser. No signup required, 100% private, zero server uploads, powered by Edge AI.',
   },
   alternates: {
-    canonical: 'https://devplayground.io/background-removal',
+    canonical: 'https://devpantry.dev/background-removal',
   },
 };
 

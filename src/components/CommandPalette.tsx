@@ -488,7 +488,7 @@ const CommandPaletteModal: React.FC<{ onClose: () => void }> = ({ onClose }) => 
               <span>Close</span>
             </span>
           </div>
-          <span className="font-semibold text-rose-500">DevPlayground Global Search</span>
+          <span className="font-semibold text-rose-500">DevPantry Global Search</span>
         </div>
       </div>
     </div>

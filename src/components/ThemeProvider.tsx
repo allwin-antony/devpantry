@@ -17,7 +17,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    const saved = localStorage.getItem('failstate-theme') as Theme | null;
+    const saved = (localStorage.getItem('devpantry-theme') || localStorage.getItem('failstate-theme')) as Theme | null;
     const initialTheme = saved || (window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
     setThemeState(initialTheme);
     applyTheme(initialTheme);
@@ -33,7 +33,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
       root.classList.add('dark');
       root.classList.remove('light');
     }
-    localStorage.setItem('failstate-theme', t);
+    localStorage.setItem('devpantry-theme', t);
   };
 
   const setTheme = (newTheme: Theme) => {

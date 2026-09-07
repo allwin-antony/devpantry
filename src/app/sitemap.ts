@@ -2,7 +2,7 @@ import { MetadataRoute } from 'next';
 import { getAllFontSlugs, getAllIconPrefixes, getAllServiceResponseIds } from '@/lib/datasetLoader';
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = 'https://devplayground.io';
+  const baseUrl = 'https://devpantry.dev';
   const now = new Date();
 
   const coreRoutes: MetadataRoute.Sitemap = [

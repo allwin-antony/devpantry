@@ -1,4 +1,4 @@
-// FailState Chaos & Edge-Case Generation Engine
+// DevPantry Chaos & Edge-Case Generation Engine
 // Curated, battle-tested dirty data pools sourced from real-world production bugs.
 
 // ═══════════════════════════════════════════════════════════════════════════════

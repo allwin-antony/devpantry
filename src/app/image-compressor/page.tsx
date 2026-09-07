@@ -22,17 +22,17 @@ export const metadata: Metadata = {
     'browser image optimizer unlimited'
   ],
   openGraph: {
-    title: 'Free Unlimited Image Compressor & WebP Converter — No Signup | DevPlayground',
+    title: 'Free Unlimited Image Compressor & WebP Converter — No Signup | DevPantry',
     description: 'Compress unlimited images to target file size budgets (<500 KB, <1 MB) and convert WebP/PNG/JPEG entirely inside your browser. No signup, zero uploads, 100% private.',
     type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Free Unlimited Image Compressor & WebP Converter — No Signup | DevPlayground',
+    title: 'Free Unlimited Image Compressor & WebP Converter — No Signup | DevPantry',
     description: 'Compress unlimited images and convert to WebP directly in your browser with no signup. Set strict file size limits with smart iterative quality tuning.',
   },
   alternates: {
-    canonical: 'https://devplayground.io/image-compressor',
+    canonical: 'https://devpantry.dev/image-compressor',
   },
 };
 

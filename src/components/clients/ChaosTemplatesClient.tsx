@@ -128,7 +128,7 @@ export function ChaosTemplatesClient({ initialServiceId, initialMode }: ChaosTem
   // Load custom templates on mount
   useEffect(() => {
     try {
-      const saved = localStorage.getItem('devplayground_custom_templates');
+      const saved = localStorage.getItem('devpantry_custom_templates') || localStorage.getItem('devplayground_custom_templates');
       if (saved) {
         const parsed = JSON.parse(saved);
         if (Array.isArray(parsed) && parsed.length > 0) {
@@ -184,7 +184,7 @@ export function ChaosTemplatesClient({ initialServiceId, initialMode }: ChaosTem
       const updated = [newTmpl, ...customTemplates.filter(t => t.id !== newTmpl.id)];
       setCustomTemplates(updated);
       setActiveCustomId(newTmpl.id);
-      localStorage.setItem('devplayground_custom_templates', JSON.stringify(updated));
+      localStorage.setItem('devpantry_custom_templates', JSON.stringify(updated));
       setViewMode('chaos');
       setCopiedCode('saved');
       setTimeout(() => setCopiedCode(null), 1500);
@@ -197,7 +197,7 @@ export function ChaosTemplatesClient({ initialServiceId, initialMode }: ChaosTem
     e.stopPropagation();
     const updated = customTemplates.filter(t => t.id !== id);
     setCustomTemplates(updated);
-    localStorage.setItem('devplayground_custom_templates', JSON.stringify(updated));
+    localStorage.setItem('devpantry_custom_templates', JSON.stringify(updated));
     if (activeCustomId === id) {
       if (updated.length > 0) {
         setActiveCustomId(updated[0].id);

@@ -20,7 +20,7 @@ export const metadata: Metadata = {
     'open source icons'
   ],
   openGraph: {
-    title: 'Vector Icons Studio & Live SVG Customizer | DevPlayground',
+    title: 'Vector Icons Studio & Live SVG Customizer | DevPantry',
     description: 'Interactive SVG icon playground: adjust size, stroke width, and colors across 353,000+ vector icons from 238 open-source libraries.',
   }
 };

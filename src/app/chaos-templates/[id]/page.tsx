@@ -18,7 +18,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const { id } = await params;
   if (id === 'custom') {
     return {
-      title: 'Custom API Chaos Template Creator — FailState',
+      title: 'Custom API Chaos Template Creator — DevPantry',
       description: 'Create and test custom API JSON response schemas injected with edge-case dirty mock data and BLNS strings.',
     };
   }
@@ -27,13 +27,13 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   if (!service) {
     return {
-      title: 'API Template Not Found | FailState',
+      title: 'API Template Not Found | DevPantry',
       description: 'The requested API chaos template could not be found.',
     };
   }
 
   return {
-    title: `${service.service} Chaos Mock Data & Response Schema — FailState`,
+    title: `${service.service} Chaos Mock Data & Response Schema — DevPantry`,
     description: `Production ${service.provider} ${service.service} response schema injected with high-entropy dirty mock data (BLNS, Punycode, precision traps). Export TypeScript fixtures and test HTTP status codes.`,
     keywords: [
       `${service.service} mock data`,
@@ -44,10 +44,10 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       'chaos engineering',
       'naughty strings',
       'api testing',
-      'failstate chaos templates'
+      'devpantry chaos templates'
     ],
     openGraph: {
-      title: `${service.service} API Response & Chaos Sandbox — FailState`,
+      title: `${service.service} API Response & Chaos Sandbox — DevPantry`,
       description: `Interactive schema tester, high-entropy dirty test payloads, and TypeScript types for ${service.service}.`,
       type: 'website',
     },

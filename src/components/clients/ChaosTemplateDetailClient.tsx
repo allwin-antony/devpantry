@@ -148,7 +148,7 @@ export function ChaosTemplateDetailClient({ service }: Props) {
   // cURL CLI command generator
   const generatedCurl = useMemo(() => {
     return `# Simulated Mock Response for ${service.service} (${service.provider})
-curl -X POST "https://api.mock.failstate.io/v1/${service.id}" \\
+curl -X POST "https://api.mock.devpantry.dev/v1/${service.id}" \\
   -H "Content-Type: application/json" \\
   -H "X-Chaos-Entropy: ${entropy}%" \\
   -d '${JSON.stringify(activeDisplayPayload)}'`;

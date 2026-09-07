@@ -1,4 +1,4 @@
-# Antigravity Project Guidelines - FailState
+# Antigravity Project Guidelines - DevPantry
 
 ## UI Theme Support Rule (Mandatory Dark & Light Mode)
 

@@ -113,4 +113,4 @@ All featured libraries are governed by **MIT**, **ISC**, **Apache 2.0**, or **CC
 - **Commercial Use**: 100% permitted in commercial applications, SaaS products, mobile apps, and websites.
 - **Attribution**: No mandatory visible attribution required on your public website or app UI.
 
-👉 See [guides/licenses_explained.md](file:///home/allwin.antony@acsiatech.com/Downloads/OpenSourceDataset/Icons/guides/licenses_explained.md) for full compliance details.
+👉 See [guides/licenses_explained.md](guides/licenses_explained.md) for full compliance details.
