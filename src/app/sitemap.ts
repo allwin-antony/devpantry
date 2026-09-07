@@ -54,6 +54,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: 'daily',
       priority: 0.95,
     },
+    {
+      url: `${baseUrl}/jwt-inspector`,
+      lastModified: now,
+      changeFrequency: 'daily',
+      priority: 0.95,
+    },
   ];
 
   // Font detail pages

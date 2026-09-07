@@ -3,7 +3,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Flame, Type, Box, Radio, Sun, Moon, ShieldCheck, Terminal, Sparkles } from 'lucide-react';
+import { Flame, Type, Box, Radio, Sun, Moon, ShieldCheck, Terminal, Sparkles, Key } from 'lucide-react';
 import { useTheme } from './ThemeProvider';
 
 export const Header: React.FC = () => {
@@ -13,6 +13,7 @@ export const Header: React.FC = () => {
   const navItems = [
     { href: '/', label: 'Overview', icon: Terminal },
     { href: '/background-removal', label: 'AI BG & Resizing', icon: Sparkles, badge: 'Edge AI' },
+    { href: '/jwt-inspector', label: 'JWT Inspector', icon: Key, badge: 'Zero Leak' },
     { href: '/fonts', label: 'Fonts Studio', icon: Type, badge: '2,180+' },
     { href: '/icons', label: 'Vector Icons', icon: Box, badge: '353K+' },
     { href: '/chaos-data', label: 'Chaos Data', icon: Flame, badge: 'Schema GUI' },

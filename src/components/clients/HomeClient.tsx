@@ -15,7 +15,8 @@ import {
   ShieldCheck,
   Sparkles,
   Maximize2,
-  HardDrive
+  HardDrive,
+  Key
 } from 'lucide-react';
 
 export function HomeClient() {
@@ -109,6 +110,15 @@ export function HomeClient() {
       href: '/image-compressor',
       badge: 'No Signup • Budgeting',
       badgeColor: 'text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 border-emerald-500/20',
+    },
+    {
+      icon: Key,
+      iconColor: 'text-rose-500',
+      title: 'Client-Side JWT Inspector & Chaos Tamperer',
+      desc: '100% in-memory client-side JWT decoder and chaos debugger. Inspect claims, decode headers, verify signatures with WebCrypto, and test edge-case auth failures with zero network requests.',
+      href: '/jwt-inspector',
+      badge: 'Zero Leak • Chaos',
+      badgeColor: 'text-rose-600 dark:text-rose-400 bg-rose-500/10 border-rose-500/20',
     },
     {
       icon: Type,

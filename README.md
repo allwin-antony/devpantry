@@ -51,7 +51,41 @@ A high-performance visual image suite running entirely inside the browser using 
 
 ---
 
-### 2. ⚡ Chaos Mock Data Synthesizer & Schema Builder (`/chaos-data`)
+### 2. 🔑 Client-Side JWT Inspector & Chaos Tamperer (`/jwt-inspector`)
+
+A 100% in-memory client-side JWT decoder, diagnostic radar, and negative-path chaos testing workbench with **zero network transmission**.
+
+* **Zero Token-Leak Architecture**:
+  * Decodes headers, payloads, and signatures strictly inside browser memory.
+  * Never stored in `localStorage`, `sessionStorage`, or cookies. Safe for production tokens.
+* **Color-Coded Token Decomposition**:
+  * Visual 3-part syntax highlighting: Header in **Rose**, Payload in **Violet**, and Signature in **Cyan**.
+  * Real-time two-way synchronized JSON editor (edits to JSON automatically update the compact token, and vice-versa).
+* **Live Status Radar & Countdown**:
+  * Real-time status detection: `Active & Valid`, `Expired`, `Not Yet Valid (nbf in future)`, `Insecure alg: none`, or `Malformed`.
+  * Live expiration countdown timer with an animated remaining lifetime progress bar.
+  * Standard claims breakdown (`sub`, `iss`, `aud`, `exp`, `iat`, `nbf`, `roles`, `scope`) with local and relative time conversions.
+* **🔥 1-Click Chaos Mutations (Test Negative Auth Paths)**:
+  * ⏱️ **Expire Now (-5m)**: Sets `exp = now - 300` to test token expiry handlers and refresh loops.
+  * ⚡ **Expire in 10s (Race Condition)**: Sets `exp = now + 10` to test near-expiry token refreshing.
+  * ⏳ **Clock Skew (+5m)**: Sets `nbf` and `iat` into the future to verify clock-drift tolerance.
+  * 🔓 **`alg: none` Exploit**: Rewrites header to `{"alg":"none","typ":"JWT"}` and removes signature to test parser vulnerability (CVE-2015-9235).
+  * 💥 **Corrupt Signature**: Mutates cryptographic signature characters to test 401 Unauthorized handling.
+  * 🕳️ **Strip Claims**: Selectively strip `sub`, `exp`, `roles`, or `aud` to test frontend null-pointer safety.
+  * 👾 **Inject BLNS / Zalgo**: Injects high-entropy strings from the Big List of Naughty Strings into user claims.
+  * 🔀 **Swap Algorithm (HS256)**: Simulates Public Key Confusion attacks by setting `HS256` on an asymmetric token.
+* **Browser WebCrypto Signer & Verifier**:
+  * Verify `HS256`, `HS384`, and `HS512` signatures against custom secrets.
+  * Cryptographically sign modified tokens with browser `crypto.subtle`.
+  * Generate ephemeral RSA-2048 key pairs in memory and sign with `RS256`.
+* **Curated Provider Presets**:
+  * One-click samples for Supabase Auth, Google OAuth 2.0 / OIDC, Auth0 / Clerk RBAC, GitHub App JWTs, and Microservice M2M tokens.
+* **Quick Export Snippets**:
+  * Copy Raw Compact JWT, `Authorization: Bearer <token>`, executable `curl` commands, TypeScript Interface definitions, and Playwright test snippets.
+
+---
+
+### 3. ⚡ Chaos Mock Data Synthesizer & Schema Builder (`/chaos-data`)
 Generate battle-tested, high-entropy test datasets to stress-test UI layout bounds, database schemas, and API parsers before production.
 
 * **Curated Domain Presets**:
@@ -75,7 +109,7 @@ Generate battle-tested, high-entropy test datasets to stress-test UI layout boun
 
 ---
 
-### 3. 🔤 Open Source Fonts Studio (`/fonts`)
+### 4. 🔤 Open Source Fonts Studio (`/fonts`)
 An interactive typography testing playground and integration directory for **120+ open-source typefaces**:
 
 * **Curated Font Catalogs**:
@@ -94,7 +128,7 @@ An interactive typography testing playground and integration directory for **120
 
 ---
 
-### 4. 🎨 Vector Icons Studio & SVG Customizer (`/icons`)
+### 5. 🎨 Vector Icons Studio & SVG Customizer (`/icons`)
 An open-source vector icon laboratory featuring **25,000+ vector icons** across 7 leading developer icon toolkits:
 
 * **Supported Libraries**:
@@ -117,7 +151,7 @@ An open-source vector icon laboratory featuring **25,000+ vector icons** across 
 
 ---
 
-### 5. 🔌 Real-World API & Chaos Templates (`/chaos-templates`)
+### 6. 🔌 Real-World API & Chaos Templates (`/chaos-templates`)
 Actual production API response payloads and edge-case schemas for 19 real-world enterprise services:
 
 * **Service Categories**:
