@@ -3,7 +3,7 @@ import { FontsClient } from '@/components/clients/FontsClient';
 
 export const metadata: Metadata = {
   title: 'Open Source Fonts Studio & Typography Playground',
-  description: 'Explore, test, and integrate 120+ open-source typefaces from Fontshare, Fontsource, and GitHub. Live interactive type tester with size, weight, and tracking sliders, plus one-click CSS and npm snippets.',
+  description: 'Explore, test, and integrate 2,180+ open-source typefaces from Fontshare, Fontsource, and GitHub. Live interactive type tester with size, weight, and tracking sliders, plus one-click CSS and npm snippets.',
   keywords: [
     'open source fonts',
     'free commercial fonts',
@@ -19,7 +19,7 @@ export const metadata: Metadata = {
   ],
   openGraph: {
     title: 'Open Source Fonts Studio & Typography Playground | DevPlayground',
-    description: 'Explore, test, and integrate 120+ open-source typefaces with live typing playground, weight controls, and CSS @import snippets.',
+    description: 'Explore, test, and integrate 2,180+ open-source typefaces with live typing playground, weight controls, and CSS @import snippets.',
   }
 };
 

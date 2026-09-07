@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { getFontCdnStylesheet, type FontItem } from '@/lib/datasetLoader';
+import { getFontCdnStylesheet, type FontItem } from '@/lib/loaders/fontLoader';
 import { 
   Type, 
   Copy, 

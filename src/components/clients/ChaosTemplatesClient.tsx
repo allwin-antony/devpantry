@@ -3,7 +3,7 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { ALL_SERVICE_RESPONSES, type ServiceResponseItem } from '@/lib/datasetLoader';
+import { ALL_SERVICE_RESPONSES, type ServiceResponseItem } from '@/lib/loaders/serviceResponseLoader';
 import { fillChaosPayload } from '@/utilities/chaos-data/chaosTemplateFiller';
 import { 
   Radio, 

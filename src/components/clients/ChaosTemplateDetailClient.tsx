@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { 
   type ServiceResponseItem, 
   ALL_SERVICE_RESPONSES 
-} from '@/lib/datasetLoader';
+} from '@/lib/loaders/serviceResponseLoader';
 import { fillChaosPayload } from '@/utilities/chaos-data/chaosTemplateFiller';
 import { 
   Radio, 

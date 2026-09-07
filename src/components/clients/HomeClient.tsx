@@ -112,15 +112,6 @@ export function HomeClient() {
       badgeColor: 'text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 border-emerald-500/20',
     },
     {
-      icon: Key,
-      iconColor: 'text-rose-500',
-      title: 'Client-Side JWT Inspector & Chaos Tamperer',
-      desc: '100% in-memory client-side JWT decoder and chaos debugger. Inspect claims, decode headers, verify signatures with WebCrypto, and test edge-case auth failures with zero network requests.',
-      href: '/jwt-inspector',
-      badge: 'Zero Leak • Chaos',
-      badgeColor: 'text-rose-600 dark:text-rose-400 bg-rose-500/10 border-rose-500/20',
-    },
-    {
       icon: Type,
       iconColor: 'text-amber-500',
       title: 'Open Source Fonts Studio',
@@ -137,6 +128,15 @@ export function HomeClient() {
       href: '/icons',
       badge: '353K+ Icons',
       badgeColor: 'text-cyan-600 dark:text-cyan-400 bg-cyan-500/10 border-cyan-500/20',
+    },
+    {
+      icon: Key,
+      iconColor: 'text-rose-500',
+      title: 'Client-Side JWT Inspector & Chaos Tamperer',
+      desc: '100% in-memory client-side JWT decoder and chaos debugger. Inspect claims, decode headers, verify signatures with WebCrypto, and test edge-case auth failures with zero network requests.',
+      href: '/jwt-inspector',
+      badge: 'Zero Leak • Chaos',
+      badgeColor: 'text-rose-600 dark:text-rose-400 bg-rose-500/10 border-rose-500/20',
     },
     {
       icon: Flame,

@@ -18,10 +18,13 @@ export const metadata: Metadata = {
     default: 'DevPlayground | Developer Edge-Case & Open-Source Asset Studio',
     template: '%s | DevPlayground'
   },
-  description: 'The ultimate developer playground and utility suite: high-entropy mock data synthesis, custom schema builder, 120+ open-source typography studio, vector icons customizer, and real-world API & SSO response vault.',
+  description: 'The ultimate developer playground and utility suite: high-entropy mock data synthesis, custom schema builder, 2,180+ open-source typography studio, 353,000+ vector icons across 238 libraries, client-side zero-leak JWT inspector, and real-world API response vault.',
   keywords: [
     'developer playground',
     'mock data generator',
+    'jwt inspector',
+    'jwt debugger',
+    'client side jwt',
     'chaos engineering',
     'edge case testing',
     'open source fonts',
@@ -61,7 +64,7 @@ export const metadata: Metadata = {
     url: 'https://devplayground.io',
     siteName: 'FailState Studio',
     title: 'FailState | Developer Asset Engine & Chaos Testing Studio',
-    description: 'High-entropy mock data, 2,180+ open-source typefaces, 353K+ vector icons, and 19 production API & SSO response schemas.',
+    description: 'High-entropy mock data, 2,180+ open-source typefaces, 353K+ vector icons, zero-leak JWT inspector, and 19 production API & SSO response schemas.',
     images: [
       {
         url: '/og-image.png',
@@ -74,7 +77,7 @@ export const metadata: Metadata = {
   twitter: {
     card: 'summary_large_image',
     title: 'DevPlayground | Developer Edge-Case & Open-Source Asset Studio',
-    description: 'High-entropy mock data, 120+ open-source typefaces, vector icon customizer, and real-world API & SSO response vault.',
+    description: 'High-entropy mock data, 2,180+ open-source typefaces, 353K+ vector icons, zero-leak JWT inspector, and real-world API & SSO response vault.',
     creator: '@devplayground',
   },
   alternates: {
@@ -93,7 +96,7 @@ export default function RootLayout({
     name: 'DevPlayground Studio',
     operatingSystem: 'Any',
     applicationCategory: 'DeveloperApplication',
-    description: 'Developer playground and edge-case testing studio featuring chaos data synthesis, custom schema builder, open-source font testing, vector icon customization, and real-world API response fixtures.',
+    description: 'Developer playground and edge-case testing studio featuring chaos data synthesis, custom schema builder, open-source font testing, vector icon customization, client-side zero-leak JWT inspection, and real-world API response fixtures.',
     offers: {
       '@type': 'Offer',
       price: '0',
@@ -102,8 +105,9 @@ export default function RootLayout({
     featureList: [
       'High-entropy dirty mock data generator with 100+ naughty strings',
       'Visual Custom Schema Builder with 13+ field types & per-column chaos',
-      '120+ Open Source Fonts interactive testing and CSS/npm generator',
-      'Vector icon explorer with SVG customizer (Lucide, Tabler, Heroicons)',
+      '2,180+ Open Source Fonts interactive testing and CSS/npm generator',
+      'Vector icon explorer with 353,000+ vector icons across 238 libraries',
+      'Client-Side Zero-Leak JWT / OAuth Token Inspector and Chaos Tamperer',
       '17 Production API & SSO response fixtures (Google, GitHub, Stripe, Supabase)'
     ]
   };

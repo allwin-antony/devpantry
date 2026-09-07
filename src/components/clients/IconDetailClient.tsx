@@ -3,7 +3,7 @@
 import React, { useState, useMemo, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
-import { type IconCollectionItem } from '@/lib/datasetLoader';
+import { type IconCollectionItem } from '@/lib/loaders/iconLoader';
 import { 
   Box, 
   Search, 

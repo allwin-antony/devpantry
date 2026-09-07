@@ -51,9 +51,52 @@ A high-performance visual image suite running entirely inside the browser using 
 
 ---
 
-### 2. 🔑 Client-Side JWT Inspector & Chaos Tamperer (`/jwt-inspector`)
+### 2. 🔤 Open Source Fonts Studio (`/fonts`)
+An interactive typography testing playground and integration directory for **2,180+ open-source typefaces**:
 
-A 100% in-memory client-side JWT decoder, diagnostic radar, and negative-path chaos testing workbench with **zero network transmission**.
+* **Curated Font Catalogs**:
+  * **Fontsource Catalog**: 2,100+ open-source typefaces packaged for self-hosting with variable font axes support.
+  * **Fontshare (Indian Type Foundry)**: High-caliber commercial-grade fonts including *Satoshi*, *Clash Display*, *General Sans*, *Cabinet Grotesk*, *Ranade*, *Alpino*, *Comico*, *Synonym*, *Boska*, and *Tanker*.
+  * **GitHub Top Open Fonts**: Community classics including *Inter*, *Fira Code*, *JetBrains Mono*, *Cascadia Code*, *Source Code Pro*, *Hack*, and *Roboto Mono*.
+* **Interactive Live Typing Tester**:
+  * Test any font in real-time with custom developer phrases.
+  * Interactive sliders for **Font Size** (14px–72px), **Font Weight** (300–800), **Tracking / Letter Spacing** (-2px–8px), **Line Height** (1.0–2.2), and **Text Transform** (Uppercase, Lowercase, Title Case).
+* **One-Click Integration Snippets**:
+  * Copy `@import` CSS snippet
+  * Copy `@fontsource/` npm install command
+  * Link to official documentation and direct download URLs
+* **Multi-Attribute Filters**:
+  * Filter by category: *Sans-Serif*, *Serif*, *Display*, *Monospace*.
+  * Filter by license: *SIL Open Font License (OFL 1.1)* or *ITF Free Font License*.
+
+---
+
+### 3. 🎨 Vector Icons Studio & SVG Customizer (`/icons`)
+An open-source vector icon laboratory featuring **353,000+ vector icons** across 238 open-source icon toolkits:
+
+* **Supported Libraries**:
+  * **Lucide Icons**: 1,800+ consistent stroke icons (fork of Feather).
+  * **Tabler Icons**: 6,100+ stroke-based vector icons for SaaS dashboards.
+  * **Material Symbols & Icons**: 10,000+ Google vector glyphs in regular and light variants.
+  * **Heroicons**: Handcrafted icons by the Tailwind CSS team.
+  * **Phosphor Icons**: 1,200+ flexible icon family.
+  * **Simple Icons**: 3,000+ brand logos and developer tech stack marks.
+  * **Radix, Carbon, Feather & Iconoir**: Complete design system component primitives.
+* **Interactive SVG Canvas**:
+  * Live stroke width adjuster (1px to 3px).
+  * Icon canvas size slider (16px to 48px).
+  * Color presets (Rose, Cyan, Emerald, Amber, Violet, CurrentColor).
+* **One-Click Code Copy**:
+  * React JSX Component: `<Flame size={28} strokeWidth={2} color="#f43f5e" />`
+  * Raw SVG markup string
+  * Vue template component
+  * `npm install` package command per library
+
+---
+
+### 4. 🔑 Client-Side JWT Inspector & Chaos Tamperer (`/jwt-inspector`)
+
+A 100% in-memory client-side JWT decoder, diagnostic radar, and negative-path chaos testing workbench with **zero network transmission** (placed immediately after Icons in navigation).
 
 * **Zero Token-Leak Architecture**:
   * Decodes headers, payloads, and signatures strictly inside browser memory.
@@ -64,7 +107,7 @@ A 100% in-memory client-side JWT decoder, diagnostic radar, and negative-path ch
 * **Live Status Radar & Countdown**:
   * Real-time status detection: `Active & Valid`, `Expired`, `Not Yet Valid (nbf in future)`, `Insecure alg: none`, or `Malformed`.
   * Live expiration countdown timer with an animated remaining lifetime progress bar.
-  * Standard claims breakdown (`sub`, `iss`, `aud`, `exp`, `iat`, `nbf`, `roles`, `scope`) with local and relative time conversions.
+  * In-place expandable claim hints with RFC specifications, plain-English definitions, and security testing gotchas.
 * **🔥 1-Click Chaos Mutations (Test Negative Auth Paths)**:
   * ⏱️ **Expire Now (-5m)**: Sets `exp = now - 300` to test token expiry handlers and refresh loops.
   * ⚡ **Expire in 10s (Race Condition)**: Sets `exp = now + 10` to test near-expiry token refreshing.
@@ -85,7 +128,7 @@ A 100% in-memory client-side JWT decoder, diagnostic radar, and negative-path ch
 
 ---
 
-### 3. ⚡ Chaos Mock Data Synthesizer & Schema Builder (`/chaos-data`)
+### 5. ⚡ Chaos Mock Data Synthesizer & Schema Builder (`/chaos-data`)
 Generate battle-tested, high-entropy test datasets to stress-test UI layout bounds, database schemas, and API parsers before production.
 
 * **Curated Domain Presets**:
@@ -98,56 +141,18 @@ Generate battle-tested, high-entropy test datasets to stress-test UI layout boun
   * **13+ Field Types**: `UUID / ID`, `Full Name`, `Email Address`, `Mailing Address`, `Phone Number`, `Integer`, `Float / Currency`, `Boolean Flag`, `Date / Timestamp`, `Enum / Status`, `Web URL`, `Naughty String (BLNS)`, and `JSON Metadata`.
   * **Per-Column Chaos Sliders**: Tune the failure probability of each individual field independently from 0% to 100%.
   * **Domain Starters**: One-click templates for *User Profile*, *E-Commerce Product*, *Billing Transaction*, and *API Telemetry*.
-* **5 Export Targets**:
+* **7 Modern Export Targets & Fixture Standards**:
   * **Table Grid**: High-density monospaced data table with sticky headers, color-coded nulls/numbers, and live byte size counters.
   * **JSON**: Formatted JSON array for API mocks and test fixtures.
   * **CSV**: Quote-escaped comma-separated values for Excel or database import.
   * **TypeScript**: Typed interface declarations (`export interface CustomDataRecord`) with typed mock arrays.
   * **Zod**: Ready-to-use runtime Zod validation schema (`export const CustomRecordSchema = z.object(...)`).
   * **SQL**: Multi-row `INSERT INTO ... VALUES (...)` statements for PostgreSQL, MySQL, and SQLite.
+  * **MSW v2 Handlers**: Ready-to-paste Mock Service Worker handlers (`http.get('/api/mock-data', () => HttpResponse.json(...))`).
+  * **Prisma Seed Script**: Production database seeding scripts (`await prisma.mockRecord.createMany({ data: records })`).
+* **🔗 Shareable URL Hash (`#schema=...`)**:
+  * 1-click **Share Link** button encodes custom schema definitions into the URL hash, allowing engineers to share reproducible schema edge cases directly in GitHub issues or Slack.
 * **Re-roll Hotkey**: Press <kbd>R</kbd> anywhere to re-generate permutations instantly.
-
----
-
-### 4. 🔤 Open Source Fonts Studio (`/fonts`)
-An interactive typography testing playground and integration directory for **120+ open-source typefaces**:
-
-* **Curated Font Catalogs**:
-  * **Fontshare (Indian Type Foundry)**: High-caliber commercial-grade fonts including *Satoshi*, *Clash Display*, *General Sans*, *Cabinet Grotesk*, *Ranade*, *Alpino*, *Comico*, *Synonym*, *Boska*, and *Tanker*.
-  * **GitHub Top Open Fonts**: Community classics including *Inter*, *Fira Code*, *JetBrains Mono*, *Cascadia Code*, *Source Code Pro*, *Hack*, and *Roboto Mono*.
-* **Interactive Live Typing Tester**:
-  * Test any font in real-time with custom developer phrases.
-  * Interactive sliders for **Font Size** (14px–72px), **Font Weight** (300–800), **Tracking / Letter Spacing** (-2px–8px), **Line Height** (1.0–2.2), and **Text Transform** (Uppercase, Lowercase, Title Case).
-* **One-Click Integration Snippets**:
-  * Copy `@import` CSS snippet
-  * Copy `@fontsource/` npm install command
-  * Link to official documentation and direct download URLs
-* **Multi-Attribute Filters**:
-  * Filter by category: *Sans-Serif*, *Serif*, *Display*, *Monospace*.
-  * Filter by license: *SIL Open Font License (OFL 1.1)* or *ITF Free Font License*.
-
----
-
-### 5. 🎨 Vector Icons Studio & SVG Customizer (`/icons`)
-An open-source vector icon laboratory featuring **25,000+ vector icons** across 7 leading developer icon toolkits:
-
-* **Supported Libraries**:
-  * **Lucide Icons**: 1,800+ consistent stroke icons (fork of Feather).
-  * **Tabler Icons**: 6,100+ stroke-based vector icons for SaaS dashboards.
-  * **Heroicons**: Handcrafted icons by the Tailwind CSS team.
-  * **Phosphor Icons**: 1,200+ flexible icon family.
-  * **Simple Icons**: 3,000+ brand logos and developer tech stack marks.
-  * **Radix Icons**: UI component primitives.
-  * **Feather Icons**: Minimalist 24x24 icons.
-* **Interactive SVG Canvas**:
-  * Live stroke width adjuster (1px to 3px).
-  * Icon canvas size slider (16px to 48px).
-  * Color presets (Rose, Cyan, Emerald, Amber, Violet, CurrentColor).
-* **One-Click Code Copy**:
-  * React JSX Component: `<Flame size={28} strokeWidth={2} color="#f43f5e" />`
-  * Raw SVG markup string
-  * Vue template component
-  * `npm install` package command per library
 
 ---
 
@@ -164,6 +169,28 @@ Actual production API response payloads and edge-case schemas for 19 real-world 
   * **TypeScript Interface Generator**: Converts any API response payload into typed TypeScript interfaces with one click.
   * **Production cURL Generator**: Generates executable cURL requests with realistic auth headers and content types.
   * **HTTP Status Code Simulator**: Test how your frontend responds to simulated `200 OK`, `400 Bad Request`, `401 Unauthorized`, `429 Rate Limited`, or `500 Server Error` payloads.
+
+---
+
+### 7. ⌨️ Global Command Palette (`Cmd + K` / `Ctrl + K`)
+
+A unified search dialog accessible from anywhere in the suite via keyboard shortcut or header button:
+* **Instant Tool Switching**: Jump directly to Overview, AI Studio, Fonts, Icons, JWT Inspector, Chaos Data, or API Mocks.
+* **Typeface Quick Jump**: Type "inter", "jetbrains", "satoshi", or "clash" to jump straight to the typeface preview.
+* **Icon Toolkit Search**: Type "lucide", "tabler", "heroicons", or "phosphor" to open the respective icon library.
+* **API Fixture Jump**: Type "stripe", "supabase", "google", or "github" to open the respective production mock response.
+* **1-Click Quick Actions**: Quick actions to simulate expired tokens or algorithm confusion attacks.
+
+---
+
+## ⚡ Performance Architecture: Modular Catalog Loaders
+
+To ensure minimal client bundle sizes and sub-second page loads:
+* **Decoupled Loaders (`src/lib/loaders/`)**:
+  * `fontLoader.ts`: Isolates Fontsource & Fontshare catalogs (860+ KB) strictly to typography routes.
+  * `iconLoader.ts`: Isolates icon library and collection definitions (150+ KB) strictly to icon pages.
+  * `serviceResponseLoader.ts`: Isolates enterprise API fixtures strictly to chaos template pages.
+* **Re-export Facade (`datasetLoader.ts`)**: Maintains 100% backward compatibility for sitemap generation and static routing while enabling aggressive tree-shaking on client bundles.
 
 ---
 

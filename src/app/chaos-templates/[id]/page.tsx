@@ -1,7 +1,7 @@
 import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
 import { Suspense } from 'react';
-import { getServiceResponseById, getAllServiceResponseIds } from '@/lib/datasetLoader';
+import { getServiceResponseById, getAllServiceResponseIds } from '@/lib/loaders/serviceResponseLoader';
 import { ChaosTemplateDetailClient } from '@/components/clients/ChaosTemplateDetailClient';
 import { ChaosTemplatesClient } from '@/components/clients/ChaosTemplatesClient';
 

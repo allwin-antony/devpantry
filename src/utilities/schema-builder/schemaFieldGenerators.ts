@@ -271,10 +271,10 @@ export function generateFromSchema(
   });
 }
 
-// Multi-format exporter supporting JSON, CSV, TypeScript, Zod, and SQL Insert
+// Multi-format exporter supporting JSON, CSV, TypeScript, Zod, SQL Insert, MSW v2, and Prisma Seed
 export function exportSchemaData(
   data: Record<string, any>[],
-  format: 'json' | 'csv' | 'typescript' | 'zod' | 'sql'
+  format: 'json' | 'csv' | 'typescript' | 'zod' | 'sql' | 'msw' | 'prisma'
 ): string {
   if (!data || data.length === 0) return '';
 
@@ -353,6 +353,14 @@ export function exportSchemaData(
       });
 
       return `INSERT INTO ${tableName} (${columnsList})\nVALUES\n${valuesLines.join(',\n')};`;
+    }
+
+    case 'msw': {
+      return `import { http, HttpResponse } from 'msw';\n\nexport const handlers = [\n  http.get('/api/mock-data', () => {\n    return HttpResponse.json(${JSON.stringify(data, null, 2)});\n  }),\n];`;
+    }
+
+    case 'prisma': {
+      return `import { PrismaClient } from '@prisma/client';\n\nconst prisma = new PrismaClient();\n\nasync function main() {\n  const records = ${JSON.stringify(data, null, 2)};\n\n  console.log('Seeding custom mock records...');\n  await prisma.mockRecord.createMany({\n    data: records,\n    skipDuplicates: true,\n  });\n  console.log(\`Successfully seeded \${records.length} records!\`);\n}\n\nmain()\n  .catch((e) => {\n    console.error(e);\n    process.exit(1);\n  })\n  .finally(async () => {\n    await prisma.$disconnect();\n  });`;
     }
 
     default:

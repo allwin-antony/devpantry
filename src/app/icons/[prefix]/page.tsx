@@ -1,7 +1,7 @@
 import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
 import { Suspense } from 'react';
-import { getAllIconCollections, getIconCollectionByPrefix, getAllIconPrefixes } from '@/lib/datasetLoader';
+import { getAllIconCollections, getIconCollectionByPrefix, getAllIconPrefixes } from '@/lib/loaders/iconLoader';
 import { IconDetailClient } from '@/components/clients/IconDetailClient';
 
 interface PageProps {

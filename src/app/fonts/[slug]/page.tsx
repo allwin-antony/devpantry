@@ -1,6 +1,6 @@
 import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
-import { getAllFonts, getFontBySlug, getAllFontSlugs } from '@/lib/datasetLoader';
+import { getAllFonts, getFontBySlug, getAllFontSlugs } from '@/lib/loaders/fontLoader';
 import { FontDetailClient } from '@/components/clients/FontDetailClient';
 
 interface PageProps {

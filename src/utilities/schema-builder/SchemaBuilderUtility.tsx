@@ -17,31 +17,62 @@ import {
   CheckCircle2, 
   SlidersHorizontal,
   Sparkles,
-  Layers
+  Layers,
+  Share2
 } from 'lucide-react';
 
 const STORAGE_KEY = 'failstate-custom-schema';
 
+const emptySubscribe = () => () => {};
+const useMounted = () => React.useSyncExternalStore(emptySubscribe, () => true, () => false);
+
+const getInitialFields = (): SchemaFieldConfig[] => {
+  if (typeof window === 'undefined') return DOMAIN_TEMPLATES[0].fields;
+  try {
+    if (window.location.hash.startsWith('#schema=')) {
+      const raw = window.location.hash.slice(8);
+      const jsonStr = decodeURIComponent(atob(raw));
+      const parsed = JSON.parse(jsonStr);
+      if (Array.isArray(parsed) && parsed.length > 0) {
+        return parsed;
+      }
+    }
+    const saved = localStorage.getItem(STORAGE_KEY);
+    if (saved) {
+      const parsed = JSON.parse(saved);
+      if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+    }
+  } catch {}
+  return DOMAIN_TEMPLATES[0].fields;
+};
+
 export const SchemaBuilderUtility: React.FC = () => {
   // Load saved fields or default to User Profile template
-  const [fields, setFields] = useState<SchemaFieldConfig[]>(DOMAIN_TEMPLATES[0].fields);
+  const [fields, setFields] = useState<SchemaFieldConfig[]>(getInitialFields);
   const [count, setCount] = useState<number>(25);
   const [globalEntropy, setGlobalEntropy] = useState<number>(65);
-  const [viewMode, setViewMode] = useState<'table' | 'json' | 'typescript' | 'zod' | 'csv' | 'sql'>('table');
+  const [viewMode, setViewMode] = useState<'table' | 'json' | 'typescript' | 'zod' | 'csv' | 'sql' | 'msw' | 'prisma'>('table');
   const [copied, setCopied] = useState<boolean>(false);
+  const [shareCopied, setShareCopied] = useState<boolean>(false);
   const [seed, setSeed] = useState<number>(0);
-  const [mounted, setMounted] = useState<boolean>(false);
+  const mounted = useMounted();
 
-  // Load from localStorage on mount
+  // Listen to hash changes if shared schema is pasted
   useEffect(() => {
-    setMounted(true);
-    try {
-      const saved = localStorage.getItem(STORAGE_KEY);
-      if (saved) {
-        const parsed = JSON.parse(saved);
-        if (Array.isArray(parsed) && parsed.length > 0) setFields(parsed);
-      }
-    } catch {}
+    const handleHashChange = () => {
+      try {
+        if (window.location.hash.startsWith('#schema=')) {
+          const raw = window.location.hash.slice(8);
+          const jsonStr = decodeURIComponent(atob(raw));
+          const parsed = JSON.parse(jsonStr);
+          if (Array.isArray(parsed) && parsed.length > 0) {
+            setFields(parsed);
+          }
+        }
+      } catch {}
+    };
+    window.addEventListener('hashchange', handleHashChange);
+    return () => window.removeEventListener('hashchange', handleHashChange);
   }, []);
 
   // Persist fields in localStorage
@@ -120,13 +151,29 @@ export const SchemaBuilderUtility: React.FC = () => {
     setTimeout(() => setCopied(false), 1500);
   };
 
+  const handleShare = () => {
+    try {
+      const jsonStr = JSON.stringify(fields);
+      const b64 = btoa(encodeURIComponent(jsonStr));
+      const shareUrl = `${window.location.origin}${window.location.pathname}#schema=${b64}`;
+      navigator.clipboard.writeText(shareUrl);
+      if (typeof window !== 'undefined') {
+        window.location.hash = `schema=${b64}`;
+      }
+      setShareCopied(true);
+      setTimeout(() => setShareCopied(false), 2000);
+    } catch {}
+  };
+
   const handleDownload = () => {
     const extMap: Record<string, string> = {
       json: 'json',
       csv: 'csv',
       typescript: 'ts',
       zod: 'ts',
-      sql: 'sql'
+      sql: 'sql',
+      msw: 'ts',
+      prisma: 'ts'
     };
     const ext = extMap[currentExportFormat] || 'json';
     const blob = new Blob([exportedString], { type: 'text/plain;charset=utf-8' });
@@ -210,16 +257,25 @@ export const SchemaBuilderUtility: React.FC = () => {
 
             <button
               onClick={handleCopy}
-              className="px-2.5 py-1 text-xs font-semibold rounded bg-[var(--bg-sidebar)] border border-[var(--border-dev)] text-[var(--text-primary)] hover:border-rose-500/40 flex items-center gap-1 transition-colors"
+              className="px-2.5 py-1 text-xs font-semibold rounded bg-[var(--bg-sidebar)] border border-[var(--border-dev)] text-[var(--text-primary)] hover:border-rose-500/40 flex items-center gap-1 transition-colors cursor-pointer"
             >
               {copied ? <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500" /> : <Copy className="w-3.5 h-3.5" />}
               <span>{copied ? 'Copied' : 'Copy'}</span>
             </button>
 
             <button
+              onClick={handleShare}
+              title="Copy shareable link with this schema encoded in URL hash"
+              className="px-2.5 py-1 text-xs font-semibold rounded bg-[var(--bg-sidebar)] border border-[var(--border-dev)] text-[var(--text-primary)] hover:border-cyan-500/40 flex items-center gap-1 transition-colors cursor-pointer"
+            >
+              {shareCopied ? <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500" /> : <Share2 className="w-3.5 h-3.5 text-cyan-500" />}
+              <span>{shareCopied ? 'Link Copied!' : 'Share'}</span>
+            </button>
+
+            <button
               onClick={handleDownload}
               title="Download generated payload"
-              className="p-1 rounded bg-[var(--bg-sidebar)] border border-[var(--border-dev)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors"
+              className="p-1 rounded bg-[var(--bg-sidebar)] border border-[var(--border-dev)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors cursor-pointer"
             >
               <Download className="w-3.5 h-3.5" />
             </button>
@@ -379,7 +435,7 @@ export const SchemaBuilderUtility: React.FC = () => {
                 <Eye className="w-3.5 h-3.5" />
                 <span>Table Grid</span>
               </button>
-              {(['json', 'typescript', 'zod', 'csv', 'sql'] as const).map(fmt => (
+              {(['json', 'typescript', 'zod', 'csv', 'sql', 'msw', 'prisma'] as const).map(fmt => (
                 <button
                   key={fmt}
                   onClick={() => setViewMode(fmt)}
