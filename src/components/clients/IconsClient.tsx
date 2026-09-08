@@ -27,78 +27,18 @@ import {
   Share2,
   Image as ImageIcon
 } from 'lucide-react';
+import { 
+  IconRenderer, 
+  loadMultiPrefixIcons, 
+  buildStandaloneSvg, 
+  downloadSvgFile, 
+  getCachedIcon 
+} from '@/lib/iconBatchLoader';
 
 interface ParsedIconItem {
   fullKey: string;
   prefix: string;
   name: string;
-}
-
-function IconSvgPreview({
-  prefix,
-  name,
-  color,
-  size,
-  strokeWidth,
-  className
-}: {
-  prefix: string;
-  name: string;
-  color: string;
-  size: number;
-  strokeWidth: number;
-  className?: string;
-}) {
-  const [svgContent, setSvgContent] = useState<string | null>(null);
-
-  useEffect(() => {
-    let isCancelled = false;
-    const encodedColor = encodeURIComponent(color === 'currentColor' ? '#ffffff' : color);
-    fetch(`https://api.iconify.design/${prefix}/${name}.svg?color=${encodedColor}`)
-      .then(res => res.text())
-      .then(rawSvg => {
-        if (!isCancelled && rawSvg && rawSvg.includes('<svg')) {
-          setSvgContent(rawSvg);
-        }
-      })
-      .catch(() => {});
-    return () => {
-      isCancelled = true;
-    };
-  }, [prefix, name, color]);
-
-  const fallbackUrl = `https://api.iconify.design/${prefix}/${name}.svg?color=${encodeURIComponent(color === 'currentColor' ? '#ffffff' : color)}`;
-
-  if (!svgContent) {
-    return (
-      <img
-        src={fallbackUrl}
-        alt={name}
-        width={size}
-        height={size}
-        className={className}
-      />
-    );
-  }
-
-  let modifiedSvg = svgContent;
-  if (modifiedSvg.includes('stroke-width')) {
-    modifiedSvg = modifiedSvg.replace(/stroke-width="[^"]*"/g, `stroke-width="${strokeWidth}"`);
-  } else {
-    modifiedSvg = modifiedSvg.replace(/<path/g, `<path stroke-width="${strokeWidth}"`);
-  }
-
-  modifiedSvg = modifiedSvg
-    .replace(/width="[^"]*"/, `width="${size}"`)
-    .replace(/height="[^"]*"/, `height="${size}"`);
-
-  return (
-    <div
-      style={{ width: `${size}px`, height: `${size}px`, display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}
-      className={className}
-      dangerouslySetInnerHTML={{ __html: modifiedSvg }}
-    />
-  );
 }
 
 export function IconsClient() {
@@ -164,13 +104,14 @@ export function IconsClient() {
   };
 
   const colorPresets = [
+    { name: 'Black', hex: '#000000' },
+    { name: 'White', hex: '#ffffff' },
     { name: 'Rose', hex: '#f43f5e' },
     { name: 'Cyan', hex: '#06b6d4' },
     { name: 'Emerald', hex: '#10b981' },
     { name: 'Amber', hex: '#f59e0b' },
     { name: 'Violet', hex: '#8b5cf6' },
-    { name: 'White', hex: '#ffffff' },
-    { name: 'Current', hex: 'currentColor' }
+    { name: 'Theme', hex: 'currentColor' }
   ];
 
   const activeCollection = useMemo(() => {
@@ -358,6 +299,13 @@ export function IconsClient() {
     }));
   }, [isMasterSearchActive, globalResults, librarySearchQuery, loadedIcons, activeCollection.prefix, displayLimit]);
 
+  // Batch-load icons for displayed items to prevent 429 rate limits and eliminate network lag
+  useEffect(() => {
+    if (displayedItems.length > 0) {
+      loadMultiPrefixIcons(displayedItems);
+    }
+  }, [displayedItems]);
+
   const totalCount = useMemo(() => {
     if (isMasterSearchActive) {
       return globalResults.length;
@@ -400,11 +348,18 @@ export function IconsClient() {
     return `https://api.iconify.design/${prefix}/${iconName}.svg?color=${encodedColor}`;
   };
 
-  const activeIcon = selectedIconItem || displayedItems[0] || {
-    fullKey: `${activeCollection.prefix}:icon`,
+  const fallbackSample = activeCollection.samples?.[0] || 'circle-check';
+  const activeIcon: ParsedIconItem = selectedIconItem || displayedItems[0] || (loadedIcons.length > 0 ? {
+    fullKey: `${activeCollection.prefix}:${loadedIcons[0]}`,
     prefix: activeCollection.prefix,
-    name: 'icon'
-  };
+    name: loadedIcons[0]
+  } : {
+    fullKey: `${activeCollection.prefix}:${fallbackSample}`,
+    prefix: activeCollection.prefix,
+    name: fallbackSample
+  });
+
+  const activeIconData = getCachedIcon(activeIcon.prefix, activeIcon.name);
 
   const activeIconCollection = useMemo(() => {
     return allCollections.find(c => c.prefix === activeIcon.prefix) || activeCollection;
@@ -423,10 +378,14 @@ export function MyComponent() {
   );
 }`;
 
-  const svgSnippet = `<svg width="${iconSize}" height="${iconSize}" viewBox="0 0 24 24" fill="none" stroke="${iconColor}" stroke-width="${strokeWidth}">
-  <!-- Icon: ${activeIcon.fullKey} -->
-  <use href="https://api.iconify.design/${activeIcon.prefix}/${activeIcon.name}.svg" />
-</svg>`;
+  const svgSnippet = buildStandaloneSvg(
+    activeIconData,
+    activeIcon.prefix,
+    activeIcon.name,
+    iconColor,
+    strokeWidth,
+    iconSize
+  );
 
   const htmlImgSnippet = `<img src="${getSvgUrl(activeIcon.prefix, activeIcon.name)}" width="${iconSize}" height="${iconSize}" alt="${activeIcon.name}" />`;
 
@@ -618,7 +577,7 @@ export function MyComponent() {
                 style={{ width: `${Math.max(iconSize + 20, 52)}px`, height: `${Math.max(iconSize + 20, 52)}px` }}
                 className="p-2 rounded-xl bg-[var(--bg-panel)] border border-[var(--border-dev)] flex items-center justify-center shadow-sm shrink-0"
               >
-                <IconSvgPreview
+                <IconRenderer
                   prefix={activeIcon.prefix}
                   name={activeIcon.name}
                   color={iconColor}
@@ -695,15 +654,14 @@ export function MyComponent() {
                 </span>
               </button>
 
-              <a
-                href={getSvgUrl(activeIcon.prefix, activeIcon.name)}
-                target="_blank"
-                download={`${activeIcon.name}.svg`}
-                className="px-2.5 py-1 rounded bg-cyan-500 text-white text-xs font-bold hover:bg-cyan-600 flex items-center gap-1 transition-colors shadow-sm"
+              <button
+                onClick={() => downloadSvgFile(activeIconData, activeIcon.prefix, activeIcon.name, iconColor, strokeWidth, iconSize)}
+                title="Download customized SVG file"
+                className="px-2.5 py-1 rounded bg-cyan-500 text-white text-xs font-bold hover:bg-cyan-600 flex items-center gap-1 transition-colors shadow-sm cursor-pointer"
               >
                 <Download className="w-3.5 h-3.5" />
                 <span>SVG</span>
-              </a>
+              </button>
             </div>
           </div>
 
@@ -741,18 +699,57 @@ export function MyComponent() {
               </div>
 
               {/* Color Presets */}
-              <div className="flex items-center gap-1 bg-[var(--bg-sidebar)] p-1 rounded border border-[var(--border-dev)]">
-                {colorPresets.map(c => (
-                  <button
-                    key={c.name}
-                    onClick={() => setIconColor(c.hex)}
-                    title={c.name}
-                    style={{ backgroundColor: c.hex === 'currentColor' ? '#ffffff' : c.hex }}
-                    className={`w-4 h-4 rounded-full border cursor-pointer transition-transform ${
-                      iconColor === c.hex ? 'scale-125 border-white ring-1 ring-cyan-500' : 'border-black/30 hover:scale-110'
-                    }`}
-                  />
-                ))}
+              <div className="h-7 flex items-center gap-1.5 bg-[var(--bg-sidebar)] px-2 rounded border border-[var(--border-dev)]">
+                {colorPresets.map(c => {
+                  const isSelected = iconColor.toLowerCase() === c.hex.toLowerCase();
+                  return (
+                    <button
+                      key={c.name}
+                      onClick={() => setIconColor(c.hex)}
+                      title={c.name}
+                      style={{ backgroundColor: c.hex === 'currentColor' ? 'transparent' : c.hex }}
+                      className={`w-3.5 h-3.5 rounded-full border cursor-pointer transition-all relative shrink-0 ${
+                        c.hex === 'currentColor' 
+                          ? 'border-dashed border-[var(--text-secondary)] flex items-center justify-center text-[7px] font-bold text-[var(--text-secondary)]' 
+                          : 'border-zinc-400/50 dark:border-zinc-600'
+                      } ${
+                        isSelected 
+                          ? 'ring-2 ring-cyan-500 ring-offset-1 ring-offset-[var(--bg-sidebar)] z-10' 
+                          : 'hover:opacity-80'
+                      }`}
+                    >
+                      {c.hex === 'currentColor' && 'A'}
+                    </button>
+                  );
+                })}
+
+                {/* Custom Color Picker Swatch */}
+                {(() => {
+                  const isCustom = !colorPresets.some(c => c.hex.toLowerCase() === iconColor.toLowerCase());
+                  return (
+                    <label 
+                      title="Custom Hex Color" 
+                      className={`relative cursor-pointer flex items-center justify-center w-3.5 h-3.5 rounded-full overflow-hidden border border-[var(--border-dev)] transition-all shrink-0 ${
+                        isCustom 
+                          ? 'ring-2 ring-cyan-500 ring-offset-1 ring-offset-[var(--bg-sidebar)] z-10' 
+                          : 'hover:opacity-80'
+                      }`}
+                    >
+                      <input
+                        type="color"
+                        value={iconColor.startsWith('#') ? iconColor : '#000000'}
+                        onChange={e => setIconColor(e.target.value)}
+                        className="absolute -top-2 -left-2 w-8 h-8 opacity-0 cursor-pointer"
+                      />
+                      <div 
+                        style={{ 
+                          background: 'conic-gradient(from 0deg, red, yellow, lime, aqua, blue, magenta, red)' 
+                        }} 
+                        className="w-full h-full rounded-full" 
+                      />
+                    </label>
+                  );
+                })()}
               </div>
             </div>
           </div>
@@ -829,18 +826,18 @@ export function MyComponent() {
                         : 'bg-[var(--bg-panel)] border-[var(--border-dev)] hover:border-cyan-500/40 hover:bg-[var(--bg-sidebar)]'
                     }`}
                   >
-                    {/* Live SVG fetched from CDN */}
+                    {/* Live Vector SVG rendered via Batch Loader with Sleek Placeholder */}
                     <div 
                       style={{ width: `${iconSize}px`, height: `${iconSize}px` }} 
                       className="flex items-center justify-center mb-2 group-hover:scale-110 transition-transform"
                     >
-                      <img
-                        src={getSvgUrl(item.prefix, item.name)}
-                        alt={item.name}
-                        width={iconSize}
-                        height={iconSize}
-                        loading="lazy"
-                        className="pointer-events-none"
+                      <IconRenderer
+                        prefix={item.prefix}
+                        name={item.name}
+                        size={iconSize}
+                        color={iconColor}
+                        strokeWidth={strokeWidth}
+                        className="pointer-events-none drop-shadow-sm"
                       />
                     </div>
 

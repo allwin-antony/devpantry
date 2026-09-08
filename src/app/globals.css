@@ -29,6 +29,7 @@
   --text-code: #e2e8f0;
 
   /* Accents */
+  --accent-blue: #3b82f6;
   --accent-rose: #f43f5e;
   --accent-cyan: #06b6d4;
   --accent-violet: #8b5cf6;
@@ -65,6 +66,7 @@
   --text-code: #f8fafc;
 
   /* Accents */
+  --accent-blue: #2563eb;
   --accent-rose: #e11d48;
   --accent-cyan: #0891b2;
   --accent-violet: #7c3aed;
@@ -109,6 +111,15 @@ body {
 }
 ::-webkit-scrollbar-thumb:hover {
   background: var(--text-muted);
+}
+
+/* Hide scrollbar utility */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
 
 /* Developer High-Density Table */
@@ -181,6 +192,15 @@ body {
   animation: shimmerGradient 6s ease infinite;
 }
 
+@keyframes iconShimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+.animate-icon-shimmer {
+  animation: iconShimmer 1.8s ease-in-out infinite;
+}
+
 @keyframes pingSlow {
   0% { transform: scale(1); opacity: 0.8; }
   50% { transform: scale(1.6); opacity: 0; }
@@ -202,4 +222,32 @@ body {
   background-size: 16px 16px;
   background-position: 0 0, 0 8px, 8px -8px, -8px 0px;
 }
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.animate-fade-in-up-delay-1 {
+  animation: fadeInUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation-delay: 0.1s;
+  animation-fill-mode: both;
+}
+
+.animate-fade-in-up-delay-2 {
+  animation: fadeInUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  animation-delay: 0.2s;
+  animation-fill-mode: both;
+}
+
 

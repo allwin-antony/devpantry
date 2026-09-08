@@ -1,0 +1,22 @@
+{
+  "name": "projects/8882414453580799622",
+  "projectId": "8882414453580799622",
+  "title": "DevPantry Modern Studio",
+  "visibility": "PRIVATE",
+  "createTime": "2026-09-08T06:15:30.182484Z",
+  "updateTime": "2026-09-08T06:15:30.182484Z",
+  "projectType": "PROJECT_DESIGN",
+  "origin": "STITCH",
+  "deviceType": "DESKTOP",
+  "designTheme": {
+    "colorMode": "DARK",
+    "font": "INTER",
+    "roundness": "ROUND_EIGHT",
+    "customColor": "#0f172a",
+    "saturation": 3
+  },
+  "screens": {},
+  "metadata": {
+    "userRole": "OWNER"
+  }
+}

@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Flame, Type, Box, Radio, Sun, Moon, Terminal, Sparkles, Key, Search } from 'lucide-react';
+import { Flame, Type, Box, Radio, Sun, Moon, Terminal, Sparkles, Key, Search, Menu, X } from 'lucide-react';
 import { useTheme } from './ThemeProvider';
 import { CommandPalette } from './CommandPalette';
 
@@ -11,6 +11,12 @@ export const Header: React.FC = () => {
   const pathname = usePathname();
   const { theme, toggleTheme } = useTheme();
   const [isPaletteOpen, setIsPaletteOpen] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  // Close mobile dropdown on route change
+  useEffect(() => {
+    setIsMobileMenuOpen(false);
+  }, [pathname]);
 
   // Global hotkey: Cmd + K or Ctrl + K
   useEffect(() => {
@@ -25,18 +31,18 @@ export const Header: React.FC = () => {
   }, []);
 
   const navItems = [
-    { href: '/', label: 'Overview', icon: Terminal },
-    { href: '/background-removal', label: 'AI Studio', icon: Sparkles, badge: 'Edge AI' },
-    { href: '/fonts', label: 'Fonts', icon: Type, badge: '2,180+' },
-    { href: '/icons', label: 'Icons', icon: Box, badge: '353K+' },
-    { href: '/jwt-inspector', label: 'JWT Inspector', icon: Key, badge: 'Zero Leak' },
-    { href: '/chaos-data', label: 'Chaos Data', icon: Flame, badge: 'GUI' },
-    { href: '/chaos-templates', label: 'API Mocks', icon: Radio, badge: '17' },
+    { href: '/', label: 'Overview', shortLabel: 'Overview', icon: Terminal },
+    { href: '/background-removal', label: 'AI Studio', shortLabel: 'AI Studio', icon: Sparkles },
+    { href: '/fonts', label: 'Fonts', shortLabel: 'Fonts', icon: Type },
+    { href: '/icons', label: 'Icons', shortLabel: 'Icons', icon: Box },
+    { href: '/jwt-inspector', label: 'JWT Inspector', shortLabel: 'JWT', icon: Key },
+    { href: '/chaos-data', label: 'Chaos Data', shortLabel: 'Chaos', icon: Flame },
+    { href: '/chaos-templates', label: 'API Mocks', shortLabel: 'Mocks', icon: Radio },
   ];
 
   return (
     <>
-      <header className="w-full h-12 bg-[var(--bg-panel)] border-b border-[var(--border-dev)] px-3 sm:px-4 flex items-center justify-between gap-3 select-none shrink-0 z-30 transition-colors shadow-xs font-mono">
+      <header className="w-full h-12 bg-[var(--bg-panel)] border-b border-[var(--border-dev)] px-3 sm:px-4 flex items-center justify-between gap-3 select-none shrink-0 z-30 transition-colors shadow-xs font-mono relative">
         {/* Left: Brand */}
         <div className="flex items-center gap-3 shrink-0">
           <Link href="/" className="flex items-center gap-2 group cursor-pointer">
@@ -49,8 +55,8 @@ export const Header: React.FC = () => {
           </Link>
         </div>
 
-        {/* Center: Top Navigation Tabs (Horizontally scrollable if tight, never wraps) */}
-        <nav className="hidden md:flex items-center bg-[var(--bg-sidebar)] p-1 rounded-lg border border-[var(--border-dev)] text-xs gap-1 max-w-[calc(100vw-360px)] overflow-x-auto no-scrollbar">
+        {/* Center: Top Navigation Tabs (Exact h-8 height, zero-scroll & clutter-free across laptops and desktops) */}
+        <nav className="hidden md:flex items-center h-8 bg-[var(--bg-sidebar)] p-0.5 rounded-lg border border-[var(--border-dev)] text-xs gap-0.5 shrink-0">
           {navItems.map(item => {
             const Icon = item.icon;
             const isActive = item.href === '/'
@@ -63,32 +69,28 @@ export const Header: React.FC = () => {
               <Link
                 key={item.href}
                 href={item.href}
-                className={`px-2.5 py-1 rounded-md flex items-center gap-1.5 transition-all cursor-pointer whitespace-nowrap shrink-0 text-xs ${
+                className={`h-7 px-2 lg:px-2.5 rounded-md flex items-center gap-1.5 transition-all cursor-pointer whitespace-nowrap shrink-0 text-xs ${
                   isActive
                     ? 'bg-rose-500/10 dark:bg-rose-500/15 text-rose-600 dark:text-rose-400 border border-rose-500/30 font-semibold shadow-xs'
                     : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--pill-bg)] border border-transparent'
                 }`}
               >
                 <Icon className="w-3.5 h-3.5 shrink-0" />
-                <span>{item.label}</span>
-                {item.badge && !isActive && (
-                  <span className="hidden xl:inline-flex text-[9px] px-1.5 py-0.2 rounded font-mono font-medium bg-[var(--pill-bg)] text-[var(--text-muted)] border border-[var(--border-dev)]">
-                    {item.badge}
-                  </span>
-                )}
+                <span className="hidden xl:inline">{item.label}</span>
+                <span className="xl:hidden">{item.shortLabel}</span>
               </Link>
             );
           })}
         </nav>
 
-        {/* Right: Quick Search (Cmd + K) & Theme Switcher */}
-        <div className="flex items-center gap-2 shrink-0">
+        {/* Right: Quick Search (Cmd + K), Theme Switcher, and Mobile Menu Toggle (All synchronized at h-8) */}
+        <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
           {/* Cmd + K Command Palette Trigger */}
           <button
             onClick={() => setIsPaletteOpen(true)}
             aria-label="Open Command Palette (Cmd + K)"
             title="Search tools, typefaces, icons, and API mocks (Cmd + K)"
-            className="flex items-center gap-2 px-2.5 py-1.5 rounded-lg bg-[var(--bg-sidebar)] border border-[var(--border-dev)] text-xs text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:border-rose-500/40 transition-all cursor-pointer"
+            className="h-8 flex items-center gap-2 px-2.5 rounded-lg bg-[var(--bg-sidebar)] border border-[var(--border-dev)] text-xs text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:border-rose-500/40 transition-all cursor-pointer"
           >
             <Search className="w-3.5 h-3.5 text-rose-500" />
             <span className="hidden sm:inline text-[11px] text-[var(--text-muted)]">Search...</span>
@@ -102,12 +104,51 @@ export const Header: React.FC = () => {
             onClick={toggleTheme}
             aria-label={theme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
             title={theme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
-            className="p-1.5 rounded-lg bg-[var(--bg-sidebar)] border border-[var(--border-dev)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:border-rose-500/40 transition-colors cursor-pointer"
+            className="h-8 w-8 flex items-center justify-center rounded-lg bg-[var(--bg-sidebar)] border border-[var(--border-dev)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:border-rose-500/40 transition-colors cursor-pointer"
           >
             {theme === 'dark' ? <Sun className="w-3.5 h-3.5 text-amber-400" /> : <Moon className="w-3.5 h-3.5 text-slate-700" />}
           </button>
+
+          {/* Mobile Menu Toggle (Only on <md) */}
+          <button
+            onClick={() => setIsMobileMenuOpen(prev => !prev)}
+            aria-label={isMobileMenuOpen ? 'Close Navigation Menu' : 'Open Navigation Menu'}
+            className="h-8 w-8 flex md:hidden items-center justify-center rounded-lg bg-[var(--bg-sidebar)] border border-[var(--border-dev)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:border-rose-500/40 transition-colors cursor-pointer"
+          >
+            {isMobileMenuOpen ? <X className="w-3.5 h-3.5" /> : <Menu className="w-3.5 h-3.5" />}
+          </button>
         </div>
       </header>
+
+      {/* Mobile Navigation Dropdown (<md) */}
+      {isMobileMenuOpen && (
+        <div className="md:hidden fixed top-12 left-0 right-0 z-40 bg-[var(--bg-panel)] border-b border-[var(--border-dev)] shadow-xl p-3 flex flex-col gap-1 font-mono animate-in fade-in slide-in-from-top-2">
+          {navItems.map(item => {
+            const Icon = item.icon;
+            const isActive = item.href === '/'
+              ? pathname === '/'
+              : item.href === '/background-removal'
+              ? (pathname === '/background-removal' || pathname === '/image-resizer' || pathname === '/image-compressor')
+              : pathname.startsWith(item.href);
+
+            return (
+              <Link
+                key={item.href}
+                href={item.href}
+                onClick={() => setIsMobileMenuOpen(false)}
+                className={`h-9 px-3 rounded-lg flex items-center gap-2.5 text-xs font-medium transition-colors ${
+                  isActive
+                    ? 'bg-rose-500/10 text-rose-600 dark:text-rose-400 font-bold border border-rose-500/30'
+                    : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--pill-bg)]'
+                }`}
+              >
+                <Icon className="w-4 h-4 shrink-0 text-rose-500" />
+                <span>{item.label}</span>
+              </Link>
+            );
+          })}
+        </div>
+      )}
 
       {/* Global Command Palette Modal */}
       <CommandPalette isOpen={isPaletteOpen} onClose={() => setIsPaletteOpen(false)} />
