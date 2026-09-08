@@ -13,7 +13,7 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://devpantry.dev'),
+  metadataBase: new URL('https://devpantry.com'),
   title: {
     default: 'DevPantry | Developer Edge-Case & Open-Source Asset Studio',
     template: '%s | DevPantry'
@@ -51,7 +51,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: 'website',
     locale: 'en_US',
-    url: 'https://devpantry.dev',
+    url: 'https://devpantry.com',
     siteName: 'DevPantry Studio',
     title: 'DevPantry | Developer Asset Engine & Chaos Testing Studio',
     description: 'High-entropy mock data, 2,180+ open-source typefaces, 353K+ vector icons, zero-leak JWT inspector, and 19 production API & SSO response schemas.',
@@ -71,7 +71,7 @@ export const metadata: Metadata = {
     creator: '@devpantry',
   },
   alternates: {
-    canonical: 'https://devpantry.dev',
+    canonical: 'https://devpantry.com',
   },
 };
 

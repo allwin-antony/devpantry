@@ -33,7 +33,7 @@ export const metadata: Metadata = {
     description: 'Resize and frame unlimited images directly in your browser with no signup. 100% private, zero uploads, custom aspect ratios and target pixel sizes.',
   },
   alternates: {
-    canonical: 'https://devpantry.dev/image-resizer',
+    canonical: 'https://devpantry.com/image-resizer',
   },
 };
 

@@ -391,7 +391,7 @@ export function MyComponent() {
 
   const shareUrl = typeof window !== 'undefined' 
     ? `${window.location.origin}/icons#${activeIcon.fullKey}` 
-    : `https://devpantry.dev/icons#${activeIcon.fullKey}`;
+    : `https://devpantry.com/icons#${activeIcon.fullKey}`;
 
   return (
     <div className="h-full flex flex-col md:flex-row p-3 overflow-hidden gap-3 font-mono relative">

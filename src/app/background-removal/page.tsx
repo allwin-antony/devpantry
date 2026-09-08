@@ -36,7 +36,7 @@ export const metadata: Metadata = {
     description: 'Remove image backgrounds from unlimited photos entirely inside your browser. No signup required, 100% private, zero server uploads, powered by Edge AI.',
   },
   alternates: {
-    canonical: 'https://devpantry.dev/background-removal',
+    canonical: 'https://devpantry.com/background-removal',
   },
 };
 

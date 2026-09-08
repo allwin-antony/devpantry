@@ -33,7 +33,7 @@ export const metadata: Metadata = {
     description: 'Generate dirty mock data with 100+ naughty strings and export to JSON, CSV, SQL, Zod, and TypeScript.',
   },
   alternates: {
-    canonical: 'https://devpantry.dev/chaos-data',
+    canonical: 'https://devpantry.com/chaos-data',
   },
 };
 

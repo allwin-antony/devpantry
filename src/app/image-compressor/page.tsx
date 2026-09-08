@@ -35,7 +35,7 @@ export const metadata: Metadata = {
     description: 'Compress unlimited images and convert to WebP directly in your browser with no signup. Set strict file size limits with smart iterative quality tuning.',
   },
   alternates: {
-    canonical: 'https://devpantry.dev/image-compressor',
+    canonical: 'https://devpantry.com/image-compressor',
   },
 };
 

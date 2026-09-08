@@ -32,7 +32,7 @@ export function getJwtPresets(): JwtPreset[] {
           iat: now,
           iss: 'https://xyzcompany.supabase.co/auth/v1',
           sub: 'd3b07384-d113-4614-a957-c58066f12e2f',
-          email: 'developer@devpantry.dev',
+          email: 'developer@devpantry.com',
           phone: '',
           app_metadata: {
             provider: 'email',
@@ -61,7 +61,7 @@ export function getJwtPresets(): JwtPreset[] {
           azp: '847291048201-devpantry.apps.googleusercontent.com',
           aud: '847291048201-devpantry.apps.googleusercontent.com',
           sub: '110293847561829304918',
-          email: 'alex.developer@devpantry.dev',
+          email: 'alex.developer@devpantry.com',
           email_verified: true,
           at_hash: '7xG9bVwK0aM2lQ5rT8yU1A',
           name: 'Alex Developer',
@@ -83,9 +83,9 @@ export function getJwtPresets(): JwtPreset[] {
       token: createPresetToken(
         { alg: 'HS256', typ: 'JWT' },
         now => ({
-          iss: 'https://auth.devpantry.dev/',
+          iss: 'https://auth.devpantry.com/',
           sub: 'usr_2b9xZ7c0PqLm4nR',
-          aud: ['https://api.devpantry.dev', 'https://billing.devpantry.dev'],
+          aud: ['https://api.devpantry.com', 'https://billing.devpantry.com'],
           iat: now,
           exp: now + 7200,
           scope: 'openid profile email offline_access',

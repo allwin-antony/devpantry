@@ -50,7 +50,7 @@ export const Header: React.FC = () => {
               <Flame className="w-3.5 h-3.5 text-white" />
             </div>
             <span className="font-bold text-xs tracking-tight text-[var(--text-primary)] font-mono">
-              DEVPANTRY<span className="text-rose-500">.DEV</span>
+              DEVPANTRY<span className="text-rose-500">.COM</span>
             </span>
           </Link>
         </div>

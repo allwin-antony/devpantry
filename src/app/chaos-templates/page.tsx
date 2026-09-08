@@ -30,7 +30,7 @@ export const metadata: Metadata = {
     description: 'Stress test your app with dirty mock data injected into real-world API schemas.',
   },
   alternates: {
-    canonical: 'https://devpantry.dev/chaos-templates',
+    canonical: 'https://devpantry.com/chaos-templates',
   },
 };
 

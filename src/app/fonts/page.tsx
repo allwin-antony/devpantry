@@ -34,7 +34,7 @@ export const metadata: Metadata = {
     description: 'Live interactive type tester with size, weight, and tracking sliders for 2,180+ free open-source fonts.',
   },
   alternates: {
-    canonical: 'https://devpantry.dev/fonts',
+    canonical: 'https://devpantry.com/fonts',
   },
 };
 

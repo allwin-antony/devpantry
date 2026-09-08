@@ -29,7 +29,7 @@ export const metadata: Metadata = {
     description: 'Live SVG customizer, React JSX generator, and searchable icon library with 353,000+ open source icons.',
   },
   alternates: {
-    canonical: 'https://devpantry.dev/icons',
+    canonical: 'https://devpantry.com/icons',
   },
 };
 
