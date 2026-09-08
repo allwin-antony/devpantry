@@ -5,8 +5,8 @@ import { Header } from '../components/Header';
 
 export const viewport: Viewport = {
   themeColor: [
-    { media: '(prefers-color-scheme: dark)', color: '#06090f' },
-    { media: '(prefers-color-scheme: light)', color: '#f1f5f9' },
+    { media: '(prefers-color-scheme: dark)', color: '#09090b' },
+    { media: '(prefers-color-scheme: light)', color: '#f4f4f5' },
   ],
   width: 'device-width',
   initialScale: 1,
@@ -21,30 +21,18 @@ export const metadata: Metadata = {
   description: 'The ultimate developer pantry and utility suite: high-entropy mock data synthesis, custom schema builder, 2,180+ open-source typography studio, 353,000+ vector icons across 238 libraries, client-side zero-leak JWT inspector, and real-world API response vault.',
   keywords: [
     'devpantry',
-    'developer pantry',
-    'developer playground',
+    'free developer tools online',
+    'web developer utility kit',
+    'frontend design resources',
+    'open source fonts',
     'mock data generator',
     'jwt inspector',
-    'jwt debugger',
+    'free vector icons',
     'client side jwt',
-    'chaos engineering',
-    'edge case testing',
-    'open source fonts',
-    'fontshare',
-    'fontsource',
-    'vector icons',
-    'lucide icons',
-    'tabler icons',
-    'api response vault',
-    'sso fixtures',
-    'google sso response',
-    'github oauth payload',
-    'stripe webhook fixture',
-    'naughty strings',
-    'custom schema builder',
-    'typescript interface generator',
-    'zod schema generator',
-    'developer asset studio'
+    'edge case test data generator',
+    'font preview',
+    'image compressor no signup',
+    'icon search engine'
   ],
   authors: [{ name: 'DevPantry Community' }],
   creator: 'DevPantry',
@@ -105,12 +93,12 @@ export default function RootLayout({
       priceCurrency: 'USD',
     },
     featureList: [
-      'High-entropy dirty mock data generator with 100+ naughty strings',
-      'Visual Custom Schema Builder with 13+ field types & per-column chaos',
+      'Mock data generator with 100+ naughty strings for edge case testing',
+      'Visual Custom Schema Builder with 13+ field types',
       '2,180+ Open Source Fonts interactive testing and CSS/npm generator',
-      'Vector icon explorer with 353,000+ vector icons across 238 libraries',
-      'Client-Side Zero-Leak JWT / OAuth Token Inspector and Chaos Tamperer',
-      '17 Production API & SSO response fixtures (Google, GitHub, Stripe, Supabase)'
+      '353,000+ free vector icons search engine and SVG code generator',
+      'Client-Side Zero-Leak JWT / OAuth Token Inspector',
+      'Production API & SSO response fixtures for mocking (Google, GitHub, Stripe)'
     ]
   };
 

@@ -15,19 +15,19 @@ export default function sitemap(): MetadataRoute.Sitemap {
     {
       url: `${baseUrl}/chaos-data`,
       lastModified: now,
-      changeFrequency: 'daily',
+      changeFrequency: 'weekly',
       priority: 0.95,
     },
     {
       url: `${baseUrl}/fonts`,
       lastModified: now,
-      changeFrequency: 'daily',
+      changeFrequency: 'weekly',
       priority: 0.95,
     },
     {
       url: `${baseUrl}/icons`,
       lastModified: now,
-      changeFrequency: 'daily',
+      changeFrequency: 'weekly',
       priority: 0.95,
     },
     {
@@ -39,25 +39,25 @@ export default function sitemap(): MetadataRoute.Sitemap {
     {
       url: `${baseUrl}/background-removal`,
       lastModified: now,
-      changeFrequency: 'daily',
+      changeFrequency: 'weekly',
       priority: 0.95,
     },
     {
       url: `${baseUrl}/image-resizer`,
       lastModified: now,
-      changeFrequency: 'daily',
+      changeFrequency: 'weekly',
       priority: 0.95,
     },
     {
       url: `${baseUrl}/image-compressor`,
       lastModified: now,
-      changeFrequency: 'daily',
+      changeFrequency: 'weekly',
       priority: 0.95,
     },
     {
       url: `${baseUrl}/jwt-inspector`,
       lastModified: now,
-      changeFrequency: 'daily',
+      changeFrequency: 'weekly',
       priority: 0.95,
     },
   ];

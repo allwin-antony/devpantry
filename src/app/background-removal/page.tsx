@@ -6,6 +6,9 @@ export const metadata: Metadata = {
   title: 'Free Client-Side AI Background Remover — No Signup & Unlimited',
   description: 'Remove backgrounds from unlimited images instantly inside your browser with zero server uploads and no signup required. Powered by Edge AI, ONNX Runtime Web, and WebGPU neural acceleration. 100% private, free forever.',
   keywords: [
+    'remove background from image free',
+    'ai background remover online',
+    'transparent background maker',
     'background remover no signup',
     'unlimited background removal',
     'free background remover no signup',
@@ -38,15 +41,35 @@ export const metadata: Metadata = {
 };
 
 export default function BackgroundRemovalPage() {
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'WebApplication',
+    name: 'DevPantry AI Background Remover',
+    description: 'Client-side AI tool to remove image backgrounds securely and privately using Edge AI and WebGPU.',
+    applicationCategory: 'MultimediaApplication',
+    operatingSystem: 'Any',
+    offers: {
+      '@type': 'Offer',
+      price: '0',
+      priceCurrency: 'USD',
+    },
+  };
+
   return (
-    <Suspense
-      fallback={
-        <div className="flex-1 flex items-center justify-center p-8 bg-[var(--bg-app)] text-[var(--text-muted)] font-mono text-xs">
-          Loading AI Background Removal Studio...
-        </div>
-      }
-    >
-      <BgRemovalClient initialMode="bg-removal" />
-    </Suspense>
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <Suspense
+        fallback={
+          <div className="flex-1 flex items-center justify-center p-8 bg-[var(--bg-app)] text-[var(--text-muted)] font-mono text-xs">
+            Loading AI Background Removal Studio...
+          </div>
+        }
+      >
+        <BgRemovalClient initialMode="bg-removal" />
+      </Suspense>
+    </>
   );
 }

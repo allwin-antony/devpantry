@@ -6,6 +6,9 @@ export const metadata: Metadata = {
   title: 'Free Unlimited Image Resizer & Artboard Studio — No Signup',
   description: 'Resize unlimited images to exact pixel dimensions, aspect ratios, and custom padding entirely inside your browser with no signup. 100% private, free forever, and instant.',
   keywords: [
+    'resize image online free',
+    'change image dimensions online',
+    'crop image to aspect ratio',
     'image resizer no signup',
     'unlimited image resizer',
     'resize image without signup',
@@ -35,15 +38,35 @@ export const metadata: Metadata = {
 };
 
 export default function ImageResizerPage() {
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'WebApplication',
+    name: 'DevPantry Image Resizer',
+    description: 'Client-side image resizer and cropper. Resize unlimited images to exact pixel dimensions privately in your browser.',
+    applicationCategory: 'MultimediaApplication',
+    operatingSystem: 'Any',
+    offers: {
+      '@type': 'Offer',
+      price: '0',
+      priceCurrency: 'USD',
+    },
+  };
+
   return (
-    <Suspense
-      fallback={
-        <div className="flex-1 flex items-center justify-center p-8 bg-[var(--bg-app)] text-[var(--text-muted)] font-mono text-xs">
-          Loading Image Resizer Studio...
-        </div>
-      }
-    >
-      <BgRemovalClient initialMode="resizer" />
-    </Suspense>
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <Suspense
+        fallback={
+          <div className="flex-1 flex items-center justify-center p-8 bg-[var(--bg-app)] text-[var(--text-muted)] font-mono text-xs">
+            Loading Image Resizer Studio...
+          </div>
+        }
+      >
+        <BgRemovalClient initialMode="resizer" />
+      </Suspense>
+    </>
   );
 }
