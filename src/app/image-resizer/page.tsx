@@ -26,11 +26,13 @@ export const metadata: Metadata = {
     title: 'Free Unlimited Image Resizer & Artboard Studio — No Signup | DevPantry',
     description: 'Instant, unlimited image resizing, aspect ratio framing, and padding directly in your browser. No signup required, zero cloud uploads, 100% private.',
     type: 'website',
+    images: [{ url: '/og-image-studio.png', width: 1200, height: 630, alt: 'DevPantry Image Resizer Studio' }],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Free Unlimited Image Resizer & Artboard Studio — No Signup | DevPantry',
     description: 'Resize and frame unlimited images directly in your browser with no signup. 100% private, zero uploads, custom aspect ratios and target pixel sizes.',
+    images: ['/og-image-studio.png'],
   },
   alternates: {
     canonical: 'https://devpantry.com/image-resizer',

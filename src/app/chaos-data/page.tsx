@@ -26,11 +26,13 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Mock Data Generator — Edge-Case Test Data & Schema Builder | DevPantry',
     description: 'High-entropy edge-case testing: 100+ BLNS naughty strings, custom schemas, 13+ field types, and 5 export formats.',
+    images: [{ url: '/og-image-devtools.png', width: 1200, height: 630, alt: 'DevPantry Chaos Mock Data Generator' }],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Mock Data Generator & Schema Builder',
     description: 'Generate dirty mock data with 100+ naughty strings and export to JSON, CSV, SQL, Zod, and TypeScript.',
+    images: ['/og-image-devtools.png'],
   },
   alternates: {
     canonical: 'https://devpantry.com/chaos-data',

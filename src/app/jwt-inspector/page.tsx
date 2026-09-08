@@ -32,12 +32,14 @@ export const metadata: Metadata = {
       'Zero-leak in-memory JWT inspector and chaos simulator. Decode tokens, verify signatures locally with WebCrypto, and test edge-case authentication failures.',
     url: 'https://devpantry.com/jwt-inspector',
     type: 'website',
+    images: [{ url: '/og-image-devtools.png', width: 1200, height: 630, alt: 'DevPantry Client-Side JWT Inspector' }],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Client-Side JWT Inspector & Chaos Tamperer — DevPantry',
     description:
       'Zero-leak client-side JWT debugger and chaos tamperer. 100% in-memory sandbox, zero network requests, and 1-click edge-case simulations.',
+    images: ['/og-image-devtools.png'],
   },
   alternates: {
     canonical: 'https://devpantry.com/jwt-inspector',

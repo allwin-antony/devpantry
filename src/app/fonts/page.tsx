@@ -27,11 +27,13 @@ export const metadata: Metadata = {
   openGraph: {
     title: '2,180+ Free Open Source Fonts | DevPantry',
     description: 'Explore, test, and integrate 2,180+ open-source typefaces with live typing playground, weight controls, and CSS @import snippets.',
+    images: [{ url: '/og-image-assets.png', width: 1200, height: 630, alt: 'DevPantry 2,180+ Open Source Fonts' }],
   },
   twitter: {
     card: 'summary_large_image',
     title: '2,180+ Free Open Source Fonts',
     description: 'Live interactive type tester with size, weight, and tracking sliders for 2,180+ free open-source fonts.',
+    images: ['/og-image-assets.png'],
   },
   alternates: {
     canonical: 'https://devpantry.com/fonts',

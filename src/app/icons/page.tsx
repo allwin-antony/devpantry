@@ -22,11 +22,13 @@ export const metadata: Metadata = {
   openGraph: {
     title: '353,000+ Free SVG Icons | DevPantry',
     description: 'Interactive SVG icon playground: adjust size, stroke width, and colors across 353,000+ vector icons from 238 open-source libraries.',
+    images: [{ url: '/og-image-assets.png', width: 1200, height: 630, alt: 'DevPantry 353,000+ Free SVG Icons' }],
   },
   twitter: {
     card: 'summary_large_image',
     title: '353,000+ Free SVG Icons — Browse & Copy Code',
     description: 'Live SVG customizer, React JSX generator, and searchable icon library with 353,000+ open source icons.',
+    images: ['/og-image-assets.png'],
   },
   alternates: {
     canonical: 'https://devpantry.com/icons',

@@ -23,11 +23,13 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'API Mock Response Templates & Chaos Sandbox | DevPantry',
     description: '17 real-world production API templates (Google, GitHub, Stripe, Supabase) filled with high-entropy edge cases, Unicode injections, and floating-point traps.',
+    images: [{ url: '/og-image-devtools.png', width: 1200, height: 630, alt: 'DevPantry API Mock Templates & Chaos Sandbox' }],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'API Mock Response Templates | DevPantry',
     description: 'Stress test your app with dirty mock data injected into real-world API schemas.',
+    images: ['/og-image-devtools.png'],
   },
   alternates: {
     canonical: 'https://devpantry.com/chaos-templates',

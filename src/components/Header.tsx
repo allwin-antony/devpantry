@@ -6,6 +6,7 @@ import { usePathname } from 'next/navigation';
 import { Flame, Type, Box, Radio, Sun, Moon, Terminal, Sparkles, Key, Search, Menu, X } from 'lucide-react';
 import { useTheme } from './ThemeProvider';
 import { CommandPalette } from './CommandPalette';
+import { DevPantryLogo } from './DevPantryLogo';
 
 export const Header: React.FC = () => {
   const pathname = usePathname();
@@ -45,12 +46,12 @@ export const Header: React.FC = () => {
       <header className="w-full h-12 bg-[var(--bg-panel)] border-b border-[var(--border-dev)] px-3 sm:px-4 flex items-center justify-between gap-3 select-none shrink-0 z-30 transition-colors shadow-xs font-mono relative">
         {/* Left: Brand */}
         <div className="flex items-center gap-3 shrink-0">
-          <Link href="/" className="flex items-center gap-2 group cursor-pointer">
-            <div className="w-6 h-6 rounded-md bg-gradient-to-tr from-rose-600 via-amber-500 to-rose-500 flex items-center justify-center shadow shadow-rose-500/20 group-hover:scale-105 transition-transform">
-              <Flame className="w-3.5 h-3.5 text-white" />
+          <Link href="/" className="flex items-center gap-2.5 group cursor-pointer">
+            <div className="w-6 h-6 flex items-center justify-center group-hover:scale-105 transition-transform shrink-0">
+              <DevPantryLogo size={24} className="w-6 h-6 drop-shadow-sm" />
             </div>
             <span className="font-bold text-xs tracking-tight text-[var(--text-primary)] font-mono">
-              DEVPANTRY<span className="text-rose-500">.COM</span>
+              DEVPANTRY<span className="text-blue-500 dark:text-blue-400">.COM</span>
             </span>
           </Link>
         </div>

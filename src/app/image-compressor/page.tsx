@@ -28,11 +28,13 @@ export const metadata: Metadata = {
     title: 'Free Unlimited Image Compressor & WebP Converter — No Signup | DevPantry',
     description: 'Compress unlimited images to target file size budgets (<500 KB, <1 MB) and convert WebP/PNG/JPEG entirely inside your browser. No signup, zero uploads, 100% private.',
     type: 'website',
+    images: [{ url: '/og-image-studio.png', width: 1200, height: 630, alt: 'DevPantry Image Compressor Studio' }],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Free Unlimited Image Compressor & WebP Converter — No Signup | DevPantry',
     description: 'Compress unlimited images and convert to WebP directly in your browser with no signup. Set strict file size limits with smart iterative quality tuning.',
+    images: ['/og-image-studio.png'],
   },
   alternates: {
     canonical: 'https://devpantry.com/image-compressor',

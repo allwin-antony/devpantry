@@ -29,11 +29,13 @@ export const metadata: Metadata = {
     title: 'Free Client-Side AI Background Remover — No Signup & Unlimited | DevPantry',
     description: 'Instant, unlimited background removal powered by Edge AI & ONNX WebAssembly. No signup, zero server uploads, high-resolution PNG/WebP exports, and interactive before/after comparison.',
     type: 'website',
+    images: [{ url: '/og-image-studio.png', width: 1200, height: 630, alt: 'DevPantry AI Background Remover' }],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Free Client-Side AI Background Remover — No Signup & Unlimited | DevPantry',
     description: 'Remove image backgrounds from unlimited photos entirely inside your browser. No signup required, 100% private, zero server uploads, powered by Edge AI.',
+    images: ['/og-image-studio.png'],
   },
   alternates: {
     canonical: 'https://devpantry.com/background-removal',
