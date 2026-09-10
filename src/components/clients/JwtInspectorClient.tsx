@@ -51,7 +51,7 @@ import {
   ChaosExploitHint,
 } from '@/lib/jwt/chaos';
 import { signHmac, verifyHmac, generateTestRsaKeyPair, signRsa, SupportedHmacAlg } from '@/lib/jwt/crypto';
-import { getJwtPresets } from '@/lib/jwt/presets';
+import { getJwtPresets, DEFAULT_PRESET_TIMESTAMP } from '@/lib/jwt/presets';
 
 function formatDeterministicTime(sec: number | undefined): string {
   if (!sec) return 'N/A';
@@ -62,16 +62,89 @@ function formatDeterministicTime(sec: number | undefined): string {
   return `${hours}:${mins}:${secs} UTC`;
 }
 
+function JwtInspectorSkeleton() {
+  return (
+    <div className="w-full bg-[var(--bg-app)] text-[var(--text-primary)] flex flex-col font-sans transition-colors">
+      {/* 1. Studio Top Command Bar Skeleton */}
+      <div className="bg-[var(--bg-panel)] border-b border-[var(--border-dev)] px-4 py-2 flex flex-wrap items-center justify-between gap-3 text-xs shrink-0 z-20">
+        <div className="flex items-center gap-2">
+          <span className="w-2 h-2 rounded-full bg-emerald-500/60 animate-pulse" />
+          <div className="h-4 w-44 bg-[var(--bg-sidebar)] border border-[var(--border-dev)] rounded animate-pulse" />
+        </div>
+        <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar py-0.5">
+          <div className="h-6 w-14 bg-[var(--bg-sidebar)] border border-[var(--border-dev)] rounded-md animate-pulse" />
+          <div className="h-6 w-32 bg-[var(--bg-sidebar)] border border-[var(--border-dev)] rounded-md animate-pulse" />
+          <div className="h-6 w-32 bg-[var(--bg-sidebar)] border border-[var(--border-dev)] rounded-md animate-pulse" />
+          <div className="h-6 w-32 bg-[var(--bg-sidebar)] border border-[var(--border-dev)] rounded-md animate-pulse" />
+        </div>
+        <div className="h-6 w-16 bg-[var(--bg-sidebar)] border border-[var(--border-dev)] rounded-md animate-pulse" />
+      </div>
+
+      {/* 2. Main Studio Workspace Skeleton (2 Columns) */}
+      <div className="flex-1 grid grid-cols-1 lg:grid-cols-12 gap-0">
+        {/* LEFT COLUMN: Visual Token Terminal & Expiry Radar (5 Cols) */}
+        <div className="lg:col-span-5 border-r border-[var(--border-dev)] flex flex-col bg-[var(--bg-panel)] p-4 gap-4">
+          <div className="rounded-xl border border-[var(--border-dev)] bg-[var(--bg-panel-subtle)] p-3.5 flex flex-col gap-2.5 shadow-2xs">
+            <div className="flex items-center justify-between">
+              <div className="h-4 w-44 bg-[var(--bg-sidebar)] border border-[var(--border-dev)] rounded animate-pulse" />
+              <div className="h-4 w-20 bg-[var(--bg-sidebar)] border border-[var(--border-dev)] rounded animate-pulse" />
+            </div>
+            <div className="h-28 w-full bg-[var(--bg-app)] rounded-lg border border-[var(--border-dev)] animate-pulse" />
+            <div className="flex flex-col gap-1.5 pt-1">
+              <div className="h-9 w-full bg-[var(--bg-panel)] rounded-lg border border-[var(--border-dev)] animate-pulse" />
+              <div className="h-9 w-full bg-[var(--bg-panel)] rounded-lg border border-[var(--border-dev)] animate-pulse" />
+              <div className="h-9 w-full bg-[var(--bg-panel)] rounded-lg border border-[var(--border-dev)] animate-pulse" />
+            </div>
+          </div>
+
+          <div className="rounded-xl border border-[var(--border-dev)] bg-[var(--bg-panel-subtle)] p-3.5 flex flex-col gap-3 shadow-2xs">
+            <div className="flex items-center justify-between">
+              <div className="h-4 w-32 bg-[var(--bg-sidebar)] border border-[var(--border-dev)] rounded animate-pulse" />
+              <div className="h-5 w-24 bg-[var(--bg-sidebar)] border border-[var(--border-dev)] rounded-full animate-pulse" />
+            </div>
+            <div className="h-8 w-full bg-[var(--bg-panel)] rounded-lg border border-[var(--border-dev)] animate-pulse" />
+            <div className="h-16 w-full bg-[var(--bg-panel)] rounded-lg border border-[var(--border-dev)] animate-pulse" />
+          </div>
+        </div>
+
+        {/* RIGHT COLUMN: Claims & Chaos Workbench (7 Cols) */}
+        <div className="lg:col-span-7 flex flex-col bg-[var(--bg-app)] p-4 gap-4">
+          <div className="h-9 w-72 bg-[var(--bg-panel)] rounded-lg border border-[var(--border-dev)] animate-pulse" />
+          <div className="flex flex-col gap-2.5">
+            <div className="h-24 w-full bg-[var(--bg-panel)] rounded-xl border border-[var(--border-dev)] animate-pulse" />
+            <div className="h-24 w-full bg-[var(--bg-panel)] rounded-xl border border-[var(--border-dev)] animate-pulse" />
+            <div className="h-24 w-full bg-[var(--bg-panel)] rounded-xl border border-[var(--border-dev)] animate-pulse" />
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export const JwtInspectorClient: React.FC = () => {
-  const presets = useMemo(() => getJwtPresets(), []);
-  
-  // 100% in-memory state — never stored in localStorage (safe for production tokens)
-  const [rawToken, setRawToken] = useState<string>(presets[0].token);
-  const [activeTab, setActiveTab] = useState<'claims' | 'json' | 'crypto' | 'export'>('claims');
-  const [copyFeedback, setCopyFeedback] = useState<string | null>(null);
-  
   // Client mount check to safely eliminate hydration mismatches
   const mounted = useIsClient();
+
+  const presets = useMemo(() => {
+    return getJwtPresets(mounted ? Math.floor(Date.now() / 1000) : DEFAULT_PRESET_TIMESTAMP);
+  }, [mounted]);
+  
+  // 100% in-memory state — never stored in localStorage (safe for production tokens)
+  const [rawToken, setRawToken] = useState<string>(() => presets[0].token);
+  const [activeTab, setActiveTab] = useState<'claims' | 'json' | 'crypto' | 'export'>('claims');
+  const [copyFeedback, setCopyFeedback] = useState<string | null>(null);
+
+  // When client mounts, ensure the default initial preset token is active with current time
+  useEffect(() => {
+    const livePresets = getJwtPresets(Math.floor(Date.now() / 1000));
+    setRawToken(prev => {
+      const defaultToken = getJwtPresets(DEFAULT_PRESET_TIMESTAMP)[0].token;
+      if (prev === defaultToken) {
+        return livePresets[0].token;
+      }
+      return prev;
+    });
+  }, []);
 
   // Expanded claims tracking for in-place accordion hints (default 'exp' open)
   const [expandedClaimKeys, setExpandedClaimKeys] = useState<Record<string, boolean>>({ exp: true });
@@ -154,7 +227,8 @@ export const JwtInspectorClient: React.FC = () => {
 
   // Load a preset
   const handleSelectPreset = (presetId: string) => {
-    const p = presets.find(item => item.id === presetId);
+    const livePresets = getJwtPresets(Math.floor(Date.now() / 1000));
+    const p = livePresets.find(item => item.id === presetId);
     if (p) {
       setRawToken(p.token);
       if (p.sampleSecret) {
@@ -277,8 +351,12 @@ export const JwtInspectorClient: React.FC = () => {
     return lines.join('\n');
   }, [parsed]);
 
+  if (!mounted) {
+    return <JwtInspectorSkeleton />;
+  }
+
   return (
-    <div className="w-full min-h-[calc(100vh-3rem)] bg-[var(--bg-app)] text-[var(--text-primary)] flex flex-col font-sans transition-colors">
+    <div className="w-full bg-[var(--bg-app)] text-[var(--text-primary)] flex flex-col font-sans transition-colors">
       
       {/* 1. Studio Top Command Bar */}
       <div className="bg-[var(--bg-panel)] border-b border-[var(--border-dev)] px-4 py-2 flex flex-wrap items-center justify-between gap-3 text-xs shrink-0 z-20">
@@ -335,12 +413,12 @@ export const JwtInspectorClient: React.FC = () => {
       </div>
 
       {/* 2. Main Studio Workspace (2 Columns) */}
-      <div className="flex-1 grid grid-cols-1 lg:grid-cols-12 gap-0 overflow-y-auto lg:overflow-hidden">
+      <div className="flex-1 grid grid-cols-1 lg:grid-cols-12 gap-0">
         
         {/* ============================================================ */}
         {/* LEFT COLUMN: Visual Token Terminal & Expiry Radar (5 Cols)   */}
         {/* ============================================================ */}
-        <div className="lg:col-span-5 border-r border-[var(--border-dev)] flex flex-col bg-[var(--bg-panel)] overflow-y-auto p-4 gap-4">
+        <div className="lg:col-span-5 border-r border-[var(--border-dev)] flex flex-col bg-[var(--bg-panel)] p-4 gap-4 lg:sticky lg:top-0 lg:self-start lg:max-h-[calc(100vh-7rem)] lg:overflow-y-auto">
           
           {/* Card 1: Encoded Token (Compact JWT) */}
           <div className="rounded-xl border border-[var(--border-dev)] bg-[var(--bg-panel-subtle)] p-3.5 flex flex-col gap-2.5 shadow-2xs">
@@ -659,7 +737,7 @@ export const JwtInspectorClient: React.FC = () => {
         {/* ============================================================ */}
         {/* RIGHT COLUMN: Pinned Chaos Deck & Workspace Tabs (7 Cols)   */}
         {/* ============================================================ */}
-        <div className="lg:col-span-7 flex flex-col bg-[var(--bg-panel-subtle)] overflow-y-auto">
+        <div className="lg:col-span-7 flex flex-col bg-[var(--bg-panel-subtle)]">
           
           {/* 🔥 1. PINNED TOP: Chaos Mutations Deck (Clean, Professional, Non-Rainbow) */}
           <div className="p-4 border-b border-[var(--border-dev)] bg-[var(--bg-panel)] flex flex-col gap-3 sticky top-0 z-10 shadow-xs">

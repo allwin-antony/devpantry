@@ -57,7 +57,7 @@ export default function JwtInspectorPage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      <div className="min-h-[calc(100vh-48px)] flex flex-col shrink-0">
+      <div className="flex flex-col">
         <Suspense
           fallback={
             <div className="p-6 text-xs font-mono text-[var(--text-muted)] flex items-center gap-2">

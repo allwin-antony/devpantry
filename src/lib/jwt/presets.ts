@@ -1,22 +1,24 @@
 import { JwtPreset } from './types';
 import { encodeJsonToBase64Url } from './codec';
 
+export const DEFAULT_PRESET_TIMESTAMP = 1789056000;
+
 /**
- * Builds a compact token with freshly calculated timestamps for presets.
+ * Builds a compact token with freshly calculated or deterministic timestamps for presets.
  */
 function createPresetToken(
   header: Record<string, unknown>,
   payloadGenerator: (nowSec: number) => Record<string, unknown>,
-  fixedSignature: string
+  fixedSignature: string,
+  nowSec: number = DEFAULT_PRESET_TIMESTAMP
 ): string {
-  const now = Math.floor(Date.now() / 1000);
-  const payload = payloadGenerator(now);
+  const payload = payloadGenerator(nowSec);
   const hB64 = encodeJsonToBase64Url(header);
   const pB64 = encodeJsonToBase64Url(payload);
   return `${hB64}.${pB64}.${fixedSignature}`;
 }
 
-export function getJwtPresets(): JwtPreset[] {
+export function getJwtPresets(referenceNowSec: number = DEFAULT_PRESET_TIMESTAMP): JwtPreset[] {
   return [
     {
       id: 'supabase',
@@ -46,7 +48,8 @@ export function getJwtPresets(): JwtPreset[] {
           role: 'authenticated',
           session_id: 'sess_e9c8b7a6',
         }),
-        'sUpAbAsE_sAmPlE_sIgNaTuRe_hS256_x92kM1pQ7'
+        'sUpAbAsE_sAmPlE_sIgNaTuRe_hS256_x92kM1pQ7',
+        referenceNowSec
       ),
     },
     {
@@ -71,7 +74,8 @@ export function getJwtPresets(): JwtPreset[] {
           iat: now,
           exp: now + 3600,
         }),
-        'gOoGlE_rS256_sIgNaTuRe_sAmPlE_k39Lm8vNpQr2'
+        'gOoGlE_rS256_sIgNaTuRe_sAmPlE_k39Lm8vNpQr2',
+        referenceNowSec
       ),
     },
     {
@@ -94,7 +98,8 @@ export function getJwtPresets(): JwtPreset[] {
           org_id: 'org_987654321',
           org_role: 'owner',
         }),
-        'aUtH0_cLeRk_sIgNaTuRe_sAmPlE_z89Lm2vNpQr4'
+        'aUtH0_cLeRk_sIgNaTuRe_sAmPlE_z89Lm2vNpQr4',
+        referenceNowSec
       ),
     },
     {
@@ -109,7 +114,8 @@ export function getJwtPresets(): JwtPreset[] {
           exp: now + 540,
           iss: '1049281',
         }),
-        'gItHuB_aPp_sIgNaTuRe_sAmPlE_w19Xm4vLpQr7'
+        'gItHuB_aPp_sIgNaTuRe_sAmPlE_w19Xm4vLpQr7',
+        referenceNowSec
       ),
     },
     {
@@ -130,7 +136,8 @@ export function getJwtPresets(): JwtPreset[] {
           exp: now + 1800,
           jti: 'jti_991827364510',
         }),
-        'mIcRoSeRvIcE_hS256_sIgNaTuRe_p39Km7vNpQr1'
+        'mIcRoSeRvIcE_hS256_sIgNaTuRe_p39Km7vNpQr1',
+        referenceNowSec
       ),
     },
   ];

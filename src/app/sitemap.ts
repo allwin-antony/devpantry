@@ -10,7 +10,8 @@ export async function generateSitemaps() {
   ];
 }
 
-export default function sitemap({ id }: { id: string }): MetadataRoute.Sitemap {
+export default async function sitemap(props: { id: Promise<string> }): Promise<MetadataRoute.Sitemap> {
+  const id = await props.id;
   const baseUrl = 'https://devpantry.com';
   const staticDate = new Date('2026-09-09');
 

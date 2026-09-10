@@ -345,7 +345,7 @@ export function ChaosTemplatesClient({ initialServiceId, initialMode }: ChaosTem
   const generatedCurl = useMemo(() => {
     const endpointUrl = isCustomMode ? 'https://api.myapp.com/v1/webhook' : (activeService.endpoints ? Object.values(activeService.endpoints)[0] : 'https://api.service.com/v1/endpoint');
     return `curl -X POST "${endpointUrl}" \\
-  -H "Authorization: Bearer ${(chaosPayload.access_token || 'sample_chaos_token_' + Date.now()).slice(0, 32)}" \\
+  -H "Authorization: Bearer ${(chaosPayload.access_token || 'sample_chaos_token_mock_auth_2026').slice(0, 32)}" \\
   -H "Content-Type: application/json" \\
   -d '${JSON.stringify(chaosPayload).slice(0, 160)}...'`;
   }, [activeService, chaosPayload, isCustomMode]);
