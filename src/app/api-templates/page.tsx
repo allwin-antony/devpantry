@@ -52,7 +52,8 @@ export default function ChaosTemplatesPage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      <div className="min-h-[calc(100vh-48px)] flex flex-col shrink-0">
+      <div className="flex flex-col shrink-0 w-full">
+        <h1 className="sr-only">API Mock Responses & Templates</h1>
         <Suspense fallback={<div className="p-4 text-xs font-mono text-[var(--text-muted)]">Loading Chaos Templates...</div>}>
           <ChaosTemplatesClient />
         </Suspense>

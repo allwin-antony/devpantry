@@ -95,7 +95,7 @@ body {
 .tool-seo-content {
   position: relative;
   max-width: 56rem;
-  margin: 4rem auto 3rem;
+  margin: 2rem auto 3rem;
   padding: 2rem 2.25rem;
   color: var(--text-secondary);
   background: color-mix(in srgb, var(--bg-panel) 92%, transparent);
@@ -132,7 +132,7 @@ body {
 
 @media (max-width: 640px) {
   .tool-seo-content {
-    margin: 3rem 1rem 2rem;
+    margin: 1.5rem 1rem 2rem;
     padding: 1.5rem;
     border-radius: 0.75rem;
   }

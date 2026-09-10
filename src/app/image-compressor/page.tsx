@@ -53,7 +53,8 @@ export default function ImageCompressorPage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      <div className="min-h-[calc(100vh-48px)] flex flex-col shrink-0">
+      <div className="flex flex-col shrink-0 w-full">
+        <h1 className="sr-only">Free Unlimited Image Compressor</h1>
         <Suspense
           fallback={
             <div className="flex-1 flex items-center justify-center p-8 bg-[var(--bg-app)] text-[var(--text-muted)] font-mono text-xs">

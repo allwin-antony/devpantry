@@ -3,7 +3,7 @@ import Link from 'next/link';
 
 export const Footer: React.FC = () => {
   return (
-    <footer className="w-full shrink-0 border-t border-[var(--border-dev)] py-3 px-4 md:px-6 font-mono text-[10px] text-[var(--text-muted)] flex items-center justify-between gap-3 select-none transition-colors">
+    <footer className="w-full shrink-0 border-t border-[var(--border-dev)] py-3 px-4 md:px-6 font-mono text-[10px] text-[var(--text-muted)] flex flex-col sm:flex-row items-center justify-between gap-3 select-none transition-colors">
       <div className="flex items-center gap-3 md:gap-5">
         <span className="text-[var(--text-secondary)]">© {new Date().getFullYear()} DevPantry</span>
         <nav className="flex items-center gap-3">

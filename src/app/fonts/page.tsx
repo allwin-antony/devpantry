@@ -51,6 +51,7 @@ export default function FontsPage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
+      <h1 className="sr-only">Fonts Studio - 2,180+ Open Source Fonts</h1>
       <FontsClient />
     </>
   );

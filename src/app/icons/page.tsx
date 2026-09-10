@@ -52,6 +52,7 @@ export default function IconsPage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
+      <h1 className="sr-only">Vector Icons Studio - 353,000+ SVG Icons</h1>
       <Suspense fallback={<div className="p-4 text-xs font-mono text-[var(--text-muted)]">Loading Icons Studio...</div>}>
         <IconsClient />
       </Suspense>

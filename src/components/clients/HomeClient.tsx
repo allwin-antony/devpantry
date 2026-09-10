@@ -216,7 +216,7 @@ export function HomeClient() {
   }, []);
 
   return (
-    <div className="h-full overflow-y-auto bg-[var(--bg-app)] relative">
+    <div className="w-full bg-[var(--bg-app)] relative">
       {/* Ambient Mouse Spotlight / Shadow Glow */}
       <div
         ref={spotlightRef}

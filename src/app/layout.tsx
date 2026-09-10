@@ -90,8 +90,10 @@ export default function RootLayout({
           <Header />
 
           {/* Main Viewport Container */}
-          <main className="flex-1 min-h-0 overflow-y-auto min-w-0">
-            {children}
+          <main className="flex-1 min-h-0 overflow-y-auto min-w-0 flex flex-col relative">
+            <div className="flex-1 shrink-0 flex flex-col">
+              {children}
+            </div>
             
             {/* Global Footer */}
             <Footer />

@@ -57,7 +57,8 @@ export default function JwtInspectorPage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      <div className="flex flex-col h-full flex-1">
+      <div className="flex flex-col w-full flex-1">
+        <h1 className="sr-only">JWT Decoder & Chaos Tamperer</h1>
         <Suspense
           fallback={
             <div className="p-6 text-xs font-mono text-[var(--text-muted)] flex items-center gap-2">
@@ -68,6 +69,7 @@ export default function JwtInspectorPage() {
         >
           <JwtInspectorClient>
             {/* SEO Content Block */}
+          </JwtInspectorClient>
             <article className="tool-seo-content prose prose-sm max-w-none dark:prose-invert">
               <h2>Zero-Leak Client-Side JWT Decoder</h2>
               <p>
@@ -96,7 +98,6 @@ export default function JwtInspectorPage() {
                 <li><a href="/mock-data" className="text-rose-400 hover:underline">Mock Data Generator</a> — Synthesize custom edge-case claims.</li>
               </ul>
             </article>
-          </JwtInspectorClient>
         </Suspense>
       </div>
     </div>
