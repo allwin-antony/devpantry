@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from 'next';
+import Script from 'next/script';
 import './globals.css';
 import { ThemeProvider } from '../components/ThemeProvider';
 import { Header } from '../components/Header';
@@ -85,6 +86,19 @@ export default function RootLayout({
         />
       </head>
       <body className="h-screen w-screen flex flex-col bg-[var(--bg-app)] text-[var(--text-primary)] selection:bg-rose-500 selection:text-white bg-dev-grid transition-colors">
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=G-WYTNMC3H2B"
+          strategy="afterInteractive"
+        />
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+
+            gtag('config', 'G-WYTNMC3H2B');
+          `}
+        </Script>
         <ThemeProvider>
           {/* Top Developer Navigation */}
           <Header />

@@ -1,18 +1,226 @@
 import React from 'react';
 import Link from 'next/link';
+import { Sparkles, Terminal, Type, Box, Radio, ShieldCheck, Heart } from 'lucide-react';
+import { DevPantryLogo } from './DevPantryLogo';
 
 export const Footer: React.FC = () => {
   return (
-    <footer className="w-full shrink-0 border-t border-[var(--border-dev)] py-3 px-4 md:px-6 font-mono text-[10px] text-[var(--text-muted)] flex flex-col sm:flex-row items-center justify-between gap-3 select-none transition-colors">
-      <div className="flex items-center gap-3 md:gap-5">
-        <span className="text-[var(--text-secondary)]">© {new Date().getFullYear()} DevPantry</span>
-        <nav className="flex items-center gap-3">
-          <Link href="/about" className="hover:text-[var(--text-primary)] transition-colors">About</Link>
-          <Link href="/privacy" className="hover:text-[var(--text-primary)] transition-colors">Privacy</Link>
-          <Link href="/security" className="hover:text-[var(--text-primary)] transition-colors">Security</Link>
-        </nav>
+    <footer className="w-full shrink-0 border-t border-[var(--border-dev)] bg-[var(--bg-panel)] font-mono text-xs text-[var(--text-muted)] transition-colors">
+      {/* Top Sitemap Grid */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8 sm:py-12">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-8">
+          {/* Column 1: Image Studio */}
+          <div className="flex flex-col gap-3">
+            <div className="flex items-center gap-1.5 text-xs font-bold text-[var(--text-primary)] tracking-wide uppercase">
+              <Sparkles className="w-3.5 h-3.5 text-rose-500" />
+              <span>Image Studio</span>
+            </div>
+            <ul className="flex flex-col gap-2 text-[11px]">
+              <li>
+                <Link href="/background-remover" className="hover:text-[var(--text-primary)] hover:underline transition-colors">
+                  AI Background Remover
+                </Link>
+              </li>
+              <li>
+                <Link href="/image-resizer" className="hover:text-[var(--text-primary)] hover:underline transition-colors">
+                  Image Resizer &amp; Artboard
+                </Link>
+              </li>
+              <li>
+                <Link href="/image-compressor" className="hover:text-[var(--text-primary)] hover:underline transition-colors">
+                  Image Compressor &amp; WebP
+                </Link>
+              </li>
+              <li>
+                <span className="text-[10px] text-[var(--text-muted)] opacity-75">
+                  100% Client-Side WebGPU &amp; WASM
+                </span>
+              </li>
+            </ul>
+          </div>
+
+          {/* Column 2: Developer Utilities */}
+          <div className="flex flex-col gap-3">
+            <div className="flex items-center gap-1.5 text-xs font-bold text-[var(--text-primary)] tracking-wide uppercase">
+              <Terminal className="w-3.5 h-3.5 text-cyan-500" />
+              <span>Dev Utilities</span>
+            </div>
+            <ul className="flex flex-col gap-2 text-[11px]">
+              <li>
+                <Link href="/jwt-decoder" className="hover:text-[var(--text-primary)] hover:underline transition-colors">
+                  Zero-Leak JWT Decoder
+                </Link>
+              </li>
+              <li>
+                <Link href="/mock-data" className="hover:text-[var(--text-primary)] hover:underline transition-colors">
+                  Chaos Mock Data Generator
+                </Link>
+              </li>
+              <li>
+                <Link href="/mock-data" className="hover:text-[var(--text-primary)] hover:underline transition-colors">
+                  Custom Schema Builder
+                </Link>
+              </li>
+              <li>
+                <Link href="/api-templates" className="hover:text-[var(--text-primary)] hover:underline transition-colors">
+                  Production API Vault
+                </Link>
+              </li>
+            </ul>
+          </div>
+
+          {/* Column 3: Featured Typefaces */}
+          <div className="flex flex-col gap-3">
+            <div className="flex items-center gap-1.5 text-xs font-bold text-[var(--text-primary)] tracking-wide uppercase">
+              <Type className="w-3.5 h-3.5 text-amber-500" />
+              <span>Open Fonts</span>
+            </div>
+            <ul className="flex flex-col gap-2 text-[11px]">
+              <li>
+                <Link href="/fonts/inter" className="hover:text-[var(--text-primary)] hover:underline transition-colors">
+                  Inter (UI Sans)
+                </Link>
+              </li>
+              <li>
+                <Link href="/fonts/jetbrains-mono" className="hover:text-[var(--text-primary)] hover:underline transition-colors">
+                  JetBrains Mono (Code)
+                </Link>
+              </li>
+              <li>
+                <Link href="/fonts/satoshi" className="hover:text-[var(--text-primary)] hover:underline transition-colors">
+                  Satoshi (Modernist)
+                </Link>
+              </li>
+              <li>
+                <Link href="/fonts/clash-display" className="hover:text-[var(--text-primary)] hover:underline transition-colors">
+                  Clash Display (Editorial)
+                </Link>
+              </li>
+              <li>
+                <Link href="/fonts/fira-code" className="hover:text-[var(--text-primary)] hover:underline transition-colors">
+                  Fira Code (Ligatures)
+                </Link>
+              </li>
+              <li>
+                <Link href="/fonts" className="text-rose-500 dark:text-rose-400 font-semibold hover:underline transition-colors">
+                  Browse 2,180+ Fonts →
+                </Link>
+              </li>
+            </ul>
+          </div>
+
+          {/* Column 4: Vector Icon Toolkits */}
+          <div className="flex flex-col gap-3">
+            <div className="flex items-center gap-1.5 text-xs font-bold text-[var(--text-primary)] tracking-wide uppercase">
+              <Box className="w-3.5 h-3.5 text-emerald-500" />
+              <span>Vector Icons</span>
+            </div>
+            <ul className="flex flex-col gap-2 text-[11px]">
+              <li>
+                <Link href="/icons/lucide" className="hover:text-[var(--text-primary)] hover:underline transition-colors">
+                  Lucide Icons (1,800+)
+                </Link>
+              </li>
+              <li>
+                <Link href="/icons/tabler" className="hover:text-[var(--text-primary)] hover:underline transition-colors">
+                  Tabler Icons (6,100+)
+                </Link>
+              </li>
+              <li>
+                <Link href="/icons/heroicons" className="hover:text-[var(--text-primary)] hover:underline transition-colors">
+                  Heroicons (Tailwind)
+                </Link>
+              </li>
+              <li>
+                <Link href="/icons/material-symbols" className="hover:text-[var(--text-primary)] hover:underline transition-colors">
+                  Material Symbols
+                </Link>
+              </li>
+              <li>
+                <Link href="/icons/simple-icons" className="hover:text-[var(--text-primary)] hover:underline transition-colors">
+                  Simple Icons (Brands)
+                </Link>
+              </li>
+              <li>
+                <Link href="/icons" className="text-rose-500 dark:text-rose-400 font-semibold hover:underline transition-colors">
+                  Browse 238+ Toolkits →
+                </Link>
+              </li>
+            </ul>
+          </div>
+
+          {/* Column 5: Production API Mocks */}
+          <div className="flex flex-col gap-3 col-span-2 sm:col-span-1">
+            <div className="flex items-center gap-1.5 text-xs font-bold text-[var(--text-primary)] tracking-wide uppercase">
+              <Radio className="w-3.5 h-3.5 text-violet-500" />
+              <span>API Fixtures</span>
+            </div>
+            <ul className="flex flex-col gap-2 text-[11px]">
+              <li>
+                <Link href="/api-templates/stripe-billing" className="hover:text-[var(--text-primary)] hover:underline transition-colors">
+                  Stripe Billing &amp; Webhooks
+                </Link>
+              </li>
+              <li>
+                <Link href="/api-templates/google-sso" className="hover:text-[var(--text-primary)] hover:underline transition-colors">
+                  Google OAuth 2.0 / OIDC
+                </Link>
+              </li>
+              <li>
+                <Link href="/api-templates/github-webhooks" className="hover:text-[var(--text-primary)] hover:underline transition-colors">
+                  GitHub Webhook Payloads
+                </Link>
+              </li>
+              <li>
+                <Link href="/api-templates/postgrest-supabase" className="hover:text-[var(--text-primary)] hover:underline transition-colors">
+                  Supabase PostgREST
+                </Link>
+              </li>
+              <li>
+                <Link href="/api-templates" className="text-rose-500 dark:text-rose-400 font-semibold hover:underline transition-colors">
+                  View 19 API Standards →
+                </Link>
+              </li>
+            </ul>
+          </div>
+        </div>
       </div>
-      <span className="hidden sm:inline">100% Client-Side · Zero Data Leaks</span>
+
+      {/* Bottom Legal & Guarantee Bar */}
+      <div className="border-t border-[var(--border-dev)] bg-[var(--bg-sidebar)] py-4 px-4 sm:px-6">
+        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 text-[11px]">
+          <div className="flex items-center gap-3">
+            <Link href="/" className="flex items-center gap-2 group cursor-pointer">
+              <DevPantryLogo size={18} className="w-4.5 h-4.5" />
+              <span className="font-bold text-xs text-[var(--text-primary)] font-mono">
+                DEVPANTRY<span className="text-blue-500">.COM</span>
+              </span>
+            </Link>
+            <span className="text-[var(--text-muted)]">|</span>
+            <span className="text-[var(--text-secondary)]">
+              © {new Date().getFullYear()} DevPantry
+            </span>
+          </div>
+
+          <div className="flex items-center gap-1 text-[11px] text-[var(--text-secondary)]">
+            <ShieldCheck className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
+            <span>100% Client-Side Sandbox · Zero Server Telemetry · Unlimited Free</span>
+          </div>
+
+          <nav className="flex items-center gap-4 text-[11px]">
+            <Link href="/about" className="text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors">
+              About
+            </Link>
+            <Link href="/privacy" className="text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors">
+              Privacy Policy
+            </Link>
+            <Link href="/security" className="text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors">
+              Security Architecture
+            </Link>
+          </nav>
+        </div>
+      </div>
     </footer>
   );
 };
+

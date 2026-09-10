@@ -31,7 +31,8 @@ import {
   SlidersHorizontal,
   Camera,
   CheckCircle2,
-  HardDrive
+  HardDrive,
+  ArrowRight
 } from 'lucide-react';
 
 interface SampleImage {
@@ -277,8 +278,20 @@ export function BgRemovalClient({ initialMode = 'bg-removal' }: BgRemovalClientP
   );
 
   // View and Inspection Controls
-  const [viewMode, setViewMode] = useState<ViewMode>('result');
+  const [viewMode, setViewMode] = useState<ViewMode>(
+    initialMode === 'bg-removal' ? 'slider' : 'result'
+  );
   const [sliderPosition, setSliderPosition] = useState<number>(50);
+
+  // Sync viewMode and activeTab when initialMode prop changes (e.g. client route transitions)
+  const prevInitialModeRef = useRef(initialMode);
+  useEffect(() => {
+    if (prevInitialModeRef.current !== initialMode) {
+      prevInitialModeRef.current = initialMode;
+      setViewMode(initialMode === 'bg-removal' ? 'slider' : 'result');
+      setActiveTab(initialMode === 'resizer' || initialMode === 'compressor' ? 'transform' : 'matte');
+    }
+  }, [initialMode]);
 
   // Advanced Image Editing Attributes
   const [scalePreset, setScalePreset] = useState<number>(1);
@@ -441,7 +454,7 @@ export function BgRemovalClient({ initialMode = 'bg-removal' }: BgRemovalClientP
       if (resultImageUrl) URL.revokeObjectURL(resultImageUrl);
       setResultImageUrl(null);
       setSliderPosition(50);
-      setViewMode('result');
+      setViewMode(initialMode === 'bg-removal' ? 'slider' : 'result');
       resetAdjustments();
     };
     reader.readAsDataURL(file);
@@ -455,7 +468,7 @@ export function BgRemovalClient({ initialMode = 'bg-removal' }: BgRemovalClientP
     if (resultImageUrl) URL.revokeObjectURL(resultImageUrl);
     setResultImageUrl(null);
     setSliderPosition(50);
-    setViewMode('result');
+    setViewMode(initialMode === 'bg-removal' ? 'slider' : 'result');
     resetAdjustments();
 
     // Immediately measure natural dimensions of the sample image
@@ -850,7 +863,7 @@ export function BgRemovalClient({ initialMode = 'bg-removal' }: BgRemovalClientP
     setErrorMessage(null);
     setProgressPercent(0);
     setSliderPosition(50);
-    setViewMode('result');
+    setViewMode(initialMode === 'bg-removal' ? 'slider' : 'result');
     resetAdjustments();
   };
 
@@ -1046,8 +1059,8 @@ export function BgRemovalClient({ initialMode = 'bg-removal' }: BgRemovalClientP
           {/* Active Image Inspection Canvas */}
           {sourceImage && (
             <div className="flex-1 flex flex-col min-h-0 relative">
-              {/* Contextual Canvas Control Bar */}
-              <div className="h-10 bg-[var(--bg-panel)] border-b border-[var(--border-dev)] px-4 flex items-center justify-between gap-2 shrink-0 z-10">
+              {/* Contextual Canvas Control Bar (Sticky) */}
+              <div className="h-10 bg-[var(--bg-panel)] border-b border-[var(--border-dev)] px-3 sm:px-4 flex items-center justify-between gap-2 shrink-0 z-30 sticky top-0 backdrop-blur-md shadow-xs">
                 {/* View Mode Selector */}
                 <div className="flex items-center gap-1 bg-[var(--bg-sidebar)] p-0.5 rounded border border-[var(--border-dev)] text-[11px]">
                   <button
@@ -1137,9 +1150,9 @@ export function BgRemovalClient({ initialMode = 'bg-removal' }: BgRemovalClientP
               </div>
 
               {/* Central Visual Canvas Area with Dynamic Artboard Aspect Ratio */}
-              <div className="flex-1 flex items-center justify-center p-4 min-h-0 overflow-hidden relative">
+              <div className="flex-1 flex items-center justify-center p-2 sm:p-4 min-h-0 overflow-hidden relative">
                 {/* Artboard Dimensions Badge floating at top of canvas */}
-                <div className="absolute top-3 left-1/2 -translate-x-1/2 z-20 px-3 py-1 rounded-full bg-black/80 backdrop-blur-md border border-white/15 text-white text-[10px] font-mono flex items-center gap-2 pointer-events-none shadow-lg">
+                <div className="absolute top-2 left-1/2 -translate-x-1/2 z-20 px-2.5 py-0.5 rounded-full bg-black/80 backdrop-blur-md border border-white/15 text-white text-[10px] font-mono flex items-center gap-1.5 pointer-events-none shadow-lg">
                   <span className="text-rose-400 font-bold">Artboard:</span>
                   <span>{targetWidth || sourceFile?.width || 0} × {targetHeight || sourceFile?.height || 0}px</span>
                   <span className="text-white/30">|</span>
@@ -1203,11 +1216,11 @@ export function BgRemovalClient({ initialMode = 'bg-removal' }: BgRemovalClientP
                     onTouchMove={(e) => {
                       if (e.touches[0]) handleSliderMove(e.touches[0].clientX);
                     }}
-                    className="relative rounded-lg overflow-hidden select-none border-2 border-[var(--border-dev)] shadow-2xl flex items-center justify-center transition-all duration-150 cursor-ew-resize"
+                    className="relative rounded-lg overflow-hidden select-none border-2 border-[var(--border-dev)] shadow-2xl flex items-center justify-center transition-all duration-150 cursor-ew-resize -translate-y-4 sm:-translate-y-5"
                     style={{
                       aspectRatio: `${safeAspect}`,
-                      width: `min(100%, calc(72vh * ${safeAspect.toFixed(4)}))`,
-                      maxHeight: '72vh',
+                      width: `min(100%, calc((100% - 2.5rem) * ${safeAspect.toFixed(4)}), calc(72vh * ${safeAspect.toFixed(4)}))`,
+                      maxHeight: 'min(72vh, calc(100% - 2.5rem))',
                       maxWidth: '100%',
                       background: (activeMatteObj?.type === 'color' || activeMatteObj?.type === 'gradient') ? activeMatteObj.value : undefined,
                       padding: `${paddingPx}px`
@@ -1325,9 +1338,9 @@ export function BgRemovalClient({ initialMode = 'bg-removal' }: BgRemovalClientP
 
                 {/* View Mode 2: Side-by-Side */}
                 {viewMode === 'split' && (
-                  <div className="w-full h-full max-w-5xl grid grid-cols-1 md:grid-cols-2 gap-4 items-center justify-center overflow-hidden">
+                  <div className="w-full h-full max-w-5xl grid grid-cols-1 md:grid-cols-2 gap-4 items-center justify-center overflow-hidden -translate-y-4 sm:-translate-y-5">
                     {/* Original card */}
-                    <div className="flex-1 h-full max-h-[72vh] flex flex-col rounded-lg border border-[var(--border-dev)] bg-[var(--bg-panel)] overflow-hidden">
+                    <div className="flex-1 h-full max-h-[min(72vh,calc(100%-2.5rem))] flex flex-col rounded-lg border border-[var(--border-dev)] bg-[var(--bg-panel)] overflow-hidden">
                       <div className="h-8 px-3 bg-[var(--bg-panel-subtle)] border-b border-[var(--border-dev)] flex items-center justify-between text-[11px] text-[var(--text-secondary)]">
                         <span className="font-bold">Original Image</span>
                         <span className="text-[10px] text-[var(--text-muted)]">Source File</span>
@@ -1343,7 +1356,7 @@ export function BgRemovalClient({ initialMode = 'bg-removal' }: BgRemovalClientP
                     </div>
 
                     {/* Result card */}
-                    <div className="flex-1 h-full max-h-[72vh] flex flex-col rounded-lg border border-[var(--border-dev)] bg-[var(--bg-panel)] overflow-hidden">
+                    <div className="flex-1 h-full max-h-[min(72vh,calc(100%-2.5rem))] flex flex-col rounded-lg border border-[var(--border-dev)] bg-[var(--bg-panel)] overflow-hidden">
                       <div className="h-8 px-3 bg-[var(--bg-panel-subtle)] border-b border-[var(--border-dev)] flex items-center justify-between text-[11px] text-[var(--text-secondary)]">
                         <span className="font-bold text-rose-500">AI Background Removed</span>
                         <span className="text-[10px] text-amber-500 font-bold">{resultImageUrl ? '100% Alpha Clean' : 'Pending AI Run'}</span>
@@ -1414,11 +1427,11 @@ export function BgRemovalClient({ initialMode = 'bg-removal' }: BgRemovalClientP
                 {/* View Mode 3: Result Only */}
                 {viewMode === 'result' && (
                   <div
-                    className="relative rounded-lg border-2 border-[var(--border-dev)] overflow-hidden shadow-2xl flex items-center justify-center transition-all duration-150"
+                    className="relative rounded-lg border-2 border-[var(--border-dev)] overflow-hidden shadow-2xl flex items-center justify-center transition-all duration-150 -translate-y-4 sm:-translate-y-5"
                     style={{
                       aspectRatio: `${safeAspect}`,
-                      width: `min(100%, calc(72vh * ${safeAspect.toFixed(4)}))`,
-                      maxHeight: '72vh',
+                      width: `min(100%, calc((100% - 2.5rem) * ${safeAspect.toFixed(4)}), calc(72vh * ${safeAspect.toFixed(4)}))`,
+                      maxHeight: 'min(72vh, calc(100% - 2.5rem))',
                       maxWidth: '100%',
                       background: (activeMatteObj?.type === 'color' || activeMatteObj?.type === 'gradient') ? activeMatteObj.value : undefined,
                       padding: `${paddingPx}px`
@@ -1467,7 +1480,7 @@ export function BgRemovalClient({ initialMode = 'bg-removal' }: BgRemovalClientP
 
                 {/* View Mode 4: Original Only */}
                 {viewMode === 'original' && (
-                  <div className="w-full h-full max-w-4xl max-h-[74vh] flex items-center justify-center rounded-lg border border-[var(--border-dev)] bg-[var(--bg-sidebar)] overflow-hidden shadow-lg p-4">
+                  <div className="w-full h-full max-w-4xl max-h-[min(74vh,calc(100%-2.5rem))] flex items-center justify-center rounded-lg border border-[var(--border-dev)] bg-[var(--bg-sidebar)] overflow-hidden shadow-lg p-4 -translate-y-4 sm:-translate-y-5">
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
                       src={sourceImage}
@@ -1483,9 +1496,9 @@ export function BgRemovalClient({ initialMode = 'bg-removal' }: BgRemovalClientP
 
         {/* Right Side: Comprehensive Studio Editor Panel */}
         {sourceImage && (
-          <aside className="w-full md:w-80 lg:w-96 bg-[var(--bg-panel)] border-t md:border-t-0 md:border-l border-[var(--border-dev)] flex flex-col shrink-0 overflow-y-auto z-20">
-            {/* Editor Sub-Navigation Tabs */}
-            <div className="flex border-b border-[var(--border-dev)] bg-[var(--bg-panel-subtle)] text-xs shrink-0">
+          <aside className="w-full md:w-80 lg:w-96 bg-[var(--bg-panel)] border-t md:border-t-0 md:border-l border-[var(--border-dev)] flex flex-col shrink-0 overflow-y-auto z-20 h-full max-h-full">
+            {/* Editor Sub-Navigation Tabs (Sticky within panel) */}
+            <div className="flex border-b border-[var(--border-dev)] bg-[var(--bg-panel)] text-xs shrink-0 sticky top-0 z-20 shadow-xs">
               <button
                 onClick={() => setActiveTab('matte')}
                 className={`flex-1 py-2.5 px-3 flex items-center justify-center gap-1.5 font-bold transition-colors cursor-pointer ${
@@ -2085,6 +2098,51 @@ export function BgRemovalClient({ initialMode = 'bg-removal' }: BgRemovalClientP
                   <span className="text-emerald-500 font-semibold">100% Client-Side</span>
                 </div>
               </div>
+
+              {/* Related Image Studio Workflows (Internal Linking) */}
+              <div className="p-3 rounded-lg bg-[var(--bg-sidebar)] border border-[var(--border-dev)] space-y-2 text-left">
+                <span className="text-[9px] font-bold text-[var(--text-primary)] uppercase tracking-wider block font-sans">
+                  Related Studio Tools
+                </span>
+                <div className="flex flex-col gap-1.5 text-xs">
+                  {initialMode !== 'bg-removal' && (
+                    <Link
+                      href="/background-remover"
+                      className="flex items-center justify-between p-2 rounded bg-[var(--bg-panel)] hover:bg-[var(--pill-bg)] border border-[var(--border-dev)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-all group"
+                    >
+                      <div className="flex items-center gap-1.5 truncate">
+                        <Sparkles className="w-3.5 h-3.5 text-rose-500 shrink-0" />
+                        <span className="truncate text-[11px] font-medium">AI Background Remover</span>
+                      </div>
+                      <ArrowRight className="w-3 h-3 text-[var(--text-muted)] group-hover:translate-x-0.5 transition-transform shrink-0" />
+                    </Link>
+                  )}
+                  {initialMode !== 'resizer' && (
+                    <Link
+                      href="/image-resizer"
+                      className="flex items-center justify-between p-2 rounded bg-[var(--bg-panel)] hover:bg-[var(--pill-bg)] border border-[var(--border-dev)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-all group"
+                    >
+                      <div className="flex items-center gap-1.5 truncate">
+                        <Maximize2 className="w-3.5 h-3.5 text-cyan-500 shrink-0" />
+                        <span className="truncate text-[11px] font-medium">Resize &amp; Frame Artboard</span>
+                      </div>
+                      <ArrowRight className="w-3 h-3 text-[var(--text-muted)] group-hover:translate-x-0.5 transition-transform shrink-0" />
+                    </Link>
+                  )}
+                  {initialMode !== 'compressor' && (
+                    <Link
+                      href="/image-compressor"
+                      className="flex items-center justify-between p-2 rounded bg-[var(--bg-panel)] hover:bg-[var(--pill-bg)] border border-[var(--border-dev)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-all group"
+                    >
+                      <div className="flex items-center gap-1.5 truncate">
+                        <HardDrive className="w-3.5 h-3.5 text-amber-500 shrink-0" />
+                        <span className="truncate text-[11px] font-medium">Compress &amp; WebP Converter</span>
+                      </div>
+                      <ArrowRight className="w-3 h-3 text-[var(--text-muted)] group-hover:translate-x-0.5 transition-transform shrink-0" />
+                    </Link>
+                  )}
+                </div>
+              </div>
             </div>
           </aside>
         )}
@@ -2208,6 +2266,31 @@ export function BgRemovalClient({ initialMode = 'bg-removal' }: BgRemovalClientP
                 <span className="font-bold text-rose-500 truncate block">
                   {activeMatteObj?.name || 'Transparent'}
                 </span>
+              </div>
+            </div>
+
+            {/* Modal Cross-Tool Next Action Link */}
+            <div className="px-4 py-2 bg-[var(--bg-sidebar)] border-t border-[var(--border-dev)] flex items-center justify-between text-xs">
+              <span className="text-[10px] text-[var(--text-muted)] font-mono">Next Workflow Step:</span>
+              <div className="flex items-center gap-3 text-[11px]">
+                {initialMode !== 'resizer' && (
+                  <Link href="/image-resizer" className="text-rose-500 hover:underline flex items-center gap-1 font-semibold">
+                    <Maximize2 className="w-3 h-3" />
+                    <span>Resize &amp; Frame</span>
+                  </Link>
+                )}
+                {initialMode !== 'compressor' && (
+                  <Link href="/image-compressor" className="text-amber-500 hover:underline flex items-center gap-1 font-semibold">
+                    <HardDrive className="w-3 h-3" />
+                    <span>Compress for Web</span>
+                  </Link>
+                )}
+                {initialMode !== 'bg-removal' && (
+                  <Link href="/background-remover" className="text-rose-500 hover:underline flex items-center gap-1 font-semibold">
+                    <Sparkles className="w-3 h-3" />
+                    <span>AI Background Remover</span>
+                  </Link>
+                )}
               </div>
             </div>
 
