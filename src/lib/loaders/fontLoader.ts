@@ -209,3 +209,81 @@ export function getFontBySlug(slug: string): FontItem | undefined {
 export function getAllFontSlugs(): string[] {
   return getAllFonts().map(f => f.slug);
 }
+
+export interface FontPairing {
+  slug: string;
+  name: string;
+  category: string;
+  role: string;
+  reason: string;
+}
+
+export function getFontPairings(font: FontItem): FontPairing[] {
+  const cat = (font.category || 'Sans').toLowerCase();
+  const currentSlug = font.slug;
+
+  const PAIRING_DATABASE: Record<string, FontPairing[]> = {
+    inter: [
+      { slug: 'jetbrains-mono', name: 'JetBrains Mono', category: 'Monospace', role: 'UI Body + Code Blocks', reason: 'Industry standard for developer consoles, docs, and SaaS dashboards.' },
+      { slug: 'clash-display', name: 'Clash Display', category: 'Display', role: 'Display Header + Neutral UI', reason: 'Striking high-contrast editorial titles paired with clean, utilitarian body copy.' },
+      { slug: 'fira-code', name: 'Fira Code', category: 'Monospace', role: 'Body + Syntax Highlighting', reason: 'Programmer-friendly ligatures alongside crisp variable sans.' },
+      { slug: 'playfair-display', name: 'Playfair Display', category: 'Serif', role: 'Editorial Headline + Sans Subtext', reason: 'Classic editorial sophistication balanced by modern digital neutrality.' }
+    ],
+    'jetbrains-mono': [
+      { slug: 'inter', name: 'Inter', category: 'Sans', role: 'Code Editor + Interface Chrome', reason: 'The premier combination for IDEs and developer documentation.' },
+      { slug: 'satoshi', name: 'Satoshi', category: 'Sans', role: 'Monospace Code + Modernist Sans', reason: 'Clean modernist geometry for headings over precise fixed-width code.' },
+      { slug: 'space-grotesk', name: 'Space Grotesk', category: 'Display', role: 'Tech Display + Code Body', reason: 'High-tech brand identity paired with terminal monospaced typography.' }
+    ],
+    satoshi: [
+      { slug: 'jetbrains-mono', name: 'JetBrains Mono', category: 'Monospace', role: 'Modernist Body + Code Blocks', reason: 'Sharp, clean developer-focused balance.' },
+      { slug: 'cabinet-grotesk', name: 'Cabinet Grotesk', category: 'Display', role: 'Display Header + Sans Body', reason: 'Pairing two distinct Indian Type Foundry masterworks.' },
+      { slug: 'fira-code', name: 'Fira Code', category: 'Monospace', role: 'Geometric UI + Monospace', reason: 'Balanced tracking and high terminal legibility.' }
+    ],
+    'clash-display': [
+      { slug: 'inter', name: 'Inter', category: 'Sans', role: 'Display Title + Clean Body', reason: 'Wildly expressive headline font grounded by hyper-legible UI body text.' },
+      { slug: 'general-sans', name: 'General Sans', category: 'Sans', role: 'Editorial Header + Neutral Body', reason: 'Contemporary French modernist pairing for premium landing pages.' },
+      { slug: 'jetbrains-mono', name: 'JetBrains Mono', category: 'Monospace', role: 'Bold Headline + Technical Metadata', reason: 'High-contrast typography for technical documentation and changelogs.' }
+    ],
+    'fira-code': [
+      { slug: 'inter', name: 'Inter', category: 'Sans', role: 'Ligature Code + UI Shell', reason: 'Standard pairing for programming tutorials, blogs, and code viewports.' },
+      { slug: 'satoshi', name: 'Satoshi', category: 'Sans', role: 'Monospace + Geometric Heading', reason: 'Sleek contemporary look for developer tools and CLI landing pages.' }
+    ]
+  };
+
+  if (PAIRING_DATABASE[currentSlug]) {
+    return PAIRING_DATABASE[currentSlug];
+  }
+
+  // Fallback by category
+  if (cat.includes('mono')) {
+    return [
+      { slug: 'inter', name: 'Inter', category: 'Sans', role: 'Code Accent + Neutral UI', reason: 'Balances monospaced syntax with hyper-legible interface text.' },
+      { slug: 'satoshi', name: 'Satoshi', category: 'Sans', role: 'Fixed-Width + Modernist Sans', reason: 'Clean modernist geometry for headings and navigation.' },
+      { slug: 'space-grotesk', name: 'Space Grotesk', category: 'Display', role: 'Code Body + Tech Display', reason: 'Future-forward tech aesthetic for developer platforms.' }
+    ].filter(p => p.slug !== currentSlug);
+  }
+
+  if (cat.includes('serif')) {
+    return [
+      { slug: 'inter', name: 'Inter', category: 'Sans', role: 'Serif Headline + Modern UI Body', reason: 'Grounds classic editorial serifs with crisp digital legibility.' },
+      { slug: 'general-sans', name: 'General Sans', category: 'Sans', role: 'Serif Titles + Clean Sans Subtext', reason: 'Warm editorial balance across marketing pages.' },
+      { slug: 'jetbrains-mono', name: 'JetBrains Mono', category: 'Monospace', role: 'Serif Copy + Code Accents', reason: 'Contrasting literary prose with precision technical monospacing.' }
+    ].filter(p => p.slug !== currentSlug);
+  }
+
+  if (cat.includes('display')) {
+    return [
+      { slug: 'inter', name: 'Inter', category: 'Sans', role: 'Expressive Headline + Neutral Body', reason: 'Prevents display personality from overwhelming long-form reading.' },
+      { slug: 'satoshi', name: 'Satoshi', category: 'Sans', role: 'Display Header + Geometric Sans', reason: 'Sharp, modern visual hierarchy for SaaS products.' },
+      { slug: 'jetbrains-mono', name: 'JetBrains Mono', category: 'Monospace', role: 'Hero Title + Technical Specs', reason: 'High-impact contrast for engineering launch sites.' }
+    ].filter(p => p.slug !== currentSlug);
+  }
+
+  // Default Sans pairings
+  return [
+    { slug: 'jetbrains-mono', name: 'JetBrains Mono', category: 'Monospace', role: 'Sans Interface + Code Monospace', reason: 'The quintessential developer stack typography pairing.' },
+    { slug: 'clash-display', name: 'Clash Display', category: 'Display', role: 'Body Copy + High-Impact Headline', reason: 'Injects strong typographic identity into clean interfaces.' },
+    { slug: 'fira-code', name: 'Fira Code', category: 'Monospace', role: 'UI Sans + Ligature Monospace', reason: 'Harmonious stroke weights between body prose and code snippets.' }
+  ].filter(p => p.slug !== currentSlug);
+}
+

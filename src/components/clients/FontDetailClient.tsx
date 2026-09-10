@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { getFontCdnStylesheet, type FontItem } from '@/lib/loaders/fontLoader';
+import { getFontCdnStylesheet, type FontItem, type FontPairing } from '@/lib/loaders/fontLoader';
 import { 
   Type, 
   Copy, 
@@ -14,10 +14,11 @@ import {
   ArrowLeft, 
   Sparkles,
   ShieldCheck,
-  Layers
+  Layers,
+  ArrowRight
 } from 'lucide-react';
 
-export function FontDetailClient({ font }: { font: FontItem }) {
+export function FontDetailClient({ font, pairings }: { font: FontItem; pairings?: FontPairing[] }) {
   const [sampleText, setSampleText] = useState<string>(
     'The quick brown fox jumps over the lazy dog 1234567890 & $ # @ !'
   );
@@ -332,6 +333,54 @@ module.exports = {
           </div>
         </div>
       </section>
+
+      {/* Recommended Typography Pairings */}
+      {pairings && pairings.length > 0 && (
+        <section className="bg-[var(--bg-panel)] border border-[var(--border-dev)] rounded-xl p-5 shadow-sm transition-colors flex flex-col gap-4">
+          <div className="flex items-center justify-between">
+            <h2 className="text-sm font-bold text-[var(--text-primary)] font-sans flex items-center gap-2">
+              <Sparkles className="w-4 h-4 text-rose-500" />
+              <span>Recommended Typography Pairings</span>
+            </h2>
+            <span className="text-[10px] text-[var(--text-muted)] font-mono">Contrast &amp; Hierarchy</span>
+          </div>
+
+          <p className="text-xs text-[var(--text-secondary)] leading-relaxed m-0 font-sans">
+            Pairing <span className="text-[var(--text-primary)] font-semibold">{font.name}</span> with high-contrast complementary typefaces creates strong visual hierarchy between headlines, interface body copy, and code blocks.
+          </p>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+            {pairings.map(pairing => (
+              <Link
+                key={pairing.slug}
+                href={`/fonts/${pairing.slug}`}
+                className="p-3.5 rounded-lg border border-[var(--border-dev)] bg-[var(--bg-sidebar)] hover:bg-[var(--pill-bg)] hover:border-rose-500/40 transition-all flex flex-col justify-between gap-2.5 group cursor-pointer"
+              >
+                <div className="flex flex-col gap-1">
+                  <div className="flex items-center justify-between">
+                    <span className="font-bold text-xs text-[var(--text-primary)] group-hover:text-rose-500 transition-colors">
+                      {pairing.name}
+                    </span>
+                    <span className="text-[9px] px-1.5 py-0.5 rounded bg-[var(--pill-bg)] border border-[var(--border-dev)] text-[var(--text-muted)] uppercase">
+                      {pairing.category}
+                    </span>
+                  </div>
+                  <span className="text-[10px] font-semibold text-rose-500 dark:text-rose-400">
+                    {pairing.role}
+                  </span>
+                  <p className="text-[11px] text-[var(--text-muted)] leading-normal line-clamp-2 m-0 font-sans">
+                    {pairing.reason}
+                  </p>
+                </div>
+                <div className="flex items-center justify-between pt-2 border-t border-[var(--border-dev-subtle)] text-[10px] text-[var(--text-secondary)] group-hover:text-[var(--text-primary)]">
+                  <span>Explore Pairing</span>
+                  <ArrowRight className="w-3 h-3 group-hover:translate-x-0.5 transition-transform text-rose-500" />
+                </div>
+              </Link>
+            ))}
+          </div>
+        </section>
+      )}
     </div>
   );
 }

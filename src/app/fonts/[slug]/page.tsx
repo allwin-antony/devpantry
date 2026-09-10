@@ -1,6 +1,6 @@
 import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
-import { getAllFonts, getFontBySlug, getAllFontSlugs } from '@/lib/loaders/fontLoader';
+import { getAllFonts, getFontBySlug, getAllFontSlugs, getFontPairings } from '@/lib/loaders/fontLoader';
 import { FontDetailClient } from '@/components/clients/FontDetailClient';
 
 interface PageProps {
@@ -47,6 +47,8 @@ export default async function FontDetailPage({ params }: PageProps) {
   }
 
   const isIndexable = isFontIndexable(font);
+  const pairings = getFontPairings(font);
+
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'WebApplication',
@@ -67,7 +69,7 @@ export default async function FontDetailPage({ params }: PageProps) {
       
       <div className="flex flex-col shrink-0 w-full">
         <h1 className="sr-only">{font.name} Font</h1>
-        <FontDetailClient font={font} />
+        <FontDetailClient font={font} pairings={pairings} />
       </div>
 
       <article className="tool-seo-content prose prose-sm max-w-none dark:prose-invert">
@@ -88,11 +90,24 @@ export default async function FontDetailPage({ params }: PageProps) {
 
         <p>Or import it via CSS:</p>
         <pre><code>@import url('{font.cdn_stylesheet_url}');</code></pre>
+
+        <h3>Recommended Font Pairings</h3>
+        <p>
+          Creating typographic contrast is essential for high-impact web design. Here are battle-tested typeface pairings for {font.name}:
+        </p>
+        <ul>
+          {pairings.map(pairing => (
+            <li key={pairing.slug}>
+              <strong><a href={`/fonts/${pairing.slug}`} className="text-rose-500 dark:text-rose-400 hover:underline">{pairing.name}</a></strong> ({pairing.category}) — <em>{pairing.role}</em>: {pairing.reason}
+            </li>
+          ))}
+        </ul>
         
         <h3>Related Tools</h3>
         <ul>
           <li><a href="/icons" className="text-rose-400 hover:underline">Icon Library</a> — Pair {font.name} with vector icons.</li>
           <li><a href="/image-resizer" className="text-rose-400 hover:underline">Image Resizer</a> — Pad images for social media covers.</li>
+          <li><a href="/jwt-decoder" className="text-rose-400 hover:underline">JWT Decoder</a> — Inspect client tokens without data leaks.</li>
         </ul>
       </article>
     </div>

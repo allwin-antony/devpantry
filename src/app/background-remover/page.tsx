@@ -53,7 +53,7 @@ export default function BackgroundRemovalPage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      <div className="flex flex-col shrink-0 w-full">
+      <div className="flex flex-col shrink-0 w-full h-[calc(100vh-3rem)] min-h-[580px]">
         <h1 className="sr-only">Free AI Background Remover</h1>
         <Suspense
           fallback={
