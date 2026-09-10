@@ -39,7 +39,7 @@ export function ChaosDataClient() {
   };
 
   return (
-    <div className="h-full flex flex-col p-3 overflow-hidden gap-2">
+    <div className="flex flex-col p-3 gap-2">
       {/* Subheader with Mode Switcher */}
       <div className="bg-[var(--bg-panel)] border border-[var(--border-dev)] rounded-lg px-3 py-1.5 flex items-center justify-between gap-3 shrink-0 shadow-sm transition-colors font-mono">
         <div className="flex items-center gap-2">
@@ -88,7 +88,7 @@ export function ChaosDataClient() {
       </div>
 
       {/* Main Utility Viewport */}
-      <div className="flex-1 min-h-0 overflow-hidden">
+      <div className="flex-1 w-full">
         {activeTab === 'presets' ? (
           <ChaosDataUtility />
         ) : (

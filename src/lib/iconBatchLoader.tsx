@@ -177,6 +177,31 @@ export async function loadMultiPrefixIcons(items: { prefix: string; name: string
   await Promise.all(promises);
 }
 
+// Queue for individual icon requests from useIcon
+const pendingIconRequests = new Map<string, Set<string>>();
+let batchQueueTimeout: NodeJS.Timeout | null = null;
+
+export function queueIconLoad(prefix: string, name: string) {
+  if (iconCache.has(`${prefix}:${name}`)) return;
+
+  if (!pendingIconRequests.has(prefix)) {
+    pendingIconRequests.set(prefix, new Set());
+  }
+  pendingIconRequests.get(prefix)!.add(name);
+
+  if (!batchQueueTimeout) {
+    batchQueueTimeout = setTimeout(() => {
+      batchQueueTimeout = null;
+      const requestsToProcess = new Map(pendingIconRequests);
+      pendingIconRequests.clear();
+      
+      for (const [pfx, names] of requestsToProcess.entries()) {
+        loadIconsBatch(pfx, Array.from(names));
+      }
+    }, 20); // 20ms debounce to collect all mounted IconRenderers in current frame
+  }
+}
+
 /**
  * Hook to read an icon from the in-memory cache and auto-trigger loading if missing.
  */
@@ -189,7 +214,7 @@ export function useIcon(prefix: string, name: string) {
 
   useEffect(() => {
     if (!iconData && prefix && name && name !== 'icon') {
-      loadIconsBatch(prefix, [name]);
+      queueIconLoad(prefix, name);
     }
   }, [prefix, name, iconData]);
 

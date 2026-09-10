@@ -140,7 +140,7 @@ font-family: '${activeFont.name}', ${activeFont.category === 'Serif' ? 'serif' :
     : `npm install @fontsource/${activeFont.slug}`;
 
   return (
-    <div className="h-full flex flex-col p-3 overflow-hidden gap-3 font-mono">
+    <div className="flex flex-col p-3 gap-3 font-mono">
       {/* Top Typography Interactive Tester */}
       <section className="bg-[var(--bg-panel)] border border-[var(--border-dev)] rounded-xl p-4 shrink-0 shadow-sm transition-colors flex flex-col gap-3">
         {/* Header & Controls Bar */}
@@ -329,7 +329,7 @@ font-family: '${activeFont.name}', ${activeFont.category === 'Serif' ? 'serif' :
       </div>
 
       {/* Infinite Scrolling Fonts Grid */}
-      <div className="flex-1 overflow-y-auto pr-1">
+      <div className="flex-1 pr-1">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">
           {visibleFonts.map(font => {
             const isSelected = activeFont.slug === font.slug;

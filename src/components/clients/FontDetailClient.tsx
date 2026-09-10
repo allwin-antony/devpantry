@@ -73,7 +73,7 @@ module.exports = {
     : `npm install @fontsource/${font.slug}`;
 
   return (
-    <div className="h-full overflow-y-auto p-4 md:p-6 flex flex-col gap-6 max-w-6xl mx-auto w-full font-mono">
+    <div className="flex flex-col gap-6 max-w-6xl mx-auto w-full font-mono p-4 md:p-6">
       {/* Back Navigation Bar */}
       <div className="flex items-center justify-between gap-4">
         <Link

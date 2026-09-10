@@ -65,7 +65,8 @@ export default async function FontDetailPage({ params }: PageProps) {
       />
       {!isIndexable && <meta name="robots" content="noindex" />}
       
-      <div className="min-h-[calc(100vh-48px)] flex flex-col shrink-0">
+      <div className="flex flex-col shrink-0 w-full">
+        <h1 className="sr-only">{font.name} Font</h1>
         <FontDetailClient font={font} />
       </div>
 

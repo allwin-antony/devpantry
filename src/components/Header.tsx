@@ -95,7 +95,7 @@ export const Header: React.FC = () => {
           >
             <Search className="w-3.5 h-3.5 text-rose-500" />
             <span className="hidden sm:inline text-[11px] text-[var(--text-muted)]">Search...</span>
-            <kbd className="text-[10px] px-1.5 py-0.2 rounded bg-[var(--pill-bg)] border border-[var(--border-dev)] font-semibold text-[var(--text-muted)]">
+            <kbd className="text-[10px] px-1.5 py-0.4 rounded bg-[var(--pill-bg)] border border-[var(--border-dev)] font-semibold text-[var(--text-muted)] tracking-widest">
               ⌘K
             </kbd>
           </button>
