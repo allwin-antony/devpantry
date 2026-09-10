@@ -232,7 +232,7 @@ const PALETTE_ITEMS: PaletteItem[] = [
     category: 'API Fixtures',
     title: 'Stripe Billing & Subscription Fixture',
     subtitle: 'Customer invoice, subscription lifecycle, and charge payloads',
-    href: '/chaos-templates/stripe-billing',
+    href: '/api-templates/stripe-billing',
     icon: Radio,
     badge: 'E-Commerce',
     keywords: ['stripe', 'billing', 'payments', 'invoice', 'charge']
@@ -242,7 +242,7 @@ const PALETTE_ITEMS: PaletteItem[] = [
     category: 'API Fixtures',
     title: 'Supabase Auth & Session Schema',
     subtitle: 'JWT bearer tokens, session objects, and user metadata',
-    href: '/chaos-templates/supabase-auth',
+    href: '/api-templates/supabase-auth',
     icon: Radio,
     badge: 'Auth',
     keywords: ['supabase', 'session', 'jwt', 'auth']
@@ -252,7 +252,7 @@ const PALETTE_ITEMS: PaletteItem[] = [
     category: 'API Fixtures',
     title: 'Google SSO & OpenID Connect',
     subtitle: 'OAuth2 token exchange, ID token claims, and user profile',
-    href: '/chaos-templates/google-sso',
+    href: '/api-templates/google-sso',
     icon: Radio,
     badge: 'SSO',
     keywords: ['google', 'sso', 'oauth', 'oidc']
@@ -262,7 +262,7 @@ const PALETTE_ITEMS: PaletteItem[] = [
     category: 'API Fixtures',
     title: 'GitHub OAuth & App Webhooks',
     subtitle: 'Installation tokens, commit events, and webhook deliveries',
-    href: '/chaos-templates/github-oauth',
+    href: '/api-templates/github-oauth',
     icon: Radio,
     badge: 'Developer',
     keywords: ['github', 'oauth', 'webhook']

@@ -394,7 +394,7 @@ export function MyComponent() {
     : `https://devpantry.com/icons#${activeIcon.fullKey}`;
 
   return (
-    <div className="h-full flex flex-col md:flex-row p-3 overflow-hidden gap-3 font-mono relative">
+    <div className="flex flex-col md:flex-row p-3 gap-3 font-mono relative items-start">
       {/* Toast Notification for Copied Feedback (Crystal Clear in Light & Dark Mode) */}
       {copiedToast && (
         <div className="fixed bottom-6 right-6 z-50 bg-emerald-600 text-white px-4 py-2.5 rounded-lg shadow-xl shadow-emerald-500/20 flex items-center gap-2 text-xs font-bold font-sans animate-in fade-in slide-in-from-bottom-2 border border-emerald-400/40">
@@ -404,7 +404,7 @@ export function MyComponent() {
       )}
 
       {/* Left Sidebar: 238 Collections Directory */}
-      <div className="w-full md:w-80 bg-[var(--bg-panel)] border border-[var(--border-dev)] rounded-xl flex flex-col overflow-hidden shrink-0 shadow-sm transition-colors">
+      <div className="w-full md:w-80 h-72 md:h-[calc(100vh-8rem)] md:sticky md:top-24 bg-[var(--bg-panel)] border border-[var(--border-dev)] rounded-xl flex flex-col overflow-hidden shrink-0 shadow-sm transition-colors z-10">
         {/* Header & Collections Search */}
         <div className="p-3 border-b border-[var(--border-dev)] flex flex-col gap-2 bg-[var(--bg-panel-subtle)] shrink-0">
           <div className="flex items-center justify-between">
@@ -789,7 +789,7 @@ export function MyComponent() {
           </div>
 
           {/* Actual SVG Icon Grid */}
-          <div className="flex-1 overflow-y-auto p-4 bg-[var(--bg-panel-subtle)]">
+          <div className="flex-1 p-4 bg-[var(--bg-panel-subtle)]">
             {isLoadingLibrary && displayedItems.length === 0 ? (
               <div className="flex flex-col items-center justify-center py-12 gap-3">
                 <Loader2 className="w-6 h-6 text-cyan-500 animate-spin" />

@@ -217,7 +217,7 @@ export function Example() {
   const npmSnippet = `npm install @iconify/react @iconify-json/${collection.prefix}`;
 
   return (
-    <div className="h-full overflow-y-auto p-4 md:p-6 flex flex-col gap-6 max-w-6xl mx-auto w-full font-mono">
+    <div className="flex flex-col gap-6 max-w-6xl mx-auto w-full font-mono p-4 md:p-6">
       {/* Back Bar */}
       <div className="flex items-center justify-between gap-4">
         <Link
@@ -479,7 +479,7 @@ export function Example() {
             </div>
           </div>
         ) : (
-          <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-3 max-h-[500px] overflow-y-auto pr-1">
+          <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-3 pr-1">
             {visibleIcons.map(name => {
               const isSelected = selectedIcon === name;
               const isCopied = copiedCode === `grid-${name}`;

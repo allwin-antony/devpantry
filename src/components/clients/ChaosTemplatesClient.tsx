@@ -363,9 +363,9 @@ export function ChaosTemplatesClient({ initialServiceId, initialMode }: ChaosTem
   };
 
   return (
-    <div className="h-full flex flex-col md:flex-row p-3 overflow-hidden gap-3 font-mono">
+    <div className="flex flex-col md:flex-row p-3 gap-3 font-mono items-start">
       {/* Left Sidebar: Templates & Custom Creator Button */}
-      <div className="w-full md:w-80 bg-[var(--bg-panel)] border border-[var(--border-dev)] rounded-xl flex flex-col overflow-hidden shrink-0 shadow-sm transition-colors">
+      <div className="w-full md:w-80 h-72 md:h-[calc(100vh-8rem)] md:sticky md:top-24 bg-[var(--bg-panel)] border border-[var(--border-dev)] rounded-xl flex flex-col overflow-hidden shrink-0 shadow-sm transition-colors z-10">
         {/* Top Header & Custom Creator Action Button */}
         <div className="p-3 border-b border-[var(--border-dev)] flex flex-col gap-2 bg-[var(--bg-panel-subtle)] shrink-0">
           <div className="flex items-center justify-between">
