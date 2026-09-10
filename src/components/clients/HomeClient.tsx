@@ -97,7 +97,7 @@ export function HomeClient() {
       icon: Sparkles,
       title: 'Edge AI Background Removal',
       desc: 'Instant, private background removal powered entirely in your browser via WebGPU. Unlimited cutouts, no signup.',
-      href: '/background-removal',
+      href: '/background-remover',
       badge: 'BETA',
     },
     {
@@ -132,21 +132,21 @@ export function HomeClient() {
       icon: Key,
       title: 'JWT Inspector',
       desc: 'Local-only token decoder and validator for secure payload inspection during development.',
-      href: '/jwt-inspector',
+      href: '/jwt-decoder',
       badge: 'SECURITY',
     },
     {
       icon: Flame,
       title: 'Chaos Data',
       desc: 'Generate malformed, extremely large, or edge-case JSON datasets for robust stress testing.',
-      href: '/chaos-data',
+      href: '/mock-data',
       badge: 'TESTING',
     },
     {
       icon: Radio,
       title: 'API Templates',
       desc: 'Scaffold standardized API route structures and middleware stacks for edge deployments.',
-      href: '/chaos-templates',
+      href: '/api-templates',
       badge: 'SCAFFOLD',
     }
   ];

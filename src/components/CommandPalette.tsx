@@ -46,7 +46,7 @@ const PALETTE_ITEMS: PaletteItem[] = [
     category: 'Tools',
     title: 'Edge AI Background Remover',
     subtitle: 'Zero-latency, client-side WebAssembly neural segmentation',
-    href: '/background-removal',
+    href: '/background-remover',
     icon: Sparkles,
     badge: 'Edge AI',
     keywords: ['remove', 'cutout', 'transparent', 'matte', 'bokeh', 'ai']
@@ -96,7 +96,7 @@ const PALETTE_ITEMS: PaletteItem[] = [
     category: 'Tools',
     title: 'Client-Side JWT Inspector & Chaos Tamperer',
     subtitle: '100% in-memory token decoder, RFC claim hints & auth chaos simulation',
-    href: '/jwt-inspector',
+    href: '/jwt-decoder',
     icon: Key,
     badge: 'Zero Leak',
     keywords: ['jwt', 'oauth', 'token', 'decode', 'tamper', 'none', 'hs256', 'bearer']
@@ -106,7 +106,7 @@ const PALETTE_ITEMS: PaletteItem[] = [
     category: 'Tools',
     title: 'Chaos Data Studio & Schema Builder',
     subtitle: 'High-entropy mock generator with 13+ types, BLNS & custom schemas',
-    href: '/chaos-data',
+    href: '/mock-data',
     icon: Flame,
     badge: 'GUI',
     keywords: ['mock', 'faker', 'blns', 'entropy', 'dirty data', 'sql', 'zod', 'csv']
@@ -116,7 +116,7 @@ const PALETTE_ITEMS: PaletteItem[] = [
     category: 'Tools',
     title: 'API Chaos Templates & Mock Vault',
     subtitle: 'Real-world response fixtures for Stripe, Supabase, Google SSO & GitHub',
-    href: '/chaos-templates',
+    href: '/api-templates',
     icon: Radio,
     badge: '17 APIs',
     keywords: ['stripe', 'supabase', 'oauth', 'fixture', 'sso', 'mock response']
@@ -274,7 +274,7 @@ const PALETTE_ITEMS: PaletteItem[] = [
     category: 'Actions',
     title: 'Simulate Expired JWT (-5m)',
     subtitle: 'Jump to JWT Inspector with active expiry test',
-    href: '/jwt-inspector',
+    href: '/jwt-decoder',
     icon: Sliders,
     badge: 'Tamper',
     keywords: ['expire', 'jwt', 'auth guard', '401']
@@ -284,7 +284,7 @@ const PALETTE_ITEMS: PaletteItem[] = [
     category: 'Actions',
     title: 'Simulate "alg": "none" Exploit',
     subtitle: 'Test backend signature verification against algorithm confusion',
-    href: '/jwt-inspector',
+    href: '/jwt-decoder',
     icon: Key,
     badge: 'Exploit',
     keywords: ['alg', 'none', 'cve', 'exploit', 'jwt']

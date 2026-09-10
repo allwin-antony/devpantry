@@ -922,7 +922,7 @@ export function BgRemovalClient({ initialMode = 'bg-removal' }: BgRemovalClientP
               {/* Studio Tool Navigation Switcher */}
               <div className="w-full max-w-xl mb-4 flex items-center justify-center gap-1.5 p-1 rounded-xl bg-[var(--bg-panel)] border border-[var(--border-dev)] text-xs shadow-sm">
                 <Link
-                  href="/background-removal"
+                  href="/background-remover"
                   className={`flex-1 py-1.5 px-2 rounded-lg flex items-center justify-center gap-1.5 font-bold transition-all text-center ${
                     initialMode === 'bg-removal'
                       ? 'bg-rose-500 text-white shadow-sm'

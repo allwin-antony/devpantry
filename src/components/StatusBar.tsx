@@ -9,12 +9,12 @@ export const StatusBar: React.FC = () => {
 
   const getRouteLabel = () => {
     if (pathname === '/') return 'command-hub';
-    if (pathname.startsWith('/chaos-data')) return 'chaos-synthesizer';
+    if (pathname.startsWith('/mock-data')) return 'chaos-synthesizer';
     if (pathname.startsWith('/fonts/')) return 'font-detail-page';
     if (pathname.startsWith('/fonts')) return 'fonts-studio';
     if (pathname.startsWith('/icons/')) return 'icon-library-page';
     if (pathname.startsWith('/icons')) return 'vector-icons-browser';
-    if (pathname.startsWith('/chaos-templates')) return 'chaos-templates';
+    if (pathname.startsWith('/api-templates')) return 'chaos-templates';
     return 'playground';
   };
 

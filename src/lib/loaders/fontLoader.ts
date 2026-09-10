@@ -58,6 +58,12 @@ export const FAMOUS_FONT_SLUGS = [
   'cinzel'
 ];
 
+export function isFontIndexable(font: FontItem): boolean {
+  return FAMOUS_FONT_SLUGS.includes(font.slug) || 
+         font.provider === 'fontshare' || 
+         (font.provider === 'github' && (font.stars || 0) > 1000);
+}
+
 export function getFontCdnStylesheet(font: { name: string; slug: string; provider: string; weights?: number[] }): string {
   if (font.provider === 'fontshare') {
     return `https://api.fontshare.com/v2/css?f[]=${font.slug}@400,500,600,700&display=swap`;

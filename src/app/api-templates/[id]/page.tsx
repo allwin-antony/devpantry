@@ -35,17 +35,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   return {
     title: `${service.service} Chaos Mock Data & Response Schema — DevPantry`,
     description: `Production ${service.provider} ${service.service} response schema injected with high-entropy dirty mock data (BLNS, Punycode, precision traps). Export TypeScript fixtures and test HTTP status codes.`,
-    keywords: [
-      `${service.service} mock data`,
-      `${service.service} schema`,
-      `${service.service} json response`,
-      `${service.provider} api mock`,
-      `${service.provider} typescript fixtures`,
-      'chaos engineering',
-      'naughty strings',
-      'api testing',
-      'devpantry chaos templates'
-    ],
+
     openGraph: {
       title: `${service.service} API Response & Chaos Sandbox — DevPantry`,
       description: `Interactive schema tester, high-entropy dirty test payloads, and TypeScript types for ${service.service}.`,

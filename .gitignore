@@ -33,3 +33,7 @@ lerna-debug.log*
 
 # Graphify output
 graphify-out/
+
+
+#internal notes
+.notes

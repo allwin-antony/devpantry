@@ -33,12 +33,12 @@ export const Header: React.FC = () => {
 
   const navItems = [
     { href: '/', label: 'Overview', shortLabel: 'Overview', icon: Terminal },
-    { href: '/background-removal', label: 'AI Studio', shortLabel: 'AI Studio', icon: Sparkles },
+    { href: '/background-remover', label: 'AI Studio', shortLabel: 'AI Studio', icon: Sparkles },
     { href: '/fonts', label: 'Fonts', shortLabel: 'Fonts', icon: Type },
     { href: '/icons', label: 'Icons', shortLabel: 'Icons', icon: Box },
-    { href: '/jwt-inspector', label: 'JWT Inspector', shortLabel: 'JWT', icon: Key },
-    { href: '/chaos-data', label: 'Chaos Data', shortLabel: 'Chaos', icon: Flame },
-    { href: '/chaos-templates', label: 'API Mocks', shortLabel: 'Mocks', icon: Radio },
+    { href: '/jwt-decoder', label: 'JWT Decoder', shortLabel: 'JWT', icon: Key },
+    { href: '/mock-data', label: 'Mock Data', shortLabel: 'Mock', icon: Flame },
+    { href: '/api-templates', label: 'API Mocks', shortLabel: 'Mocks', icon: Radio },
   ];
 
   return (
@@ -62,8 +62,8 @@ export const Header: React.FC = () => {
             const Icon = item.icon;
             const isActive = item.href === '/'
               ? pathname === '/'
-              : item.href === '/background-removal'
-              ? (pathname === '/background-removal' || pathname === '/image-resizer' || pathname === '/image-compressor')
+              : item.href === '/background-remover'
+              ? (pathname === '/background-remover' || pathname === '/image-resizer' || pathname === '/image-compressor')
               : pathname.startsWith(item.href);
 
             return (
@@ -128,8 +128,8 @@ export const Header: React.FC = () => {
             const Icon = item.icon;
             const isActive = item.href === '/'
               ? pathname === '/'
-              : item.href === '/background-removal'
-              ? (pathname === '/background-removal' || pathname === '/image-resizer' || pathname === '/image-compressor')
+              : item.href === '/background-remover'
+              ? (pathname === '/background-remover' || pathname === '/image-resizer' || pathname === '/image-compressor')
               : pathname.startsWith(item.href);
 
             return (
