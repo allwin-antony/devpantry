@@ -404,7 +404,7 @@ export function MyComponent() {
       )}
 
       {/* Left Sidebar: 238 Collections Directory */}
-      <div className="w-full md:w-80 h-72 md:h-[calc(100vh-8rem)] md:sticky md:top-24 bg-[var(--bg-panel)] border border-[var(--border-dev)] rounded-xl flex flex-col overflow-hidden shrink-0 shadow-sm transition-colors z-10">
+      <div className="w-full md:w-80 h-72 md:h-[calc(100vh-5rem)] md:sticky md:top-3 bg-[var(--bg-panel)] border border-[var(--border-dev)] rounded-xl flex flex-col overflow-hidden shrink-0 shadow-sm transition-colors z-10">
         {/* Header & Collections Search */}
         <div className="p-3 border-b border-[var(--border-dev)] flex flex-col gap-2 bg-[var(--bg-panel-subtle)] shrink-0">
           <div className="flex items-center justify-between">
