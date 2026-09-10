@@ -33,6 +33,8 @@ import {
   Info,
   X,
   ChevronDown,
+  ArrowUp,
+  ArrowDown,
 } from 'lucide-react';
 import { parseJwt, buildCompactJwt } from '@/lib/jwt/codec';
 import { ParsedJwt } from '@/lib/jwt/types';
@@ -121,7 +123,7 @@ function JwtInspectorSkeleton() {
   );
 }
 
-export const JwtInspectorClient: React.FC = () => {
+export const JwtInspectorClient: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
   // Client mount check to safely eliminate hydration mismatches
   const mounted = useIsClient();
 
@@ -158,6 +160,9 @@ export const JwtInspectorClient: React.FC = () => {
 
   // New claim modal state
   const [isAddingClaim, setIsAddingClaim] = useState<boolean>(false);
+  
+  // Chaos deck toggle state
+  const [isChaosExpanded, setIsChaosExpanded] = useState<boolean>(false);
   const [newClaimKey, setNewClaimKey] = useState<string>('');
   const [newClaimValue, setNewClaimValue] = useState<string>('');
 
@@ -288,6 +293,29 @@ export const JwtInspectorClient: React.FC = () => {
     triggerCopy(updated, `Stripped claim: ${claimKey}`);
   };
 
+  // Move claim order
+  const handleMoveClaim = (claimKey: string, direction: 'up' | 'down') => {
+    if (!parsed.isValidStructure) return;
+    const keys = Object.keys(parsed.payload);
+    const index = keys.indexOf(claimKey);
+    if (index === -1) return;
+    if (direction === 'up' && index === 0) return;
+    if (direction === 'down' && index === keys.length - 1) return;
+
+    const newIndex = direction === 'up' ? index - 1 : index + 1;
+    const newKeys = [...keys];
+    [newKeys[index], newKeys[newIndex]] = [newKeys[newIndex], newKeys[index]];
+
+    const newPayload: Record<string, any> = {};
+    newKeys.forEach(k => {
+      newPayload[k] = parsed.payload[k];
+    });
+
+    const updated = buildCompactJwt(parsed.header, newPayload, hmacSecret);
+    setRawToken(updated);
+    triggerCopy(updated, `Moved claim: ${claimKey}`);
+  };
+
   // Cryptographic Verification
   const handleVerifyHmac = async () => {
     const res = await verifyHmac(rawToken, hmacSecret, cryptoAlg);
@@ -356,7 +384,7 @@ export const JwtInspectorClient: React.FC = () => {
   }
 
   return (
-    <div className="w-full bg-[var(--bg-app)] text-[var(--text-primary)] flex flex-col font-sans transition-colors">
+    <div className="w-full h-full min-h-0 flex-1 bg-[var(--bg-app)] text-[var(--text-primary)] flex flex-col font-sans transition-colors">
       
       {/* 1. Studio Top Command Bar */}
       <div className="bg-[var(--bg-panel)] border-b border-[var(--border-dev)] px-4 py-2 flex flex-wrap items-center justify-between gap-3 text-xs shrink-0 z-20">
@@ -413,14 +441,15 @@ export const JwtInspectorClient: React.FC = () => {
       </div>
 
       {/* 2. Main Studio Workspace (2 Columns) */}
-      <div className="flex-1 grid grid-cols-1 lg:grid-cols-12 gap-0">
+      <div className="flex-1 min-h-0 grid grid-cols-1 lg:grid-cols-12 gap-0">
         
         {/* ============================================================ */}
         {/* LEFT COLUMN: Visual Token Terminal & Expiry Radar (5 Cols)   */}
         {/* ============================================================ */}
-        <div className="lg:col-span-5 border-r border-[var(--border-dev)] flex flex-col bg-[var(--bg-panel)] p-4 gap-4 lg:sticky lg:top-0 lg:self-start lg:max-h-[calc(100vh-7rem)] lg:overflow-y-auto">
-          
-          {/* Card 1: Encoded Token (Compact JWT) */}
+        <div className="lg:col-span-5 border-r border-[var(--border-dev)] flex flex-col bg-[var(--bg-panel)] lg:overflow-y-auto">
+          <div className="p-4 flex flex-col gap-4">
+            
+            {/* Card 1: Encoded Token (Compact JWT) */}
           <div className="rounded-xl border border-[var(--border-dev)] bg-[var(--bg-panel-subtle)] p-3.5 flex flex-col gap-2.5 shadow-2xs">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-1.5 font-mono text-xs font-bold text-[var(--text-primary)] uppercase tracking-wider">
@@ -477,6 +506,16 @@ export const JwtInspectorClient: React.FC = () => {
                       </span>
                     </div>
                     <div className="flex items-center gap-1.5 shrink-0">
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          triggerCopy(parsed.headerB64, 'Copied Header Segment');
+                        }}
+                        className="p-1 rounded hover:bg-[var(--bg-app)] text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-colors cursor-pointer"
+                        title="Copy Header Segment"
+                      >
+                        <Copy className="w-3.5 h-3.5" />
+                      </button>
                       <span className="px-1.5 py-0.2 rounded bg-[var(--pill-bg)] text-[var(--text-primary)] text-[10px] font-bold border border-[var(--border-dev)]">
                         {parsed.header.alg}
                       </span>
@@ -513,6 +552,16 @@ export const JwtInspectorClient: React.FC = () => {
                       </span>
                     </div>
                     <div className="flex items-center gap-1.5 shrink-0">
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          triggerCopy(parsed.payloadB64, 'Copied Payload Segment');
+                        }}
+                        className="p-1 rounded hover:bg-[var(--bg-app)] text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-colors cursor-pointer"
+                        title="Copy Payload Segment"
+                      >
+                        <Copy className="w-3.5 h-3.5" />
+                      </button>
                       <span className="px-1.5 py-0.2 rounded bg-[var(--pill-bg)] text-[var(--text-primary)] text-[10px] font-bold border border-[var(--border-dev)]">
                         {parsed.diagnostics.length} claims
                       </span>
@@ -549,6 +598,19 @@ export const JwtInspectorClient: React.FC = () => {
                       </span>
                     </div>
                     <div className="flex items-center gap-1.5 shrink-0">
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          if (parsed.signatureB64) {
+                            triggerCopy(parsed.signatureB64, 'Copied Signature Segment');
+                          }
+                        }}
+                        className={`p-1 rounded transition-colors ${parsed.hasSignature ? 'hover:bg-[var(--bg-app)] text-[var(--text-muted)] hover:text-[var(--text-primary)] cursor-pointer' : 'opacity-30 cursor-not-allowed text-[var(--text-muted)]'}`}
+                        title="Copy Signature Segment"
+                        disabled={!parsed.hasSignature}
+                      >
+                        <Copy className="w-3.5 h-3.5" />
+                      </button>
                       <span
                         className={`px-1.5 py-0.2 rounded text-[10px] font-bold ${
                           parsed.hasSignature
@@ -730,136 +792,104 @@ export const JwtInspectorClient: React.FC = () => {
               </div>
             </div>
 
+            </div>
           </div>
-
         </div>
 
         {/* ============================================================ */}
         {/* RIGHT COLUMN: Pinned Chaos Deck & Workspace Tabs (7 Cols)   */}
         {/* ============================================================ */}
-        <div className="lg:col-span-7 flex flex-col bg-[var(--bg-panel-subtle)]">
+        <div className="lg:col-span-7 flex flex-col bg-[var(--bg-panel-subtle)] lg:overflow-y-auto">
           
-          {/* 🔥 1. PINNED TOP: Chaos Mutations Deck (Clean, Professional, Non-Rainbow) */}
-          <div className="p-4 border-b border-[var(--border-dev)] bg-[var(--bg-panel)] flex flex-col gap-3 sticky top-0 z-10 shadow-xs">
+          {/* 🔥 1. PINNED TOP: Chaos Mutations Deck (Compact & Collapsible) */}
+          <div className="border-b border-[var(--border-dev)] bg-[var(--bg-panel)] flex flex-col sticky top-0 z-10 shadow-xs">
             
-            <div className="flex items-center justify-between">
+            <div 
+              className="px-4 py-3 flex items-center justify-between cursor-pointer hover:bg-[var(--bg-panel-subtle)] transition-colors"
+              onClick={() => setIsChaosExpanded(!isChaosExpanded)}
+            >
               <div className="flex items-center gap-1.5 font-mono text-xs font-bold text-rose-600 dark:text-rose-400 uppercase tracking-wider">
                 <Flame className="w-4 h-4 text-rose-500" />
                 Chaos Mutations &mdash; Negative Path Simulator
               </div>
-              <span className="text-[11px] font-mono text-[var(--text-muted)]">
-                Click any action to apply &amp; view hint
-              </span>
+              <div className="flex items-center gap-2 text-[11px] font-mono text-[var(--text-muted)]">
+                <span className="hidden sm:inline">Click to expand &amp; apply mutations</span>
+                <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${isChaosExpanded ? 'rotate-180' : ''}`} />
+              </div>
             </div>
 
-            {/* Unified, sleek, professional action buttons */}
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs font-mono">
-              
-              {/* Expire Now */}
-              <button
-                onClick={() => runChaosMutation(() => expireTokenNow(parsed, 300), 'Expired (-5m)', 'expire_now')}
-                className="p-2 rounded-lg bg-[var(--bg-sidebar)] hover:bg-[var(--pill-bg)] text-[var(--text-primary)] border border-[var(--border-dev)] hover:border-rose-500/40 transition-all flex items-center justify-center gap-1.5 cursor-pointer font-medium"
-              >
-                <Clock className="w-3.5 h-3.5 text-rose-500 shrink-0" /> Expire (-5m)
-              </button>
-
-              {/* Race Condition (10s) */}
-              <button
-                onClick={() => runChaosMutation(() => expireTokenSoon(parsed, 10), 'Expiring in 10s', 'race_expire')}
-                className="p-2 rounded-lg bg-[var(--bg-sidebar)] hover:bg-[var(--pill-bg)] text-[var(--text-primary)] border border-[var(--border-dev)] hover:border-amber-500/40 transition-all flex items-center justify-center gap-1.5 cursor-pointer font-medium"
-              >
-                <Zap className="w-3.5 h-3.5 text-amber-500 shrink-0" /> Race (10s)
-              </button>
-
-              {/* Clock Skew */}
-              <button
-                onClick={() => runChaosMutation(() => injectClockSkewFuture(parsed, 300), 'Clock Skew Injected', 'clock_skew')}
-                className="p-2 rounded-lg bg-[var(--bg-sidebar)] hover:bg-[var(--pill-bg)] text-[var(--text-primary)] border border-[var(--border-dev)] hover:border-cyan-500/40 transition-all flex items-center justify-center gap-1.5 cursor-pointer font-medium"
-              >
-                <Sliders className="w-3.5 h-3.5 text-cyan-500 shrink-0" /> Clock Skew (+5m)
-              </button>
-
-              {/* Renew (+1h) */}
-              <button
-                onClick={() => runChaosMutation(() => renewTokenValid(parsed, 3600), 'Renewed (+1h)', 'renew')}
-                className="p-2 rounded-lg bg-[var(--bg-sidebar)] hover:bg-[var(--pill-bg)] text-[var(--text-primary)] border border-[var(--border-dev)] hover:border-emerald-500/40 transition-all flex items-center justify-center gap-1.5 cursor-pointer font-medium"
-              >
-                <RefreshCw className="w-3.5 h-3.5 text-emerald-500 shrink-0" /> Renew (+1h)
-              </button>
-
-              {/* alg: none Exploit */}
-              <button
-                onClick={() => runChaosMutation(() => simulateAlgNone(parsed), 'alg: none Exploit', 'alg_none')}
-                className="p-2 rounded-lg bg-[var(--bg-sidebar)] hover:bg-[var(--pill-bg)] text-[var(--text-primary)] border border-[var(--border-dev)] hover:border-purple-500/40 transition-all flex items-center justify-center gap-1.5 cursor-pointer font-medium"
-              >
-                <Unlock className="w-3.5 h-3.5 text-purple-500 shrink-0" /> alg: none
-              </button>
-
-              {/* Corrupt Signature */}
-              <button
-                onClick={() => runChaosMutation(() => corruptSignature(parsed), 'Signature Corrupted', 'corrupt_sig')}
-                className="p-2 rounded-lg bg-[var(--bg-sidebar)] hover:bg-[var(--pill-bg)] text-[var(--text-primary)] border border-[var(--border-dev)] hover:border-rose-500/40 transition-all flex items-center justify-center gap-1.5 cursor-pointer font-medium"
-              >
-                <AlertTriangle className="w-3.5 h-3.5 text-rose-500 shrink-0" /> Corrupt Sig
-              </button>
-
-              {/* Swap to HS256 */}
-              <button
-                onClick={() => runChaosMutation(() => swapAlgorithmToHs256(parsed), 'Swapped to HS256', 'swap_hs256')}
-                className="p-2 rounded-lg bg-[var(--bg-sidebar)] hover:bg-[var(--pill-bg)] text-[var(--text-primary)] border border-[var(--border-dev)] hover:border-amber-500/40 transition-all flex items-center justify-center gap-1.5 cursor-pointer font-medium"
-              >
-                <RefreshCw className="w-3.5 h-3.5 text-amber-500 shrink-0" /> To HS256
-              </button>
-
-              {/* Inject BLNS */}
-              <button
-                onClick={() => runChaosMutation(() => injectBlnsClaim(parsed, 'name'), 'Naughty String Injected', 'inject_blns')}
-                className="p-2 rounded-lg bg-[var(--bg-sidebar)] hover:bg-[var(--pill-bg)] text-[var(--text-primary)] border border-[var(--border-dev)] hover:border-indigo-500/40 transition-all flex items-center justify-center gap-1.5 cursor-pointer font-medium"
-              >
-                <Sparkles className="w-3.5 h-3.5 text-indigo-500 shrink-0" /> Inject BLNS
-              </button>
-
-            </div>
-
-            {/* High-Contrast Active Chaos Scenario & Testing Guide (100% visible in light & dark mode) */}
-            {activeChaosHint && (
-              <div className="mt-1 p-3.5 rounded-xl bg-amber-50 dark:bg-amber-950/30 border-2 border-amber-300 dark:border-amber-700/60 text-xs font-mono flex flex-col gap-2 shadow-sm animate-fade-in text-slate-900 dark:text-slate-100">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <span className="font-bold text-sm text-amber-900 dark:text-amber-300 flex items-center gap-1.5">
-                      <Zap className="w-4 h-4 text-amber-600 dark:text-amber-400" />
-                      {activeChaosHint.title}
-                    </span>
-                    <span className="text-[10px] px-2 py-0.5 rounded-full border font-bold bg-amber-200/60 dark:bg-amber-900/60 text-amber-900 dark:text-amber-200 border-amber-400/50">
-                      {activeChaosHint.badge}
-                    </span>
-                  </div>
+            {isChaosExpanded && (
+              <div className="px-4 pb-4 animate-fade-in">
+                {/* Unified, sleek, professional action buttons */}
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs font-mono border-t border-[var(--border-dev)] pt-3">
+                  
+                  {/* Expire Now */}
                   <button
-                    onClick={() => setActiveChaosHint(null)}
-                    className="p-1 rounded hover:bg-black/10 dark:hover:bg-white/10 text-slate-600 dark:text-slate-400 cursor-pointer"
-                    title="Dismiss Hint"
+                    onClick={() => runChaosMutation(() => expireTokenNow(parsed, 300), 'Expired (-5m)', 'expire_now')}
+                    className="p-2 rounded-lg bg-[var(--bg-sidebar)] hover:bg-[var(--pill-bg)] text-[var(--text-primary)] border border-[var(--border-dev)] hover:border-rose-500/40 transition-all flex items-center justify-center gap-1.5 cursor-pointer font-medium"
                   >
-                    <X className="w-3.5 h-3.5" />
+                    <Clock className="w-3.5 h-3.5 text-rose-500 shrink-0" /> Expire (-5m)
                   </button>
-                </div>
 
-                <div className="grid grid-cols-1 gap-1.5 text-xs leading-relaxed">
-                  <div>
-                    <span className="text-slate-600 dark:text-slate-400 font-bold">What was modified: </span>
-                    <span className="font-semibold text-slate-900 dark:text-slate-100">{activeChaosHint.mutation}</span>
-                  </div>
-                  <div>
-                    <span className="text-slate-600 dark:text-slate-400 font-bold">Security Impact: </span>
-                    <span className="text-slate-800 dark:text-slate-200">{activeChaosHint.securityImpact}</span>
-                  </div>
-                  <div className="p-2.5 rounded-lg bg-white dark:bg-slate-900 border border-amber-300/80 dark:border-amber-700/40 text-xs shadow-2xs">
-                    <span className="font-bold text-emerald-700 dark:text-emerald-400">How to test your app: </span>
-                    <span className="text-slate-900 dark:text-slate-100">{activeChaosHint.howToTest}</span>
-                  </div>
+                  {/* Race Condition (10s) */}
+                  <button
+                    onClick={() => runChaosMutation(() => expireTokenSoon(parsed, 10), 'Expiring in 10s', 'race_expire')}
+                    className="p-2 rounded-lg bg-[var(--bg-sidebar)] hover:bg-[var(--pill-bg)] text-[var(--text-primary)] border border-[var(--border-dev)] hover:border-amber-500/40 transition-all flex items-center justify-center gap-1.5 cursor-pointer font-medium"
+                  >
+                    <Zap className="w-3.5 h-3.5 text-amber-500 shrink-0" /> Race (10s)
+                  </button>
+
+                  {/* Clock Skew */}
+                  <button
+                    onClick={() => runChaosMutation(() => injectClockSkewFuture(parsed, 300), 'Clock Skew Injected', 'clock_skew')}
+                    className="p-2 rounded-lg bg-[var(--bg-sidebar)] hover:bg-[var(--pill-bg)] text-[var(--text-primary)] border border-[var(--border-dev)] hover:border-cyan-500/40 transition-all flex items-center justify-center gap-1.5 cursor-pointer font-medium"
+                  >
+                    <Sliders className="w-3.5 h-3.5 text-cyan-500 shrink-0" /> Clock Skew (+5m)
+                  </button>
+
+                  {/* Renew (+1h) */}
+                  <button
+                    onClick={() => runChaosMutation(() => renewTokenValid(parsed, 3600), 'Renewed (+1h)', 'renew')}
+                    className="p-2 rounded-lg bg-[var(--bg-sidebar)] hover:bg-[var(--pill-bg)] text-[var(--text-primary)] border border-[var(--border-dev)] hover:border-emerald-500/40 transition-all flex items-center justify-center gap-1.5 cursor-pointer font-medium"
+                  >
+                    <RefreshCw className="w-3.5 h-3.5 text-emerald-500 shrink-0" /> Renew (+1h)
+                  </button>
+
+                  {/* alg: none Exploit */}
+                  <button
+                    onClick={() => runChaosMutation(() => simulateAlgNone(parsed), 'alg: none Exploit', 'alg_none')}
+                    className="p-2 rounded-lg bg-[var(--bg-sidebar)] hover:bg-[var(--pill-bg)] text-[var(--text-primary)] border border-[var(--border-dev)] hover:border-purple-500/40 transition-all flex items-center justify-center gap-1.5 cursor-pointer font-medium"
+                  >
+                    <Unlock className="w-3.5 h-3.5 text-purple-500 shrink-0" /> alg: none
+                  </button>
+
+                  {/* Corrupt Signature */}
+                  <button
+                    onClick={() => runChaosMutation(() => corruptSignature(parsed), 'Signature Corrupted', 'corrupt_sig')}
+                    className="p-2 rounded-lg bg-[var(--bg-sidebar)] hover:bg-[var(--pill-bg)] text-[var(--text-primary)] border border-[var(--border-dev)] hover:border-rose-500/40 transition-all flex items-center justify-center gap-1.5 cursor-pointer font-medium"
+                  >
+                    <AlertTriangle className="w-3.5 h-3.5 text-rose-500 shrink-0" /> Corrupt Sig
+                  </button>
+
+                  {/* Swap to HS256 */}
+                  <button
+                    onClick={() => runChaosMutation(() => swapAlgorithmToHs256(parsed), 'Swapped to HS256', 'swap_hs256')}
+                    className="p-2 rounded-lg bg-[var(--bg-sidebar)] hover:bg-[var(--pill-bg)] text-[var(--text-primary)] border border-[var(--border-dev)] hover:border-amber-500/40 transition-all flex items-center justify-center gap-1.5 cursor-pointer font-medium"
+                  >
+                    <RefreshCw className="w-3.5 h-3.5 text-amber-500 shrink-0" /> To HS256
+                  </button>
+
+                  {/* Inject BLNS */}
+                  <button
+                    onClick={() => runChaosMutation(() => injectBlnsClaim(parsed, 'name'), 'Naughty String Injected', 'inject_blns')}
+                    className="p-2 rounded-lg bg-[var(--bg-sidebar)] hover:bg-[var(--pill-bg)] text-[var(--text-primary)] border border-[var(--border-dev)] hover:border-indigo-500/40 transition-all flex items-center justify-center gap-1.5 cursor-pointer font-medium"
+                  >
+                    <Sparkles className="w-3.5 h-3.5 text-indigo-500 shrink-0" /> Inject BLNS
+                  </button>
+
                 </div>
               </div>
             )}
-
           </div>
 
           {/* 2. Workspace Tabs Navigation */}
@@ -920,8 +950,47 @@ export const JwtInspectorClient: React.FC = () => {
           </div>
 
           {/* 3. Tab Content */}
-          <div className="p-4 flex-1">
+          <div className="p-4 flex-1 flex flex-col">
             
+            {/* High-Contrast Active Chaos Scenario & Testing Guide */}
+            {activeChaosHint && (
+              <div className="mb-4 p-3.5 rounded-xl bg-amber-50 dark:bg-amber-950/30 border-2 border-amber-300 dark:border-amber-700/60 text-xs font-mono flex flex-col gap-2 shadow-sm animate-fade-in text-slate-900 dark:text-slate-100">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <span className="font-bold text-sm text-amber-900 dark:text-amber-300 flex items-center gap-1.5">
+                      <Zap className="w-4 h-4 text-amber-600 dark:text-amber-400" />
+                      {activeChaosHint.title}
+                    </span>
+                    <span className="text-[10px] px-2 py-0.5 rounded-full border font-bold bg-amber-200/60 dark:bg-amber-900/60 text-amber-900 dark:text-amber-200 border-amber-400/50">
+                      {activeChaosHint.badge}
+                    </span>
+                  </div>
+                  <button
+                    onClick={() => setActiveChaosHint(null)}
+                    className="p-1 rounded hover:bg-black/10 dark:hover:bg-white/10 text-slate-600 dark:text-slate-400 cursor-pointer"
+                    title="Dismiss Hint"
+                  >
+                    <X className="w-3.5 h-3.5" />
+                  </button>
+                </div>
+
+                <div className="grid grid-cols-1 gap-1.5 text-xs leading-relaxed">
+                  <div>
+                    <span className="text-slate-600 dark:text-slate-400 font-bold">What was modified: </span>
+                    <span className="font-semibold text-slate-900 dark:text-slate-100">{activeChaosHint.mutation}</span>
+                  </div>
+                  <div>
+                    <span className="text-slate-600 dark:text-slate-400 font-bold">Security Impact: </span>
+                    <span className="text-slate-800 dark:text-slate-200">{activeChaosHint.securityImpact}</span>
+                  </div>
+                  <div className="p-2.5 rounded-lg bg-white dark:bg-slate-900 border border-amber-300/80 dark:border-amber-700/40 text-xs shadow-2xs">
+                    <span className="font-bold text-emerald-700 dark:text-emerald-400">How to test your app: </span>
+                    <span className="text-slate-900 dark:text-slate-100">{activeChaosHint.howToTest}</span>
+                  </div>
+                </div>
+              </div>
+            )}
+
             {/* TAB 1: Decoded Claims (In-Place Expandable Hint Cards) */}
             {activeTab === 'claims' && (
               <div className="flex flex-col gap-3">
@@ -986,8 +1055,10 @@ export const JwtInspectorClient: React.FC = () => {
 
                 {/* List of Decoded Claim Cards (With IN-PLACE expandable Hint Accordion) */}
                 <div className="flex flex-col gap-2.5">
-                  {parsed.diagnostics.map(claim => {
+                  {parsed.diagnostics.map((claim, index) => {
                     const isExpanded = Boolean(expandedClaimKeys[claim.key]);
+                    const isFirst = index === 0;
+                    const isLast = index === parsed.diagnostics.length - 1;
 
                     return (
                       <div
@@ -1022,12 +1093,46 @@ export const JwtInspectorClient: React.FC = () => {
                               {isExpanded ? 'Hide Hint' : 'View Hint'}
                               <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-200 ${isExpanded ? 'rotate-180' : ''}`} />
                             </span>
+                            
+                            <div className="flex items-center gap-1 border-l border-[var(--border-dev)] pl-3">
+                              <button
+                                onClick={e => {
+                                  e.stopPropagation();
+                                  handleMoveClaim(claim.key, 'up');
+                                }}
+                                disabled={isFirst}
+                                className={`p-1 rounded border transition-colors flex items-center justify-center ${
+                                  isFirst 
+                                    ? 'opacity-30 border-transparent text-[var(--text-muted)] cursor-not-allowed'
+                                    : 'bg-[var(--bg-sidebar)] hover:bg-[var(--pill-bg)] text-[var(--text-muted)] hover:text-[var(--text-primary)] border-[var(--border-dev)] hover:border-slate-400 cursor-pointer'
+                                }`}
+                                title={`Move "${claim.key}" claim up`}
+                              >
+                                <ArrowUp className="w-3 h-3" />
+                              </button>
+                              <button
+                                onClick={e => {
+                                  e.stopPropagation();
+                                  handleMoveClaim(claim.key, 'down');
+                                }}
+                                disabled={isLast}
+                                className={`p-1 rounded border transition-colors flex items-center justify-center ${
+                                  isLast 
+                                    ? 'opacity-30 border-transparent text-[var(--text-muted)] cursor-not-allowed'
+                                    : 'bg-[var(--bg-sidebar)] hover:bg-[var(--pill-bg)] text-[var(--text-muted)] hover:text-[var(--text-primary)] border-[var(--border-dev)] hover:border-slate-400 cursor-pointer'
+                                }`}
+                                title={`Move "${claim.key}" claim down`}
+                              >
+                                <ArrowDown className="w-3 h-3" />
+                              </button>
+                            </div>
+
                             <button
                               onClick={e => {
                                 e.stopPropagation();
                                 handleDeleteClaim(claim.key);
                               }}
-                              className="px-2 py-0.5 rounded bg-[var(--bg-sidebar)] hover:bg-rose-500/20 text-[var(--text-muted)] hover:text-rose-600 dark:hover:text-rose-400 border border-[var(--border-dev)] transition-colors text-[11px] flex items-center gap-1 cursor-pointer"
+                              className="px-2 py-1 rounded bg-[var(--bg-sidebar)] hover:bg-rose-500/20 text-[var(--text-muted)] hover:text-rose-600 dark:hover:text-rose-400 border border-[var(--border-dev)] transition-colors text-[11px] flex items-center gap-1 cursor-pointer ml-1"
                               title={`Remove "${claim.key}" claim`}
                             >
                               <Trash2 className="w-3 h-3" /> Strip
@@ -1332,6 +1437,13 @@ export const JwtInspectorClient: React.FC = () => {
                   </div>
 
                 </div>
+              </div>
+            )}
+            
+            {/* SEO Content Injection */}
+            {children && (
+              <div className="mt-8 border-t border-[var(--border-dev)] pt-8 pb-12">
+                {children}
               </div>
             )}
 
