@@ -14,6 +14,7 @@ import {
   Sliders,
   Crop,
   FileArchive,
+  Share2,
   ArrowRight,
   X
 } from 'lucide-react';
@@ -120,6 +121,16 @@ const PALETTE_ITEMS: PaletteItem[] = [
     icon: Radio,
     badge: '17 APIs',
     keywords: ['stripe', 'supabase', 'oauth', 'fixture', 'sso', 'mock response']
+  },
+  {
+    id: 'tool-social-preview',
+    category: 'Tools',
+    title: 'Social Share Preview & OG Checker',
+    subtitle: 'Preview cards for Twitter/X, LinkedIn, Facebook, Discord, Slack & WhatsApp',
+    href: '/social-preview',
+    icon: Share2,
+    badge: '6 Platforms',
+    keywords: ['og', 'open graph', 'twitter card', 'meta', 'social', 'share', 'preview', 'linkedin', 'discord', 'slack', 'whatsapp']
   },
 
   // Popular Typefaces

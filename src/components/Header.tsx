@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Flame, Type, Box, Radio, Sun, Moon, Terminal, Sparkles, Key, Search, Menu, X } from 'lucide-react';
+import { Flame, Type, Box, Radio, Sun, Moon, Terminal, Sparkles, Key, Search, Menu, X, Share2 } from 'lucide-react';
 import { useTheme } from './ThemeProvider';
 import { CommandPalette } from './CommandPalette';
 import { DevPantryLogo } from './DevPantryLogo';
@@ -38,6 +38,7 @@ export const Header: React.FC = () => {
     { href: '/icons', label: 'Icons', shortLabel: 'Icons', icon: Box },
     { href: '/jwt-decoder', label: 'JWT Decoder', shortLabel: 'JWT', icon: Key },
     { href: '/mock-data', label: 'Mock Data', shortLabel: 'Mock', icon: Flame },
+    { href: '/social-preview', label: 'Social Preview', shortLabel: 'Social', icon: Share2 },
     { href: '/api-templates', label: 'API Mocks', shortLabel: 'Mocks', icon: Radio },
   ];
 

@@ -62,6 +62,11 @@ export const Footer: React.FC = () => {
                 </Link>
               </li>
               <li>
+                <Link href="/social-preview" className="hover:text-[var(--text-primary)] hover:underline transition-colors">
+                  Social Share Preview
+                </Link>
+              </li>
+              <li>
                 <Link href="/api-templates" className="hover:text-[var(--text-primary)] hover:underline transition-colors">
                   Production API Vault
                 </Link>
