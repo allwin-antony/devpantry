@@ -366,6 +366,7 @@ export function BgRemovalClient({ initialMode = 'bg-removal' }: BgRemovalClientP
       const { removeBackground } = await import('@imgly/background-removal');
 
       const blobResult = await removeBackground(imageInput, {
+        device: 'gpu',
         model: modelQuality,
         output: {
           format: 'image/png',

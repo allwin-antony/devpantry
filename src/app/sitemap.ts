@@ -4,6 +4,7 @@ import { getAllIconPrefixes, getAllServiceResponseIds } from '@/lib/datasetLoade
 export async function generateSitemaps() {
   return [
     { id: 'core' },
+    { id: 'tools' },
     { id: 'fonts' },
     { id: 'icons' },
     { id: 'templates' },
@@ -26,7 +27,18 @@ export default async function sitemap(props: { id: Promise<string> }): Promise<M
       { url: `${baseUrl}/image-resizer`, lastModified: staticDate, changeFrequency: 'weekly', priority: 0.95 },
       { url: `${baseUrl}/image-compressor`, lastModified: staticDate, changeFrequency: 'weekly', priority: 0.95 },
       { url: `${baseUrl}/jwt-decoder`, lastModified: staticDate, changeFrequency: 'weekly', priority: 0.95 },
+      { url: `${baseUrl}/social-preview`, lastModified: staticDate, changeFrequency: 'weekly', priority: 0.95 },
     ];
+  }
+
+  if (id === 'tools') {
+    const socialPlatforms = ['twitter', 'facebook', 'linkedin', 'discord', 'slack', 'whatsapp'];
+    return socialPlatforms.map(platform => ({
+      url: `${baseUrl}/social-preview/${platform}`,
+      lastModified: staticDate,
+      changeFrequency: 'weekly' as const,
+      priority: 0.85,
+    }));
   }
 
   if (id === 'fonts') {

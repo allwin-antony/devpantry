@@ -16,7 +16,8 @@ import {
   Sparkles,
   Maximize2,
   HardDrive,
-  Key
+  Key,
+  Share2
 } from 'lucide-react';
 import { IconRenderer, loadMultiPrefixIcons } from '@/lib/iconBatchLoader';
 
@@ -94,6 +95,13 @@ export function HomeClient() {
 
   const tools = [
     {
+      icon: HardDrive,
+      title: 'Edge Image Compressor',
+      desc: 'Compress unlimited images under target budgets (<500 KB, <1 MB) and convert between WebP, PNG, and JPEG.',
+      href: '/image-compressor',
+      badge: 'UTILITY',
+    },
+    {
       icon: Sparkles,
       title: 'Edge AI Background Removal',
       desc: 'Instant, private background removal powered entirely in your browser via WebGPU. Unlimited cutouts, no signup.',
@@ -108,18 +116,18 @@ export function HomeClient() {
       badge: 'UTILITY',
     },
     {
-      icon: HardDrive,
-      title: 'Edge Image Compressor',
-      desc: 'Compress unlimited images under target budgets (<500 KB, <1 MB) and convert between WebP, PNG, and JPEG.',
-      href: '/image-compressor',
-      badge: 'UTILITY',
+      icon: Key,
+      title: 'JWT Inspector',
+      desc: 'Local-only token decoder and validator for secure payload inspection during development.',
+      href: '/jwt-decoder',
+      badge: 'SECURITY',
     },
     {
-      icon: Type,
-      title: 'Fonts Studio',
-      desc: 'Variable font playground with granular axis controls and layout preview matrices.',
-      href: '/fonts',
-      badge: 'TYPOGRAPHY',
+      icon: Share2,
+      title: 'Social Share Preview',
+      desc: 'Preview and validate Open Graph & Twitter Cards across 6 platforms instantly. Zero cache lock-in.',
+      href: '/social-preview',
+      badge: 'SEO',
     },
     {
       icon: Box,
@@ -129,11 +137,11 @@ export function HomeClient() {
       badge: 'ASSETS',
     },
     {
-      icon: Key,
-      title: 'JWT Inspector',
-      desc: 'Local-only token decoder and validator for secure payload inspection during development.',
-      href: '/jwt-decoder',
-      badge: 'SECURITY',
+      icon: Type,
+      title: 'Fonts Studio',
+      desc: 'Variable font playground with granular axis controls and layout preview matrices.',
+      href: '/fonts',
+      badge: 'TYPOGRAPHY',
     },
     {
       icon: Flame,
