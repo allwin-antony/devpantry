@@ -60,7 +60,7 @@ export default function SecurityPage() {
           <aside className="rounded-2xl border border-amber-500/25 bg-amber-500/5 p-6">
             <ShieldAlert className="h-5 w-5 text-amber-500" />
             <h2 className="mt-4 font-semibold text-[var(--text-primary)]">Reporting a vulnerability</h2>
-            <p className="mt-2 text-sm leading-6 text-[var(--text-secondary)]">Do not include tokens, private files, or exploit details in a public issue. Send security reports to <a className="font-medium text-[var(--accent-blue)] hover:underline" href="mailto:security@devpantry.com">security@devpantry.com</a>.</p>
+            <p className="mt-2 text-sm leading-6 text-[var(--text-secondary)]">If you discover a security vulnerability, please report it privately to the maintainer via <a href="https://github.com/allwin-antony/devpantry" target="_blank" rel="noopener noreferrer" className="text-[var(--accent-blue)] hover:underline font-medium">GitHub</a>. Do not include tokens, private files, or exploit details in a public issue.</p>
           </aside>
         </section>
       </div>

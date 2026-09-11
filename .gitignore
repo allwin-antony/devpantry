@@ -37,3 +37,7 @@ graphify-out/
 
 #internal notes
 .notes
+
+# Cloudflare Wrangler
+.wrangler/
+.dev.vars

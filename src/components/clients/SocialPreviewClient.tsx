@@ -23,13 +23,13 @@ interface OgMeta {
 type Platform = 'twitter' | 'facebook' | 'linkedin' | 'discord' | 'slack' | 'whatsapp';
 type InputMode = 'url' | 'source';
 
-const PLATFORMS: { id: Platform; label: string; color: string }[] = [
-  { id: 'twitter', label: 'X / Twitter', color: 'var(--accent-blue)' },
-  { id: 'facebook', label: 'Facebook', color: '#1877F2' },
-  { id: 'linkedin', label: 'LinkedIn', color: '#0A66C2' },
-  { id: 'discord', label: 'Discord', color: '#5865F2' },
-  { id: 'slack', label: 'Slack', color: '#4A154B' },
-  { id: 'whatsapp', label: 'WhatsApp', color: '#25D366' },
+const PLATFORMS: { id: Platform; label: string; color: string; icon: string }[] = [
+  { id: 'twitter', label: 'X / Twitter', color: 'var(--text-primary)', icon: 'x' },
+  { id: 'facebook', label: 'Facebook', color: '#1877F2', icon: 'facebook' },
+  { id: 'linkedin', label: 'LinkedIn', color: '#0A66C2', icon: 'linkedin' },
+  { id: 'discord', label: 'Discord', color: '#5865F2', icon: 'discord' },
+  { id: 'slack', label: 'Slack', color: '#E01E5A', icon: 'slack' },
+  { id: 'whatsapp', label: 'WhatsApp', color: '#25D366', icon: 'whatsapp' },
 ];
 
 // ─── Meta extraction from pasted HTML source ─────────────────────────────────
@@ -231,20 +231,20 @@ function WhatsAppCard({ data }: { data: OgMeta }) {
   const title = data.meta['og:title'] || data.title;
   const description = data.meta['og:description'] || data.meta['description'] || '';
   const image = data.meta['og:image'] || '';
-  const domain = getDomain(data.url).toLowerCase();
+  const domain = getDomain(data.url).toUpperCase();
 
   return (
-    <div className="rounded-lg overflow-hidden bg-[#025C4C] max-w-[330px] shadow-lg">
+    <div className="rounded-xl overflow-hidden bg-[#005c4b] max-w-[350px] shadow-sm border border-[var(--border-dev)]">
       {image && (
         <div className="w-full aspect-[1.91/1] bg-[#075E54] overflow-hidden">
           <img src={image} alt="" className="w-full h-full object-cover" onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }} />
         </div>
       )}
-      <div className="px-2.5 py-2 bg-[#025C4C]">
-        <span className="text-[11px] text-[#A8D8CF] uppercase tracking-wider block">{domain}</span>
-        <div className="text-[13px] font-semibold text-white line-clamp-2 mt-0.5 leading-tight">{truncate(title, 60)}</div>
+      <div className="px-3.5 py-3 bg-[#005c4b]">
+        <span className="text-[11px] text-[#A8D8CF] tracking-wide block mb-1">{domain}</span>
+        <div className="text-[14px] font-bold text-white line-clamp-1 leading-tight">{truncate(title, 60)}</div>
         {description && (
-          <div className="text-[12px] text-[#A8D8CF] line-clamp-2 mt-0.5">{truncate(description, 120)}</div>
+          <div className="text-[13px] text-[#8696a0] line-clamp-2 mt-0.5 leading-snug">{truncate(description, 120)}</div>
         )}
       </div>
     </div>
@@ -487,39 +487,45 @@ export function SocialPreviewClient({ initialPlatform, children }: SocialPreview
       {/* ── Results ────────────────────────────────────────────────────────── */}
       {ogData && (
         <div className="flex-1 flex flex-col lg:flex-row gap-0 overflow-hidden animate-fade-in-up">
-          {/* Left: Platform Mockups */}
-          <div className="flex-1 flex flex-col min-w-0 border-r border-[var(--border-dev)]">
-            {/* Platform Tabs */}
-            <div className="flex items-center gap-0.5 px-4 sm:px-6 pt-4 pb-2 overflow-x-auto no-scrollbar shrink-0">
-              {PLATFORMS.map(p => (
-                <button
-                  key={p.id}
-                  onClick={() => setActivePlatform(p.id)}
-                  className={`h-7 px-2.5 rounded-md flex items-center gap-1.5 text-[11px] transition-all cursor-pointer whitespace-nowrap shrink-0 ${
-                    activePlatform === p.id
-                      ? 'bg-cyan-500/15 text-cyan-600 dark:text-cyan-400 border border-cyan-500/30 font-semibold shadow-xs'
-                      : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--pill-bg)] border border-transparent'
-                  }`}
-                >
-                  {p.label}
-                </button>
-              ))}
-            </div>
+          {/* Left: Platform Selection Sidebar */}
+          <div className="w-full lg:w-[220px] flex-shrink-0 flex lg:flex-col gap-1.5 px-4 sm:px-6 lg:px-5 py-3 lg:py-6 border-b lg:border-b-0 border-[var(--border-dev)] bg-transparent overflow-x-auto lg:overflow-y-auto no-scrollbar">
+            <div className="text-[10px] font-bold text-[var(--text-muted)] tracking-wider mb-2 hidden lg:block px-3">PLATFORM</div>
+            {PLATFORMS.map(p => (
+              <button
+                key={p.id}
+                onClick={() => setActivePlatform(p.id)}
+                className={`flex-shrink-0 h-9 px-3 rounded-lg flex items-center gap-3 text-[13px] transition-all cursor-pointer whitespace-nowrap ${
+                  activePlatform === p.id
+                    ? 'bg-[var(--bg-panel)] text-[var(--text-primary)] border border-[var(--border-dev)] font-semibold shadow-sm'
+                    : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--pill-bg)] border border-transparent'
+                }`}
+              >
+                <IconRenderer 
+                  prefix="simple-icons" 
+                  name={p.icon} 
+                  size={14} 
+                  color={activePlatform === p.id && !p.color.startsWith('var') ? p.color : 'currentColor'} 
+                />
+                <span className="mt-0.5">{p.label}</span>
+              </button>
+            ))}
+          </div>
 
-            {/* Card Preview */}
-            <div className="flex-1 p-4 sm:p-6 overflow-y-auto">
-              <div className="max-w-[520px] mx-auto">
+          {/* Center: Card Preview */}
+          <div className="flex-1 flex flex-col min-w-0 border-r border-[var(--border-dev)] bg-transparent">
+            <div className="flex-1 p-6 lg:p-8 overflow-y-auto flex flex-col items-center justify-center">
+              <div className="w-full max-w-[520px]">
                 {renderPlatformCard()}
               </div>
 
               {/* Share link */}
               {inputMode === 'url' && urlInput && (
-                <div className="mt-4 flex items-center gap-2 justify-center">
+                <div className="mt-6 flex items-center gap-2 justify-center">
                   <button
                     onClick={handleCopyLink}
-                    className="h-7 px-3 rounded-md bg-[var(--pill-bg)] border border-[var(--border-dev)] text-[11px] text-[var(--text-secondary)] hover:text-[var(--text-primary)] flex items-center gap-1.5 transition-colors cursor-pointer"
+                    className="h-8 px-4 rounded-lg bg-[var(--bg-panel)] border border-[var(--border-dev)] text-[12px] font-medium text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:border-[var(--border-focus)] flex items-center gap-1.5 transition-colors cursor-pointer shadow-sm"
                   >
-                    {copied ? <Check className="w-3 h-3 text-emerald-500" /> : <Copy className="w-3 h-3" />}
+                    {copied ? <Check className="w-3.5 h-3.5 text-emerald-500" /> : <Copy className="w-3.5 h-3.5" />}
                     {copied ? 'Copied!' : 'Copy shareable link'}
                   </button>
                   {ogData.url && (
@@ -527,9 +533,9 @@ export function SocialPreviewClient({ initialPlatform, children }: SocialPreview
                       href={ogData.url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="h-7 px-3 rounded-md bg-[var(--pill-bg)] border border-[var(--border-dev)] text-[11px] text-[var(--text-secondary)] hover:text-[var(--text-primary)] flex items-center gap-1.5 transition-colors"
+                      className="h-8 px-4 rounded-lg bg-[var(--bg-panel)] border border-[var(--border-dev)] text-[12px] font-medium text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:border-[var(--border-focus)] flex items-center gap-1.5 transition-colors shadow-sm"
                     >
-                      <ExternalLink className="w-3 h-3" />
+                      <ExternalLink className="w-3.5 h-3.5" />
                       Visit page
                     </a>
                   )}
@@ -604,7 +610,7 @@ export function SocialPreviewClient({ initialPlatform, children }: SocialPreview
                 <ChevronDown className={`w-3 h-3 ml-auto text-[var(--text-muted)] transition-transform ${showRawMeta ? 'rotate-180' : ''}`} />
               </button>
               {showRawMeta && (
-                <div className="mt-2 bg-[var(--bg-codebox)] rounded-lg border border-[var(--border-dev)] p-3 max-h-[300px] overflow-y-auto">
+                <div className="mt-3 bg-[var(--bg-codebox)] rounded-lg border border-[var(--border-dev)] p-4 max-h-[350px] overflow-y-auto shadow-inner">
                   <table className="w-full text-[11px] font-mono">
                     <tbody>
                       {sortedMetaKeys.map(key => (
@@ -640,7 +646,8 @@ export function SocialPreviewClient({ initialPlatform, children }: SocialPreview
               { prefix: 'simple-icons', name: 'linkedin', title: 'LinkedIn' },
               { prefix: 'simple-icons', name: 'facebook', title: 'Facebook' },
               { prefix: 'simple-icons', name: 'discord', title: 'Discord' },
-              { prefix: 'simple-icons', name: 'slack', title: 'Slack' }
+              { prefix: 'simple-icons', name: 'slack', title: 'Slack' },
+              { prefix: 'simple-icons', name: 'whatsapp', title: 'WhatsApp' }
             ].map((icon, i) => (
               <div
                 key={i}

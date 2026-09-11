@@ -34,6 +34,9 @@ export default function AboutPage() {
           <p className="mb-4">
             DevPantry is built with Next.js, React, TypeScript, and Tailwind CSS. We rely on incredible open-source projects like Lucide, Fontsource, Transformers.js, and many more.
           </p>
+          <p className="mb-4">
+            The entire DevPantry suite is completely open-source! You can view the source code, report issues, or contribute on our <a href="https://github.com/allwin-antony/devpantry" target="_blank" rel="noopener noreferrer" className="text-[var(--accent-blue)] hover:underline font-medium">GitHub Repository</a>.
+          </p>
         </div>
       </div>
     </div>
