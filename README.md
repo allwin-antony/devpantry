@@ -157,7 +157,27 @@ Generate battle-tested, high-entropy test datasets to stress-test UI layout boun
 
 ---
 
-### 6. 🔌 Real-World API & Chaos Templates (`/chaos-templates`)
+### 6. 🔗 Social Share Preview & Open Graph Inspector (`/social-preview`)
+Generate pixel-perfect mockups of how your links will appear when shared across major social networks and messaging platforms.
+
+* **Multi-Platform Accurate Mockups**:
+  * Instantly preview cards for **X/Twitter**, **LinkedIn**, **Facebook**, **Discord**, **Slack**, and **WhatsApp**.
+  * Accurately reflects truncation limits, fallback card types (e.g., `summary` vs `summary_large_image`), and platform-specific background colors.
+* **Stateless Edge Fetcher**:
+  * Bypasses CORS restrictions securely using a Cloudflare Pages edge function (`/api/og-fetch`).
+  * **Zero logs & zero storage**: The relay fetches metadata in transit and drops the connection, guaranteeing absolute privacy for unreleased staging environments.
+* **Raw HTML Source Parser**:
+  * Developing on localhost? Switch to **Paste Source** mode to paste your raw `<head>` HTML (or `document.documentElement.outerHTML`) for instant offline parsing without needing a public tunnel.
+* **Comprehensive Metadata Inspector**:
+  * Extracts and validates `og:title`, `og:description`, `og:image`, `twitter:card`, and image dimensions.
+  * Real-time **Validation Warnings**: Flags missing critical tags or character limits that will cause truncation on specific platforms.
+  * Expandable raw tag viewer showing all detected meta tags in a formatted code block.
+* **Shareable Previews**:
+  * Generates shareable URL hashes (`#url=...`) so you can send a specific preview state to your marketing or engineering teams.
+
+---
+
+### 7. 🔌 Real-World API & Chaos Templates (`/chaos-templates`)
 Actual production API response payloads and edge-case schemas for 19 real-world enterprise services:
 
 * **Service Categories**:
@@ -173,7 +193,7 @@ Actual production API response payloads and edge-case schemas for 19 real-world 
 
 ---
 
-### 7. ⌨️ Global Command Palette (`Cmd + K` / `Ctrl + K`)
+### 8. ⌨️ Global Command Palette (`Cmd + K` / `Ctrl + K`)
 
 A unified search dialog accessible from anywhere in the suite via keyboard shortcut or header button:
 * **Instant Tool Switching**: Jump directly to Overview, AI Studio, Fonts, Icons, JWT Inspector, Chaos Data, or API Mocks.
