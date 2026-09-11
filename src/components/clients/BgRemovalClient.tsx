@@ -353,6 +353,31 @@ export function BgRemovalClient({ initialMode = 'bg-removal' }: BgRemovalClientP
     };
   }, []);
 
+  // Eagerly preload AI model weights + compile WASM during browser idle time
+  useEffect(() => {
+    const doPreload = async () => {
+      try {
+        const { preload } = await import('@imgly/background-removal');
+        await preload({
+          device: 'gpu',
+          proxyToWorker: true,
+          model: modelQuality,
+        });
+      } catch {
+        // Silent — preload is best-effort; processImage will retry anyway
+      }
+    };
+
+    if (typeof requestIdleCallback !== 'undefined') {
+      const id = requestIdleCallback(() => doPreload());
+      return () => cancelIdleCallback(id);
+    } else {
+      // Fallback: delay 2s so initial paint isn't blocked
+      const timer = setTimeout(doPreload, 2000);
+      return () => clearTimeout(timer);
+    }
+  }, [modelQuality]);
+
   // Main processing pipeline
   const processImage = useCallback(async (imageInput: string | Blob, fileName: string, fileSize: number) => {
     setIsProcessing(true);
@@ -367,6 +392,7 @@ export function BgRemovalClient({ initialMode = 'bg-removal' }: BgRemovalClientP
 
       const blobResult = await removeBackground(imageInput, {
         device: 'gpu',
+        proxyToWorker: true,
         model: modelQuality,
         output: {
           format: 'image/png',

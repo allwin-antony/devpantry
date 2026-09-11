@@ -23,7 +23,8 @@ A high-performance visual image suite running entirely inside the browser using 
 
 #### ✨ Free AI Background Remover (`/background-removal`)
 * **On-Demand Neural Inference**: Loads with **0ms latency** on upload. Neural model execution is deferred until the user clicks **`✨ Remove Background (AI)`**, preserving battery and GPU memory.
-* **Transformers.js / RMBG-1.4 Neural Engine**: Runs state-of-the-art background segmentation client-side in browser memory without sending a single byte to external servers.
+* **Hardware Acceleration & Dedicated Web Worker**: Utilizes `proxyToWorker` to offload neural segmentation entirely to a background thread, while automatically utilizing WebGPU hardware acceleration for blazing-fast inference without locking the main UI thread.
+* **Eager Idle Preloading**: The AI model weights and WASM compiler are silently pre-fetched during idle browser time so the segmentation engine is warm the moment a user acts.
 * **Studio Backdrops & Matting**:
   * Alpha transparency grid
   * Solid colors & modern gradient presets
