@@ -2387,7 +2387,7 @@ export function BgRemovalClient({ initialMode = 'bg-removal' }: BgRemovalClientP
 
         {/* Right Side: Comprehensive Studio Editor Panel */}
         {sourceImage && (
-          <aside className="w-full md:w-80 lg:w-96 bg-[var(--bg-panel)] border-t md:border-t-0 md:border-l border-[var(--border-dev)] flex flex-col shrink-0 overflow-hidden z-20 h-full max-h-full relative">
+          <aside className="w-full md:w-80 lg:w-96 bg-[var(--bg-panel)] border-t md:border-t-0 md:border-l border-[var(--border-dev)] flex flex-col shrink-0 overflow-hidden z-20 h-[45%] md:h-full relative">
             {/* Editor Sub-Navigation Tabs (Sticky within panel) */}
             <div className="flex border-b border-[var(--border-dev)] bg-[var(--bg-panel)] text-xs shrink-0 sticky top-0 z-20 shadow-xs">
               <button
