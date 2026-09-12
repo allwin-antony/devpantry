@@ -49,7 +49,6 @@ const SAMPLE_IMAGES: SampleImage[] = [
   { id: 'sample-portrait', name: 'Studio Portrait', category: 'People', url: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=800&q=80' },
   { id: 'sample-headphones', name: 'Headphones', category: 'Tech Gadget', url: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=800&q=80' },
   { id: 'sample-watch', name: 'Minimalist Watch', category: 'Luxury', url: 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=800&q=80' },
-  { id: 'sample-camera', name: 'Vintage Camera', category: 'Product', url: 'https://images.unsplash.com/photo-1516035069371-29a1b244cc32?auto=format&fit=crop&w=800&q=80' },
   { id: 'sample-car', name: 'Classic Car', category: 'Vehicle', url: 'https://images.unsplash.com/photo-1494976388531-d1058494cdd8?auto=format&fit=crop&w=800&q=80' },
   { id: 'sample-backpack', name: 'Yellow Backpack', category: 'Product', url: 'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?auto=format&fit=crop&w=800&q=80' },
   { id: 'sample-chair', name: 'Modern Chair', category: 'Furniture', url: 'https://images.unsplash.com/photo-1505843490538-5133c6c7d0e1?auto=format&fit=crop&w=800&q=80' },
@@ -57,7 +56,6 @@ const SAMPLE_IMAGES: SampleImage[] = [
   { id: 'sample-cat', name: 'Domestic Cat', category: 'Animals', url: 'https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?auto=format&fit=crop&w=800&q=80' },
   { id: 'sample-plant', name: 'Potted Plant', category: 'Botanical', url: 'https://images.unsplash.com/photo-1485955900006-10f4d324d411?auto=format&fit=crop&w=800&q=80' },
   { id: 'sample-drone', name: 'Drone', category: 'Tech Gadget', url: 'https://images.unsplash.com/photo-1507582020474-9a35b7d455d9?auto=format&fit=crop&w=800&q=80' },
-  { id: 'sample-toy', name: 'Action Figure', category: 'Collectibles', url: 'https://images.unsplash.com/photo-1558877385-81a1c7e67d72?auto=format&fit=crop&w=800&q=80' },
   { id: 'sample-portrait-2', name: 'Male Portrait', category: 'People', url: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=800&q=80' },
   { id: 'sample-bicycle', name: 'Vintage Bicycle', category: 'Vehicle', url: 'https://images.unsplash.com/photo-1485965120184-e220f721d03e?auto=format&fit=crop&w=800&q=80' },
   { id: 'sample-motorcycle', name: 'Custom Moto', category: 'Vehicle', url: 'https://images.unsplash.com/photo-1558981806-ec527fa84c39?auto=format&fit=crop&w=800&q=80' },
@@ -254,7 +252,7 @@ export function BgRemovalClient({ initialMode = 'bg-removal' }: BgRemovalClientP
   const [sourceImage, setSourceImage] = useState<string | null>(null);
   const [sourceBlob, setSourceBlob] = useState<Blob | null>(null);
   const [sourceFile, setSourceFile] = useState<{ name: string; size: number; width: number; height: number } | null>(null);
-  
+
   // Crop & Undo State
   const [originalSourceImage, setOriginalSourceImage] = useState<string | null>(null);
   const [originalSourceBlob, setOriginalSourceBlob] = useState<Blob | null>(null);
@@ -265,10 +263,10 @@ export function BgRemovalClient({ initialMode = 'bg-removal' }: BgRemovalClientP
   const imgRef = useRef<HTMLImageElement>(null);
 
   const [processedBlob, setProcessedBlob] = useState<Blob | null>(null);
-  
+
   // Random sample state
   const [displaySamples, setDisplaySamples] = useState<SampleImage[]>(() => SAMPLE_IMAGES.slice(0, 4));
-  
+
   useEffect(() => {
     shuffleSamples();
   }, []);
@@ -930,7 +928,7 @@ export function BgRemovalClient({ initialMode = 'bg-removal' }: BgRemovalClientP
 
   const handleApplyCrop = async () => {
     if (!completedCrop || !completedCrop.width || !completedCrop.height || !imgRef.current) return;
-    
+
     const scaleX = imgRef.current.naturalWidth / imgRef.current.width;
     const scaleY = imgRef.current.naturalHeight / imgRef.current.height;
 
@@ -955,17 +953,17 @@ export function BgRemovalClient({ initialMode = 'bg-removal' }: BgRemovalClientP
     const croppedBlob = await new Promise<Blob | null>(resolve => canvas.toBlob(resolve, 'image/png', 1));
     if (!croppedBlob) return;
     const croppedUrl = URL.createObjectURL(croppedBlob);
-    
+
     setSourceBlob(croppedBlob);
     setSourceImage(croppedUrl);
     setSourceFile(prev => prev ? { ...prev, width: canvas.width, height: canvas.height } : null);
-    
+
     setTargetWidth(canvas.width);
     setTargetHeight(canvas.height);
     setIsCropMode(false);
     setCrop(undefined);
     setCompletedCrop(undefined);
-    
+
     setProcessedBlob(null);
     if (resultImageUrl) URL.revokeObjectURL(resultImageUrl);
     setResultImageUrl(null);
@@ -981,7 +979,7 @@ export function BgRemovalClient({ initialMode = 'bg-removal' }: BgRemovalClientP
       setIsCropMode(false);
       setCrop(undefined);
       setCompletedCrop(undefined);
-      
+
       setProcessedBlob(null);
       if (resultImageUrl) URL.revokeObjectURL(resultImageUrl);
       setResultImageUrl(null);
@@ -1055,33 +1053,30 @@ export function BgRemovalClient({ initialMode = 'bg-removal' }: BgRemovalClientP
               <div className="w-full max-w-xl mb-4 flex items-center justify-center gap-1.5 p-1 rounded-xl bg-[var(--bg-panel)] border border-[var(--border-dev)] text-xs shadow-sm">
                 <Link
                   href="/background-remover"
-                  className={`flex-1 py-1.5 px-2 rounded-lg flex items-center justify-center gap-1.5 font-bold transition-all text-center ${
-                    initialMode === 'bg-removal'
+                  className={`flex-1 py-1.5 px-2 rounded-lg flex items-center justify-center gap-1.5 font-bold transition-all text-center ${initialMode === 'bg-removal'
                       ? 'bg-rose-500 text-white shadow-sm'
                       : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--pill-bg)]'
-                  }`}
+                    }`}
                 >
                   <Sparkles className="w-3.5 h-3.5 shrink-0" />
                   <span className="truncate">AI BG Removal</span>
                 </Link>
                 <Link
                   href="/image-resizer"
-                  className={`flex-1 py-1.5 px-2 rounded-lg flex items-center justify-center gap-1.5 font-bold transition-all text-center ${
-                    initialMode === 'resizer'
+                  className={`flex-1 py-1.5 px-2 rounded-lg flex items-center justify-center gap-1.5 font-bold transition-all text-center ${initialMode === 'resizer'
                       ? 'bg-rose-500 text-white shadow-sm'
                       : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--pill-bg)]'
-                  }`}
+                    }`}
                 >
                   <Maximize2 className="w-3.5 h-3.5 shrink-0" />
                   <span className="truncate">Resizer &amp; Artboard</span>
                 </Link>
                 <Link
                   href="/image-compressor"
-                  className={`flex-1 py-1.5 px-2 rounded-lg flex items-center justify-center gap-1.5 font-bold transition-all text-center ${
-                    initialMode === 'compressor'
+                  className={`flex-1 py-1.5 px-2 rounded-lg flex items-center justify-center gap-1.5 font-bold transition-all text-center ${initialMode === 'compressor'
                       ? 'bg-rose-500 text-white shadow-sm'
                       : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--pill-bg)]'
-                  }`}
+                    }`}
                 >
                   <HardDrive className="w-3.5 h-3.5 shrink-0" />
                   <span className="truncate">Compressor &amp; WebP</span>
@@ -1093,11 +1088,10 @@ export function BgRemovalClient({ initialMode = 'bg-removal' }: BgRemovalClientP
                 onDragLeave={onDragLeave}
                 onDrop={onDrop}
                 onClick={() => fileInputRef.current?.click()}
-                className={`w-full max-w-xl p-8 rounded-xl border-2 border-dashed transition-all flex flex-col items-center justify-center text-center cursor-pointer group ${
-                  isDragging
+                className={`w-full max-w-xl p-8 rounded-xl border-2 border-dashed transition-all flex flex-col items-center justify-center text-center cursor-pointer group ${isDragging
                     ? 'border-rose-500 bg-rose-500/5 scale-[1.01]'
                     : 'border-[var(--border-dev)] bg-[var(--bg-panel)] hover:border-rose-500/50 hover:bg-[var(--bg-panel-hover)]'
-                }`}
+                  }`}
               >
                 <input
                   ref={fileInputRef}
@@ -1122,8 +1116,8 @@ export function BgRemovalClient({ initialMode = 'bg-removal' }: BgRemovalClientP
                   {initialMode === 'resizer'
                     ? '100% Client-side. Resize, crop, pad, and scale unlimited images instantly with no signup and zero server uploads.'
                     : initialMode === 'compressor'
-                    ? '100% Client-side. Compress unlimited images under target budgets (<500 KB, <1 MB) with no signup and convert to WebP, PNG, or JPEG.'
-                    : '100% Client-Side Edge AI. Remove backgrounds from unlimited images with no signup, zero server uploads, and high-resolution cutouts.'}
+                      ? '100% Client-side. Compress unlimited images under target budgets (<500 KB, <1 MB) with no signup and convert to WebP, PNG, or JPEG.'
+                      : '100% Client-Side Edge AI. Remove backgrounds from unlimited images with no signup, zero server uploads, and high-resolution cutouts.'}
                 </p>
 
                 <div className="flex flex-wrap items-center justify-center gap-2 text-[10px] text-[var(--text-muted)] font-mono">
@@ -1145,7 +1139,7 @@ export function BgRemovalClient({ initialMode = 'bg-removal' }: BgRemovalClientP
                   </span>
                   <div className="flex items-center gap-2">
                     <span className="text-[10px] text-[var(--text-muted)] hidden sm:inline-block">Instant Studio Preview</span>
-                    <button 
+                    <button
                       onClick={shuffleSamples}
                       className="flex items-center gap-1 text-[10px] bg-[var(--bg-sidebar)] border border-[var(--border-dev)] text-[var(--text-primary)] hover:bg-[var(--bg-panel-hover)] transition-colors cursor-pointer px-2 py-1 rounded"
                       title="Load new random samples"
@@ -1197,9 +1191,8 @@ export function BgRemovalClient({ initialMode = 'bg-removal' }: BgRemovalClientP
                       setViewMode('slider');
                       setSliderPosition(50);
                     }}
-                    className={`px-2 py-0.5 rounded flex items-center gap-1 cursor-pointer transition-colors ${
-                      viewMode === 'slider' ? 'bg-rose-500 text-white font-bold' : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
-                    }`}
+                    className={`px-2 py-0.5 rounded flex items-center gap-1 cursor-pointer transition-colors ${viewMode === 'slider' ? 'bg-rose-500 text-white font-bold' : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
+                      }`}
                     title="Interactive Before/After Comparison Slider"
                   >
                     <Sliders className="w-3 h-3" />
@@ -1207,9 +1200,8 @@ export function BgRemovalClient({ initialMode = 'bg-removal' }: BgRemovalClientP
                   </button>
                   <button
                     onClick={() => setViewMode('split')}
-                    className={`px-2 py-0.5 rounded flex items-center gap-1 cursor-pointer transition-colors ${
-                      viewMode === 'split' ? 'bg-rose-500 text-white font-bold' : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
-                    }`}
+                    className={`px-2 py-0.5 rounded flex items-center gap-1 cursor-pointer transition-colors ${viewMode === 'split' ? 'bg-rose-500 text-white font-bold' : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
+                      }`}
                     title="Side-by-Side Comparison"
                   >
                     <Columns className="w-3 h-3" />
@@ -1217,9 +1209,8 @@ export function BgRemovalClient({ initialMode = 'bg-removal' }: BgRemovalClientP
                   </button>
                   <button
                     onClick={() => setViewMode('result')}
-                    className={`px-2 py-0.5 rounded flex items-center gap-1 cursor-pointer transition-colors ${
-                      viewMode === 'result' ? 'bg-rose-500 text-white font-bold' : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
-                    }`}
+                    className={`px-2 py-0.5 rounded flex items-center gap-1 cursor-pointer transition-colors ${viewMode === 'result' ? 'bg-rose-500 text-white font-bold' : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
+                      }`}
                     title={resultImageUrl ? "Cutout Result Only" : "Live Artboard Preview"}
                   >
                     <Eye className="w-3 h-3" />
@@ -1227,9 +1218,8 @@ export function BgRemovalClient({ initialMode = 'bg-removal' }: BgRemovalClientP
                   </button>
                   <button
                     onClick={() => setViewMode('original')}
-                    className={`px-2 py-0.5 rounded flex items-center gap-1 cursor-pointer transition-colors ${
-                      viewMode === 'original' ? 'bg-rose-500 text-white font-bold' : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
-                    }`}
+                    className={`px-2 py-0.5 rounded flex items-center gap-1 cursor-pointer transition-colors ${viewMode === 'original' ? 'bg-rose-500 text-white font-bold' : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
+                      }`}
                     title="Original Source Image"
                   >
                     <FileImage className="w-3 h-3" />
@@ -1242,11 +1232,10 @@ export function BgRemovalClient({ initialMode = 'bg-removal' }: BgRemovalClientP
                   <button
                     onClick={handleTriggerBgRemoval}
                     disabled={isProcessing}
-                    className={`px-2.5 py-1 text-[11px] rounded-md flex items-center gap-1.5 cursor-pointer font-bold transition-all ${
-                      resultImageUrl
+                    className={`px-2.5 py-1 text-[11px] rounded-md flex items-center gap-1.5 cursor-pointer font-bold transition-all ${resultImageUrl
                         ? 'bg-[var(--bg-sidebar)] border border-rose-500/40 text-rose-500 hover:bg-rose-500/10'
                         : 'bg-gradient-to-r from-rose-500 via-rose-600 to-amber-500 hover:from-rose-600 hover:to-amber-600 text-white shadow-sm shadow-rose-500/20'
-                    } disabled:opacity-50`}
+                      } disabled:opacity-50`}
                     title="Run Edge AI WebAssembly background removal"
                   >
                     <Sparkles className="w-3.5 h-3.5" />
@@ -1654,11 +1643,10 @@ export function BgRemovalClient({ initialMode = 'bg-removal' }: BgRemovalClientP
                   setActiveTab('matte');
                   setIsCropMode(false);
                 }}
-                className={`flex-1 py-2.5 px-3 flex items-center justify-center gap-1.5 font-bold transition-colors cursor-pointer ${
-                  activeTab === 'matte'
+                className={`flex-1 py-2.5 px-3 flex items-center justify-center gap-1.5 font-bold transition-colors cursor-pointer ${activeTab === 'matte'
                     ? 'border-b-2 border-rose-500 text-rose-500 bg-[var(--bg-panel)]'
                     : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
-                }`}
+                  }`}
               >
                 <Palette className="w-3.5 h-3.5" />
                 <span>Backdrop</span>
@@ -1669,11 +1657,10 @@ export function BgRemovalClient({ initialMode = 'bg-removal' }: BgRemovalClientP
                   // We don't necessarily need to cancel it if they click the same tab, but let's be safe
                   if (activeTab !== 'transform') setIsCropMode(false);
                 }}
-                className={`flex-1 py-2.5 px-3 flex items-center justify-center gap-1.5 font-bold transition-colors cursor-pointer ${
-                  activeTab === 'transform'
+                className={`flex-1 py-2.5 px-3 flex items-center justify-center gap-1.5 font-bold transition-colors cursor-pointer ${activeTab === 'transform'
                     ? 'border-b-2 border-rose-500 text-rose-500 bg-[var(--bg-panel)]'
                     : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
-                }`}
+                  }`}
               >
                 <Maximize2 className="w-3.5 h-3.5" />
                 <span>Size and Crop</span>
@@ -1683,11 +1670,10 @@ export function BgRemovalClient({ initialMode = 'bg-removal' }: BgRemovalClientP
                   setActiveTab('filters');
                   setIsCropMode(false);
                 }}
-                className={`flex-1 py-2.5 px-3 flex items-center justify-center gap-1.5 font-bold transition-colors cursor-pointer ${
-                  activeTab === 'filters'
+                className={`flex-1 py-2.5 px-3 flex items-center justify-center gap-1.5 font-bold transition-colors cursor-pointer ${activeTab === 'filters'
                     ? 'border-b-2 border-rose-500 text-rose-500 bg-[var(--bg-panel)]'
                     : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
-                }`}
+                  }`}
               >
                 <SlidersHorizontal className="w-3.5 h-3.5" />
                 <span>Effects</span>
@@ -1716,11 +1702,10 @@ export function BgRemovalClient({ initialMode = 'bg-removal' }: BgRemovalClientP
                         <button
                           onClick={() => setSelectedMatte('original')}
                           disabled={!resultImageUrl}
-                          className={`p-2 rounded-lg border text-left flex items-center gap-2 cursor-pointer transition-all ${
-                            selectedMatte === 'original'
+                          className={`p-2 rounded-lg border text-left flex items-center gap-2 cursor-pointer transition-all ${selectedMatte === 'original'
                               ? 'border-rose-500 bg-rose-500/10 text-rose-500 font-bold'
                               : 'border-[var(--border-dev)] bg-[var(--bg-sidebar)] text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
-                          }`}
+                            }`}
                         >
                           <FileImage className="w-4 h-4 text-amber-500 shrink-0" />
                           <div className="min-w-0">
@@ -1732,11 +1717,10 @@ export function BgRemovalClient({ initialMode = 'bg-removal' }: BgRemovalClientP
                         <button
                           onClick={() => setSelectedMatte('blurred-original')}
                           disabled={!resultImageUrl}
-                          className={`p-2 rounded-lg border text-left flex items-center gap-2 cursor-pointer transition-all ${
-                            selectedMatte === 'blurred-original'
+                          className={`p-2 rounded-lg border text-left flex items-center gap-2 cursor-pointer transition-all ${selectedMatte === 'blurred-original'
                               ? 'border-rose-500 bg-rose-500/10 text-rose-500 font-bold'
                               : 'border-[var(--border-dev)] bg-[var(--bg-sidebar)] text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
-                          }`}
+                            }`}
                         >
                           <Camera className="w-4 h-4 text-cyan-500 shrink-0" />
                           <div className="min-w-0">
@@ -1752,11 +1736,10 @@ export function BgRemovalClient({ initialMode = 'bg-removal' }: BgRemovalClientP
                             key={m.id}
                             onClick={() => setSelectedMatte(m.id)}
                             disabled={!resultImageUrl}
-                            className={`h-11 rounded-lg border relative flex flex-col items-center justify-center overflow-hidden transition-all cursor-pointer ${
-                              selectedMatte === m.id
+                            className={`h-11 rounded-lg border relative flex flex-col items-center justify-center overflow-hidden transition-all cursor-pointer ${selectedMatte === m.id
                                 ? 'border-rose-500 ring-2 ring-rose-500/30'
                                 : 'border-[var(--border-dev)] hover:border-[var(--text-muted)]'
-                            }`}
+                              }`}
                             title={m.name}
                           >
                             {m.type === 'transparent' ? (
@@ -1892,11 +1875,10 @@ export function BgRemovalClient({ initialMode = 'bg-removal' }: BgRemovalClientP
 
                       <button
                         onClick={() => setAspectRatioLocked(!aspectRatioLocked)}
-                        className={`text-[10px] px-2 py-0.5 rounded flex items-center gap-1 border cursor-pointer transition-colors ${
-                          aspectRatioLocked
+                        className={`text-[10px] px-2 py-0.5 rounded flex items-center gap-1 border cursor-pointer transition-colors ${aspectRatioLocked
                             ? 'bg-rose-500/10 border-rose-500/30 text-rose-500 font-bold'
                             : 'bg-[var(--bg-sidebar)] border-[var(--border-dev)] text-[var(--text-muted)]'
-                        }`}
+                          }`}
                         title={aspectRatioLocked ? 'Aspect Ratio Locked' : 'Aspect Ratio Free'}
                       >
                         {aspectRatioLocked ? <Lock className="w-2.5 h-2.5" /> : <Unlock className="w-2.5 h-2.5" />}
@@ -1948,11 +1930,10 @@ export function BgRemovalClient({ initialMode = 'bg-removal' }: BgRemovalClientP
                         <button
                           key={item.label}
                           onClick={() => handleScalePresetChange(item.val)}
-                          className={`py-1 rounded border text-[10px] font-mono transition-colors cursor-pointer ${
-                            scalePreset === item.val
+                          className={`py-1 rounded border text-[10px] font-mono transition-colors cursor-pointer ${scalePreset === item.val
                               ? 'bg-rose-500 text-white font-bold border-rose-500'
                               : 'bg-[var(--bg-sidebar)] border-[var(--border-dev)] text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
-                          }`}
+                            }`}
                         >
                           {item.label}
                         </button>
@@ -1976,11 +1957,10 @@ export function BgRemovalClient({ initialMode = 'bg-removal' }: BgRemovalClientP
                       </button>
                       <button
                         onClick={() => setFlipH(!flipH)}
-                        className={`py-1.5 px-2 rounded-lg border text-xs flex items-center justify-center gap-1.5 cursor-pointer ${
-                          flipH
+                        className={`py-1.5 px-2 rounded-lg border text-xs flex items-center justify-center gap-1.5 cursor-pointer ${flipH
                             ? 'bg-rose-500/10 border-rose-500 text-rose-500 font-bold'
                             : 'border-[var(--border-dev)] bg-[var(--bg-sidebar)] text-[var(--text-primary)]'
-                        }`}
+                          }`}
                         title="Flip Horizontal (Mirror)"
                       >
                         <FlipHorizontal className="w-3.5 h-3.5" />
@@ -1988,11 +1968,10 @@ export function BgRemovalClient({ initialMode = 'bg-removal' }: BgRemovalClientP
                       </button>
                       <button
                         onClick={() => setFlipV(!flipV)}
-                        className={`py-1.5 px-2 rounded-lg border text-xs flex items-center justify-center gap-1.5 cursor-pointer ${
-                          flipV
+                        className={`py-1.5 px-2 rounded-lg border text-xs flex items-center justify-center gap-1.5 cursor-pointer ${flipV
                             ? 'bg-rose-500/10 border-rose-500 text-rose-500 font-bold'
                             : 'border-[var(--border-dev)] bg-[var(--bg-sidebar)] text-[var(--text-primary)]'
-                        }`}
+                          }`}
                         title="Flip Vertical"
                       >
                         <FlipVertical className="w-3.5 h-3.5" />
@@ -2015,11 +1994,10 @@ export function BgRemovalClient({ initialMode = 'bg-removal' }: BgRemovalClientP
                       </span>
                       <button
                         onClick={() => setHasDropShadow(!hasDropShadow)}
-                        className={`text-[10px] px-2 py-0.5 rounded font-bold cursor-pointer transition-colors ${
-                          hasDropShadow
+                        className={`text-[10px] px-2 py-0.5 rounded font-bold cursor-pointer transition-colors ${hasDropShadow
                             ? 'bg-rose-500 text-white'
                             : 'bg-[var(--bg-panel)] text-[var(--text-muted)] border border-[var(--border-dev)]'
-                        }`}
+                          }`}
                       >
                         {hasDropShadow ? 'Enabled' : 'Disabled'}
                       </button>
@@ -2064,11 +2042,10 @@ export function BgRemovalClient({ initialMode = 'bg-removal' }: BgRemovalClientP
                               <button
                                 key={sc.label}
                                 onClick={() => setShadowColor(sc.value)}
-                                className={`py-1 px-2 rounded border text-left truncate cursor-pointer ${
-                                  shadowColor === sc.value
+                                className={`py-1 px-2 rounded border text-left truncate cursor-pointer ${shadowColor === sc.value
                                     ? 'border-rose-500 bg-rose-500/10 text-rose-500 font-bold'
                                     : 'border-[var(--border-dev)] bg-[var(--bg-panel)] text-[var(--text-secondary)]'
-                                }`}
+                                  }`}
                               >
                                 {sc.label}
                               </button>
@@ -2144,33 +2121,30 @@ export function BgRemovalClient({ initialMode = 'bg-removal' }: BgRemovalClientP
                 <div className="grid grid-cols-3 gap-2 text-xs">
                   <button
                     onClick={() => setExportFormat('image/png')}
-                    className={`py-2 px-2 rounded-lg border text-center transition-all cursor-pointer ${
-                      exportFormat === 'image/png'
+                    className={`py-2 px-2 rounded-lg border text-center transition-all cursor-pointer ${exportFormat === 'image/png'
                         ? 'bg-rose-500/10 border-rose-500 text-rose-500 font-bold'
                         : 'border-[var(--border-dev)] bg-[var(--bg-sidebar)] text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
-                    }`}
+                      }`}
                   >
                     PNG
                     <span className="block text-[8px] text-[var(--text-muted)] font-normal">Lossless Alpha</span>
                   </button>
                   <button
                     onClick={() => setExportFormat('image/webp')}
-                    className={`py-2 px-2 rounded-lg border text-center transition-all cursor-pointer ${
-                      exportFormat === 'image/webp'
+                    className={`py-2 px-2 rounded-lg border text-center transition-all cursor-pointer ${exportFormat === 'image/webp'
                         ? 'bg-rose-500/10 border-rose-500 text-rose-500 font-bold'
                         : 'border-[var(--border-dev)] bg-[var(--bg-sidebar)] text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
-                    }`}
+                      }`}
                   >
                     WebP
                     <span className="block text-[8px] text-[var(--text-muted)] font-normal">Ultra Compact</span>
                   </button>
                   <button
                     onClick={() => setExportFormat('image/jpeg')}
-                    className={`py-2 px-2 rounded-lg border text-center transition-all cursor-pointer ${
-                      exportFormat === 'image/jpeg'
+                    className={`py-2 px-2 rounded-lg border text-center transition-all cursor-pointer ${exportFormat === 'image/jpeg'
                         ? 'bg-rose-500/10 border-rose-500 text-rose-500 font-bold'
                         : 'border-[var(--border-dev)] bg-[var(--bg-sidebar)] text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
-                    }`}
+                      }`}
                   >
                     JPEG
                     <span className="block text-[8px] text-[var(--text-muted)] font-normal">Standard</span>
@@ -2197,11 +2171,10 @@ export function BgRemovalClient({ initialMode = 'bg-removal' }: BgRemovalClientP
                     <button
                       key={preset.id}
                       onClick={() => setTargetFileSize(preset.id)}
-                      className={`py-1.5 px-2 rounded-lg border text-left transition-all cursor-pointer ${
-                        targetFileSize === preset.id
+                      className={`py-1.5 px-2 rounded-lg border text-left transition-all cursor-pointer ${targetFileSize === preset.id
                           ? 'bg-rose-500/10 border-rose-500 text-rose-500 font-bold shadow-sm'
                           : 'border-[var(--border-dev)] bg-[var(--bg-sidebar)] text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
-                      }`}
+                        }`}
                     >
                       <span className="block text-[11px] font-bold truncate">{preset.label}</span>
                       <span className="block text-[8px] text-[var(--text-muted)] font-normal truncate">{preset.sub}</span>
@@ -2213,11 +2186,10 @@ export function BgRemovalClient({ initialMode = 'bg-removal' }: BgRemovalClientP
                 <div className="flex items-center gap-2">
                   <button
                     onClick={() => setTargetFileSize('custom')}
-                    className={`py-1 px-2.5 text-[10px] rounded border transition-colors cursor-pointer ${
-                      targetFileSize === 'custom'
+                    className={`py-1 px-2.5 text-[10px] rounded border transition-colors cursor-pointer ${targetFileSize === 'custom'
                         ? 'bg-rose-500 text-white font-bold border-rose-500'
                         : 'bg-[var(--bg-sidebar)] border-[var(--border-dev)] text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
-                    }`}
+                      }`}
                   >
                     Custom Size
                   </button>
@@ -2256,8 +2228,8 @@ export function BgRemovalClient({ initialMode = 'bg-removal' }: BgRemovalClientP
                     {isExporting
                       ? 'Compositing Output...'
                       : resultImageUrl
-                      ? 'Preview and Download Cutout'
-                      : 'Preview and Download Image'}
+                        ? 'Preview and Download Cutout'
+                        : 'Preview and Download Image'}
                   </span>
                 </button>
 
@@ -2381,11 +2353,10 @@ export function BgRemovalClient({ initialMode = 'bg-removal' }: BgRemovalClientP
                     key={fmt}
                     onClick={() => handleModalFormatChange(fmt)}
                     disabled={isExporting}
-                    className={`px-2 py-0.5 rounded text-[10px] font-bold border transition-colors cursor-pointer ${
-                      exportFormat === fmt
+                    className={`px-2 py-0.5 rounded text-[10px] font-bold border transition-colors cursor-pointer ${exportFormat === fmt
                         ? 'bg-rose-500 text-white border-rose-500'
                         : 'bg-[var(--bg-sidebar)] border-[var(--border-dev)] text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
-                    }`}
+                      }`}
                   >
                     {fmt.replace('image/', '').toUpperCase()}
                   </button>
@@ -2400,11 +2371,10 @@ export function BgRemovalClient({ initialMode = 'bg-removal' }: BgRemovalClientP
                     key={preset.id}
                     onClick={() => handleModalTargetSizeChange(preset.id)}
                     disabled={isExporting}
-                    className={`px-2 py-0.5 rounded text-[10px] font-bold border transition-colors cursor-pointer ${
-                      targetFileSize === preset.id
+                    className={`px-2 py-0.5 rounded text-[10px] font-bold border transition-colors cursor-pointer ${targetFileSize === preset.id
                         ? 'bg-rose-500 text-white border-rose-500'
                         : 'bg-[var(--bg-sidebar)] border-[var(--border-dev)] text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
-                    }`}
+                      }`}
                   >
                     {preset.label}
                   </button>
