@@ -2,6 +2,8 @@
 
 import React, { useState, useRef, useEffect, useCallback, useMemo } from 'react';
 import Link from 'next/link';
+import ReactCrop, { type Crop, type PixelCrop } from 'react-image-crop';
+import 'react-image-crop/dist/ReactCrop.css';
 import {
   Upload,
   Download,
@@ -43,30 +45,23 @@ interface SampleImage {
 }
 
 const SAMPLE_IMAGES: SampleImage[] = [
-  {
-    id: 'sample-sneaker',
-    name: 'Red Athletic Sneaker',
-    category: 'Product E-Commerce',
-    url: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=800&q=80',
-  },
-  {
-    id: 'sample-portrait',
-    name: 'Studio Portrait',
-    category: 'People and Fashion',
-    url: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=800&q=80',
-  },
-  {
-    id: 'sample-headphones',
-    name: 'Wireless Headphones',
-    category: 'Tech Gadget',
-    url: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=800&q=80',
-  },
-  {
-    id: 'sample-watch',
-    name: 'Minimalist Timepiece',
-    category: 'Luxury Product',
-    url: 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=800&q=80',
-  },
+  { id: 'sample-sneaker', name: 'Athletic Sneaker', category: 'Product', url: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=800&q=80' },
+  { id: 'sample-portrait', name: 'Studio Portrait', category: 'People', url: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=800&q=80' },
+  { id: 'sample-headphones', name: 'Headphones', category: 'Tech Gadget', url: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=800&q=80' },
+  { id: 'sample-watch', name: 'Minimalist Watch', category: 'Luxury', url: 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=800&q=80' },
+  { id: 'sample-camera', name: 'Vintage Camera', category: 'Product', url: 'https://images.unsplash.com/photo-1516035069371-29a1b244cc32?auto=format&fit=crop&w=800&q=80' },
+  { id: 'sample-car', name: 'Classic Car', category: 'Vehicle', url: 'https://images.unsplash.com/photo-1494976388531-d1058494cdd8?auto=format&fit=crop&w=800&q=80' },
+  { id: 'sample-backpack', name: 'Yellow Backpack', category: 'Product', url: 'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?auto=format&fit=crop&w=800&q=80' },
+  { id: 'sample-chair', name: 'Modern Chair', category: 'Furniture', url: 'https://images.unsplash.com/photo-1505843490538-5133c6c7d0e1?auto=format&fit=crop&w=800&q=80' },
+  { id: 'sample-puppy', name: 'Cute Puppy', category: 'Animals', url: 'https://images.unsplash.com/photo-1543466835-00a7907e9de1?auto=format&fit=crop&w=800&q=80' },
+  { id: 'sample-cat', name: 'Domestic Cat', category: 'Animals', url: 'https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?auto=format&fit=crop&w=800&q=80' },
+  { id: 'sample-plant', name: 'Potted Plant', category: 'Botanical', url: 'https://images.unsplash.com/photo-1485955900006-10f4d324d411?auto=format&fit=crop&w=800&q=80' },
+  { id: 'sample-drone', name: 'Drone', category: 'Tech Gadget', url: 'https://images.unsplash.com/photo-1507582020474-9a35b7d455d9?auto=format&fit=crop&w=800&q=80' },
+  { id: 'sample-toy', name: 'Action Figure', category: 'Collectibles', url: 'https://images.unsplash.com/photo-1558877385-81a1c7e67d72?auto=format&fit=crop&w=800&q=80' },
+  { id: 'sample-portrait-2', name: 'Male Portrait', category: 'People', url: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=800&q=80' },
+  { id: 'sample-bicycle', name: 'Vintage Bicycle', category: 'Vehicle', url: 'https://images.unsplash.com/photo-1485965120184-e220f721d03e?auto=format&fit=crop&w=800&q=80' },
+  { id: 'sample-motorcycle', name: 'Custom Moto', category: 'Vehicle', url: 'https://images.unsplash.com/photo-1558981806-ec527fa84c39?auto=format&fit=crop&w=800&q=80' },
+  { id: 'sample-statue', name: 'Classical Statue', category: 'Art & Sculpture', url: 'https://images.unsplash.com/photo-1541336032412-2048a678540d?auto=format&fit=crop&w=800&q=80' }
 ];
 
 type ModelQuality = 'isnet_fp16' | 'isnet' | 'isnet_quint8';
@@ -259,7 +254,30 @@ export function BgRemovalClient({ initialMode = 'bg-removal' }: BgRemovalClientP
   const [sourceImage, setSourceImage] = useState<string | null>(null);
   const [sourceBlob, setSourceBlob] = useState<Blob | null>(null);
   const [sourceFile, setSourceFile] = useState<{ name: string; size: number; width: number; height: number } | null>(null);
+  
+  // Crop & Undo State
+  const [originalSourceImage, setOriginalSourceImage] = useState<string | null>(null);
+  const [originalSourceBlob, setOriginalSourceBlob] = useState<Blob | null>(null);
+  const [originalSourceFile, setOriginalSourceFile] = useState<{ name: string; size: number; width: number; height: number } | null>(null);
+  const [isCropMode, setIsCropMode] = useState<boolean>(false);
+  const [crop, setCrop] = useState<Crop>();
+  const [completedCrop, setCompletedCrop] = useState<PixelCrop>();
+  const imgRef = useRef<HTMLImageElement>(null);
+
   const [processedBlob, setProcessedBlob] = useState<Blob | null>(null);
+  
+  // Random sample state
+  const [displaySamples, setDisplaySamples] = useState<SampleImage[]>(() => SAMPLE_IMAGES.slice(0, 4));
+  
+  useEffect(() => {
+    shuffleSamples();
+  }, []);
+
+  const shuffleSamples = () => {
+    const shuffled = [...SAMPLE_IMAGES].sort(() => 0.5 - Math.random());
+    setDisplaySamples(shuffled.slice(0, 4));
+  };
+
   const [resultImageUrl, setResultImageUrl] = useState<string | null>(null);
 
   // Processing state
@@ -458,13 +476,17 @@ export function BgRemovalClient({ initialMode = 'bg-removal' }: BgRemovalClientP
       const dataUrl = e.target?.result as string;
       setSourceImage(dataUrl);
       setSourceBlob(file);
+      setOriginalSourceImage(dataUrl);
+      setOriginalSourceBlob(file);
 
       // Immediately measure true natural dimensions of the image
       const img = new Image();
       img.onload = () => {
         const w = img.naturalWidth || 800;
         const h = img.naturalHeight || 800;
-        setSourceFile({ name: file.name, size: file.size, width: w, height: h });
+        const fileInfo = { name: file.name, size: file.size, width: w, height: h };
+        setSourceFile(fileInfo);
+        setOriginalSourceFile(fileInfo);
         setTargetWidth(w);
         setTargetHeight(h);
         setScalePreset(1);
@@ -491,6 +513,7 @@ export function BgRemovalClient({ initialMode = 'bg-removal' }: BgRemovalClientP
   const handleSelectSample = async (sample: SampleImage) => {
     setErrorMessage(null);
     setSourceImage(sample.url);
+    setOriginalSourceImage(sample.url);
     setProcessedBlob(null);
     if (resultImageUrl) URL.revokeObjectURL(resultImageUrl);
     setResultImageUrl(null);
@@ -504,7 +527,9 @@ export function BgRemovalClient({ initialMode = 'bg-removal' }: BgRemovalClientP
     sampleImg.onload = () => {
       const w = sampleImg.naturalWidth || 800;
       const h = sampleImg.naturalHeight || 800;
-      setSourceFile({ name: `${sample.id}.jpg`, size: 280000, width: w, height: h });
+      const fileInfo = { name: `${sample.id}.jpg`, size: 280000, width: w, height: h };
+      setSourceFile(fileInfo);
+      setOriginalSourceFile(fileInfo);
       setTargetWidth(w);
       setTargetHeight(h);
       setScalePreset(1);
@@ -525,6 +550,7 @@ export function BgRemovalClient({ initialMode = 'bg-removal' }: BgRemovalClientP
       const res = await fetch(sample.url);
       const blob = await res.blob();
       setSourceBlob(blob);
+      setOriginalSourceBlob(blob);
       setProgressPercent(100);
     } catch (err) {
       console.warn('Sample fetch failed:', err);
@@ -879,6 +905,12 @@ export function BgRemovalClient({ initialMode = 'bg-removal' }: BgRemovalClientP
     setSourceImage(null);
     setSourceBlob(null);
     setSourceFile(null);
+    setOriginalSourceImage(null);
+    setOriginalSourceBlob(null);
+    setOriginalSourceFile(null);
+    setIsCropMode(false);
+    setCrop(undefined);
+    setCompletedCrop(undefined);
     setProcessedBlob(null);
     if (resultImageUrl) URL.revokeObjectURL(resultImageUrl);
     setResultImageUrl(null);
@@ -895,6 +927,66 @@ export function BgRemovalClient({ initialMode = 'bg-removal' }: BgRemovalClientP
   };
 
   const activeMatteObj = MATTE_OPTIONS.find(m => m.id === selectedMatte);
+
+  const handleApplyCrop = async () => {
+    if (!completedCrop || !completedCrop.width || !completedCrop.height || !imgRef.current) return;
+    
+    const scaleX = imgRef.current.naturalWidth / imgRef.current.width;
+    const scaleY = imgRef.current.naturalHeight / imgRef.current.height;
+
+    const canvas = document.createElement('canvas');
+    canvas.width = Math.round(completedCrop.width * scaleX);
+    canvas.height = Math.round(completedCrop.height * scaleY);
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    ctx.drawImage(
+      imgRef.current,
+      completedCrop.x * scaleX,
+      completedCrop.y * scaleY,
+      completedCrop.width * scaleX,
+      completedCrop.height * scaleY,
+      0,
+      0,
+      canvas.width,
+      canvas.height
+    );
+
+    const croppedBlob = await new Promise<Blob | null>(resolve => canvas.toBlob(resolve, 'image/png', 1));
+    if (!croppedBlob) return;
+    const croppedUrl = URL.createObjectURL(croppedBlob);
+    
+    setSourceBlob(croppedBlob);
+    setSourceImage(croppedUrl);
+    setSourceFile(prev => prev ? { ...prev, width: canvas.width, height: canvas.height } : null);
+    
+    setTargetWidth(canvas.width);
+    setTargetHeight(canvas.height);
+    setIsCropMode(false);
+    setCrop(undefined);
+    setCompletedCrop(undefined);
+    
+    setProcessedBlob(null);
+    if (resultImageUrl) URL.revokeObjectURL(resultImageUrl);
+    setResultImageUrl(null);
+  };
+
+  const handleUndoCrop = () => {
+    if (originalSourceImage && originalSourceBlob && originalSourceFile) {
+      setSourceImage(originalSourceImage);
+      setSourceBlob(originalSourceBlob);
+      setSourceFile(originalSourceFile);
+      setTargetWidth(originalSourceFile.width);
+      setTargetHeight(originalSourceFile.height);
+      setIsCropMode(false);
+      setCrop(undefined);
+      setCompletedCrop(undefined);
+      
+      setProcessedBlob(null);
+      if (resultImageUrl) URL.revokeObjectURL(resultImageUrl);
+      setResultImageUrl(null);
+    }
+  };
 
   // Computed Aspect Ratio for the live workspace artboard with safe bounds
   const targetAspect = useMemo(() => {
@@ -1051,11 +1143,21 @@ export function BgRemovalClient({ initialMode = 'bg-removal' }: BgRemovalClientP
                     <Zap className="w-3.5 h-3.5 text-amber-500" />
                     Or test with developer sample assets
                   </span>
-                  <span className="text-[10px] text-[var(--text-muted)]">Instant Studio Preview</span>
+                  <div className="flex items-center gap-2">
+                    <span className="text-[10px] text-[var(--text-muted)] hidden sm:inline-block">Instant Studio Preview</span>
+                    <button 
+                      onClick={shuffleSamples}
+                      className="flex items-center gap-1 text-[10px] bg-[var(--bg-sidebar)] border border-[var(--border-dev)] text-[var(--text-primary)] hover:bg-[var(--bg-panel-hover)] transition-colors cursor-pointer px-2 py-1 rounded"
+                      title="Load new random samples"
+                    >
+                      <RefreshCw className="w-3 h-3" />
+                      Shuffle
+                    </button>
+                  </div>
                 </div>
 
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-                  {SAMPLE_IMAGES.map((sample) => (
+                  {displaySamples.map((sample) => (
                     <button
                       key={sample.id}
                       onClick={() => handleSelectSample(sample)}
@@ -1228,9 +1330,30 @@ export function BgRemovalClient({ initialMode = 'bg-removal' }: BgRemovalClientP
                     </div>
                   </div>
                 )}
+                {/* View Mode 0: Interactive Crop Mode */}
+                {isCropMode && sourceImage && (
+                  <div className="max-w-4xl max-h-[min(74vh,calc(100%-2.5rem))] flex items-center justify-center rounded-lg border border-[var(--border-dev)] bg-[var(--bg-sidebar)] overflow-hidden shadow-lg p-4 -translate-y-4 sm:-translate-y-5">
+                    <ReactCrop
+                      crop={crop}
+                      onChange={(_, percentCrop) => setCrop(percentCrop)}
+                      onComplete={(c) => setCompletedCrop(c)}
+                      className="flex items-center justify-center"
+                    >
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img
+                        ref={imgRef}
+                        src={sourceImage}
+                        alt="Crop source"
+                        crossOrigin="anonymous"
+                        className="object-contain select-none pointer-events-auto block rounded"
+                        style={{ maxWidth: '100%', maxHeight: '62vh' }}
+                      />
+                    </ReactCrop>
+                  </div>
+                )}
 
                 {/* View Mode 1: Pixel-Perfect Interactive Slider with Live Aspect Ratio */}
-                {viewMode === 'slider' && (
+                {!isCropMode && viewMode === 'slider' && (
                   <div
                     ref={sliderContainerRef}
                     onMouseDown={(e) => {
@@ -1264,7 +1387,7 @@ export function BgRemovalClient({ initialMode = 'bg-removal' }: BgRemovalClientP
                         <img
                           src={sourceImage}
                           alt="Original Background Backdrop"
-                          className="absolute inset-0 w-full h-full object-cover pointer-events-none"
+                          className="absolute inset-0 w-full h-full object-contain pointer-events-none"
                         />
                       )}
                       {activeMatteObj?.type === 'blurred-original' && sourceImage && (
@@ -1273,7 +1396,7 @@ export function BgRemovalClient({ initialMode = 'bg-removal' }: BgRemovalClientP
                           <img
                             src={sourceImage}
                             alt="Blurred Portrait Backdrop"
-                            className="absolute inset-0 w-full h-full object-cover filter blur-md scale-105 pointer-events-none"
+                            className="absolute inset-0 w-full h-full object-contain filter blur-md scale-105 pointer-events-none"
                           />
                         </div>
                       )}
@@ -1364,7 +1487,7 @@ export function BgRemovalClient({ initialMode = 'bg-removal' }: BgRemovalClientP
                 )}
 
                 {/* View Mode 2: Side-by-Side */}
-                {viewMode === 'split' && (
+                {!isCropMode && viewMode === 'split' && (
                   <div className="w-full h-full max-w-5xl grid grid-cols-1 md:grid-cols-2 gap-4 items-center justify-center overflow-hidden -translate-y-4 sm:-translate-y-5">
                     {/* Original card */}
                     <div className="flex-1 h-full max-h-[min(72vh,calc(100%-2.5rem))] flex flex-col rounded-lg border border-[var(--border-dev)] bg-[var(--bg-panel)] overflow-hidden">
@@ -1421,7 +1544,7 @@ export function BgRemovalClient({ initialMode = 'bg-removal' }: BgRemovalClientP
                               <img
                                 src={sourceImage}
                                 alt="Original Background Backdrop"
-                                className="absolute inset-0 w-full h-full object-cover pointer-events-none"
+                                className="absolute inset-0 w-full h-full object-contain pointer-events-none"
                               />
                             )}
                             {activeMatteObj?.type === 'blurred-original' && sourceImage && (
@@ -1430,7 +1553,7 @@ export function BgRemovalClient({ initialMode = 'bg-removal' }: BgRemovalClientP
                                 <img
                                   src={sourceImage}
                                   alt="Blurred Portrait Backdrop"
-                                  className="absolute inset-0 w-full h-full object-cover filter blur-md scale-105 pointer-events-none"
+                                  className="absolute inset-0 w-full h-full object-contain filter blur-md scale-105 pointer-events-none"
                                 />
                               </div>
                             )}
@@ -1452,7 +1575,7 @@ export function BgRemovalClient({ initialMode = 'bg-removal' }: BgRemovalClientP
                 )}
 
                 {/* View Mode 3: Result Only */}
-                {viewMode === 'result' && (
+                {!isCropMode && viewMode === 'result' && (
                   <div
                     className="relative rounded-lg border-2 border-[var(--border-dev)] overflow-hidden shadow-2xl flex items-center justify-center transition-all duration-150 -translate-y-4 sm:-translate-y-5"
                     style={{
@@ -1483,7 +1606,7 @@ export function BgRemovalClient({ initialMode = 'bg-removal' }: BgRemovalClientP
                           <img
                             src={sourceImage}
                             alt="Blurred Portrait Backdrop"
-                            className="absolute inset-0 w-full h-full object-cover filter blur-md scale-105 pointer-events-none"
+                            className="absolute inset-0 w-full h-full object-contain filter blur-md scale-105 pointer-events-none"
                           />
                         </div>
                       )}
@@ -1506,7 +1629,7 @@ export function BgRemovalClient({ initialMode = 'bg-removal' }: BgRemovalClientP
                 )}
 
                 {/* View Mode 4: Original Only */}
-                {viewMode === 'original' && (
+                {!isCropMode && viewMode === 'original' && (
                   <div className="w-full h-full max-w-4xl max-h-[min(74vh,calc(100%-2.5rem))] flex items-center justify-center rounded-lg border border-[var(--border-dev)] bg-[var(--bg-sidebar)] overflow-hidden shadow-lg p-4 -translate-y-4 sm:-translate-y-5">
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
@@ -1527,7 +1650,10 @@ export function BgRemovalClient({ initialMode = 'bg-removal' }: BgRemovalClientP
             {/* Editor Sub-Navigation Tabs (Sticky within panel) */}
             <div className="flex border-b border-[var(--border-dev)] bg-[var(--bg-panel)] text-xs shrink-0 sticky top-0 z-20 shadow-xs">
               <button
-                onClick={() => setActiveTab('matte')}
+                onClick={() => {
+                  setActiveTab('matte');
+                  setIsCropMode(false);
+                }}
                 className={`flex-1 py-2.5 px-3 flex items-center justify-center gap-1.5 font-bold transition-colors cursor-pointer ${
                   activeTab === 'matte'
                     ? 'border-b-2 border-rose-500 text-rose-500 bg-[var(--bg-panel)]'
@@ -1538,7 +1664,11 @@ export function BgRemovalClient({ initialMode = 'bg-removal' }: BgRemovalClientP
                 <span>Backdrop</span>
               </button>
               <button
-                onClick={() => setActiveTab('transform')}
+                onClick={() => {
+                  setActiveTab('transform');
+                  // We don't necessarily need to cancel it if they click the same tab, but let's be safe
+                  if (activeTab !== 'transform') setIsCropMode(false);
+                }}
                 className={`flex-1 py-2.5 px-3 flex items-center justify-center gap-1.5 font-bold transition-colors cursor-pointer ${
                   activeTab === 'transform'
                     ? 'border-b-2 border-rose-500 text-rose-500 bg-[var(--bg-panel)]'
@@ -1549,7 +1679,10 @@ export function BgRemovalClient({ initialMode = 'bg-removal' }: BgRemovalClientP
                 <span>Size and Crop</span>
               </button>
               <button
-                onClick={() => setActiveTab('filters')}
+                onClick={() => {
+                  setActiveTab('filters');
+                  setIsCropMode(false);
+                }}
                 className={`flex-1 py-2.5 px-3 flex items-center justify-center gap-1.5 font-bold transition-colors cursor-pointer ${
                   activeTab === 'filters'
                     ? 'border-b-2 border-rose-500 text-rose-500 bg-[var(--bg-panel)]'
@@ -1694,6 +1827,48 @@ export function BgRemovalClient({ initialMode = 'bg-removal' }: BgRemovalClientP
               {/* TAB 2: RESOLUTION, SCALE AND TRANSFORM */}
               {activeTab === 'transform' && (
                 <div className="space-y-5">
+                  {/* Cropping Tool */}
+                  <div className="p-3 rounded-lg bg-[var(--bg-sidebar)] border border-rose-500/30 shadow-sm space-y-3">
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs font-bold text-[var(--text-primary)] flex items-center gap-1.5">
+                        <Maximize2 className="w-3.5 h-3.5 text-rose-500" />
+                        Interactive Image Cropper
+                      </span>
+                      {originalSourceImage !== sourceImage && (
+                        <button
+                          onClick={handleUndoCrop}
+                          className="text-[10px] px-2 py-0.5 rounded border border-[var(--border-dev)] hover:bg-[var(--pill-bg)] transition-colors cursor-pointer"
+                        >
+                          Undo Crop
+                        </button>
+                      )}
+                    </div>
+                    {isCropMode ? (
+                      <div className="flex gap-2">
+                        <button
+                          onClick={handleApplyCrop}
+                          disabled={!completedCrop?.width || !completedCrop?.height}
+                          className="flex-1 py-1.5 text-xs font-bold bg-rose-500 hover:bg-rose-600 text-white rounded cursor-pointer transition-colors disabled:opacity-50"
+                        >
+                          Apply Crop
+                        </button>
+                        <button
+                          onClick={() => setIsCropMode(false)}
+                          className="flex-1 py-1.5 text-xs font-bold border border-[var(--border-dev)] text-[var(--text-primary)] hover:bg-[var(--pill-bg)] rounded cursor-pointer transition-colors"
+                        >
+                          Cancel
+                        </button>
+                      </div>
+                    ) : (
+                      <button
+                        onClick={() => setIsCropMode(true)}
+                        className="w-full py-1.5 text-xs font-bold border border-rose-500/50 text-rose-500 hover:bg-rose-500/10 rounded cursor-pointer transition-colors"
+                      >
+                        Enter Crop Mode
+                      </button>
+                    )}
+                  </div>
+
                   {/* Resolution Input */}
                   <div>
                     <div className="flex justify-between items-center mb-2">
