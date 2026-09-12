@@ -8,7 +8,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "oxlint"
+    "lint": "oxlint",
+    "postinstall": "node scripts/fetch-imgly-models.mjs"
   },
   "dependencies": {
     "@imgly/background-removal": "^1.7.0",

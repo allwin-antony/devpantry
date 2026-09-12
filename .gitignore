@@ -41,3 +41,4 @@ graphify-out/
 # Cloudflare Wrangler
 .wrangler/
 .dev.vars
+public/assets/
