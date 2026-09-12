@@ -40,11 +40,11 @@ export function HomeClient() {
 
   const heroFonts = [
     { name: 'Inter', slug: 'inter', category: 'Sans Serif', cdn: 'https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap' },
-    { name: 'Satoshi', slug: 'satoshi', category: 'Sans Serif', cdn: 'https://api.fontshare.com/v2/css?f[]=satoshi@400,700&display=swap' },
+    { name: 'Playfair Display', slug: 'playfair-display', category: 'Serif', cdn: 'https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&display=swap' },
     { name: 'JetBrains Mono', slug: 'jetbrains-mono', category: 'Monospace', cdn: 'https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap' },
     { name: 'Clash Display', slug: 'clash-display', category: 'Display', cdn: 'https://api.fontshare.com/v2/css?f[]=clash-display@600,700&display=swap' },
-    { name: 'Fira Code', slug: 'fira-code', category: 'Monospace', cdn: 'https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;700&display=swap' },
-    { name: 'Cabinet Grotesk', slug: 'cabinet-grotesk', category: 'Display', cdn: 'https://api.fontshare.com/v2/css?f[]=cabinet-grotesk@700,800&display=swap' }
+    { name: 'Syne', slug: 'syne', category: 'Display', cdn: 'https://fonts.googleapis.com/css2?family=Syne:wght@400;700&display=swap' },
+    { name: 'Orbitron', slug: 'orbitron', category: 'Display', cdn: 'https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap' }
   ];
 
   useEffect(() => {
@@ -384,7 +384,7 @@ export function HomeClient() {
                       style={{ fontFamily: `'${f.name}', sans-serif` }}
                       className="text-3xl text-[var(--text-primary)] truncate font-semibold leading-snug min-h-[40px]"
                     >
-                      {fontSampleText ? fontSampleText.slice(0, 3) : 'Aa'}
+                      {fontSampleText || 'Aa'}
                     </div>
                     <div className="mt-4 pt-2 border-t border-[var(--border-dev-subtle)] flex items-center justify-between text-[10px]">
                       <button

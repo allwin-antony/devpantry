@@ -2,6 +2,8 @@
 
 import React, { useState, useRef, useEffect, useCallback, useMemo } from 'react';
 import Link from 'next/link';
+import ReactCrop, { type Crop, type PixelCrop } from 'react-image-crop';
+import 'react-image-crop/dist/ReactCrop.css';
 import {
   Upload,
   Download,
@@ -32,8 +34,30 @@ import {
   Camera,
   CheckCircle2,
   HardDrive,
-  ArrowRight
+  ArrowRight,
+  Pipette,
+  ImagePlus,
+  Crosshair,
+  MoveHorizontal
 } from 'lucide-react';
+
+interface MattePreset {
+  id: string;
+  name: string;
+  color: string; // CSS color or gradient
+  icon?: React.ReactNode;
+}
+
+interface Point {
+  x: number;
+  y: number;
+}
+
+interface BrushPath {
+  type: 'restore' | 'erase';
+  size: number;
+  points: Point[];
+}
 
 interface SampleImage {
   id: string;
@@ -43,30 +67,21 @@ interface SampleImage {
 }
 
 const SAMPLE_IMAGES: SampleImage[] = [
-  {
-    id: 'sample-sneaker',
-    name: 'Red Athletic Sneaker',
-    category: 'Product E-Commerce',
-    url: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=800&q=80',
-  },
-  {
-    id: 'sample-portrait',
-    name: 'Studio Portrait',
-    category: 'People and Fashion',
-    url: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=800&q=80',
-  },
-  {
-    id: 'sample-headphones',
-    name: 'Wireless Headphones',
-    category: 'Tech Gadget',
-    url: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=800&q=80',
-  },
-  {
-    id: 'sample-watch',
-    name: 'Minimalist Timepiece',
-    category: 'Luxury Product',
-    url: 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=800&q=80',
-  },
+  { id: 'sample-sneaker', name: 'Athletic Sneaker', category: 'Product', url: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=800&q=80' },
+  { id: 'sample-portrait', name: 'Studio Portrait', category: 'People', url: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=800&q=80' },
+  { id: 'sample-headphones', name: 'Headphones', category: 'Tech Gadget', url: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=800&q=80' },
+  { id: 'sample-watch', name: 'Minimalist Watch', category: 'Luxury', url: 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=800&q=80' },
+  { id: 'sample-car', name: 'Classic Car', category: 'Vehicle', url: 'https://images.unsplash.com/photo-1494976388531-d1058494cdd8?auto=format&fit=crop&w=800&q=80' },
+  { id: 'sample-backpack', name: 'Yellow Backpack', category: 'Product', url: 'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?auto=format&fit=crop&w=800&q=80' },
+  { id: 'sample-chair', name: 'Modern Chair', category: 'Furniture', url: 'https://images.unsplash.com/photo-1505843490538-5133c6c7d0e1?auto=format&fit=crop&w=800&q=80' },
+  { id: 'sample-puppy', name: 'Cute Puppy', category: 'Animals', url: 'https://images.unsplash.com/photo-1543466835-00a7907e9de1?auto=format&fit=crop&w=800&q=80' },
+  { id: 'sample-cat', name: 'Domestic Cat', category: 'Animals', url: 'https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?auto=format&fit=crop&w=800&q=80' },
+  { id: 'sample-plant', name: 'Potted Plant', category: 'Botanical', url: 'https://images.unsplash.com/photo-1485955900006-10f4d324d411?auto=format&fit=crop&w=800&q=80' },
+  { id: 'sample-drone', name: 'Drone', category: 'Tech Gadget', url: 'https://images.unsplash.com/photo-1507582020474-9a35b7d455d9?auto=format&fit=crop&w=800&q=80' },
+  { id: 'sample-portrait-2', name: 'Male Portrait', category: 'People', url: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=800&q=80' },
+  { id: 'sample-bicycle', name: 'Vintage Bicycle', category: 'Vehicle', url: 'https://images.unsplash.com/photo-1485965120184-e220f721d03e?auto=format&fit=crop&w=800&q=80' },
+  { id: 'sample-motorcycle', name: 'Custom Moto', category: 'Vehicle', url: 'https://images.unsplash.com/photo-1558981806-ec527fa84c39?auto=format&fit=crop&w=800&q=80' },
+  { id: 'sample-statue', name: 'Classical Statue', category: 'Art & Sculpture', url: 'https://images.unsplash.com/photo-1541336032412-2048a678540d?auto=format&fit=crop&w=800&q=80' }
 ];
 
 type ModelQuality = 'isnet_fp16' | 'isnet' | 'isnet_quint8';
@@ -74,10 +89,12 @@ type ExportFormat = 'image/png' | 'image/webp' | 'image/jpeg';
 type ViewMode = 'slider' | 'split' | 'result' | 'original';
 type StudioTab = 'matte' | 'transform' | 'filters';
 
+type OutputType = 'foreground' | 'mask';
+
 interface MatteOption {
   id: string;
   name: string;
-  type: 'transparent' | 'original' | 'blurred-original' | 'color' | 'gradient';
+  type: 'transparent' | 'original' | 'blurred-original' | 'color' | 'gradient' | 'custom-image';
   value: string;
 }
 
@@ -92,6 +109,10 @@ const MATTE_OPTIONS: MatteOption[] = [
   { id: 'emerald', name: 'Emerald Mint', type: 'color', value: '#10b981' },
   { id: 'gradient-sunset', name: 'Sunset Glow', type: 'gradient', value: 'linear-gradient(135deg, #f43f5e, #f59e0b)' },
   { id: 'gradient-cyber', name: 'Cyber Neon', type: 'gradient', value: 'linear-gradient(135deg, #06b6d4, #8b5cf6)' },
+  { id: 'gradient-ocean', name: 'Ocean Breeze', type: 'gradient', value: 'linear-gradient(135deg, #667eea, #764ba2)' },
+  { id: 'gradient-forest', name: 'Forest Green', type: 'gradient', value: 'linear-gradient(135deg, #11998e, #38ef7d)' },
+  { id: 'gradient-midnight', name: 'Midnight Purple', type: 'gradient', value: 'linear-gradient(135deg, #2b5876, #4e4376)' },
+  { id: 'gradient-peach', name: 'Warm Peach', type: 'gradient', value: 'linear-gradient(135deg, #ffecd2, #fcb69f)' },
 ];
 
 const SHADOW_COLORS = [
@@ -259,7 +280,30 @@ export function BgRemovalClient({ initialMode = 'bg-removal' }: BgRemovalClientP
   const [sourceImage, setSourceImage] = useState<string | null>(null);
   const [sourceBlob, setSourceBlob] = useState<Blob | null>(null);
   const [sourceFile, setSourceFile] = useState<{ name: string; size: number; width: number; height: number } | null>(null);
+
+  // Crop & Undo State
+  const [originalSourceImage, setOriginalSourceImage] = useState<string | null>(null);
+  const [originalSourceBlob, setOriginalSourceBlob] = useState<Blob | null>(null);
+  const [originalSourceFile, setOriginalSourceFile] = useState<{ name: string; size: number; width: number; height: number } | null>(null);
+  const [isCropMode, setIsCropMode] = useState<boolean>(false);
+  const [crop, setCrop] = useState<Crop>();
+  const [completedCrop, setCompletedCrop] = useState<PixelCrop>();
+  const imgRef = useRef<HTMLImageElement>(null);
+
   const [processedBlob, setProcessedBlob] = useState<Blob | null>(null);
+
+  // Random sample state
+  const [displaySamples, setDisplaySamples] = useState<SampleImage[]>(() => SAMPLE_IMAGES.slice(0, 4));
+
+  useEffect(() => {
+    shuffleSamples();
+  }, []);
+
+  const shuffleSamples = () => {
+    const shuffled = [...SAMPLE_IMAGES].sort(() => 0.5 - Math.random());
+    setDisplaySamples(shuffled.slice(0, 4));
+  };
+
   const [resultImageUrl, setResultImageUrl] = useState<string | null>(null);
 
   // Processing state
@@ -271,8 +315,12 @@ export function BgRemovalClient({ initialMode = 'bg-removal' }: BgRemovalClientP
 
   // Model and Engine Configuration
   const [modelQuality, setModelQuality] = useState<ModelQuality>('isnet_fp16');
+  const [outputType, setOutputType] = useState<OutputType>('foreground');
   const [exportFormat, setExportFormat] = useState<ExportFormat>('image/png');
   const [selectedMatte, setSelectedMatte] = useState<string>('transparent');
+  const [customColor, setCustomColor] = useState<string>('#3b82f6');
+  const [customBgImage, setCustomBgImage] = useState<Blob | null>(null);
+  const [customBgImageUrl, setCustomBgImageUrl] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<StudioTab>(
     initialMode === 'resizer' || initialMode === 'compressor' ? 'transform' : 'matte'
   );
@@ -309,6 +357,26 @@ export function BgRemovalClient({ initialMode = 'bg-removal' }: BgRemovalClientP
   const [brightness, setBrightness] = useState<number>(100);
   const [contrast, setContrast] = useState<number>(100);
   const [saturation, setSaturation] = useState<number>(100);
+  const [edgeCrispness, setEdgeCrispness] = useState<number>(0);
+  const [featherRadius, setFeatherRadius] = useState<number>(0);
+
+  // Chroma Key Cleanup
+  const [isChromaKeyActive, setIsChromaKeyActive] = useState<boolean>(false);
+  const [chromaKeyColor, setChromaKeyColor] = useState<string>('#00ff00');
+  const [chromaKeyTolerance, setChromaKeyTolerance] = useState<number>(20);
+  
+  // Brush Mode State
+  const [isBrushModeActive, setIsBrushModeActive] = useState<boolean>(false);
+  const [isSingleStrokeMode, setIsSingleStrokeMode] = useState<boolean>(true);
+  const [brushType, setBrushType] = useState<'restore' | 'erase'>('restore');
+  const [brushSize, setBrushSize] = useState<number>(30);
+  const [brushPaths, setBrushPaths] = useState<BrushPath[]>([]);
+  const [brushPreviewUrl, setBrushPreviewUrl] = useState<string | null>(null);
+  
+  const brushPreviewUrlRef = useRef<string | null>(null);
+  const currentPathRef = useRef<BrushPath | null>(null);
+  const canvasOverlayRef = useRef<HTMLCanvasElement>(null);
+  const [chromaPreviewUrl, setChromaPreviewUrl] = useState<string | null>(null);
 
   // Drop Shadow
   const [hasDropShadow, setHasDropShadow] = useState<boolean>(false);
@@ -345,13 +413,207 @@ export function BgRemovalClient({ initialMode = 'bg-removal' }: BgRemovalClientP
     exportUrlRef.current = finalExportUrl;
   }, [finalExportUrl]);
 
+  const chromaPreviewUrlRef = useRef<string | null>(null);
+  useEffect(() => {
+    chromaPreviewUrlRef.current = chromaPreviewUrl;
+  }, [chromaPreviewUrl]);
+
+  useEffect(() => {
+    brushPreviewUrlRef.current = brushPreviewUrl;
+  }, [brushPreviewUrl]);
+
   // Cleanup object URLs strictly when component unmounts
   useEffect(() => {
     return () => {
       if (resultUrlRef.current) URL.revokeObjectURL(resultUrlRef.current);
       if (exportUrlRef.current) URL.revokeObjectURL(exportUrlRef.current);
+      if (chromaPreviewUrlRef.current) URL.revokeObjectURL(chromaPreviewUrlRef.current);
+      if (brushPreviewUrlRef.current) URL.revokeObjectURL(brushPreviewUrlRef.current);
     };
   }, []);
+
+  // Live preview generation for Chroma Key (Runs AFTER Brush Mode)
+  useEffect(() => {
+    if (!isChromaKeyActive || !chromaKeyColor) {
+      if (chromaPreviewUrl) {
+        URL.revokeObjectURL(chromaPreviewUrl);
+        setChromaPreviewUrl(null);
+      }
+      return;
+    }
+    
+    let isCancelled = false;
+    
+    const runChroma = async () => {
+      try {
+        const sourceUrl = brushPreviewUrl || resultImageUrl || sourceImage;
+        if (!sourceUrl) return;
+        
+        let img: HTMLImageElement;
+        try {
+          img = await safeLoadImage(sourceUrl);
+        } catch (e) {
+          console.error('Chroma Image load error for URL:', sourceUrl, e);
+          return;
+        }
+        
+        if (isCancelled) return;
+        if (img.naturalWidth === 0 || img.naturalHeight === 0) return;
+        
+        const canvas = document.createElement('canvas');
+        canvas.width = img.naturalWidth;
+        canvas.height = img.naturalHeight;
+        const ctx = canvas.getContext('2d', { willReadFrequently: true });
+        if (!ctx) return;
+        
+        ctx.drawImage(img, 0, 0);
+        const imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+        const data = imgData.data;
+        
+        const hex = chromaKeyColor.replace('#', '');
+        const targetR = parseInt(hex.substring(0, 2), 16);
+        const targetG = parseInt(hex.substring(2, 4), 16);
+        const targetB = parseInt(hex.substring(4, 6), 16);
+        const maxDist = (chromaKeyTolerance / 100) * 250;
+        
+        for (let i = 0; i < data.length; i += 4) {
+          if (data[i+3] === 0) continue;
+          const r = data[i], g = data[i+1], b = data[i+2];
+          const dist = Math.sqrt(Math.pow(r - targetR, 2) + Math.pow(g - targetG, 2) + Math.pow(b - targetB, 2));
+          if (dist < maxDist) data[i+3] = 0;
+          else if (dist < maxDist + 30) {
+            const alphaFactor = (dist - maxDist) / 30;
+            data[i+3] = Math.min(data[i+3], data[i+3] * alphaFactor);
+          }
+        }
+        ctx.putImageData(imgData, 0, 0);
+        
+        canvas.toBlob(blob => {
+          if (blob && !isCancelled) {
+            const url = URL.createObjectURL(blob);
+            setChromaPreviewUrl(prev => {
+              if (prev) URL.revokeObjectURL(prev);
+              return url;
+            });
+          }
+        }, 'image/png');
+      } catch (err) {
+        console.error('Chroma live preview error:', err);
+      }
+    };
+    
+    const timer = setTimeout(runChroma, 30);
+    return () => {
+      isCancelled = true;
+      clearTimeout(timer);
+    };
+  }, [isChromaKeyActive, chromaKeyColor, chromaKeyTolerance, brushPreviewUrl, resultImageUrl, sourceImage]);
+
+  // Live preview generation for Brush Mode (Runs BEFORE Chroma Key)
+  useEffect(() => {
+    if (brushPaths.length === 0) {
+      if (brushPreviewUrl) {
+        URL.revokeObjectURL(brushPreviewUrl);
+        setBrushPreviewUrl(null);
+      }
+      return;
+    }
+    
+    let isCancelled = false;
+    
+    const runBrush = async () => {
+      try {
+        const baseImgUrl = resultImageUrl || sourceImage;
+        if (!baseImgUrl) return;
+        
+        const baseImg = await safeLoadImage(baseImgUrl);
+        if (isCancelled) return;
+        
+        const canvas = document.createElement('canvas');
+        canvas.width = baseImg.naturalWidth;
+        canvas.height = baseImg.naturalHeight;
+        const ctx = canvas.getContext('2d');
+        if (!ctx) return;
+        
+        ctx.drawImage(baseImg, 0, 0);
+        
+        const origImg = sourceImage ? await safeLoadImage(sourceImage) : null;
+        if (isCancelled) return;
+        
+        const strokeCanvas = document.createElement('canvas');
+        strokeCanvas.width = canvas.width;
+        strokeCanvas.height = canvas.height;
+        const sCtx = strokeCanvas.getContext('2d');
+        
+        if (sCtx) {
+          for (const path of brushPaths) {
+            if (!path || !path.points || path.points.length === 0) continue;
+            
+            if (path.type === 'erase') {
+              ctx.globalCompositeOperation = 'destination-out';
+              ctx.lineCap = 'round';
+              ctx.lineJoin = 'round';
+              ctx.lineWidth = path.size;
+              ctx.beginPath();
+              ctx.moveTo(path.points[0].x, path.points[0].y);
+              for (let i = 1; i < path.points.length; i++) {
+                ctx.lineTo(path.points[i].x, path.points[i].y);
+              }
+              ctx.stroke();
+              ctx.globalCompositeOperation = 'source-over';
+            } else if (path.type === 'restore' && origImg) {
+              sCtx.clearRect(0, 0, canvas.width, canvas.height);
+              sCtx.globalCompositeOperation = 'source-over';
+              sCtx.drawImage(origImg, 0, 0);
+              
+              sCtx.globalCompositeOperation = 'destination-in';
+              sCtx.lineCap = 'round';
+              sCtx.lineJoin = 'round';
+              sCtx.lineWidth = path.size;
+              sCtx.strokeStyle = 'black'; // Explicitly set stroke color
+              sCtx.beginPath();
+              sCtx.moveTo(path.points[0].x, path.points[0].y);
+              for (let i = 1; i < path.points.length; i++) {
+                sCtx.lineTo(path.points[i].x, path.points[i].y);
+              }
+              sCtx.stroke();
+              
+              // Restore the default composite operation just in case
+              sCtx.globalCompositeOperation = 'source-over';
+              
+              ctx.drawImage(strokeCanvas, 0, 0);
+            }
+          }
+        }
+        
+        canvas.toBlob(blob => {
+          if (blob && !isCancelled) {
+            const url = URL.createObjectURL(blob);
+            setBrushPreviewUrl(prev => {
+              if (prev) URL.revokeObjectURL(prev);
+              return url;
+            });
+            // Clear overlay now that the live composite engine has rendered the final stroke
+            if (canvasOverlayRef.current) {
+              const oCtx = canvasOverlayRef.current.getContext('2d');
+              if (oCtx) {
+                oCtx.clearRect(0, 0, canvasOverlayRef.current.width, canvasOverlayRef.current.height);
+              }
+            }
+          }
+        }, 'image/png');
+        
+      } catch (err) {
+        console.error('Brush live preview error:', err);
+      }
+    };
+    
+    const timer = setTimeout(runBrush, 30); 
+    return () => {
+      isCancelled = true;
+      clearTimeout(timer);
+    };
+  }, [brushPaths, resultImageUrl, sourceImage]);
 
   // Eagerly preload AI model weights + compile WASM during browser idle time
   useEffect(() => {
@@ -391,12 +653,15 @@ export function BgRemovalClient({ initialMode = 'bg-removal' }: BgRemovalClientP
       const { removeBackground } = await import('@imgly/background-removal');
 
       const blobResult = await removeBackground(imageInput, {
+        publicPath: `${window.location.origin}/assets/imgly-v1.7.0/`,
         device: 'gpu',
         proxyToWorker: true,
         model: modelQuality,
         output: {
           format: 'image/png',
           quality: 1,
+          // @ts-ignore
+          type: outputType,
         },
         progress: (key: string, current: number, total: number) => {
           let stageLabel = 'Downloading AI model weights...';
@@ -435,7 +700,7 @@ export function BgRemovalClient({ initialMode = 'bg-removal' }: BgRemovalClientP
     } finally {
       setIsProcessing(false);
     }
-  }, [modelQuality, resultImageUrl]);
+  }, [modelQuality, outputType, resultImageUrl]);
 
   // On-demand AI Background Removal Trigger
   const handleTriggerBgRemoval = useCallback(() => {
@@ -445,6 +710,44 @@ export function BgRemovalClient({ initialMode = 'bg-removal' }: BgRemovalClientP
     const size = sourceFile?.size || 500000;
     processImage(input, name, size);
   }, [sourceBlob, sourceImage, sourceFile, processImage]);
+
+  // Logo Mode: one-click preset for sharp logo edges
+  const handleLogoMode = useCallback(() => {
+    setModelQuality('isnet');
+    setEdgeCrispness(30);
+    // Re-run if we already have a source
+    if (sourceBlob || sourceImage) {
+      const input = sourceBlob || sourceImage!;
+      const name = sourceFile?.name || 'image.png';
+      const size = sourceFile?.size || 500000;
+      // Defer to next tick so model quality state update is picked up
+      setTimeout(() => processImage(input, name, size), 50);
+    }
+  }, [sourceBlob, sourceImage, sourceFile, processImage]);
+
+  // Handle Output Type Change: One-click re-run
+  const handleOutputTypeChange = useCallback((newType: OutputType) => {
+    if (newType === outputType) return;
+    setOutputType(newType);
+    if (sourceBlob || sourceImage) {
+      const input = sourceBlob || sourceImage!;
+      const name = sourceFile?.name || 'image.png';
+      const size = sourceFile?.size || 500000;
+      setTimeout(() => processImage(input, name, size), 50);
+    }
+  }, [outputType, sourceBlob, sourceImage, sourceFile, processImage]);
+
+  // Custom background image upload handler
+  const customBgInputRef = useRef<HTMLInputElement>(null);
+  const handleCustomBgUpload = (file: File) => {
+    if (!file.type.startsWith('image/')) return;
+    // Revoke previous custom bg URL to avoid memory leak
+    if (customBgImageUrl) URL.revokeObjectURL(customBgImageUrl);
+    const url = URL.createObjectURL(file);
+    setCustomBgImage(file);
+    setCustomBgImageUrl(url);
+    setSelectedMatte('custom-image');
+  };
 
   // Load from File (Upload or Drop) - 0ms Instant Canvas Load without auto-running heavy AI model
   const handleFileSelect = (file: File) => {
@@ -458,13 +761,17 @@ export function BgRemovalClient({ initialMode = 'bg-removal' }: BgRemovalClientP
       const dataUrl = e.target?.result as string;
       setSourceImage(dataUrl);
       setSourceBlob(file);
+      setOriginalSourceImage(dataUrl);
+      setOriginalSourceBlob(file);
 
       // Immediately measure true natural dimensions of the image
       const img = new Image();
       img.onload = () => {
         const w = img.naturalWidth || 800;
         const h = img.naturalHeight || 800;
-        setSourceFile({ name: file.name, size: file.size, width: w, height: h });
+        const fileInfo = { name: file.name, size: file.size, width: w, height: h };
+        setSourceFile(fileInfo);
+        setOriginalSourceFile(fileInfo);
         setTargetWidth(w);
         setTargetHeight(h);
         setScalePreset(1);
@@ -491,6 +798,7 @@ export function BgRemovalClient({ initialMode = 'bg-removal' }: BgRemovalClientP
   const handleSelectSample = async (sample: SampleImage) => {
     setErrorMessage(null);
     setSourceImage(sample.url);
+    setOriginalSourceImage(sample.url);
     setProcessedBlob(null);
     if (resultImageUrl) URL.revokeObjectURL(resultImageUrl);
     setResultImageUrl(null);
@@ -504,7 +812,9 @@ export function BgRemovalClient({ initialMode = 'bg-removal' }: BgRemovalClientP
     sampleImg.onload = () => {
       const w = sampleImg.naturalWidth || 800;
       const h = sampleImg.naturalHeight || 800;
-      setSourceFile({ name: `${sample.id}.jpg`, size: 280000, width: w, height: h });
+      const fileInfo = { name: `${sample.id}.jpg`, size: 280000, width: w, height: h };
+      setSourceFile(fileInfo);
+      setOriginalSourceFile(fileInfo);
       setTargetWidth(w);
       setTargetHeight(h);
       setScalePreset(1);
@@ -525,6 +835,7 @@ export function BgRemovalClient({ initialMode = 'bg-removal' }: BgRemovalClientP
       const res = await fetch(sample.url);
       const blob = await res.blob();
       setSourceBlob(blob);
+      setOriginalSourceBlob(blob);
       setProgressPercent(100);
     } catch (err) {
       console.warn('Sample fetch failed:', err);
@@ -621,6 +932,11 @@ export function BgRemovalClient({ initialMode = 'bg-removal' }: BgRemovalClientP
     setBrightness(100);
     setContrast(100);
     setSaturation(100);
+    setEdgeCrispness(0);
+    setFeatherRadius(0);
+    setIsChromaKeyActive(false);
+    setChromaKeyColor('#00ff00');
+    setChromaKeyTolerance(20);
     setHasDropShadow(false);
     setSelectedMatte('transparent');
   };
@@ -652,6 +968,12 @@ export function BgRemovalClient({ initialMode = 'bg-removal' }: BgRemovalClientP
     }
 
     const currentMatte = MATTE_OPTIONS.find(m => m.id === selectedMatte);
+    // For custom-color, build an ephemeral matte
+    const activeMatte: MatteOption | undefined = selectedMatte === 'custom-color'
+      ? { id: 'custom-color', name: 'Custom', type: 'color', value: customColor }
+      : selectedMatte === 'custom-image'
+        ? { id: 'custom-image', name: 'Custom Image', type: 'custom-image', value: '' }
+        : currentMatte;
 
     const naturalW = 'naturalWidth' in img ? img.naturalWidth : img.width;
     const naturalH = 'naturalHeight' in img ? img.naturalHeight : img.height;
@@ -671,8 +993,8 @@ export function BgRemovalClient({ initialMode = 'bg-removal' }: BgRemovalClientP
     if (!ctx) return null;
 
     // 1. Draw Backdrop / Matte
-    if (currentMatte && currentMatte.type !== 'transparent') {
-      if ((currentMatte.type === 'original' || currentMatte.type === 'blurred-original') && (sourceBlob || sourceImage)) {
+    if (activeMatte && activeMatte.type !== 'transparent') {
+      if ((activeMatte.type === 'original' || activeMatte.type === 'blurred-original') && (sourceBlob || sourceImage)) {
         let srcImg: ImageBitmap | HTMLImageElement | null = null;
         try {
           if (sourceBlob && typeof createImageBitmap === 'function') {
@@ -698,7 +1020,7 @@ export function BgRemovalClient({ initialMode = 'bg-removal' }: BgRemovalClientP
             sy = (sh - sHeight) / 2;
           }
 
-          if (currentMatte.type === 'blurred-original') {
+          if (activeMatte.type === 'blurred-original') {
             ctx.save();
             ctx.filter = 'blur(16px)';
             const bleed = 24;
@@ -708,20 +1030,46 @@ export function BgRemovalClient({ initialMode = 'bg-removal' }: BgRemovalClientP
             ctx.drawImage(srcImg, sx, sy, sWidth, sHeight, 0, 0, outW, outH);
           }
         }
-      } else if (currentMatte.type === 'color') {
-        ctx.fillStyle = currentMatte.value;
+      } else if (activeMatte.type === 'color') {
+        ctx.fillStyle = activeMatte.value;
         ctx.fillRect(0, 0, outW, outH);
-      } else if (currentMatte.type === 'gradient') {
+      } else if (activeMatte.type === 'gradient') {
         const grad = ctx.createLinearGradient(0, 0, outW, outH);
-        if (currentMatte.id === 'gradient-sunset') {
-          grad.addColorStop(0, '#f43f5e');
-          grad.addColorStop(1, '#f59e0b');
+        // Parse gradient colors from value string: "linear-gradient(135deg, #color1, #color2)"
+        const colorMatch = activeMatte.value.match(/#[0-9a-fA-F]{6}/g);
+        if (colorMatch && colorMatch.length >= 2) {
+          grad.addColorStop(0, colorMatch[0]);
+          grad.addColorStop(1, colorMatch[1]);
         } else {
           grad.addColorStop(0, '#06b6d4');
           grad.addColorStop(1, '#8b5cf6');
         }
         ctx.fillStyle = grad;
         ctx.fillRect(0, 0, outW, outH);
+      } else if (activeMatte.type === 'custom-image' && customBgImage) {
+        try {
+          let bgImg: ImageBitmap | HTMLImageElement;
+          if (typeof createImageBitmap === 'function') {
+            bgImg = await createImageBitmap(customBgImage);
+          } else {
+            bgImg = await safeLoadImage(customBgImageUrl || '');
+          }
+          const bw = 'naturalWidth' in bgImg ? bgImg.naturalWidth : bgImg.width;
+          const bh = 'naturalHeight' in bgImg ? bgImg.naturalHeight : bgImg.height;
+          const bAspect = (bw > 0 && bh > 0) ? bw / bh : 1;
+          const dAspect = outW / outH;
+          let bsx = 0, bsy = 0, bsW = bw, bsH = bh;
+          if (bAspect > dAspect) {
+            bsW = bh * dAspect;
+            bsx = (bw - bsW) / 2;
+          } else {
+            bsH = bw / dAspect;
+            bsy = (bh - bsH) / 2;
+          }
+          ctx.drawImage(bgImg, bsx, bsy, bsW, bsH, 0, 0, outW, outH);
+        } catch (e) {
+          console.warn('Custom backdrop image failed:', e);
+        }
       }
     }
 
@@ -747,7 +1095,169 @@ export function BgRemovalClient({ initialMode = 'bg-removal' }: BgRemovalClientP
     // 4. Setup Filters (Brightness, Contrast, Saturation)
     ctx.filter = `brightness(${brightness}%) contrast(${contrast}%) saturate(${saturation}%)`;
 
-    // 5. Draw the Subject Cutout with aspect-ratio preservation (object-contain)
+    let finalSubjectImg: CanvasImageSource = img;
+
+    // 5. Apply Manual Brush Strokes (Runs BEFORE Chroma Key)
+    if (brushPaths.length > 0) {
+      const brushCvs = document.createElement('canvas');
+      brushCvs.width = naturalW;
+      brushCvs.height = naturalH;
+      const bCtx = brushCvs.getContext('2d');
+      if (bCtx) {
+        bCtx.drawImage(finalSubjectImg, 0, 0);
+        
+        let origImg: HTMLImageElement | null = null;
+        if (sourceImage) {
+          try {
+             origImg = await safeLoadImage(sourceImage);
+          } catch(e) {}
+        }
+        
+        const strokeCanvas = document.createElement('canvas');
+        strokeCanvas.width = naturalW;
+        strokeCanvas.height = naturalH;
+        const sCtx = strokeCanvas.getContext('2d');
+        
+        if (sCtx) {
+          for (const path of brushPaths) {
+            if (!path || !path.points || path.points.length === 0) continue;
+            
+            if (path.type === 'erase') {
+              bCtx.globalCompositeOperation = 'destination-out';
+              bCtx.lineCap = 'round';
+              bCtx.lineJoin = 'round';
+              bCtx.lineWidth = path.size;
+              bCtx.beginPath();
+              bCtx.moveTo(path.points[0].x, path.points[0].y);
+              for (let i = 1; i < path.points.length; i++) bCtx.lineTo(path.points[i].x, path.points[i].y);
+              bCtx.stroke();
+              bCtx.globalCompositeOperation = 'source-over';
+            } else if (path.type === 'restore' && origImg) {
+              sCtx.clearRect(0, 0, naturalW, naturalH);
+              sCtx.globalCompositeOperation = 'source-over';
+              sCtx.drawImage(origImg, 0, 0);
+              sCtx.globalCompositeOperation = 'destination-in';
+              sCtx.lineCap = 'round';
+              sCtx.lineJoin = 'round';
+              sCtx.lineWidth = path.size;
+              sCtx.beginPath();
+              sCtx.moveTo(path.points[0].x, path.points[0].y);
+              for (let i = 1; i < path.points.length; i++) sCtx.lineTo(path.points[i].x, path.points[i].y);
+              sCtx.stroke();
+              
+              bCtx.drawImage(strokeCanvas, 0, 0);
+            }
+          }
+        }
+        finalSubjectImg = brushCvs;
+      }
+    }
+
+    // 6. Chroma Key (Color-based background removal cleanup, runs AFTER Brush)
+    if (isChromaKeyActive && chromaKeyColor) {
+      const hex = chromaKeyColor.replace('#', '');
+      const targetR = parseInt(hex.substring(0, 2), 16);
+      const targetG = parseInt(hex.substring(2, 4), 16);
+      const targetB = parseInt(hex.substring(4, 6), 16);
+      
+      const tempCvs = document.createElement('canvas');
+      tempCvs.width = naturalW;
+      tempCvs.height = naturalH;
+      const tCtx = tempCvs.getContext('2d');
+      if (tCtx) {
+        tCtx.drawImage(finalSubjectImg, 0, 0);
+        const imgData = tCtx.getImageData(0, 0, naturalW, naturalH);
+        const data = imgData.data;
+        
+        // Euclidean distance threshold max is roughly 441 (sqrt(255^2*3)). 
+        // We map tolerance 0-100 to a reasonable distance threshold (0 to ~250).
+        const maxDist = (chromaKeyTolerance / 100) * 250;
+        
+        for (let i = 0; i < data.length; i += 4) {
+          if (data[i+3] === 0) continue; // already transparent
+          const r = data[i];
+          const g = data[i+1];
+          const b = data[i+2];
+          
+          const dist = Math.sqrt(Math.pow(r - targetR, 2) + Math.pow(g - targetG, 2) + Math.pow(b - targetB, 2));
+          
+          if (dist < maxDist) {
+            // Full transparent
+            data[i+3] = 0;
+          } else if (dist < maxDist + 30) {
+            // Smooth blending at the edge of the tolerance
+            const alphaFactor = (dist - maxDist) / 30;
+            data[i+3] = Math.min(data[i+3], data[i+3] * alphaFactor);
+          }
+        }
+        tCtx.putImageData(imgData, 0, 0);
+        finalSubjectImg = tempCvs;
+      }
+    }
+
+    // 7. Apply Edge Crispness (Alpha Threshold) if needed before drawing
+    if (edgeCrispness > 0) {
+      const tempCvs = document.createElement('canvas');
+      tempCvs.width = naturalW;
+      tempCvs.height = naturalH;
+      const tCtx = tempCvs.getContext('2d');
+      if (tCtx) {
+        tCtx.drawImage(finalSubjectImg, 0, 0);
+        const imgData = tCtx.getImageData(0, 0, naturalW, naturalH);
+        const data = imgData.data;
+        const threshold = Math.round((edgeCrispness / 100) * 255);
+        for (let i = 3; i < data.length; i += 4) {
+          data[i] = data[i] > threshold ? 255 : 0;
+        }
+        tCtx.putImageData(imgData, 0, 0);
+        finalSubjectImg = tempCvs;
+      }
+    }
+
+    // 8. Apply Feather (soft Gaussian blur on alpha edges)
+    if (featherRadius > 0 && finalSubjectImg instanceof HTMLCanvasElement) {
+      const fCvs = finalSubjectImg;
+      const fCtx = fCvs.getContext('2d');
+      if (fCtx) {
+        fCtx.save();
+        fCtx.globalCompositeOperation = 'destination-in';
+        // Draw a slightly blurred copy to soften edges
+        const blurCvs = document.createElement('canvas');
+        blurCvs.width = fCvs.width;
+        blurCvs.height = fCvs.height;
+        const blurCtx = blurCvs.getContext('2d');
+        if (blurCtx) {
+          blurCtx.filter = `blur(${featherRadius}px)`;
+          blurCtx.drawImage(fCvs, 0, 0);
+          fCtx.drawImage(blurCvs, 0, 0);
+        }
+        fCtx.restore();
+      }
+    } else if (featherRadius > 0) {
+      // Need to create a temp canvas from the image first
+      const tempCvs = document.createElement('canvas');
+      tempCvs.width = naturalW;
+      tempCvs.height = naturalH;
+      const tCtx = tempCvs.getContext('2d');
+      if (tCtx) {
+        tCtx.drawImage(finalSubjectImg, 0, 0);
+        tCtx.save();
+        tCtx.globalCompositeOperation = 'destination-in';
+        const blurCvs = document.createElement('canvas');
+        blurCvs.width = naturalW;
+        blurCvs.height = naturalH;
+        const blurCtx = blurCvs.getContext('2d');
+        if (blurCtx) {
+          blurCtx.filter = `blur(${featherRadius}px)`;
+          blurCtx.drawImage(tempCvs, 0, 0);
+          tCtx.drawImage(blurCvs, 0, 0);
+        }
+        tCtx.restore();
+        finalSubjectImg = tempCvs;
+      }
+    }
+
+    // 8. Draw the Subject Cutout with aspect-ratio preservation (object-contain)
     const imgAspect = (naturalW > 0 && naturalH > 0) ? naturalW / naturalH : 1;
     const artboardAspect = baseW / baseH;
     let drawW = baseW;
@@ -761,7 +1271,7 @@ export function BgRemovalClient({ initialMode = 'bg-removal' }: BgRemovalClientP
       drawH = baseW / imgAspect;
     }
 
-    ctx.drawImage(img, -drawW / 2, -drawH / 2, drawW, drawH);
+    ctx.drawImage(finalSubjectImg, -drawW / 2, -drawH / 2, drawW, drawH);
 
     ctx.restore();
     return canvas;
@@ -874,16 +1384,126 @@ export function BgRemovalClient({ initialMode = 'bg-removal' }: BgRemovalClientP
     }
   };
 
+  // Helper to map object-contain mouse coordinates to intrinsic pixels
+  const getIntrinsicCoordinates = (e: React.PointerEvent<HTMLCanvasElement>, canvas: HTMLCanvasElement) => {
+    const rectW = canvas.offsetWidth;
+    const rectH = canvas.offsetHeight;
+    const intrinsicW = canvas.width;
+    const intrinsicH = canvas.height;
+    
+    if (intrinsicW === 0 || intrinsicH === 0) return { pxX: 0, pxY: 0 };
+
+    const imgAspect = intrinsicW / intrinsicH;
+    const rectAspect = rectW / rectH;
+
+    let renderW, renderH, offsetX, offsetY;
+
+    if (rectAspect > imgAspect) {
+      renderH = rectH;
+      renderW = rectH * imgAspect;
+      offsetX = (rectW - renderW) / 2;
+      offsetY = 0;
+    } else {
+      renderW = rectW;
+      renderH = rectW / imgAspect;
+      offsetX = 0;
+      offsetY = (rectH - renderH) / 2;
+    }
+
+    const rect = canvas.getBoundingClientRect();
+    const x = e.clientX - rect.left - offsetX;
+    const y = e.clientY - rect.top - offsetY;
+
+    return {
+      pxX: (x / renderW) * intrinsicW,
+      pxY: (y / renderH) * intrinsicH
+    };
+  };
+
+  // Brush Event Handlers
+  const handleBrushPointerDown = (e: React.PointerEvent<HTMLCanvasElement>) => {
+    if (!isBrushModeActive) return;
+    const canvas = e.currentTarget;
+    e.currentTarget.setPointerCapture(e.pointerId);
+    
+    const { pxX, pxY } = getIntrinsicCoordinates(e, canvas);
+    
+    const newPath: BrushPath = { type: brushType, size: brushSize, points: [{ x: pxX, y: pxY }] };
+    currentPathRef.current = newPath;
+    
+    const ctx = canvas.getContext('2d');
+    if (ctx) {
+       ctx.lineCap = 'round';
+       ctx.lineJoin = 'round';
+       ctx.lineWidth = brushSize;
+       ctx.strokeStyle = brushType === 'restore' ? 'rgba(16, 185, 129, 0.6)' : 'rgba(239, 68, 68, 0.6)';
+       ctx.beginPath();
+       ctx.moveTo(pxX, pxY);
+       ctx.lineTo(pxX, pxY);
+       ctx.stroke();
+    }
+  };
+
+  const handleBrushPointerMove = (e: React.PointerEvent<HTMLCanvasElement>) => {
+    if (!isBrushModeActive || !currentPathRef.current) return;
+    const canvas = e.currentTarget;
+    
+    const { pxX, pxY } = getIntrinsicCoordinates(e, canvas);
+    
+    currentPathRef.current.points.push({ x: pxX, y: pxY });
+    
+    const ctx = canvas.getContext('2d');
+    if (ctx) {
+       ctx.lineTo(pxX, pxY);
+       ctx.stroke();
+    }
+  };
+
+  const handleBrushPointerUp = (e: React.PointerEvent<HTMLCanvasElement>) => {
+    if (!isBrushModeActive || !currentPathRef.current) return;
+    e.currentTarget.releasePointerCapture(e.pointerId);
+    
+    // Capture the object reference before nullifying the ref, 
+    // because React 18 state updater callbacks can be executed asynchronously!
+    const finalPath = currentPathRef.current;
+    setBrushPaths(prev => [...prev, finalPath]);
+    
+    currentPathRef.current = null;
+    
+    if (isSingleStrokeMode) {
+      setIsBrushModeActive(false);
+    }
+  };
+
+  const undoLastBrushStroke = () => {
+    setBrushPaths(prev => prev.slice(0, -1));
+  };
+  
+  const clearAllBrushStrokes = () => {
+    setBrushPaths([]);
+  };
+
   // Reset to upload screen
   const handleReset = () => {
     setSourceImage(null);
     setSourceBlob(null);
     setSourceFile(null);
+    setOriginalSourceImage(null);
+    setOriginalSourceBlob(null);
+    setOriginalSourceFile(null);
+    setIsCropMode(false);
+    setCrop(undefined);
+    setCompletedCrop(undefined);
     setProcessedBlob(null);
     if (resultImageUrl) URL.revokeObjectURL(resultImageUrl);
     setResultImageUrl(null);
     if (finalExportUrl) URL.revokeObjectURL(finalExportUrl);
     setFinalExportUrl(null);
+    if (chromaPreviewUrl) URL.revokeObjectURL(chromaPreviewUrl);
+    setChromaPreviewUrl(null);
+    if (brushPreviewUrl) URL.revokeObjectURL(brushPreviewUrl);
+    setBrushPreviewUrl(null);
+    
     setFinalExportBlob(null);
     setPreviewModalOpen(false);
     setProcessingTimeMs(null);
@@ -892,9 +1512,82 @@ export function BgRemovalClient({ initialMode = 'bg-removal' }: BgRemovalClientP
     setSliderPosition(50);
     setViewMode(initialMode === 'bg-removal' ? 'slider' : 'result');
     resetAdjustments();
+    
+    // Reset advanced modes
+    setIsChromaKeyActive(false);
+    setIsBrushModeActive(false);
+    setBrushPaths([]);
   };
 
-  const activeMatteObj = MATTE_OPTIONS.find(m => m.id === selectedMatte);
+  const activeMatteObj: MatteOption | undefined = selectedMatte === 'custom-color'
+    ? { id: 'custom-color', name: `Custom (${customColor})`, type: 'color', value: customColor }
+    : selectedMatte === 'custom-image'
+      ? { id: 'custom-image', name: 'Custom Image', type: 'custom-image', value: '' }
+      : MATTE_OPTIONS.find(m => m.id === selectedMatte);
+
+  const handleApplyCrop = async () => {
+    if (!completedCrop || !completedCrop.width || !completedCrop.height || !imgRef.current) return;
+
+    const scaleX = imgRef.current.naturalWidth / imgRef.current.width;
+    const scaleY = imgRef.current.naturalHeight / imgRef.current.height;
+
+    const canvas = document.createElement('canvas');
+    canvas.width = Math.round(completedCrop.width * scaleX);
+    canvas.height = Math.round(completedCrop.height * scaleY);
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    ctx.drawImage(
+      imgRef.current,
+      completedCrop.x * scaleX,
+      completedCrop.y * scaleY,
+      completedCrop.width * scaleX,
+      completedCrop.height * scaleY,
+      0,
+      0,
+      canvas.width,
+      canvas.height
+    );
+
+    const croppedBlob = await new Promise<Blob | null>(resolve => canvas.toBlob(resolve, 'image/png', 1));
+    if (!croppedBlob) return;
+    const croppedUrl = URL.createObjectURL(croppedBlob);
+
+    setSourceBlob(croppedBlob);
+    setSourceImage(croppedUrl);
+    setSourceFile(prev => prev ? { ...prev, width: canvas.width, height: canvas.height } : null);
+
+    setTargetWidth(canvas.width);
+    setTargetHeight(canvas.height);
+    setIsCropMode(false);
+    setCrop(undefined);
+    setCompletedCrop(undefined);
+
+    // Reset brush strokes because the pixel coordinate space has changed
+    setBrushPaths([]);
+    setIsBrushModeActive(false);
+
+    setProcessedBlob(null);
+    if (resultImageUrl) URL.revokeObjectURL(resultImageUrl);
+    setResultImageUrl(null);
+  };
+
+  const handleUndoCrop = () => {
+    if (originalSourceImage && originalSourceBlob && originalSourceFile) {
+      setSourceImage(originalSourceImage);
+      setSourceBlob(originalSourceBlob);
+      setSourceFile(originalSourceFile);
+      setTargetWidth(originalSourceFile.width);
+      setTargetHeight(originalSourceFile.height);
+      setIsCropMode(false);
+      setCrop(undefined);
+      setCompletedCrop(undefined);
+
+      setProcessedBlob(null);
+      if (resultImageUrl) URL.revokeObjectURL(resultImageUrl);
+      setResultImageUrl(null);
+    }
+  };
 
   // Computed Aspect Ratio for the live workspace artboard with safe bounds
   const targetAspect = useMemo(() => {
@@ -923,11 +1616,12 @@ export function BgRemovalClient({ initialMode = 'bg-removal' }: BgRemovalClientP
     if (brightness !== 100) filters.push(`brightness(${brightness}%)`);
     if (contrast !== 100) filters.push(`contrast(${contrast}%)`);
     if (saturation !== 100) filters.push(`saturate(${saturation}%)`);
+    if (edgeCrispness > 0) filters.push(`url(#crisp-edges)`);
     if (hasDropShadow) {
       filters.push(`drop-shadow(0px ${shadowOffsetY}px ${shadowBlur}px ${shadowColor})`);
     }
     return filters.join(' ');
-  }, [brightness, contrast, saturation, hasDropShadow, shadowBlur, shadowOffsetY, shadowColor]);
+  }, [brightness, contrast, saturation, edgeCrispness, hasDropShadow, shadowBlur, shadowOffsetY, shadowColor]);
 
   const previewTransformStyle = useMemo(() => {
     const transforms: string[] = [];
@@ -937,8 +1631,21 @@ export function BgRemovalClient({ initialMode = 'bg-removal' }: BgRemovalClientP
     return transforms.join(' ');
   }, [rotationDeg, flipH, flipV]);
 
+  const hasCutout = !!resultImageUrl || isChromaKeyActive;
+
   return (
-    <div className="flex-1 flex flex-col h-full bg-[var(--bg-app)] text-[var(--text-primary)] select-none overflow-hidden font-mono">
+    <div className="w-full h-full flex flex-col bg-[var(--bg-app)] text-[var(--text-primary)] select-none overflow-hidden font-mono">
+      {/* SVG Filter Definition for Edge Crispness */}
+      {edgeCrispness > 0 && (
+        <svg width="0" height="0" className="absolute pointer-events-none">
+          <filter id="crisp-edges">
+            <feComponentTransfer>
+              <feFuncA type="linear" slope="1000" intercept={-(edgeCrispness / 100) * 1000} />
+            </feComponentTransfer>
+          </filter>
+        </svg>
+      )}
+
       {/* Main Studio Body */}
       <div className="flex-1 flex flex-col md:flex-row min-h-0 overflow-hidden">
         {/* Left Side: Interactive Canvas and Viewport */}
@@ -963,33 +1670,30 @@ export function BgRemovalClient({ initialMode = 'bg-removal' }: BgRemovalClientP
               <div className="w-full max-w-xl mb-4 flex items-center justify-center gap-1.5 p-1 rounded-xl bg-[var(--bg-panel)] border border-[var(--border-dev)] text-xs shadow-sm">
                 <Link
                   href="/background-remover"
-                  className={`flex-1 py-1.5 px-2 rounded-lg flex items-center justify-center gap-1.5 font-bold transition-all text-center ${
-                    initialMode === 'bg-removal'
+                  className={`flex-1 py-1.5 px-2 rounded-lg flex items-center justify-center gap-1.5 font-bold transition-all text-center ${initialMode === 'bg-removal'
                       ? 'bg-rose-500 text-white shadow-sm'
                       : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--pill-bg)]'
-                  }`}
+                    }`}
                 >
                   <Sparkles className="w-3.5 h-3.5 shrink-0" />
                   <span className="truncate">AI BG Removal</span>
                 </Link>
                 <Link
                   href="/image-resizer"
-                  className={`flex-1 py-1.5 px-2 rounded-lg flex items-center justify-center gap-1.5 font-bold transition-all text-center ${
-                    initialMode === 'resizer'
+                  className={`flex-1 py-1.5 px-2 rounded-lg flex items-center justify-center gap-1.5 font-bold transition-all text-center ${initialMode === 'resizer'
                       ? 'bg-rose-500 text-white shadow-sm'
                       : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--pill-bg)]'
-                  }`}
+                    }`}
                 >
                   <Maximize2 className="w-3.5 h-3.5 shrink-0" />
                   <span className="truncate">Resizer &amp; Artboard</span>
                 </Link>
                 <Link
                   href="/image-compressor"
-                  className={`flex-1 py-1.5 px-2 rounded-lg flex items-center justify-center gap-1.5 font-bold transition-all text-center ${
-                    initialMode === 'compressor'
+                  className={`flex-1 py-1.5 px-2 rounded-lg flex items-center justify-center gap-1.5 font-bold transition-all text-center ${initialMode === 'compressor'
                       ? 'bg-rose-500 text-white shadow-sm'
                       : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--pill-bg)]'
-                  }`}
+                    }`}
                 >
                   <HardDrive className="w-3.5 h-3.5 shrink-0" />
                   <span className="truncate">Compressor &amp; WebP</span>
@@ -1001,11 +1705,10 @@ export function BgRemovalClient({ initialMode = 'bg-removal' }: BgRemovalClientP
                 onDragLeave={onDragLeave}
                 onDrop={onDrop}
                 onClick={() => fileInputRef.current?.click()}
-                className={`w-full max-w-xl p-8 rounded-xl border-2 border-dashed transition-all flex flex-col items-center justify-center text-center cursor-pointer group ${
-                  isDragging
+                className={`w-full max-w-xl p-8 rounded-xl border-2 border-dashed transition-all flex flex-col items-center justify-center text-center cursor-pointer group ${isDragging
                     ? 'border-rose-500 bg-rose-500/5 scale-[1.01]'
                     : 'border-[var(--border-dev)] bg-[var(--bg-panel)] hover:border-rose-500/50 hover:bg-[var(--bg-panel-hover)]'
-                }`}
+                  }`}
               >
                 <input
                   ref={fileInputRef}
@@ -1030,8 +1733,8 @@ export function BgRemovalClient({ initialMode = 'bg-removal' }: BgRemovalClientP
                   {initialMode === 'resizer'
                     ? '100% Client-side. Resize, crop, pad, and scale unlimited images instantly with no signup and zero server uploads.'
                     : initialMode === 'compressor'
-                    ? '100% Client-side. Compress unlimited images under target budgets (<500 KB, <1 MB) with no signup and convert to WebP, PNG, or JPEG.'
-                    : '100% Client-Side Edge AI. Remove backgrounds from unlimited images with no signup, zero server uploads, and high-resolution cutouts.'}
+                      ? '100% Client-side. Compress unlimited images under target budgets (<500 KB, <1 MB) with no signup and convert to WebP, PNG, or JPEG.'
+                      : '100% Client-Side Edge AI. Remove backgrounds from unlimited images with no signup, zero server uploads, and high-resolution cutouts.'}
                 </p>
 
                 <div className="flex flex-wrap items-center justify-center gap-2 text-[10px] text-[var(--text-muted)] font-mono">
@@ -1051,11 +1754,21 @@ export function BgRemovalClient({ initialMode = 'bg-removal' }: BgRemovalClientP
                     <Zap className="w-3.5 h-3.5 text-amber-500" />
                     Or test with developer sample assets
                   </span>
-                  <span className="text-[10px] text-[var(--text-muted)]">Instant Studio Preview</span>
+                  <div className="flex items-center gap-2">
+                    <span className="text-[10px] text-[var(--text-muted)] hidden sm:inline-block">Instant Studio Preview</span>
+                    <button
+                      onClick={shuffleSamples}
+                      className="flex items-center gap-1 text-[10px] bg-[var(--bg-sidebar)] border border-[var(--border-dev)] text-[var(--text-primary)] hover:bg-[var(--bg-panel-hover)] transition-colors cursor-pointer px-2 py-1 rounded"
+                      title="Load new random samples"
+                    >
+                      <RefreshCw className="w-3 h-3" />
+                      Shuffle
+                    </button>
+                  </div>
                 </div>
 
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-                  {SAMPLE_IMAGES.map((sample) => (
+                  {displaySamples.map((sample) => (
                     <button
                       key={sample.id}
                       onClick={() => handleSelectSample(sample)}
@@ -1095,9 +1808,8 @@ export function BgRemovalClient({ initialMode = 'bg-removal' }: BgRemovalClientP
                       setViewMode('slider');
                       setSliderPosition(50);
                     }}
-                    className={`px-2 py-0.5 rounded flex items-center gap-1 cursor-pointer transition-colors ${
-                      viewMode === 'slider' ? 'bg-rose-500 text-white font-bold' : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
-                    }`}
+                    className={`px-2 py-0.5 rounded flex items-center gap-1 cursor-pointer transition-colors ${viewMode === 'slider' ? 'bg-rose-500 text-white font-bold' : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
+                      }`}
                     title="Interactive Before/After Comparison Slider"
                   >
                     <Sliders className="w-3 h-3" />
@@ -1105,9 +1817,8 @@ export function BgRemovalClient({ initialMode = 'bg-removal' }: BgRemovalClientP
                   </button>
                   <button
                     onClick={() => setViewMode('split')}
-                    className={`px-2 py-0.5 rounded flex items-center gap-1 cursor-pointer transition-colors ${
-                      viewMode === 'split' ? 'bg-rose-500 text-white font-bold' : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
-                    }`}
+                    className={`px-2 py-0.5 rounded flex items-center gap-1 cursor-pointer transition-colors ${viewMode === 'split' ? 'bg-rose-500 text-white font-bold' : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
+                      }`}
                     title="Side-by-Side Comparison"
                   >
                     <Columns className="w-3 h-3" />
@@ -1115,9 +1826,8 @@ export function BgRemovalClient({ initialMode = 'bg-removal' }: BgRemovalClientP
                   </button>
                   <button
                     onClick={() => setViewMode('result')}
-                    className={`px-2 py-0.5 rounded flex items-center gap-1 cursor-pointer transition-colors ${
-                      viewMode === 'result' ? 'bg-rose-500 text-white font-bold' : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
-                    }`}
+                    className={`px-2 py-0.5 rounded flex items-center gap-1 cursor-pointer transition-colors ${viewMode === 'result' ? 'bg-rose-500 text-white font-bold' : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
+                      }`}
                     title={resultImageUrl ? "Cutout Result Only" : "Live Artboard Preview"}
                   >
                     <Eye className="w-3 h-3" />
@@ -1125,9 +1835,8 @@ export function BgRemovalClient({ initialMode = 'bg-removal' }: BgRemovalClientP
                   </button>
                   <button
                     onClick={() => setViewMode('original')}
-                    className={`px-2 py-0.5 rounded flex items-center gap-1 cursor-pointer transition-colors ${
-                      viewMode === 'original' ? 'bg-rose-500 text-white font-bold' : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
-                    }`}
+                    className={`px-2 py-0.5 rounded flex items-center gap-1 cursor-pointer transition-colors ${viewMode === 'original' ? 'bg-rose-500 text-white font-bold' : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
+                      }`}
                     title="Original Source Image"
                   >
                     <FileImage className="w-3 h-3" />
@@ -1140,11 +1849,10 @@ export function BgRemovalClient({ initialMode = 'bg-removal' }: BgRemovalClientP
                   <button
                     onClick={handleTriggerBgRemoval}
                     disabled={isProcessing}
-                    className={`px-2.5 py-1 text-[11px] rounded-md flex items-center gap-1.5 cursor-pointer font-bold transition-all ${
-                      resultImageUrl
+                    className={`px-2.5 py-1 text-[11px] rounded-md flex items-center gap-1.5 cursor-pointer font-bold transition-all ${resultImageUrl
                         ? 'bg-[var(--bg-sidebar)] border border-rose-500/40 text-rose-500 hover:bg-rose-500/10'
                         : 'bg-gradient-to-r from-rose-500 via-rose-600 to-amber-500 hover:from-rose-600 hover:to-amber-600 text-white shadow-sm shadow-rose-500/20'
-                    } disabled:opacity-50`}
+                      } disabled:opacity-50`}
                     title="Run Edge AI WebAssembly background removal"
                   >
                     <Sparkles className="w-3.5 h-3.5" />
@@ -1159,9 +1867,9 @@ export function BgRemovalClient({ initialMode = 'bg-removal' }: BgRemovalClientP
                       onChange={(e) => setModelQuality(e.target.value as ModelQuality)}
                       className="bg-transparent text-[11px] text-[var(--text-primary)] outline-none cursor-pointer"
                     >
-                      <option value="isnet_fp16" className="bg-[var(--bg-panel)]">Balanced (FP16)</option>
-                      <option value="isnet" className="bg-[var(--bg-panel)]">Ultra Detail (ISNet)</option>
-                      <option value="isnet_quint8" className="bg-[var(--bg-panel)]">Fast &amp; Light (Quint8)</option>
+                      <option value="isnet" className="bg-[var(--bg-panel)]">Ultra Detail (Logos & Hard Edges)</option>
+                      <option value="isnet_fp16" className="bg-[var(--bg-panel)]">Balanced (Photos & Portraits)</option>
+                      <option value="isnet_quint8" className="bg-[var(--bg-panel)]">Fast & Light (Low Spec)</option>
                     </select>
                   </div>
 
@@ -1225,12 +1933,40 @@ export function BgRemovalClient({ initialMode = 'bg-removal' }: BgRemovalClientP
                         <span>WebGPU Neural Acceleration</span>
                         <span className="font-bold text-[var(--text-primary)]">{progressPercent}%</span>
                       </div>
+                      
+                      {progressStage.includes('Downloading') && (
+                        <div className="mt-4 p-2 rounded-lg bg-emerald-500/10 border border-emerald-500/20 text-[10px] text-emerald-500 text-left flex items-start gap-2 animate-in fade-in slide-in-from-bottom-2 duration-500">
+                          <HardDrive className="w-3.5 h-3.5 shrink-0 mt-0.5" />
+                          <span><strong>One-time download.</strong> The AI models are securely saving to your browser cache for instant, offline processing on future visits.</span>
+                        </div>
+                      )}
                     </div>
+                  </div>
+                )}
+                {/* View Mode 0: Interactive Crop Mode */}
+                {isCropMode && sourceImage && (
+                  <div className="max-w-4xl max-h-[min(74vh,calc(100%-2.5rem))] flex items-center justify-center rounded-lg border border-[var(--border-dev)] bg-[var(--bg-sidebar)] overflow-hidden shadow-lg p-4 -translate-y-4 sm:-translate-y-5">
+                    <ReactCrop
+                      crop={crop}
+                      onChange={(_, percentCrop) => setCrop(percentCrop)}
+                      onComplete={(c) => setCompletedCrop(c)}
+                      className="flex items-center justify-center"
+                    >
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img
+                        ref={imgRef}
+                        src={sourceImage}
+                        alt="Crop source"
+                        crossOrigin="anonymous"
+                        className="object-contain select-none pointer-events-auto block rounded"
+                        style={{ maxWidth: '100%', maxHeight: '62vh' }}
+                      />
+                    </ReactCrop>
                   </div>
                 )}
 
                 {/* View Mode 1: Pixel-Perfect Interactive Slider with Live Aspect Ratio */}
-                {viewMode === 'slider' && (
+                {!isCropMode && viewMode === 'slider' && (
                   <div
                     ref={sliderContainerRef}
                     onMouseDown={(e) => {
@@ -1264,7 +2000,7 @@ export function BgRemovalClient({ initialMode = 'bg-removal' }: BgRemovalClientP
                         <img
                           src={sourceImage}
                           alt="Original Background Backdrop"
-                          className="absolute inset-0 w-full h-full object-cover pointer-events-none"
+                          className="absolute inset-0 w-full h-full object-contain pointer-events-none"
                         />
                       )}
                       {activeMatteObj?.type === 'blurred-original' && sourceImage && (
@@ -1273,14 +2009,22 @@ export function BgRemovalClient({ initialMode = 'bg-removal' }: BgRemovalClientP
                           <img
                             src={sourceImage}
                             alt="Blurred Portrait Backdrop"
-                            className="absolute inset-0 w-full h-full object-cover filter blur-md scale-105 pointer-events-none"
+                            className="absolute inset-0 w-full h-full object-contain filter blur-md scale-105 pointer-events-none"
                           />
                         </div>
+                      )}
+                      {activeMatteObj?.type === 'custom-image' && customBgImageUrl && (
+                        /* eslint-disable-next-line @next/next/no-img-element */
+                        <img
+                          src={customBgImageUrl}
+                          alt="Custom Backdrop"
+                          className="absolute inset-0 w-full h-full object-cover pointer-events-none"
+                        />
                       )}
 
                       {/* Bottom Layer: Segmented AI Cutout with transformations and filters */}
                       <div
-                        className="absolute inset-0 flex items-center justify-center pointer-events-none"
+                        className="absolute inset-0 flex items-center justify-center pointer-events-none select-none"
                         style={{
                           transform: previewTransformStyle || undefined,
                           filter: previewFilterStyle || undefined
@@ -1288,44 +2032,60 @@ export function BgRemovalClient({ initialMode = 'bg-removal' }: BgRemovalClientP
                       >
                         {/* eslint-disable-next-line @next/next/no-img-element */}
                         <img
-                          src={resultImageUrl || sourceImage}
+                          src={chromaPreviewUrl || brushPreviewUrl || resultImageUrl || sourceImage!}
                           alt="Segmented Cutout"
-                          className="w-full h-full object-contain pointer-events-none"
+                          className="w-full h-full object-contain pointer-events-none select-none"
+                          draggable={false}
                         />
                       </div>
 
                       {/* Top Layer: Original Source Image, clipped cleanly using CSS clipPath */}
-                      <div
-                        className="absolute inset-0 pointer-events-none flex items-center justify-center"
-                        style={{
-                          clipPath: `inset(0 calc(100% - ${safeSliderPos}%) 0 0)`
-                        }}
-                      >
-                        {/* eslint-disable-next-line @next/next/no-img-element */}
-                        <img
-                          src={sourceImage}
-                          alt="Original Source"
-                          className="w-full h-full object-contain pointer-events-none"
-                          onLoad={(e) => {
-                            if (targetWidth === 0 && e.currentTarget.naturalWidth > 0) {
-                              const nw = e.currentTarget.naturalWidth;
-                              const nh = e.currentTarget.naturalHeight;
-                              setTargetWidth(nw);
-                              setTargetHeight(nh);
-                            }
+                      {viewMode === 'slider' && !isBrushModeActive && (
+                        <div
+                          className="absolute inset-0 pointer-events-none z-10"
+                          style={{
+                            clipPath: `inset(0 calc(100% - ${safeSliderPos}%) 0 0)`
                           }}
-                        />
-                      </div>
+                        >
+                          <div
+                            className="absolute inset-0 flex items-center justify-center"
+                            style={{
+                              transform: previewTransformStyle || undefined,
+                              filter: previewFilterStyle || undefined
+                            }}
+                          >
+                            {/* eslint-disable-next-line @next/next/no-img-element */}
+                            <img
+                              src={sourceImage!}
+                              alt="Original"
+                              className="w-full h-full object-contain pointer-events-none select-none"
+                              draggable={false}
+                              onLoad={(e) => {
+                                if (targetWidth === 0 && e.currentTarget.naturalWidth > 0) {
+                                  const nw = e.currentTarget.naturalWidth;
+                                  const nh = e.currentTarget.naturalHeight;
+                                  setTargetWidth(nw);
+                                  setTargetHeight(nh);
+                                }
+                              }}
+                            />
+                          </div>
+                        </div>
+                      )}
 
                       {/* Divider Line and Centered Drag Handle */}
-                      <div
-                        className="absolute top-0 bottom-0 w-0.5 bg-white cursor-ew-resize z-20 flex items-center justify-center -translate-x-1/2 shadow-2xl pointer-events-auto"
-                        style={{ left: `${safeSliderPos}%` }}
-                      >
-                        <div className="w-7 h-7 rounded-full bg-white text-rose-600 shadow-lg border border-slate-300 flex items-center justify-center text-xs font-bold select-none">
-                          ↔
+                      {viewMode === 'slider' && !isBrushModeActive && (
+                        <div
+                          className={`absolute top-0 bottom-0 w-1 bg-white cursor-ew-resize hover:bg-emerald-400 transition-colors shadow-[0_0_10px_rgba(0,0,0,0.5)] z-20 group ${isBrushModeActive ? 'pointer-events-none opacity-50' : 'pointer-events-auto'}`}
+                          style={{ left: `calc(${sliderPosition}% - 2px)` }}
+                          onPointerDown={onMouseDown}
+                        >
+                          {/* Centered Grab Handle */}
+                          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-8 h-8 bg-white rounded-full shadow-[0_2px_10px_rgba(0,0,0,0.3)] flex items-center justify-center border border-slate-200 group-hover:border-emerald-400 group-hover:scale-110 transition-transform">
+                            <MoveHorizontal className="w-[18px] h-[18px] opacity-70" />
+                          </div>
                         </div>
-                      </div>
+                      )}
 
                       {/* Badges on slider */}
                       <div className="absolute top-3 left-3 px-2 py-0.5 rounded bg-black/60 backdrop-blur-sm text-white text-[10px] font-bold pointer-events-none z-10">
@@ -1359,12 +2119,36 @@ export function BgRemovalClient({ initialMode = 'bg-removal' }: BgRemovalClientP
                           </div>
                         </div>
                       )}
+                      
+                      {/* Interactive Brush Canvas Overlay (Pulled out to be top-most) */}
+                      {isBrushModeActive && (
+                        <div
+                          className="absolute inset-0 flex items-center justify-center z-30 pointer-events-none"
+                          style={{
+                            transform: previewTransformStyle || undefined,
+                            filter: previewFilterStyle || undefined
+                          }}
+                        >
+                          <canvas
+                            ref={canvasOverlayRef}
+                            width={targetWidth}
+                            height={targetHeight}
+                            className="w-full h-full object-contain touch-none pointer-events-auto cursor-crosshair select-none"
+                            draggable={false}
+                            onPointerDown={handleBrushPointerDown}
+                            onPointerMove={handleBrushPointerMove}
+                            onPointerUp={handleBrushPointerUp}
+                            onPointerOut={handleBrushPointerUp}
+                            onPointerCancel={handleBrushPointerUp}
+                          />
+                        </div>
+                      )}
                     </div>
                   </div>
                 )}
 
                 {/* View Mode 2: Side-by-Side */}
-                {viewMode === 'split' && (
+                {!isCropMode && viewMode === 'split' && (
                   <div className="w-full h-full max-w-5xl grid grid-cols-1 md:grid-cols-2 gap-4 items-center justify-center overflow-hidden -translate-y-4 sm:-translate-y-5">
                     {/* Original card */}
                     <div className="flex-1 h-full max-h-[min(72vh,calc(100%-2.5rem))] flex flex-col rounded-lg border border-[var(--border-dev)] bg-[var(--bg-panel)] overflow-hidden">
@@ -1389,70 +2173,105 @@ export function BgRemovalClient({ initialMode = 'bg-removal' }: BgRemovalClientP
                         <span className="text-[10px] text-amber-500 font-bold">{resultImageUrl ? '100% Alpha Clean' : 'Pending AI Run'}</span>
                       </div>
                       <div
-                        className="flex-1 p-3 flex items-center justify-center overflow-hidden relative"
+                        className="flex-1 p-3 overflow-hidden relative flex flex-col"
                         style={{
                           background: (activeMatteObj?.type === 'color' || activeMatteObj?.type === 'gradient') ? activeMatteObj.value : undefined,
                           padding: `${paddingPx}px`
                         }}
                       >
-                        {activeMatteObj?.type === 'transparent' && (
-                          <div className="absolute inset-0 bg-transparency-grid" />
-                        )}
-                        {!resultImageUrl ? (
-                          <div className="flex flex-col items-center justify-center text-center p-4 z-10">
-                            <Sparkles className="w-8 h-8 text-rose-500/60 mb-2" />
-                            <p className="text-xs font-bold text-[var(--text-primary)] mb-1">AI Cutout Not Run Yet</p>
-                            <p className="text-[10px] text-[var(--text-secondary)] max-w-xs mb-3">
-                              Click below to segment your subject using client-side edge AI.
-                            </p>
-                            <button
-                              onClick={handleTriggerBgRemoval}
-                              disabled={isProcessing}
-                              className="px-3 py-1.5 rounded-lg bg-rose-500 hover:bg-rose-600 text-white text-xs font-bold shadow-sm cursor-pointer flex items-center gap-1.5"
-                            >
-                              <Sparkles className="w-3.5 h-3.5" />
-                              <span>Run AI Removal</span>
-                            </button>
-                          </div>
-                        ) : (
-                          <>
-                            {activeMatteObj?.type === 'original' && sourceImage && (
-                              /* eslint-disable-next-line @next/next/no-img-element */
-                              <img
-                                src={sourceImage}
-                                alt="Original Background Backdrop"
-                                className="absolute inset-0 w-full h-full object-cover pointer-events-none"
-                              />
-                            )}
-                            {activeMatteObj?.type === 'blurred-original' && sourceImage && (
-                              <div className="absolute inset-0 overflow-hidden pointer-events-none">
-                                {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <div className="flex-1 relative w-full h-full flex items-center justify-center">
+                          {activeMatteObj?.type === 'transparent' && (
+                            <div className="absolute inset-0 bg-transparency-grid" />
+                          )}
+                          {!resultImageUrl ? (
+                            <div className="flex flex-col items-center justify-center text-center p-4 z-10">
+                              <Sparkles className="w-8 h-8 text-rose-500/60 mb-2" />
+                              <p className="text-xs font-bold text-[var(--text-primary)] mb-1">AI Cutout Not Run Yet</p>
+                              <p className="text-[10px] text-[var(--text-secondary)] max-w-xs mb-3">
+                                Click below to segment your subject using client-side edge AI.
+                              </p>
+                              <button
+                                onClick={handleTriggerBgRemoval}
+                                disabled={isProcessing}
+                                className="px-3 py-1.5 rounded-lg bg-rose-500 hover:bg-rose-600 text-white text-xs font-bold shadow-sm cursor-pointer flex items-center gap-1.5"
+                              >
+                                <Sparkles className="w-3.5 h-3.5" />
+                                <span>Run AI Removal</span>
+                              </button>
+                            </div>
+                          ) : (
+                            <>
+                              {activeMatteObj?.type === 'original' && sourceImage && (
+                                /* eslint-disable-next-line @next/next/no-img-element */
                                 <img
                                   src={sourceImage}
-                                  alt="Blurred Portrait Backdrop"
-                                  className="absolute inset-0 w-full h-full object-cover filter blur-md scale-105 pointer-events-none"
+                                  alt="Original Background Backdrop"
+                                  className="absolute inset-0 w-full h-full object-contain pointer-events-none"
                                 />
-                              </div>
-                            )}
-                            {/* eslint-disable-next-line @next/next/no-img-element */}
-                            <img
-                              src={resultImageUrl}
-                              alt="Cutout"
-                              className="max-w-full max-h-full object-contain rounded relative z-10 select-none"
+                              )}
+                              {activeMatteObj?.type === 'blurred-original' && sourceImage && (
+                                <div className="absolute inset-0 overflow-hidden pointer-events-none">
+                                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                                  <img
+                                    src={sourceImage}
+                                    alt="Blurred Portrait Backdrop"
+                                    className="absolute inset-0 w-full h-full object-contain filter blur-md scale-105 pointer-events-none"
+                                  />
+                                </div>
+                              )}
+                              {activeMatteObj?.type === 'custom-image' && customBgImageUrl && (
+                                /* eslint-disable-next-line @next/next/no-img-element */
+                                <img
+                                  src={customBgImageUrl}
+                                  alt="Custom Backdrop"
+                                  className="absolute inset-0 w-full h-full object-cover pointer-events-none"
+                                />
+                              )}
+                              {/* eslint-disable-next-line @next/next/no-img-element */}
+                              <img
+                                src={chromaPreviewUrl || brushPreviewUrl || resultImageUrl || sourceImage!}
+                                alt="Result Canvas"
+                                className="w-full h-full object-contain rounded relative z-10 select-none pointer-events-none"
+                                style={{
+                                  transform: previewTransformStyle || undefined,
+                                  filter: previewFilterStyle || undefined
+                                }}
+                                draggable={false}
+                              />
+                            </>
+                          )}
+
+                          {/* Interactive Brush Canvas Overlay (Top-most in split view result card) */}
+                          {isBrushModeActive && (
+                            <div
+                              className="absolute inset-0 flex items-center justify-center z-30 pointer-events-none"
                               style={{
                                 transform: previewTransformStyle || undefined,
                                 filter: previewFilterStyle || undefined
                               }}
-                            />
-                          </>
-                        )}
+                            >
+                              <canvas
+                                ref={canvasOverlayRef}
+                                width={targetWidth}
+                                height={targetHeight}
+                                className="w-full h-full object-contain touch-none pointer-events-auto cursor-crosshair select-none"
+                                draggable={false}
+                                onPointerDown={handleBrushPointerDown}
+                                onPointerMove={handleBrushPointerMove}
+                                onPointerUp={handleBrushPointerUp}
+                                onPointerOut={handleBrushPointerUp}
+                                onPointerCancel={handleBrushPointerUp}
+                              />
+                            </div>
+                          )}
+                        </div>
                       </div>
                     </div>
                   </div>
                 )}
 
                 {/* View Mode 3: Result Only */}
-                {viewMode === 'result' && (
+                {!isCropMode && viewMode === 'result' && (
                   <div
                     className="relative rounded-lg border-2 border-[var(--border-dev)] overflow-hidden shadow-2xl flex items-center justify-center transition-all duration-150 -translate-y-4 sm:-translate-y-5"
                     style={{
@@ -1483,12 +2302,20 @@ export function BgRemovalClient({ initialMode = 'bg-removal' }: BgRemovalClientP
                           <img
                             src={sourceImage}
                             alt="Blurred Portrait Backdrop"
-                            className="absolute inset-0 w-full h-full object-cover filter blur-md scale-105 pointer-events-none"
+                            className="absolute inset-0 w-full h-full object-contain filter blur-md scale-105 pointer-events-none"
                           />
                         </div>
                       )}
+                      {activeMatteObj?.type === 'custom-image' && customBgImageUrl && (
+                        /* eslint-disable-next-line @next/next/no-img-element */
+                        <img
+                          src={customBgImageUrl}
+                          alt="Custom Backdrop"
+                          className="absolute inset-0 w-full h-full object-cover pointer-events-none"
+                        />
+                      )}
                       <div
-                        className="absolute inset-0 flex items-center justify-center"
+                        className="absolute inset-0 flex items-center justify-center pointer-events-none select-none"
                         style={{
                           transform: previewTransformStyle || undefined,
                           filter: previewFilterStyle || undefined
@@ -1496,24 +2323,68 @@ export function BgRemovalClient({ initialMode = 'bg-removal' }: BgRemovalClientP
                       >
                         {/* eslint-disable-next-line @next/next/no-img-element */}
                         <img
-                          src={resultImageUrl || sourceImage}
-                          alt={resultImageUrl ? "Cutout Only" : "Artboard Image"}
-                          className="w-full h-full object-contain select-none"
+                          src={chromaPreviewUrl || brushPreviewUrl || resultImageUrl || sourceImage!}
+                          alt={hasCutout ? "Cutout Only" : "Artboard Image"}
+                          className="w-full h-full object-contain pointer-events-none select-none"
+                          draggable={false}
                         />
                       </div>
+                      
+                      {/* Interactive Brush Canvas Overlay (Top-most in result view) */}
+                      {isBrushModeActive && (
+                        <div
+                          className="absolute inset-0 flex items-center justify-center z-30 pointer-events-none"
+                          style={{
+                            transform: previewTransformStyle || undefined,
+                            filter: previewFilterStyle || undefined
+                          }}
+                        >
+                          <canvas
+                            ref={canvasOverlayRef}
+                            width={targetWidth}
+                            height={targetHeight}
+                            className="w-full h-full object-contain touch-none pointer-events-auto cursor-crosshair select-none"
+                            draggable={false}
+                            onPointerDown={handleBrushPointerDown}
+                            onPointerMove={handleBrushPointerMove}
+                            onPointerUp={handleBrushPointerUp}
+                            onPointerOut={handleBrushPointerUp}
+                            onPointerCancel={handleBrushPointerUp}
+                          />
+                        </div>
+                      )}
                     </div>
                   </div>
                 )}
 
                 {/* View Mode 4: Original Only */}
-                {viewMode === 'original' && (
-                  <div className="w-full h-full max-w-4xl max-h-[min(74vh,calc(100%-2.5rem))] flex items-center justify-center rounded-lg border border-[var(--border-dev)] bg-[var(--bg-sidebar)] overflow-hidden shadow-lg p-4 -translate-y-4 sm:-translate-y-5">
+                {!isCropMode && viewMode === 'original' && (
+                  <div className="w-full h-full max-w-4xl max-h-[min(74vh,calc(100%-2.5rem))] flex items-center justify-center relative rounded-lg border border-[var(--border-dev)] bg-[var(--bg-sidebar)] overflow-hidden shadow-lg p-4 -translate-y-4 sm:-translate-y-5">
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
                       src={sourceImage}
                       alt="Original Only"
-                      className="max-w-full max-h-full object-contain rounded select-none"
+                      className="w-full h-full object-contain rounded select-none pointer-events-none"
+                      draggable={false}
                     />
+                    
+                    {/* Interactive Brush Canvas Overlay */}
+                    {isBrushModeActive && (
+                      <div className="absolute inset-0 flex items-center justify-center z-30 pointer-events-none p-4">
+                        <canvas
+                          ref={canvasOverlayRef}
+                          width={targetWidth}
+                          height={targetHeight}
+                          className="w-full h-full object-contain touch-none pointer-events-auto cursor-crosshair select-none"
+                          draggable={false}
+                          onPointerDown={handleBrushPointerDown}
+                          onPointerMove={handleBrushPointerMove}
+                          onPointerUp={handleBrushPointerUp}
+                          onPointerOut={handleBrushPointerUp}
+                          onPointerCancel={handleBrushPointerUp}
+                        />
+                      </div>
+                    )}
                   </div>
                 )}
               </div>
@@ -1523,107 +2394,421 @@ export function BgRemovalClient({ initialMode = 'bg-removal' }: BgRemovalClientP
 
         {/* Right Side: Comprehensive Studio Editor Panel */}
         {sourceImage && (
-          <aside className="w-full md:w-80 lg:w-96 bg-[var(--bg-panel)] border-t md:border-t-0 md:border-l border-[var(--border-dev)] flex flex-col shrink-0 overflow-y-auto z-20 h-full max-h-full">
+          <aside className="w-full md:w-80 lg:w-96 bg-[var(--bg-panel)] border-t md:border-t-0 md:border-l border-[var(--border-dev)] flex flex-col shrink-0 overflow-hidden z-20 h-[45%] md:h-full relative">
             {/* Editor Sub-Navigation Tabs (Sticky within panel) */}
             <div className="flex border-b border-[var(--border-dev)] bg-[var(--bg-panel)] text-xs shrink-0 sticky top-0 z-20 shadow-xs">
               <button
-                onClick={() => setActiveTab('matte')}
-                className={`flex-1 py-2.5 px-3 flex items-center justify-center gap-1.5 font-bold transition-colors cursor-pointer ${
-                  activeTab === 'matte'
+                onClick={() => {
+                  setActiveTab('matte');
+                  setIsCropMode(false);
+                }}
+                className={`flex-1 py-2.5 px-3 flex items-center justify-center gap-1.5 font-bold transition-colors cursor-pointer ${activeTab === 'matte'
                     ? 'border-b-2 border-rose-500 text-rose-500 bg-[var(--bg-panel)]'
                     : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
-                }`}
+                  }`}
               >
                 <Palette className="w-3.5 h-3.5" />
                 <span>Backdrop</span>
               </button>
               <button
-                onClick={() => setActiveTab('transform')}
-                className={`flex-1 py-2.5 px-3 flex items-center justify-center gap-1.5 font-bold transition-colors cursor-pointer ${
-                  activeTab === 'transform'
+                onClick={() => {
+                  setActiveTab('transform');
+                  // We don't necessarily need to cancel it if they click the same tab, but let's be safe
+                  if (activeTab !== 'transform') setIsCropMode(false);
+                }}
+                className={`flex-1 py-2.5 px-3 flex items-center justify-center gap-1.5 font-bold transition-colors cursor-pointer ${activeTab === 'transform'
                     ? 'border-b-2 border-rose-500 text-rose-500 bg-[var(--bg-panel)]'
                     : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
-                }`}
+                  }`}
               >
                 <Maximize2 className="w-3.5 h-3.5" />
                 <span>Size and Crop</span>
               </button>
               <button
-                onClick={() => setActiveTab('filters')}
-                className={`flex-1 py-2.5 px-3 flex items-center justify-center gap-1.5 font-bold transition-colors cursor-pointer ${
-                  activeTab === 'filters'
+                onClick={() => {
+                  setActiveTab('filters');
+                  setIsCropMode(false);
+                }}
+                className={`flex-1 py-2.5 px-3 flex items-center justify-center gap-1.5 font-bold transition-colors cursor-pointer ${activeTab === 'filters'
                     ? 'border-b-2 border-rose-500 text-rose-500 bg-[var(--bg-panel)]'
                     : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
-                }`}
+                  }`}
               >
                 <SlidersHorizontal className="w-3.5 h-3.5" />
                 <span>Effects</span>
               </button>
             </div>
 
-            <div className="p-4 flex-1 space-y-6">
+            <div className="p-4 flex-1 space-y-6 overflow-y-auto pb-6">
+              {/* TAB 1: MATTE AND BACKDROPS */}
               {/* TAB 1: MATTE AND BACKDROPS */}
               {activeTab === 'matte' && (
                 <div className="space-y-5">
+                  
+                  {/* Pro Logo Settings: Output Type & Logo Mode */}
+                  <div className="flex flex-col gap-3 p-3 rounded-lg bg-[var(--bg-panel-subtle)] border border-[var(--border-dev)]">
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs font-bold text-[var(--text-primary)] flex items-center gap-1.5">
+                        <Layers className="w-3.5 h-3.5 text-rose-500" />
+                        AI Output Mode
+                      </span>
+                      <button
+                        onClick={handleLogoMode}
+                        title="Instantly configures the AI for sharp, crisp edges perfect for logos and vector graphics."
+                        className="text-[10px] bg-rose-500/10 text-rose-500 hover:bg-rose-500/20 px-2 py-1 rounded font-bold border border-rose-500/20 transition-colors flex items-center gap-1 cursor-pointer"
+                      >
+                        <Crosshair className="w-3 h-3" />
+                        Logo Mode
+                      </button>
+                    </div>
+                    <div className="flex bg-[var(--bg-sidebar)] rounded border border-[var(--border-dev)] p-0.5 relative">
+                      <div
+                        className="absolute inset-y-0.5 w-[calc(50%-2px)] bg-[var(--bg-panel)] shadow-sm rounded-sm transition-transform duration-200 border border-[var(--border-dev)]"
+                        style={{ transform: outputType === 'foreground' ? 'translateX(0)' : 'translateX(100%)' }}
+                      />
+                      <button
+                        onClick={() => handleOutputTypeChange('foreground')}
+                        title="Outputs the standard isolated object with a transparent background."
+                        className={`flex-1 py-1.5 text-[11px] font-bold z-10 transition-colors cursor-pointer rounded-sm ${outputType === 'foreground' ? 'text-[var(--text-primary)]' : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'}`}
+                      >
+                        Foreground
+                      </button>
+                      <button
+                        onClick={() => handleOutputTypeChange('mask')}
+                        title="Outputs a black and white silhouette mask, useful for external compositing in Photoshop or Premiere."
+                        className={`flex-1 py-1.5 text-[11px] font-bold z-10 transition-colors cursor-pointer rounded-sm ${outputType === 'mask' ? 'text-[var(--text-primary)]' : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'}`}
+                      >
+                        Alpha Mask
+                      </button>
+                    </div>
+                    {outputType === 'mask' && (
+                      <div className="text-[10px] text-amber-500 flex items-center gap-1 mt-1">
+                        <AlertCircle className="w-3 h-3" />
+                        Generates a black/white silhouette (Photoshop).
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Chroma Key Cleanup */}
+                  <div className="flex flex-col gap-3 p-3 rounded-lg bg-[var(--bg-panel-subtle)] border border-[var(--border-dev)]">
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs font-bold text-[var(--text-primary)] flex items-center gap-1.5" title="Removes specific colored backgrounds based on a hexadecimal target.">
+                        <Pipette className="w-3.5 h-3.5 text-emerald-500" />
+                        Chroma Key Cleanup
+                      </span>
+                      <button
+                        onClick={() => setIsChromaKeyActive(!isChromaKeyActive)}
+                        title="Toggle Chroma Key mode"
+                        className={`text-[10px] px-2 py-1 rounded font-bold border transition-colors cursor-pointer ${isChromaKeyActive ? 'bg-emerald-500/10 text-emerald-500 border-emerald-500/20' : 'bg-[var(--bg-sidebar)] text-[var(--text-secondary)] border-[var(--border-dev)] hover:bg-[var(--pill-bg)]'}`}
+                      >
+                        {isChromaKeyActive ? 'Active' : 'Disabled'}
+                      </button>
+                    </div>
+                    
+                    {isChromaKeyActive && (
+                      <div className="space-y-3 animate-in fade-in slide-in-from-top-2 duration-200">
+                        <div className="flex gap-2">
+                          <div className="relative h-8 flex-1 rounded-lg overflow-hidden border border-[var(--border-dev)] hover:border-[var(--text-muted)] cursor-pointer">
+                            <input 
+                              type="color" 
+                              value={chromaKeyColor}
+                              onChange={(e) => setChromaKeyColor(e.target.value)}
+                              className="absolute inset-0 w-[200%] h-[200%] -top-4 -left-4 cursor-pointer"
+                            />
+                            <div className="absolute inset-0 flex items-center justify-center pointer-events-none bg-black/20 text-white text-[10px] font-bold shadow-sm">
+                              {chromaKeyColor.toUpperCase()}
+                            </div>
+                          </div>
+                          
+                          {typeof window !== 'undefined' && 'EyeDropper' in window && (
+                            <button
+                              onClick={async () => {
+                                try {
+                                  // @ts-ignore
+                                  const eyeDropper = new window.EyeDropper();
+                                  const result = await eyeDropper.open();
+                                  setChromaKeyColor(result.sRGBHex);
+                                } catch (e) {
+                                  // User canceled or error
+                                }
+                              }}
+                              className="h-8 px-3 rounded-lg bg-[var(--bg-sidebar)] border border-[var(--border-dev)] hover:bg-[var(--bg-panel-hover)] hover:border-emerald-500/50 flex items-center justify-center text-[var(--text-primary)] transition-colors cursor-pointer"
+                              title="Pick color from screen"
+                            >
+                              <Pipette className="w-4 h-4" />
+                            </button>
+                          )}
+                        </div>
+                        
+                        <div>
+                          <div className="flex justify-between items-center mb-1.5 text-xs">
+                            <span className="text-[var(--text-secondary)] font-bold">Tolerance</span>
+                            <span className="text-[11px] font-mono text-emerald-500 font-bold">{chromaKeyTolerance}%</span>
+                          </div>
+                          <input
+                            type="range"
+                            min={0}
+                            max={100}
+                            value={chromaKeyTolerance}
+                            onChange={(e) => setChromaKeyTolerance(Number(e.target.value))}
+                            className="w-full accent-emerald-500 cursor-pointer"
+                          />
+                        </div>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Manual Brush Mode */}
+                  <div className={`flex flex-col gap-3 p-3 rounded-lg bg-[var(--bg-panel-subtle)] border border-[var(--border-dev)] transition-all ${!sourceImage ? 'opacity-30 pointer-events-none' : ''}`}>
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs font-bold text-[var(--text-primary)] flex items-center gap-1.5" title="Draw strokes on the image to manually restore original pixels or erase background.">
+                        <Pipette className="w-3.5 h-3.5 text-blue-500" />
+                        Manual Brush Cleanup
+                      </span>
+                      <div className="flex items-center gap-1.5">
+                        {isBrushModeActive && brushPaths.length > 0 && (
+                          <button
+                            onClick={undoLastBrushStroke}
+                            title="Undo Last Stroke"
+                            className="text-[10px] px-2 py-1 rounded font-bold border bg-[var(--bg-sidebar)] text-[var(--text-secondary)] border-[var(--border-dev)] hover:bg-[var(--pill-bg)] hover:text-rose-500 transition-colors flex items-center gap-1 cursor-pointer"
+                          >
+                            Undo
+                          </button>
+                        )}
+                        <button
+                          onClick={() => setIsBrushModeActive(!isBrushModeActive)}
+                          title="Toggle Manual Brush Tool"
+                          className={`text-[10px] px-2 py-1 rounded font-bold border transition-colors flex items-center gap-1 cursor-pointer ${isBrushModeActive ? 'bg-blue-500/10 text-blue-500 border-blue-500/20' : 'bg-[var(--bg-sidebar)] text-[var(--text-secondary)] border-[var(--border-dev)] hover:bg-[var(--pill-bg)]'}`}
+                        >
+                          {isBrushModeActive ? 'Active' : 'Disabled'}
+                        </button>
+                      </div>
+                    </div>
+                    
+                    {isBrushModeActive && (
+                      <div className="space-y-3 animate-in fade-in slide-in-from-top-2 duration-200">
+                        <div className="text-[10px] text-blue-500/90 font-medium bg-blue-500/5 p-2 rounded flex items-start gap-1.5">
+                          <span className="shrink-0">ℹ️</span>
+                          <span>Paint over the image in the viewer to modify the mask. {isSingleStrokeMode ? 'Brush auto-deactivates after one stroke to prevent accidental touches.' : ''}</span>
+                        </div>
+                        <div className="flex gap-2">
+                          <button
+                            onClick={() => setBrushType('restore')}
+                            title="Paint to bring back parts of the original image"
+                            className={`flex-1 py-1.5 text-xs font-bold rounded border transition-colors cursor-pointer ${brushType === 'restore' ? 'bg-emerald-500/10 text-emerald-500 border-emerald-500/30' : 'bg-[var(--bg-sidebar)] text-[var(--text-secondary)] border-[var(--border-dev)] hover:text-[var(--text-primary)]'}`}
+                          >
+                            Restore
+                          </button>
+                          <button
+                            onClick={() => setBrushType('erase')}
+                            title="Paint to remove parts of the image"
+                            className={`flex-1 py-1.5 text-xs font-bold rounded border transition-colors cursor-pointer ${brushType === 'erase' ? 'bg-rose-500/10 text-rose-500 border-rose-500/30' : 'bg-[var(--bg-sidebar)] text-[var(--text-secondary)] border-[var(--border-dev)] hover:text-[var(--text-primary)]'}`}
+                          >
+                            Erase
+                          </button>
+                        </div>
+                        <div className="flex flex-col gap-1.5">
+                          <div className="flex justify-between text-[10px] text-[var(--text-secondary)]">
+                            <span>Brush Size</span>
+                            <span>{brushSize}px</span>
+                          </div>
+                          <input
+                            type="range"
+                            min="1"
+                            max="200"
+                            value={brushSize}
+                            onChange={(e) => setBrushSize(parseInt(e.target.value))}
+                            className="w-full accent-blue-500 h-1.5 bg-[var(--border-dev)] rounded-lg appearance-none cursor-pointer"
+                            title="Adjust the size of the brush cursor"
+                          />
+                        </div>
+
+                        <div className="flex items-center justify-between pt-2 border-t border-[var(--border-dev)]">
+                          <label className="flex items-center gap-1.5 cursor-pointer" title="Auto-deactivate the brush mode after every single stroke">
+                            <input
+                              type="checkbox"
+                              checked={isSingleStrokeMode}
+                              onChange={(e) => setIsSingleStrokeMode(e.target.checked)}
+                              className="w-3 h-3 accent-blue-500"
+                            />
+                            <span className="text-[10px] font-bold text-[var(--text-secondary)]">Single-Stroke Safe Mode</span>
+                          </label>
+                          <button 
+                            onClick={clearAllBrushStrokes}
+                            title="Clear all manual edits"
+                            className="text-[10px] text-rose-500 hover:text-rose-600 font-bold transition-colors cursor-pointer"
+                          >
+                            Reset Brush
+                          </button>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Edges & Feather */}
+                  <div className="space-y-4">
+                    <div>
+                      <div className="flex justify-between items-center mb-1.5 text-xs">
+                        <span className="font-bold text-[var(--text-primary)] flex items-center gap-1.5" title="Removes soft semi-transparent edges. Higher values make the edges sharper.">
+                          <Crosshair className="w-3.5 h-3.5 text-rose-500" />
+                          Edge Threshold (Logos)
+                        </span>
+                        <span className="text-[11px] font-mono text-rose-500 font-bold">{edgeCrispness}%</span>
+                      </div>
+                      <input
+                        type="range"
+                        min={0}
+                        max={100}
+                        value={edgeCrispness}
+                        onChange={(e) => setEdgeCrispness(Number(e.target.value))}
+                        className="w-full accent-rose-500 cursor-pointer"
+                      />
+                      <div className="text-[9px] text-[var(--text-muted)] mt-1 flex justify-between">
+                        <span>Smooth (0)</span>
+                        <span>Logo Sharp (30)</span>
+                        <span>Harsh (100)</span>
+                      </div>
+                    </div>
+                    <div>
+                      <div className="flex justify-between items-center mb-1.5 text-xs">
+                        <span className="font-bold text-[var(--text-primary)] flex items-center gap-1.5">
+                          <Pipette className="w-3.5 h-3.5 text-rose-500" />
+                          Edge Feather (Smoothing)
+                        </span>
+                        <span className="text-[11px] font-mono text-rose-500 font-bold">{featherRadius}px</span>
+                      </div>
+                      <input
+                        type="range"
+                        min={0}
+                        max={5}
+                        step={0.5}
+                        value={featherRadius}
+                        onChange={(e) => setFeatherRadius(Number(e.target.value))}
+                        className="w-full accent-rose-500 cursor-pointer"
+                      />
+                      <div className="text-[9px] text-[var(--text-muted)] mt-1 flex justify-between">
+                        <span>Hard (0)</span>
+                        <span>Soft (5)</span>
+                      </div>
+                    </div>
+                  </div>
+
                   <div className="relative">
                     <label className="block text-xs font-bold text-[var(--text-primary)] mb-2 flex items-center justify-between">
                       <span className="flex items-center gap-1.5">
                         <Palette className="w-3.5 h-3.5 text-rose-500" />
                         <span>Background Fill</span>
                       </span>
-                      <span className="text-[10px] text-[var(--text-muted)] font-normal">
-                        {resultImageUrl ? activeMatteObj?.name : 'Original Source (Locked)'}
+                      <span className="text-[10px] text-[var(--text-muted)] font-normal truncate max-w-[120px] text-right">
+                        {resultImageUrl ? activeMatteObj?.name : 'Original Source'}
                       </span>
                     </label>
 
-                    {/* Backdrop Options Container - Greyed out and unclickable when !resultImageUrl */}
-                    <div className={`space-y-2 transition-all duration-300 ${!resultImageUrl ? 'opacity-30 grayscale pointer-events-none select-none filter' : ''}`}>
-                      <div className="grid grid-cols-2 gap-2">
+                    {/* Backdrop Options Container */}
+                    <div className={`space-y-3 transition-all duration-300 ${!resultImageUrl ? 'opacity-30 grayscale pointer-events-none select-none filter' : ''}`}>
+                      <div className="grid grid-cols-3 gap-2">
                         {/* Special Original Background options */}
                         <button
                           onClick={() => setSelectedMatte('original')}
                           disabled={!resultImageUrl}
-                          className={`p-2 rounded-lg border text-left flex items-center gap-2 cursor-pointer transition-all ${
-                            selectedMatte === 'original'
+                          className={`p-2 rounded-lg border text-left flex items-center gap-2 cursor-pointer transition-all ${selectedMatte === 'original'
                               ? 'border-rose-500 bg-rose-500/10 text-rose-500 font-bold'
                               : 'border-[var(--border-dev)] bg-[var(--bg-sidebar)] text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
-                          }`}
+                            }`}
                         >
                           <FileImage className="w-4 h-4 text-amber-500 shrink-0" />
                           <div className="min-w-0">
-                            <span className="text-[11px] block truncate">Original BG</span>
-                            <span className="text-[9px] text-[var(--text-muted)] block">Keep Source</span>
+                            <span className="text-[10px] block truncate font-bold">Original BG</span>
                           </div>
                         </button>
 
                         <button
                           onClick={() => setSelectedMatte('blurred-original')}
                           disabled={!resultImageUrl}
-                          className={`p-2 rounded-lg border text-left flex items-center gap-2 cursor-pointer transition-all ${
-                            selectedMatte === 'blurred-original'
+                          className={`p-2 rounded-lg border text-left flex items-center gap-2 cursor-pointer transition-all ${selectedMatte === 'blurred-original'
                               ? 'border-rose-500 bg-rose-500/10 text-rose-500 font-bold'
                               : 'border-[var(--border-dev)] bg-[var(--bg-sidebar)] text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
-                          }`}
+                            }`}
                         >
                           <Camera className="w-4 h-4 text-cyan-500 shrink-0" />
                           <div className="min-w-0">
-                            <span className="text-[11px] block truncate">Bokeh Blur</span>
-                            <span className="text-[9px] text-[var(--text-muted)] block">Portrait Depth</span>
+                            <span className="text-[10px] block truncate font-bold">Bokeh Blur</span>
                           </div>
                         </button>
+                        
+                        {/* Custom Image Upload */}
+                        <div className="relative">
+                          <input 
+                            type="file" 
+                            ref={customBgInputRef} 
+                            onChange={(e) => {
+                              if (e.target.files && e.target.files.length > 0) {
+                                handleCustomBgUpload(e.target.files[0]);
+                              }
+                            }}
+                            className="hidden" 
+                            accept="image/*"
+                          />
+                          <button
+                            onClick={() => {
+                              if (customBgImage) {
+                                setSelectedMatte('custom-image');
+                              } else {
+                                customBgInputRef.current?.click();
+                              }
+                            }}
+                            disabled={!resultImageUrl}
+                            className={`w-full h-full p-2 rounded-lg border text-left flex items-center gap-2 cursor-pointer transition-all ${selectedMatte === 'custom-image'
+                                ? 'border-rose-500 bg-rose-500/10 text-rose-500 font-bold'
+                                : 'border-[var(--border-dev)] bg-[var(--bg-sidebar)] text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
+                              }`}
+                          >
+                            <ImagePlus className="w-4 h-4 text-purple-500 shrink-0" />
+                            <div className="min-w-0">
+                              <span className="text-[10px] block truncate font-bold">Upload BG</span>
+                            </div>
+                          </button>
+                          {customBgImage && (
+                            <button 
+                              onClick={(e) => { e.stopPropagation(); customBgInputRef.current?.click(); }}
+                              className="absolute top-1 right-1 p-0.5 bg-black/50 hover:bg-black/80 rounded-full text-white pointer-events-auto"
+                              title="Replace Custom Background"
+                            >
+                              <RefreshCw className="w-2.5 h-2.5" />
+                            </button>
+                          )}
+                        </div>
                       </div>
 
-                      <div className="grid grid-cols-4 gap-2">
+                      <div className="grid grid-cols-6 gap-2">
+                        {/* Custom Color Picker */}
+                        <div className="relative h-11 rounded-lg overflow-hidden border border-[var(--border-dev)] hover:border-[var(--text-muted)] cursor-pointer">
+                          <input 
+                            type="color" 
+                            value={customColor}
+                            onChange={(e) => {
+                              setCustomColor(e.target.value);
+                              setSelectedMatte('custom-color');
+                            }}
+                            className="absolute inset-0 w-[200%] h-[200%] -top-4 -left-4 cursor-pointer"
+                          />
+                          {selectedMatte === 'custom-color' && (
+                            <div className="absolute inset-0 bg-black/20 flex items-center justify-center pointer-events-none">
+                              <Check className="w-4 h-4 text-white drop-shadow" />
+                            </div>
+                          )}
+                          <div className="absolute bottom-0 inset-x-0 bg-black/60 text-[8px] text-white text-center pointer-events-none pb-0.5">Custom</div>
+                        </div>
+
                         {MATTE_OPTIONS.filter(m => m.type !== 'original' && m.type !== 'blurred-original').map((m) => (
                           <button
                             key={m.id}
                             onClick={() => setSelectedMatte(m.id)}
                             disabled={!resultImageUrl}
-                            className={`h-11 rounded-lg border relative flex flex-col items-center justify-center overflow-hidden transition-all cursor-pointer ${
-                              selectedMatte === m.id
+                            className={`h-11 rounded-lg border relative flex flex-col items-center justify-center overflow-hidden transition-all cursor-pointer ${selectedMatte === m.id
                                 ? 'border-rose-500 ring-2 ring-rose-500/30'
                                 : 'border-[var(--border-dev)] hover:border-[var(--text-muted)]'
-                            }`}
+                              }`}
                             title={m.name}
                           >
                             {m.type === 'transparent' ? (
@@ -1694,6 +2879,48 @@ export function BgRemovalClient({ initialMode = 'bg-removal' }: BgRemovalClientP
               {/* TAB 2: RESOLUTION, SCALE AND TRANSFORM */}
               {activeTab === 'transform' && (
                 <div className="space-y-5">
+                  {/* Cropping Tool */}
+                  <div className="p-3 rounded-lg bg-[var(--bg-sidebar)] border border-rose-500/30 shadow-sm space-y-3">
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs font-bold text-[var(--text-primary)] flex items-center gap-1.5">
+                        <Maximize2 className="w-3.5 h-3.5 text-rose-500" />
+                        Interactive Image Cropper
+                      </span>
+                      {originalSourceImage !== sourceImage && (
+                        <button
+                          onClick={handleUndoCrop}
+                          className="text-[10px] px-2 py-0.5 rounded border border-[var(--border-dev)] hover:bg-[var(--pill-bg)] transition-colors cursor-pointer"
+                        >
+                          Undo Crop
+                        </button>
+                      )}
+                    </div>
+                    {isCropMode ? (
+                      <div className="flex gap-2">
+                        <button
+                          onClick={handleApplyCrop}
+                          disabled={!completedCrop?.width || !completedCrop?.height}
+                          className="flex-1 py-1.5 text-xs font-bold bg-rose-500 hover:bg-rose-600 text-white rounded cursor-pointer transition-colors disabled:opacity-50"
+                        >
+                          Apply Crop
+                        </button>
+                        <button
+                          onClick={() => setIsCropMode(false)}
+                          className="flex-1 py-1.5 text-xs font-bold border border-[var(--border-dev)] text-[var(--text-primary)] hover:bg-[var(--pill-bg)] rounded cursor-pointer transition-colors"
+                        >
+                          Cancel
+                        </button>
+                      </div>
+                    ) : (
+                      <button
+                        onClick={() => setIsCropMode(true)}
+                        className="w-full py-1.5 text-xs font-bold border border-rose-500/50 text-rose-500 hover:bg-rose-500/10 rounded cursor-pointer transition-colors"
+                      >
+                        Enter Crop Mode
+                      </button>
+                    )}
+                  </div>
+
                   {/* Resolution Input */}
                   <div>
                     <div className="flex justify-between items-center mb-2">
@@ -1717,11 +2944,10 @@ export function BgRemovalClient({ initialMode = 'bg-removal' }: BgRemovalClientP
 
                       <button
                         onClick={() => setAspectRatioLocked(!aspectRatioLocked)}
-                        className={`text-[10px] px-2 py-0.5 rounded flex items-center gap-1 border cursor-pointer transition-colors ${
-                          aspectRatioLocked
+                        className={`text-[10px] px-2 py-0.5 rounded flex items-center gap-1 border cursor-pointer transition-colors ${aspectRatioLocked
                             ? 'bg-rose-500/10 border-rose-500/30 text-rose-500 font-bold'
                             : 'bg-[var(--bg-sidebar)] border-[var(--border-dev)] text-[var(--text-muted)]'
-                        }`}
+                          }`}
                         title={aspectRatioLocked ? 'Aspect Ratio Locked' : 'Aspect Ratio Free'}
                       >
                         {aspectRatioLocked ? <Lock className="w-2.5 h-2.5" /> : <Unlock className="w-2.5 h-2.5" />}
@@ -1773,11 +2999,10 @@ export function BgRemovalClient({ initialMode = 'bg-removal' }: BgRemovalClientP
                         <button
                           key={item.label}
                           onClick={() => handleScalePresetChange(item.val)}
-                          className={`py-1 rounded border text-[10px] font-mono transition-colors cursor-pointer ${
-                            scalePreset === item.val
+                          className={`py-1 rounded border text-[10px] font-mono transition-colors cursor-pointer ${scalePreset === item.val
                               ? 'bg-rose-500 text-white font-bold border-rose-500'
                               : 'bg-[var(--bg-sidebar)] border-[var(--border-dev)] text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
-                          }`}
+                            }`}
                         >
                           {item.label}
                         </button>
@@ -1801,11 +3026,10 @@ export function BgRemovalClient({ initialMode = 'bg-removal' }: BgRemovalClientP
                       </button>
                       <button
                         onClick={() => setFlipH(!flipH)}
-                        className={`py-1.5 px-2 rounded-lg border text-xs flex items-center justify-center gap-1.5 cursor-pointer ${
-                          flipH
+                        className={`py-1.5 px-2 rounded-lg border text-xs flex items-center justify-center gap-1.5 cursor-pointer ${flipH
                             ? 'bg-rose-500/10 border-rose-500 text-rose-500 font-bold'
                             : 'border-[var(--border-dev)] bg-[var(--bg-sidebar)] text-[var(--text-primary)]'
-                        }`}
+                          }`}
                         title="Flip Horizontal (Mirror)"
                       >
                         <FlipHorizontal className="w-3.5 h-3.5" />
@@ -1813,11 +3037,10 @@ export function BgRemovalClient({ initialMode = 'bg-removal' }: BgRemovalClientP
                       </button>
                       <button
                         onClick={() => setFlipV(!flipV)}
-                        className={`py-1.5 px-2 rounded-lg border text-xs flex items-center justify-center gap-1.5 cursor-pointer ${
-                          flipV
+                        className={`py-1.5 px-2 rounded-lg border text-xs flex items-center justify-center gap-1.5 cursor-pointer ${flipV
                             ? 'bg-rose-500/10 border-rose-500 text-rose-500 font-bold'
                             : 'border-[var(--border-dev)] bg-[var(--bg-sidebar)] text-[var(--text-primary)]'
-                        }`}
+                          }`}
                         title="Flip Vertical"
                       >
                         <FlipVertical className="w-3.5 h-3.5" />
@@ -1840,11 +3063,10 @@ export function BgRemovalClient({ initialMode = 'bg-removal' }: BgRemovalClientP
                       </span>
                       <button
                         onClick={() => setHasDropShadow(!hasDropShadow)}
-                        className={`text-[10px] px-2 py-0.5 rounded font-bold cursor-pointer transition-colors ${
-                          hasDropShadow
+                        className={`text-[10px] px-2 py-0.5 rounded font-bold cursor-pointer transition-colors ${hasDropShadow
                             ? 'bg-rose-500 text-white'
                             : 'bg-[var(--bg-panel)] text-[var(--text-muted)] border border-[var(--border-dev)]'
-                        }`}
+                          }`}
                       >
                         {hasDropShadow ? 'Enabled' : 'Disabled'}
                       </button>
@@ -1889,11 +3111,10 @@ export function BgRemovalClient({ initialMode = 'bg-removal' }: BgRemovalClientP
                               <button
                                 key={sc.label}
                                 onClick={() => setShadowColor(sc.value)}
-                                className={`py-1 px-2 rounded border text-left truncate cursor-pointer ${
-                                  shadowColor === sc.value
+                                className={`py-1 px-2 rounded border text-left truncate cursor-pointer ${shadowColor === sc.value
                                     ? 'border-rose-500 bg-rose-500/10 text-rose-500 font-bold'
                                     : 'border-[var(--border-dev)] bg-[var(--bg-panel)] text-[var(--text-secondary)]'
-                                }`}
+                                  }`}
                               >
                                 {sc.label}
                               </button>
@@ -1950,6 +3171,8 @@ export function BgRemovalClient({ initialMode = 'bg-removal' }: BgRemovalClientP
                         className="w-full accent-rose-500 cursor-pointer"
                       />
                     </div>
+                    
+
                   </div>
 
                   <button
@@ -1969,33 +3192,30 @@ export function BgRemovalClient({ initialMode = 'bg-removal' }: BgRemovalClientP
                 <div className="grid grid-cols-3 gap-2 text-xs">
                   <button
                     onClick={() => setExportFormat('image/png')}
-                    className={`py-2 px-2 rounded-lg border text-center transition-all cursor-pointer ${
-                      exportFormat === 'image/png'
+                    className={`py-2 px-2 rounded-lg border text-center transition-all cursor-pointer ${exportFormat === 'image/png'
                         ? 'bg-rose-500/10 border-rose-500 text-rose-500 font-bold'
                         : 'border-[var(--border-dev)] bg-[var(--bg-sidebar)] text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
-                    }`}
+                      }`}
                   >
                     PNG
                     <span className="block text-[8px] text-[var(--text-muted)] font-normal">Lossless Alpha</span>
                   </button>
                   <button
                     onClick={() => setExportFormat('image/webp')}
-                    className={`py-2 px-2 rounded-lg border text-center transition-all cursor-pointer ${
-                      exportFormat === 'image/webp'
+                    className={`py-2 px-2 rounded-lg border text-center transition-all cursor-pointer ${exportFormat === 'image/webp'
                         ? 'bg-rose-500/10 border-rose-500 text-rose-500 font-bold'
                         : 'border-[var(--border-dev)] bg-[var(--bg-sidebar)] text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
-                    }`}
+                      }`}
                   >
                     WebP
                     <span className="block text-[8px] text-[var(--text-muted)] font-normal">Ultra Compact</span>
                   </button>
                   <button
                     onClick={() => setExportFormat('image/jpeg')}
-                    className={`py-2 px-2 rounded-lg border text-center transition-all cursor-pointer ${
-                      exportFormat === 'image/jpeg'
+                    className={`py-2 px-2 rounded-lg border text-center transition-all cursor-pointer ${exportFormat === 'image/jpeg'
                         ? 'bg-rose-500/10 border-rose-500 text-rose-500 font-bold'
                         : 'border-[var(--border-dev)] bg-[var(--bg-sidebar)] text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
-                    }`}
+                      }`}
                   >
                     JPEG
                     <span className="block text-[8px] text-[var(--text-muted)] font-normal">Standard</span>
@@ -2022,11 +3242,10 @@ export function BgRemovalClient({ initialMode = 'bg-removal' }: BgRemovalClientP
                     <button
                       key={preset.id}
                       onClick={() => setTargetFileSize(preset.id)}
-                      className={`py-1.5 px-2 rounded-lg border text-left transition-all cursor-pointer ${
-                        targetFileSize === preset.id
+                      className={`py-1.5 px-2 rounded-lg border text-left transition-all cursor-pointer ${targetFileSize === preset.id
                           ? 'bg-rose-500/10 border-rose-500 text-rose-500 font-bold shadow-sm'
                           : 'border-[var(--border-dev)] bg-[var(--bg-sidebar)] text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
-                      }`}
+                        }`}
                     >
                       <span className="block text-[11px] font-bold truncate">{preset.label}</span>
                       <span className="block text-[8px] text-[var(--text-muted)] font-normal truncate">{preset.sub}</span>
@@ -2038,11 +3257,10 @@ export function BgRemovalClient({ initialMode = 'bg-removal' }: BgRemovalClientP
                 <div className="flex items-center gap-2">
                   <button
                     onClick={() => setTargetFileSize('custom')}
-                    className={`py-1 px-2.5 text-[10px] rounded border transition-colors cursor-pointer ${
-                      targetFileSize === 'custom'
+                    className={`py-1 px-2.5 text-[10px] rounded border transition-colors cursor-pointer ${targetFileSize === 'custom'
                         ? 'bg-rose-500 text-white font-bold border-rose-500'
                         : 'bg-[var(--bg-sidebar)] border-[var(--border-dev)] text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
-                    }`}
+                      }`}
                   >
                     Custom Size
                   </button>
@@ -2069,41 +3287,7 @@ export function BgRemovalClient({ initialMode = 'bg-removal' }: BgRemovalClientP
                 )}
               </div>
 
-              {/* Primary Action Buttons */}
-              <div className="space-y-2 pt-2 border-t border-[var(--border-dev)]">
-                <button
-                  onClick={handleOpenExportPreview}
-                  disabled={!sourceImage || isProcessing || isExporting}
-                  className="w-full py-2.5 px-4 rounded-lg bg-gradient-to-r from-rose-500 via-rose-600 to-amber-500 hover:from-rose-600 hover:to-amber-600 text-white font-bold text-xs flex items-center justify-center gap-2 shadow-lg shadow-rose-500/20 transition-all cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                  <Download className="w-4 h-4" />
-                  <span>
-                    {isExporting
-                      ? 'Compositing Output...'
-                      : resultImageUrl
-                      ? 'Preview and Download Cutout'
-                      : 'Preview and Download Image'}
-                  </span>
-                </button>
-
-                <button
-                  onClick={handleCopyClipboard}
-                  disabled={!sourceImage || isProcessing || isExporting}
-                  className="w-full py-2 px-4 rounded-lg border border-[var(--border-dev)] bg-[var(--bg-sidebar)] hover:bg-[var(--pill-bg)] text-[var(--text-primary)] font-semibold text-xs flex items-center justify-center gap-2 transition-all cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                  {isCopied ? (
-                    <>
-                      <Check className="w-3.5 h-3.5 text-emerald-500" />
-                      <span className="text-emerald-500">Copied to Clipboard!</span>
-                    </>
-                  ) : (
-                    <>
-                      <Copy className="w-3.5 h-3.5 text-[var(--text-muted)]" />
-                      <span>{resultImageUrl ? 'Copy PNG Cutout to Clipboard' : 'Copy Image to Clipboard'}</span>
-                    </>
-                  )}
-                </button>
-              </div>
+              {/* Primary Action Buttons (Moved to Sticky Footer) */}
 
               {/* Live Image Diagnostics */}
               <div className="p-3 rounded-lg bg-[var(--bg-sidebar)] border border-[var(--border-dev)] space-y-1.5 text-[10px] font-mono">
@@ -2171,6 +3355,44 @@ export function BgRemovalClient({ initialMode = 'bg-removal' }: BgRemovalClientP
                 </div>
               </div>
             </div>
+            
+            {/* Sticky Action Footer */}
+            <div className="sticky bottom-0 bg-[var(--bg-panel)] p-4 border-t border-[var(--border-dev)] z-30 shadow-[0_-4px_10px_rgba(0,0,0,0.1)]">
+              <div className="space-y-2">
+                <button
+                  onClick={handleOpenExportPreview}
+                  disabled={!sourceImage || isProcessing || isExporting}
+                  className="w-full py-2.5 px-4 rounded-lg bg-gradient-to-r from-rose-500 via-rose-600 to-amber-500 hover:from-rose-600 hover:to-amber-600 text-white font-bold text-xs flex items-center justify-center gap-2 shadow-lg shadow-rose-500/20 transition-all cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  <Download className="w-4 h-4" />
+                  <span>
+                    {isExporting
+                      ? 'Compositing Output...'
+                      : resultImageUrl
+                        ? 'Preview and Download Cutout'
+                        : 'Preview and Download Image'}
+                  </span>
+                </button>
+
+                <button
+                  onClick={handleCopyClipboard}
+                  disabled={!sourceImage || isProcessing || isExporting}
+                  className="w-full py-2 px-4 rounded-lg border border-[var(--border-dev)] bg-[var(--bg-sidebar)] hover:bg-[var(--pill-bg)] text-[var(--text-primary)] font-semibold text-xs flex items-center justify-center gap-2 transition-all cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {isCopied ? (
+                    <>
+                      <Check className="w-3.5 h-3.5 text-emerald-500" />
+                      <span className="text-emerald-500">Copied to Clipboard!</span>
+                    </>
+                  ) : (
+                    <>
+                      <Copy className="w-3.5 h-3.5 text-[var(--text-muted)]" />
+                      <span>{resultImageUrl ? 'Copy PNG Cutout to Clipboard' : 'Copy Image to Clipboard'}</span>
+                    </>
+                  )}
+                </button>
+              </div>
+            </div>
           </aside>
         )}
       </div>
@@ -2206,11 +3428,10 @@ export function BgRemovalClient({ initialMode = 'bg-removal' }: BgRemovalClientP
                     key={fmt}
                     onClick={() => handleModalFormatChange(fmt)}
                     disabled={isExporting}
-                    className={`px-2 py-0.5 rounded text-[10px] font-bold border transition-colors cursor-pointer ${
-                      exportFormat === fmt
+                    className={`px-2 py-0.5 rounded text-[10px] font-bold border transition-colors cursor-pointer ${exportFormat === fmt
                         ? 'bg-rose-500 text-white border-rose-500'
                         : 'bg-[var(--bg-sidebar)] border-[var(--border-dev)] text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
-                    }`}
+                      }`}
                   >
                     {fmt.replace('image/', '').toUpperCase()}
                   </button>
@@ -2225,11 +3446,10 @@ export function BgRemovalClient({ initialMode = 'bg-removal' }: BgRemovalClientP
                     key={preset.id}
                     onClick={() => handleModalTargetSizeChange(preset.id)}
                     disabled={isExporting}
-                    className={`px-2 py-0.5 rounded text-[10px] font-bold border transition-colors cursor-pointer ${
-                      targetFileSize === preset.id
+                    className={`px-2 py-0.5 rounded text-[10px] font-bold border transition-colors cursor-pointer ${targetFileSize === preset.id
                         ? 'bg-rose-500 text-white border-rose-500'
                         : 'bg-[var(--bg-sidebar)] border-[var(--border-dev)] text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
-                    }`}
+                      }`}
                   >
                     {preset.label}
                   </button>

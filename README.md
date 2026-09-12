@@ -23,8 +23,8 @@ A high-performance visual image suite running entirely inside the browser using 
 
 #### ✨ Free AI Background Remover (`/background-removal`)
 * **On-Demand Neural Inference**: Loads with **0ms latency** on upload. Neural model execution is deferred until the user clicks **`✨ Remove Background (AI)`**, preserving battery and GPU memory.
-* **Hardware Acceleration & Dedicated Web Worker**: Utilizes `proxyToWorker` to offload neural segmentation entirely to a background thread, while automatically utilizing WebGPU hardware acceleration for blazing-fast inference without locking the main UI thread.
-* **Eager Idle Preloading**: The AI model weights and WASM compiler are silently pre-fetched during idle browser time so the segmentation engine is warm the moment a user acts.
+* **Hardware Acceleration & Dedicated Web Worker**: Utilizes `proxyToWorker` to offload neural segmentation entirely to a background thread. Employs `SharedArrayBuffer` with COOP/COEP isolation for true multi-threaded WebAssembly execution.
+* **Eager Idle Preloading**: The AI model weights and WASM compiler are silently pre-fetched during idle browser time from a local cache so the segmentation engine is warm the moment a user acts.
 * **Studio Backdrops & Matting**:
   * Alpha transparency grid
   * Solid colors & modern gradient presets
@@ -254,7 +254,7 @@ DevPantry is built from the ground up for search engine indexing:
 git clone https://github.com/allwin-antony/failstate.git
 cd failstate
 
-# Install dependencies
+# Install dependencies (Automatically downloads ~200MB of AI models locally via postinstall)
 npm install
 
 # Start local development server
@@ -280,7 +280,7 @@ npm run start
 * **Framework**: Next.js 16 (App Router with Turbopack)
 * **Runtime**: React 19 + TypeScript
 * **Styling**: Tailwind CSS v4 (`@tailwindcss/postcss`) + Custom Design Tokens
-* **Edge AI**: Transformers.js (`@xenova/transformers`) with RMBG-1.4 model
+* **Edge AI**: `@imgly/background-removal` (WebAssembly + WebGL) with local ISNet model serving
 * **Icons**: Lucide React
 * **Dataset**: OpenSourceDataset (Fonts, Icons, Service Responses)
 * **Author**: [Allwin S Antony](https://github.com/allwin-antony)

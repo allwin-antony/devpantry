@@ -2,12 +2,14 @@
   "name": "failstate",
   "private": true,
   "version": "0.0.0",
+  "license": "MIT",
   "type": "module",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "oxlint"
+    "lint": "oxlint",
+    "postinstall": "node scripts/fetch-imgly-models.mjs"
   },
   "dependencies": {
     "@imgly/background-removal": "^1.7.0",
@@ -19,6 +21,7 @@
     "postcss": "^8.5.27",
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
+    "react-image-crop": "^11.1.2",
     "tailwindcss": "^4.3.3"
   },
   "devDependencies": {
