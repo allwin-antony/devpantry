@@ -1937,7 +1937,7 @@ export function BgRemovalClient({ initialMode = 'bg-removal' }: BgRemovalClientP
                       {progressStage.includes('Downloading') && (
                         <div className="mt-4 p-2 rounded-lg bg-emerald-500/10 border border-emerald-500/20 text-[10px] text-emerald-500 text-left flex items-start gap-2 animate-in fade-in slide-in-from-bottom-2 duration-500">
                           <HardDrive className="w-3.5 h-3.5 shrink-0 mt-0.5" />
-                          <span><strong>One-time download.</strong> The AI models (~200MB) are securely saving to your browser cache for instant, offline processing on future visits.</span>
+                          <span><strong>One-time download.</strong> The AI models are securely saving to your browser cache for instant, offline processing on future visits.</span>
                         </div>
                       )}
                     </div>
