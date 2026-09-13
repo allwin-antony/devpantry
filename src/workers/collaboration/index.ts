@@ -1,11 +1,12 @@
 export { SignalingRoom } from './SignalingRoom';
+import { handleOgFetch } from '../og-fetch';
 
 interface Env {
   SIGNALING_ROOM: DurableObjectNamespace;
 }
 
 export default {
-  async fetch(request: Request, env: Env): Promise<Response> {
+  async fetch(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
     const url = new URL(request.url);
     
     // We expect WebSocket connections at /api/collab/:roomId
@@ -19,6 +20,11 @@ export default {
       
       // Forward the request to the Durable Object
       return room.fetch(request);
+    }
+
+    // Proxy Open Graph requests for Social Preview tool
+    if (url.pathname === '/api/og-fetch') {
+      return handleOgFetch(request, ctx);
     }
     
     return new Response('Not found', { status: 404 });
