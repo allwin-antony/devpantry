@@ -193,7 +193,26 @@ Actual production API response payloads and edge-case schemas for 19 real-world 
 
 ---
 
-### 8. ⌨️ Global Command Palette (`Cmd + K` / `Ctrl + K`)
+### 8. 🤝 Real-Time P2P Collaborative Editor (`/collab`)
+
+A zero-knowledge, real-time collaborative text and code editor built on pure peer-to-peer WebRTC and CRDTs (Conflict-free Replicated Data Types).
+
+* **Zero-Knowledge Architecture**: 
+  * Documents are **never** sent to a central database or server.
+  * Uses Cloudflare Durable Objects exclusively for lightweight WebRTC signaling (SDP offer/answer exchange).
+* **Client-Side AES-GCM Encryption**:
+  * Uses `PBKDF2` to derive a strong 256-bit AES-GCM key from the room password entirely in the browser.
+  * Every Yjs update is securely encrypted before being transmitted over the WebRTC DataChannel.
+* **Resilient CRDT Sync (Yjs)**:
+  * Powered by `Yjs` for robust, conflict-free syncing of document state across multiple peers.
+  * Automatically handles offline editing via `IndexedDB` persistence and resyncs seamlessly when the network is restored.
+* **Rich Code Editing (`@uiw/react-codemirror`)**:
+  * Clean, fast, and responsive CodeMirror 6 interface tailored for collaborative coding.
+  * Supports dynamic light and dark mode toggling.
+
+---
+
+### 9. ⌨️ Global Command Palette (`Cmd + K` / `Ctrl + K`)
 
 A unified search dialog accessible from anywhere in the suite via keyboard shortcut or header button:
 * **Instant Tool Switching**: Jump directly to Overview, AI Studio, Fonts, Icons, JWT Inspector, Chaos Data, or API Mocks.

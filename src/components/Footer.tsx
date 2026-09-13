@@ -52,6 +52,11 @@ export const Footer: React.FC = () => {
                 </Link>
               </li>
               <li>
+                <Link href="/collab" className="hover:text-[var(--text-primary)] hover:underline transition-colors">
+                  P2P Collab Editor
+                </Link>
+              </li>
+              <li>
                 <Link href="/mock-data" className="hover:text-[var(--text-primary)] hover:underline transition-colors">
                   Chaos Mock Data Generator
                 </Link>

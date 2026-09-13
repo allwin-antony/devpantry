@@ -12,19 +12,29 @@
     "postinstall": "node scripts/fetch-imgly-models.mjs"
   },
   "dependencies": {
+    "@codemirror/state": "^6.7.4",
+    "@codemirror/view": "^6.43.11",
     "@imgly/background-removal": "^1.7.0",
     "@tailwindcss/postcss": "^4.3.3",
     "@tailwindcss/typography": "^0.5.20",
     "@tailwindcss/vite": "^4.3.3",
+    "@uiw/react-codemirror": "^4.25.11",
+    "lib0": "^0.2.117",
     "lucide-react": "^1.39.0",
     "next": "^16.3.4",
+    "next-themes": "^0.4.6",
     "postcss": "^8.5.27",
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
     "react-image-crop": "^11.1.2",
-    "tailwindcss": "^4.3.3"
+    "tailwindcss": "^4.3.3",
+    "y-codemirror.next": "^0.3.6",
+    "y-indexeddb": "^9.0.12",
+    "y-protocols": "^1.0.7",
+    "yjs": "^13.6.32"
   },
   "devDependencies": {
+    "@cloudflare/workers-types": "^5.20260911.1",
     "@types/node": "^24.13.3",
     "@types/react": "^19.2.18",
     "@types/react-dom": "^19.2.4",

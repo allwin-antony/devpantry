@@ -288,7 +288,7 @@ export function SocialPreviewClient({ initialPlatform, children }: SocialPreview
 
     try {
       const response = await fetch(`/api/og-fetch?url=${encodeURIComponent(url)}`);
-      const data = await response.json();
+      const data: any = await response.json();
 
       if (!response.ok) {
         throw new Error(data.error || `Failed to fetch (HTTP ${response.status})`);

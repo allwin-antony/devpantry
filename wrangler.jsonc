@@ -3,5 +3,20 @@
   "compatibility_date": "2026-09-10",
   "assets": {
     "directory": "./out"
-  }
+  },
+  "main": "./src/workers/collaboration/index.ts",
+  "durable_objects": {
+    "bindings": [
+      {
+        "name": "SIGNALING_ROOM",
+        "class_name": "SignalingRoom"
+      }
+    ]
+  },
+  "migrations": [
+    {
+      "tag": "v1",
+      "new_classes": ["SignalingRoom"]
+    }
+  ]
 }

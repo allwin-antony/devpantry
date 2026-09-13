@@ -96,7 +96,7 @@ export async function loadIconsBatch(prefix: string, names: string[]): Promise<v
           return;
         }
 
-        const data = await res.json();
+        const data: any = await res.json();
         if (!data) return;
 
         const defaultWidth = data.width || 24;

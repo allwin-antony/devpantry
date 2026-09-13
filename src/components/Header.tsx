@@ -1,9 +1,9 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Flame, Type, Box, Radio, Sun, Moon, Terminal, Sparkles, Key, Search, Menu, X, Share2 } from 'lucide-react';
+import { Flame, Type, Box, Radio, Sun, Moon, Terminal, Sparkles, Key, Search, Menu, X, Share2, Users, ChevronDown } from 'lucide-react';
 import { useTheme } from './ThemeProvider';
 import { CommandPalette } from './CommandPalette';
 import { DevPantryLogo } from './DevPantryLogo';
@@ -31,16 +31,36 @@ export const Header: React.FC = () => {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, []);
 
-  const navItems = [
+  const [isMoreMenuOpen, setIsMoreMenuOpen] = useState(false);
+  const moreMenuRef = useRef<HTMLDivElement>(null);
+
+  // Close dropdown on click outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (moreMenuRef.current && !moreMenuRef.current.contains(event.target as Node)) {
+        setIsMoreMenuOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  const mainNavItems = [
     { href: '/', label: 'Overview', shortLabel: 'Overview', icon: Terminal },
     { href: '/background-remover', label: 'AI Studio', shortLabel: 'AI Studio', icon: Sparkles },
     { href: '/fonts', label: 'Fonts', shortLabel: 'Fonts', icon: Type },
     { href: '/icons', label: 'Icons', shortLabel: 'Icons', icon: Box },
+  ];
+
+  const moreNavItems = [
+    { href: '/collab', label: 'Collab Editor', shortLabel: 'Collab', icon: Users },
     { href: '/jwt-decoder', label: 'JWT Decoder', shortLabel: 'JWT', icon: Key },
     { href: '/mock-data', label: 'Mock Data', shortLabel: 'Mock', icon: Flame },
     { href: '/social-preview', label: 'Social Preview', shortLabel: 'Social', icon: Share2 },
     { href: '/api-templates', label: 'API Mocks', shortLabel: 'Mocks', icon: Radio },
   ];
+
+  const allNavItems = [...mainNavItems, ...moreNavItems];
 
   return (
     <>
@@ -59,7 +79,7 @@ export const Header: React.FC = () => {
 
         {/* Center: Top Navigation Tabs (Exact h-8 height, zero-scroll & clutter-free across laptops and desktops) */}
         <nav className="hidden md:flex items-center h-8 bg-[var(--bg-sidebar)] p-0.5 rounded-lg border border-[var(--border-dev)] text-xs gap-0.5 shrink-0">
-          {navItems.map(item => {
+          {mainNavItems.map(item => {
             const Icon = item.icon;
             const isActive = item.href === '/'
               ? pathname === '/'
@@ -83,6 +103,45 @@ export const Header: React.FC = () => {
               </Link>
             );
           })}
+
+          <div className="relative" ref={moreMenuRef}>
+            <button
+              onClick={() => setIsMoreMenuOpen(prev => !prev)}
+              className={`h-7 px-2 lg:px-2.5 rounded-md flex items-center gap-1.5 transition-all cursor-pointer whitespace-nowrap shrink-0 text-xs ${
+                moreNavItems.some(item => pathname.startsWith(item.href))
+                  ? 'text-rose-600 dark:text-rose-400 font-semibold'
+                  : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--pill-bg)] border border-transparent'
+              }`}
+            >
+              <span className="hidden xl:inline">More Tools</span>
+              <span className="xl:hidden">More</span>
+              <ChevronDown className={`w-3.5 h-3.5 transition-transform ${isMoreMenuOpen ? 'rotate-180' : ''}`} />
+            </button>
+            
+            {isMoreMenuOpen && (
+              <div className="absolute top-full left-0 mt-2 w-48 bg-[var(--bg-panel)] border border-[var(--border-dev)] rounded-lg shadow-lg flex flex-col p-1.5 z-50 animate-in fade-in zoom-in-95 duration-100">
+                {moreNavItems.map(item => {
+                  const Icon = item.icon;
+                  const isActive = pathname.startsWith(item.href);
+                  return (
+                    <Link
+                      key={item.href}
+                      href={item.href}
+                      onClick={() => setIsMoreMenuOpen(false)}
+                      className={`px-3 py-2 rounded-md flex items-center gap-2.5 transition-colors text-xs ${
+                        isActive
+                          ? 'bg-rose-500/10 text-rose-600 dark:text-rose-400 font-semibold'
+                          : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--pill-bg)]'
+                      }`}
+                    >
+                      <Icon className="w-4 h-4 shrink-0" />
+                      <span>{item.label}</span>
+                    </Link>
+                  );
+                })}
+              </div>
+            )}
+          </div>
         </nav>
 
         {/* Right: Quick Search (Cmd + K), Theme Switcher, and Mobile Menu Toggle (All synchronized at h-8) */}
@@ -139,7 +198,7 @@ export const Header: React.FC = () => {
       {/* Mobile Navigation Dropdown (<md) */}
       {isMobileMenuOpen && (
         <div className="md:hidden fixed top-12 left-0 right-0 z-40 bg-[var(--bg-panel)] border-b border-[var(--border-dev)] shadow-xl p-3 flex flex-col gap-1 font-mono animate-in fade-in slide-in-from-top-2">
-          {navItems.map(item => {
+          {allNavItems.map(item => {
             const Icon = item.icon;
             const isActive = item.href === '/'
               ? pathname === '/'

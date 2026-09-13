@@ -199,7 +199,7 @@ export function IconsClient() {
 
     fetch(`https://api.iconify.design/collection?prefix=${activeCollection.prefix}`)
       .then(res => res.json())
-      .then(data => {
+      .then((data: any) => {
         if (!isCancelled && data) {
           const list: string[] = [];
           if (Array.isArray(data.uncategorized)) list.push(...data.uncategorized);
@@ -255,7 +255,7 @@ export function IconsClient() {
     const timeout = setTimeout(() => {
       fetch(`https://api.iconify.design/search?query=${encodeURIComponent(masterSearchQuery.trim())}&limit=160`)
         .then(res => res.json())
-        .then(data => {
+        .then((data: any) => {
           if (!isCancelled && data && Array.isArray(data.icons)) {
             const parsed: ParsedIconItem[] = data.icons.map((item: string) => {
               const parts = item.split(':');
