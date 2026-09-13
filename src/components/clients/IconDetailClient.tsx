@@ -113,7 +113,7 @@ export function IconDetailClient({ collection }: { collection: IconCollectionIte
 
     fetch(`https://api.iconify.design/collection?prefix=${collection.prefix}`)
       .then(res => res.json())
-      .then(data => {
+      .then((data: any) => {
         if (!isCancelled && data) {
           const list: string[] = [];
           if (Array.isArray(data.uncategorized)) {
