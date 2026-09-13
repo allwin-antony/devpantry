@@ -28,6 +28,7 @@ export default async function sitemap(props: { id: Promise<string> }): Promise<M
       { url: `${baseUrl}/image-compressor`, lastModified: staticDate, changeFrequency: 'weekly', priority: 0.95 },
       { url: `${baseUrl}/jwt-decoder`, lastModified: staticDate, changeFrequency: 'weekly', priority: 0.95 },
       { url: `${baseUrl}/social-preview`, lastModified: staticDate, changeFrequency: 'weekly', priority: 0.95 },
+      { url: `${baseUrl}/collab`, lastModified: staticDate, changeFrequency: 'weekly', priority: 0.95 },
     ];
   }
 

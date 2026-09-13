@@ -17,7 +17,8 @@ import {
   Maximize2,
   HardDrive,
   Key,
-  Share2
+  Share2,
+  Users
 } from 'lucide-react';
 import { IconRenderer, loadMultiPrefixIcons } from '@/lib/iconBatchLoader';
 
@@ -135,6 +136,13 @@ export function HomeClient() {
       desc: 'High-density SVG icon repository with integrated styling controls and immediate copy hooks.',
       href: '/icons',
       badge: 'ASSETS',
+    },
+    {
+      icon: Users,
+      title: 'P2P Collab Editor',
+      desc: 'Zero-knowledge, real-time collaborative text and code editor powered by WebRTC and Yjs.',
+      href: '/collab',
+      badge: 'NEW',
     },
     {
       icon: Type,
