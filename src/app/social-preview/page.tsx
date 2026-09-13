@@ -105,6 +105,7 @@ export default function SocialPreviewPage() {
             <li><a href="/jwt-decoder" className="text-rose-400 hover:underline">JWT Decoder</a> — Inspect and chaos-test authentication tokens client-side.</li>
             <li><a href="/mock-data" className="text-rose-400 hover:underline">Mock Data Generator</a> — Synthesize edge-case test data for any schema.</li>
             <li><a href="/api-templates" className="text-rose-400 hover:underline">API Templates</a> — Real-world OAuth, webhook, and REST response fixtures.</li>
+            <li><a href="/collab" className="text-rose-400 hover:underline">P2P Collab Editor (Beta)</a> — Code and preview open graph tags collaboratively.</li>
           </ul>
         </article>
       </div>

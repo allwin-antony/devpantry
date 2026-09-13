@@ -83,6 +83,7 @@ export default function ChaosDataPage() {
         <ul>
           <li><a href="/api-templates" className="text-rose-400 hover:underline">API Templates</a> — Inject mock data directly into production schemas.</li>
           <li><a href="/jwt-decoder" className="text-rose-400 hover:underline">JWT Decoder</a> — Inspect tokens generated from mock claims.</li>
+          <li><a href="/collab" className="text-rose-400 hover:underline">P2P Collab Editor (Beta)</a> — Share and edit your mock payloads securely in real-time.</li>
         </ul>
       </article>
     </div>

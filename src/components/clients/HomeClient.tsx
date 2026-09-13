@@ -142,7 +142,7 @@ export function HomeClient() {
       title: 'P2P Collab Editor',
       desc: 'Zero-knowledge, real-time collaborative text and code editor powered by WebRTC and Yjs.',
       href: '/collab',
-      badge: 'NEW',
+      badge: 'BETA',
     },
     {
       icon: Type,

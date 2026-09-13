@@ -86,6 +86,7 @@ export default function ChaosTemplatesPage() {
         <ul>
           <li><a href="/mock-data" className="text-rose-400 hover:underline">Mock Data Generator</a> — Customize and expand these templates with your own schemas.</li>
           <li><a href="/jwt-decoder" className="text-rose-400 hover:underline">JWT Decoder</a> — Debug the authentication tokens embedded in these responses.</li>
+          <li><a href="/collab" className="text-rose-400 hover:underline">P2P Collab Editor (Beta)</a> — Real-time peer-to-peer editor to discuss API schemas.</li>
         </ul>
       </article>
     </div>

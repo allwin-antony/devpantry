@@ -96,6 +96,7 @@ export default function JwtInspectorPage() {
               <ul>
                 <li><a href="/api-templates" className="text-rose-400 hover:underline">API Templates</a> — Test your decoders with real OAuth and OIDC responses.</li>
                 <li><a href="/mock-data" className="text-rose-400 hover:underline">Mock Data Generator</a> — Synthesize custom edge-case claims.</li>
+                <li><a href="/collab" className="text-rose-400 hover:underline">P2P Collab Editor (Beta)</a> — Securely pair program or share decrypted payloads using zero-knowledge WebRTC.</li>
               </ul>
             </article>
         </Suspense>

@@ -16,7 +16,8 @@ import {
   FileArchive,
   Share2,
   ArrowRight,
-  X
+  X,
+  Users
 } from 'lucide-react';
 
 interface PaletteItem {
@@ -131,6 +132,16 @@ const PALETTE_ITEMS: PaletteItem[] = [
     icon: Share2,
     badge: '6 Platforms',
     keywords: ['og', 'open graph', 'twitter card', 'meta', 'social', 'share', 'preview', 'linkedin', 'discord', 'slack', 'whatsapp']
+  },
+  {
+    id: 'tool-collab-editor',
+    category: 'Tools',
+    title: 'P2P Collaborative Editor',
+    subtitle: 'Zero-knowledge, real-time code editor powered by WebRTC & Yjs',
+    href: '/collab',
+    icon: Users,
+    badge: 'Beta',
+    keywords: ['collab', 'collaborate', 'webrtc', 'p2p', 'editor', 'yjs', 'code', 'real-time', 'zero-knowledge', 'encryption']
   },
 
   // Popular Typefaces

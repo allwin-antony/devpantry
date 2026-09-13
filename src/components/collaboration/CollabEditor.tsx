@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import CodeMirror from '@uiw/react-codemirror';
 import { yCollab } from 'y-codemirror.next';
 import * as Y from 'yjs';
-import { useTheme } from 'next-themes';
+import { useTheme } from '@/components/ThemeProvider';
 
 interface CollabEditorProps {
   ytext: Y.Text;
@@ -12,7 +12,7 @@ interface CollabEditorProps {
 }
 
 export function CollabEditor({ ytext, provider, username = 'Anonymous', color = '#30bced' }: CollabEditorProps) {
-  const { resolvedTheme } = useTheme();
+  const { theme } = useTheme();
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
@@ -28,13 +28,13 @@ export function CollabEditor({ ytext, provider, username = 'Anonymous', color = 
   if (!mounted) return null;
 
   return (
-    <div className="flex-1 w-full h-full border rounded-md overflow-hidden bg-background">
+    <div className="flex-1 w-full h-full border border-[var(--border-dev)] rounded-xl overflow-hidden shadow-sm focus-within:border-[var(--border-focus)] transition-colors duration-300">
       <CodeMirror
         value={ytext.toString()}
         height="100%"
-        theme={resolvedTheme === 'dark' ? 'dark' : 'light'}
+        theme={theme === 'dark' ? 'dark' : 'light'}
         extensions={extensions}
-        className="h-full text-base"
+        className="h-full text-[14px] sm:text-[15px] font-mono [&>.cm-editor]:h-full [&>.cm-editor]:bg-[var(--bg-panel)] [&>.cm-editor]:outline-none"
       />
     </div>
   );

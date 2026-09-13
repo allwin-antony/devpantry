@@ -106,7 +106,7 @@ export function CollabClient() {
 
   if (view === 'SETUP') {
     return (
-      <div className="flex flex-col items-center justify-center min-h-[60vh] p-4">
+      <div className="flex flex-col items-center justify-center min-h-[60vh] p-4 bg-[var(--bg-app)]">
         {setupMode === 'CREATE' ? (
           <RoomCreate 
             onJoin={handleCreateRoom} 
@@ -125,29 +125,39 @@ export function CollabClient() {
   }
 
   return (
-    <div className="flex flex-col h-screen max-h-screen">
-      <header className="flex items-center justify-between p-4 border-b bg-background">
+    <div className="flex flex-col h-[calc(100vh-64px)] max-h-screen bg-[var(--bg-app)]">
+      <header className="flex flex-wrap items-center justify-between p-4 sm:px-6 border-b border-[var(--border-dev)] bg-[var(--bg-panel)] shadow-sm gap-4">
         <div className="flex items-center gap-4">
-          <h1 className="font-bold text-lg">DevPantry Collab</h1>
+          <div className="flex flex-col">
+            <h1 className="font-bold text-lg text-[var(--text-primary)] font-sans flex items-center gap-2">
+              <span className="bg-rose-500/10 text-rose-500 px-2 py-0.5 rounded text-xs font-mono tracking-wider border border-rose-500/20">BETA</span>
+              P2P Collab Editor
+            </h1>
+          </div>
+          <div className="hidden sm:block h-6 w-px bg-[var(--border-dev)] mx-2"></div>
           <ConnectionStatus state={connState} />
+        </div>
+        <div className="flex items-center gap-4">
+          <ParticipantList count={connState === 'CONNECTED' ? 2 : 1} />
           <button 
-            onClick={() => navigator.clipboard.writeText(window.location.href)}
-            className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors ml-4 border px-3 py-1.5 rounded-full bg-secondary/50 hover:bg-secondary"
+            onClick={() => {
+              navigator.clipboard.writeText(window.location.href);
+              alert('Invite link copied to clipboard!');
+            }}
+            className="flex items-center gap-2 text-xs font-mono font-bold text-[var(--text-secondary)] hover:text-cyan-500 transition-colors border border-[var(--border-dev)] hover:border-cyan-500/50 px-4 py-2 rounded-lg bg-[var(--bg-sidebar)] shadow-sm"
             title="Copy Invite Link"
           >
             <Copy size={14} />
             <span className="hidden sm:inline">Copy Invite Link</span>
           </button>
         </div>
-        <div className="flex items-center gap-4">
-          {/* For MVP we don't have exact participant count exposed yet, hardcode or calculate from provider state if we track it */}
-          <ParticipantList count={connState === 'CONNECTED' ? 2 : 1} />
-        </div>
       </header>
-      <main className="flex-1 overflow-hidden p-4">
-        {yjsManager && webrtcProvider && (
-          <CollabEditor ytext={yjsManager.text} provider={webrtcProvider} />
-        )}
+      <main className="flex-1 overflow-hidden p-4 sm:p-6 lg:p-8">
+        <div className="w-full h-full flex flex-col">
+          {yjsManager && webrtcProvider && (
+            <CollabEditor ytext={yjsManager.text} provider={webrtcProvider} />
+          )}
+        </div>
       </main>
     </div>
   );
