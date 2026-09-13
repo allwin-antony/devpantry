@@ -66,7 +66,7 @@ export function HomeClient() {
     const timer = setTimeout(() => {
       fetch(`https://api.iconify.design/search?query=${encodeURIComponent(iconQuery.trim())}&limit=12`)
         .then(res => res.json())
-        .then(data => {
+        .then((data: any) => {
           if (data && Array.isArray(data.icons) && data.icons.length > 0) {
             const parsed = data.icons.slice(0, 8).map((item: string) => {
               const parts = item.split(':');
