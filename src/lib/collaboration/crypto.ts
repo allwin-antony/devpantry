@@ -6,6 +6,15 @@ const PBKDF2_ITERATIONS = 100000;
 const SALT_SIZE = 16;
 const IV_SIZE = 12;
 
+export class PayloadDecryptionError extends Error {
+  constructor() {
+    super('Failed to decrypt room payload. Password or room ID may be incorrect.');
+    this.name = 'PayloadDecryptionError';
+    // Fix prototype chain for instanceof to work after transpilation
+    Object.setPrototypeOf(this, PayloadDecryptionError.prototype);
+  }
+}
+
 /**
  * Derives an AES-GCM CryptoKey from a password and salt.
  * The salt should be unique per room but does not need to be secret.
@@ -61,7 +70,7 @@ export async function encryptPayload(data: Uint8Array, key: CryptoKey): Promise<
  */
 export async function decryptPayload(encryptedData: Uint8Array, key: CryptoKey): Promise<Uint8Array> {
   if (encryptedData.length < IV_SIZE) {
-    throw new Error('Invalid encrypted data (too short to contain IV)');
+    throw new Error(`Invalid encrypted data (too short to contain IV). Length: ${encryptedData.length}`);
   }
   
   const iv = encryptedData.slice(0, IV_SIZE);
@@ -77,8 +86,8 @@ export async function decryptPayload(encryptedData: Uint8Array, key: CryptoKey):
       ciphertext
     );
     return new Uint8Array(decryptedBuffer);
-  } catch (e) {
-    throw new Error('Failed to decrypt room payload. Password or room ID may be incorrect.');
+  } catch (e: any) {
+    throw new PayloadDecryptionError();
   }
 }
 

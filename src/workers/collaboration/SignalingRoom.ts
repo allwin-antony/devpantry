@@ -5,11 +5,8 @@ interface Env {
 }
 
 export class SignalingRoom extends DurableObject {
-  private connections: Map<WebSocket, { id: string }>;
-
   constructor(ctx: DurableObjectState, env: Env) {
     super(ctx, env);
-    this.connections = new Map();
   }
 
   async fetch(request: Request): Promise<Response> {
@@ -27,10 +24,24 @@ export class SignalingRoom extends DurableObject {
     }
 
     this.ctx.acceptWebSocket(server);
-    this.connections.set(server, { id: peerId });
+    // Use the hibernation API to store the peer ID on the socket itself,
+    // so it survives across Durable Object hibernation cycles!
+    server.serializeAttachment({ id: peerId });
 
-    // Notify others that a new peer joined
+    // 1. Notify EXISTING peers that a new peer joined
     this.broadcast(JSON.stringify({ type: 'peer-joined', peerId }), server);
+
+    // 2. Notify the NEW peer about every existing peer already in the room.
+    for (const ws of this.ctx.getWebSockets()) {
+      if (ws !== server) {
+        try {
+          const info = ws.deserializeAttachment() as { id: string };
+          server.send(JSON.stringify({ type: 'peer-joined', peerId: info.id }));
+        } catch {
+          // Ignore
+        }
+      }
+    }
 
     return new Response(null, {
       status: 101,
@@ -63,42 +74,49 @@ export class SignalingRoom extends DurableObject {
   }
 
   webSocketClose(ws: WebSocket, code: number, reason: string, wasClean: boolean) {
-    const conn = this.connections.get(ws);
-    if (conn) {
-      this.connections.delete(ws);
-      this.broadcast(JSON.stringify({ type: 'peer-left', peerId: conn.id }));
+    try {
+      const info = ws.deserializeAttachment() as { id: string };
+      if (info && info.id) {
+        this.broadcast(JSON.stringify({ type: 'peer-left', peerId: info.id }));
+      }
+    } catch (e) {
+      // Ignore
     }
   }
 
   webSocketError(ws: WebSocket, error: unknown) {
-    const conn = this.connections.get(ws);
-    if (conn) {
-      this.connections.delete(ws);
-      this.broadcast(JSON.stringify({ type: 'peer-left', peerId: conn.id }));
+    try {
+      const info = ws.deserializeAttachment() as { id: string };
+      if (info && info.id) {
+        this.broadcast(JSON.stringify({ type: 'peer-left', peerId: info.id }));
+      }
+    } catch (e) {
+      // Ignore
     }
   }
 
   private broadcast(message: string, exclude?: WebSocket) {
-    for (const ws of this.connections.keys()) {
+    for (const ws of this.ctx.getWebSockets()) {
       if (ws !== exclude) {
         try {
           ws.send(message);
         } catch (e) {
-          // If a send fails, we'll wait for standard cleanup via webSocketClose/Error
+          // Ignore
         }
       }
     }
   }
 
   private sendTo(peerId: string, message: string) {
-    for (const [ws, info] of this.connections.entries()) {
-      if (info.id === peerId) {
-        try {
+    for (const ws of this.ctx.getWebSockets()) {
+      try {
+        const info = ws.deserializeAttachment() as { id: string };
+        if (info && info.id === peerId) {
           ws.send(message);
-        } catch (e) {
-          // Ignore
+          break;
         }
-        break;
+      } catch (e) {
+        // Ignore
       }
     }
   }

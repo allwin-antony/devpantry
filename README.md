@@ -199,10 +199,12 @@ A zero-knowledge, real-time collaborative text and code editor built on pure pee
 
 * **Zero-Knowledge Architecture**: 
   * Documents are **never** sent to a central database or server.
-  * Uses Cloudflare Durable Objects exclusively for lightweight WebRTC signaling (SDP offer/answer exchange).
+  * WebRTC signaling (SDP offer/answer exchange) is handled by a lightweight **Cloudflare Durable Object** (`SignalingRoom`). 
+  * The signaling server utilizes the modern **WebSocket Hibernation API** to persist socket connections and track peers gracefully, even if the worker hibernates to save compute.
 * **Client-Side AES-GCM Encryption**:
   * Uses `PBKDF2` to derive a strong 256-bit AES-GCM key from the room password entirely in the browser.
-  * Every Yjs update is securely encrypted before being transmitted over the WebRTC DataChannel.
+  * Every Yjs update is securely encrypted before being transmitted over the WebRTC `RTCDataChannel`.
+  * If a user enters the wrong password, symmetric decryption natively fails and drops the peer gracefully.
 * **Resilient CRDT Sync (Yjs)**:
   * Powered by `Yjs` for robust, conflict-free syncing of document state across multiple peers.
   * Automatically handles offline editing via `IndexedDB` persistence and resyncs seamlessly when the network is restored.

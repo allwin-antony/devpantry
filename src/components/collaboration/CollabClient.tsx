@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { RoomCreate } from './RoomCreate';
 import { RoomJoin } from './RoomJoin';
 import { ConnectionStatus, ConnectionState } from './ConnectionStatus';
@@ -28,27 +28,30 @@ export function CollabClient() {
   const [webrtcProvider, setWebrtcProvider] = useState<EncryptedWebRTCProvider | null>(null);
   
   const [connState, setConnState] = useState<ConnectionState>('INITIALIZING');
+  const [participantCount, setParticipantCount] = useState<number>(1);
+  const [activeRoomId, setActiveRoomId] = useState<string>('');
+
+  // Use refs so cleanup callbacks don't capture stale closure values
+  const providerRef = useRef<EncryptedWebRTCProvider | null>(null);
+  const managerRef = useRef<YjsStateManager | null>(null);
   
   // Clean up on unmount
   useEffect(() => {
     return () => {
-      webrtcProvider?.disconnect();
-      yjsManager?.destroy();
+      providerRef.current?.disconnect();
+      managerRef.current?.destroy();
     };
-  }, [webrtcProvider, yjsManager]);
+  }, []);
 
   const handleCreateRoom = async (roomId: string, password: string) => {
     try {
-      // In a real app, salt should be deterministic based on roomId to avoid needing to sync it,
-      // or we sync it during a plaintext handshake. For MVP, we'll derive the key simply 
-      // by using the roomId itself as the salt (padded/hashed) to ensure both sides get the same key.
       const encoder = new TextEncoder();
       const salt = encoder.encode(roomId.padEnd(16, '0').slice(0, 16));
       
       const key = await deriveKey(password, salt);
-      initCollaboration(roomId, key);
+      sessionStorage.setItem(`collab-role-${roomId}`, 'creator');
+      initCollaboration(roomId, key, true);
       
-      // Update URL so it's easy to share
       window.history.replaceState(null, '', `?room=${roomId}`);
     } catch (e: any) {
       setError(e.message);
@@ -61,16 +64,27 @@ export function CollabClient() {
       const salt = encoder.encode(roomId.padEnd(16, '0').slice(0, 16));
       
       const key = await deriveKey(password, salt);
-      initCollaboration(roomId, key);
+
+      // Check if they previously created this room in this session
+      const savedRole = sessionStorage.getItem(`collab-role-${roomId}`);
+      const isCreator = savedRole === 'creator';
+      if (!isCreator) {
+        sessionStorage.setItem(`collab-role-${roomId}`, 'participant');
+      }
       
-      // Update URL so it's easy to share
+      initCollaboration(roomId, key, isCreator);
+      
       window.history.replaceState(null, '', `?room=${roomId}`);
     } catch (e: any) {
       setError(e.message);
     }
   };
 
-  const initCollaboration = (roomId: string, key: CryptoKey) => {
+  const initCollaboration = (roomId: string, key: CryptoKey, isCreator: boolean) => {
+    // Clean up any existing session first
+    providerRef.current?.disconnect();
+    managerRef.current?.destroy();
+
     const manager = new YjsStateManager(roomId);
     
     // Generate an ephemeral peer ID for this session
@@ -80,25 +94,36 @@ export function CollabClient() {
       roomId,
       localPeerId,
       manager.doc,
-      key
+      key,
+      isCreator
     );
 
-    provider.onStateChange = (state) => {
+    provider.onStateChange = (state, _peerId, count) => {
       setConnState(state);
+      if (count !== undefined) {
+        setParticipantCount(count + 1); // +1 for self
+      }
     };
 
-    provider.onAuthFailed = () => {
+    provider.onAuthFailed = (_failedPeerId: string) => {
       setError('❌ Unable to decrypt room. The password may be incorrect.');
       setView('SETUP');
       setSetupMode('JOIN');
+      // Don't call provider.disconnect() here — the WebRTC layer already
+      // closed the specific peer connection. We only tear down the UI.
       provider.disconnect();
       manager.destroy();
+      providerRef.current = null;
+      managerRef.current = null;
       setWebrtcProvider(null);
       setYjsManager(null);
     };
 
+    providerRef.current = provider;
+    managerRef.current = manager;
     setYjsManager(manager);
     setWebrtcProvider(provider);
+    setActiveRoomId(roomId);
     setView('EDITOR');
     
     provider.connect();
@@ -132,13 +157,16 @@ export function CollabClient() {
             <h1 className="font-bold text-lg text-[var(--text-primary)] font-sans flex items-center gap-2">
               <span className="bg-rose-500/10 text-rose-500 px-2 py-0.5 rounded text-xs font-mono tracking-wider border border-rose-500/20">BETA</span>
               P2P Collab Editor
+              <span className="ml-2 text-sm text-[var(--text-secondary)] font-mono font-normal opacity-70">
+                {activeRoomId && `Room: ${activeRoomId}`}
+              </span>
             </h1>
           </div>
           <div className="hidden sm:block h-6 w-px bg-[var(--border-dev)] mx-2"></div>
           <ConnectionStatus state={connState} />
         </div>
         <div className="flex items-center gap-4">
-          <ParticipantList count={connState === 'CONNECTED' ? 2 : 1} />
+          <ParticipantList count={participantCount} />
           <button 
             onClick={() => {
               navigator.clipboard.writeText(window.location.href);
