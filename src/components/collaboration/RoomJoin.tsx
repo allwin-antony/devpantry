@@ -26,8 +26,13 @@ export function RoomJoin({ onJoin, onSwitchToCreate, error, initialRoomId = '' }
     onJoin(upperRoomId, password);
   };
 
+  const onSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    handleJoin();
+  };
+
   return (
-    <div className="w-full max-w-md mx-auto border rounded-xl shadow-sm bg-card text-card-foreground">
+    <form onSubmit={onSubmit} className="w-full max-w-md mx-auto border rounded-xl shadow-sm bg-card text-card-foreground">
       <div className="flex flex-col space-y-1.5 p-6">
         <h3 className="font-semibold leading-none tracking-tight">Join Collaboration Room</h3>
         <p className="text-sm text-muted-foreground">
@@ -62,13 +67,13 @@ export function RoomJoin({ onJoin, onSwitchToCreate, error, initialRoomId = '' }
         </div>
       </div>
       <div className="flex flex-col gap-3 p-6 pt-0">
-        <button className="inline-flex items-center justify-center rounded-md text-sm font-medium bg-primary text-primary-foreground shadow hover:bg-primary/90 h-9 px-4 py-2 w-full" onClick={handleJoin}>
+        <button type="submit" className="inline-flex items-center justify-center rounded-md text-sm font-medium bg-primary text-primary-foreground shadow hover:bg-primary/90 h-9 px-4 py-2 w-full">
           Join Room <ArrowRight className="ml-2" size={16} />
         </button>
-        <button className="inline-flex items-center justify-center rounded-md text-sm font-medium underline-offset-4 hover:underline h-9 px-4 py-2 w-full text-muted-foreground" onClick={onSwitchToCreate}>
+        <button type="button" className="inline-flex items-center justify-center rounded-md text-sm font-medium underline-offset-4 hover:underline h-9 px-4 py-2 w-full text-muted-foreground" onClick={onSwitchToCreate}>
           Create a new room instead
         </button>
       </div>
-    </div>
+    </form>
   );
 }
