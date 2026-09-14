@@ -10,6 +10,7 @@ export type SignalingMessage =
 export class SignalingClient {
   private ws: WebSocket | null = null;
   private heartbeatInterval: ReturnType<typeof setInterval> | null = null;
+  private queue: string[] = [];
   
   constructor(
     private roomId: string,
@@ -30,6 +31,7 @@ export class SignalingClient {
     
     this.ws.onopen = () => {
       this.startHeartbeat();
+      this.flushQueue();
     };
 
     this.ws.onmessage = (event) => {
@@ -53,11 +55,22 @@ export class SignalingClient {
   }
 
   send(msg: Omit<SignalingMessage, 'peerId'> & { peerId?: string }) {
+    const fullMsg = { ...msg, peerId: this.localPeerId };
+    const payload = JSON.stringify(fullMsg);
+
     if (this.ws && this.ws.readyState === WebSocket.OPEN) {
-      // Auto-attach our local peer ID to outbound messages
-      const fullMsg = { ...msg, peerId: this.localPeerId };
-      this.ws.send(JSON.stringify(fullMsg));
+      this.ws.send(payload);
+    } else {
+      this.queue.push(payload);
     }
+  }
+
+  private flushQueue() {
+    if (!this.ws || this.ws.readyState !== WebSocket.OPEN) return;
+    for (const msg of this.queue) {
+      this.ws.send(msg);
+    }
+    this.queue = [];
   }
 
   disconnect() {

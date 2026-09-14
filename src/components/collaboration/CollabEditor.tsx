@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import CodeMirror from '@uiw/react-codemirror';
 import { yCollab } from 'y-codemirror.next';
 import * as Y from 'yjs';
@@ -19,11 +19,11 @@ export function CollabEditor({ ytext, provider, username = 'Anonymous', color = 
     setMounted(true);
   }, []);
 
-  const extensions = [
+  const extensions = useMemo(() => [
     yCollab(ytext, provider.awareness || null, {
       undoManager: new Y.UndoManager(ytext)
     })
-  ];
+  ], [ytext, provider.awareness]);
 
   if (!mounted) return null;
 
