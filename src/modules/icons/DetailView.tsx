@@ -48,7 +48,7 @@ export default function IconsDetailView({ item }: { item: any }) {
         <h3>Related Design Resources</h3>
         <ul>
           <li><a href="/fonts" className="text-rose-400 hover:underline">Typography Library</a> — Discover 2,180+ open-source fonts to pair with these icons.</li>
-          <li><a href="/image-resizer" className="text-rose-400 hover:underline">Image Resizer</a> — Perfectly frame your icons for social media graphics.</li>
+          <li><a href="/tools/image-resizer" className="text-rose-400 hover:underline">Image Resizer</a> — Perfectly frame your icons for social media graphics.</li>
         </ul>
       </article>
     </div>

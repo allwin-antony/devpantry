@@ -2,30 +2,6 @@ import type { Metadata } from 'next';
 import { Suspense } from 'react';
 import { JwtInspectorClient } from '@/components/clients/JwtInspectorClient';
 
-export const metadata: Metadata = {
-  title: 'JWT Decoder — Decode & Test Tokens Online | DevPantry',
-  description:
-    '100% in-memory client-side JWT decoder and chaos debugger. Inspect claims, decode headers, verify signatures with WebCrypto, and simulate edge-case authentication failures (expired tokens, clock skew, alg: none exploit simulation, claim stripping, BLNS injections) with zero network transmission. Completely private, free, unlimited, and no signup required.',
-  openGraph: {
-    title: 'Client-Side JWT Inspector & Chaos Tamperer — No Signup & Zero Leak | DevPantry',
-    description:
-      'Zero-leak in-memory JWT inspector and chaos simulator. Decode tokens, verify signatures locally with WebCrypto, and test edge-case authentication failures.',
-    url: 'https://devpantry.com/jwt-decoder',
-    type: 'website',
-    images: [{ url: '/og-image-devtools.png', width: 1200, height: 630, alt: 'DevPantry Client-Side JWT Inspector' }],
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: 'Client-Side JWT Inspector & Chaos Tamperer — DevPantry',
-    description:
-      'Zero-leak client-side JWT debugger and chaos tamperer. 100% in-memory sandbox, zero network requests, and 1-click edge-case simulations.',
-    images: ['/og-image-devtools.png'],
-  },
-  alternates: {
-    canonical: 'https://devpantry.com/jwt-decoder',
-  },
-};
-
 export default function JwtInspectorPage() {
   const jsonLd = [
     {
@@ -94,9 +70,9 @@ export default function JwtInspectorPage() {
 
               <h3>Related Tools</h3>
               <ul>
-                <li><a href="/api-templates" className="text-rose-400 hover:underline">API Templates</a> — Test your decoders with real OAuth and OIDC responses.</li>
-                <li><a href="/mock-data" className="text-rose-400 hover:underline">Mock Data Generator</a> — Synthesize custom edge-case claims.</li>
-                <li><a href="/collab" className="text-rose-400 hover:underline">P2P Collab Editor (Beta)</a> — Securely pair program or share decrypted payloads using zero-knowledge WebRTC.</li>
+                <li><a href="/tools/api-templates" className="text-rose-400 hover:underline">API Templates</a> — Test your decoders with real OAuth and OIDC responses.</li>
+                <li><a href="/tools/mock-data" className="text-rose-400 hover:underline">Mock Data Generator</a> — Synthesize custom edge-case claims.</li>
+                <li><a href="/tools/collab" className="text-rose-400 hover:underline">P2P Collab Editor (Beta)</a> — Securely pair program or share decrypted payloads using zero-knowledge WebRTC.</li>
               </ul>
             </article>
         </Suspense>

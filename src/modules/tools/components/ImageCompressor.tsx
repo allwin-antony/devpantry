@@ -2,26 +2,6 @@ import type { Metadata } from 'next';
 import { Suspense } from 'react';
 import { BgRemovalClient } from '@/components/clients/BgRemovalClient';
 
-export const metadata: Metadata = {
-  title: 'Free Unlimited Image Compressor & WebP Converter — No Signup',
-  description: 'Compress unlimited images under 500 KB, 1 MB, 200 KB, or custom file size budgets with no signup. Convert between PNG, JPEG, and WebP entirely in your browser with zero data storage and 100% privacy.',
-  openGraph: {
-    title: 'Free Unlimited Image Compressor & WebP Converter — No Signup | DevPantry',
-    description: 'Compress unlimited images to target file size budgets (<500 KB, <1 MB) and convert WebP/PNG/JPEG entirely inside your browser. No signup, zero uploads, 100% private.',
-    type: 'website',
-    images: [{ url: '/og-image-studio.png', width: 1200, height: 630, alt: 'DevPantry Image Compressor Studio' }],
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: 'Free Unlimited Image Compressor & WebP Converter — No Signup | DevPantry',
-    description: 'Compress unlimited images and convert to WebP directly in your browser with no signup. Set strict file size limits with smart iterative quality tuning.',
-    images: ['/og-image-studio.png'],
-  },
-  alternates: {
-    canonical: 'https://devpantry.com/image-compressor',
-  },
-};
-
 export default function ImageCompressorPage() {
   const jsonLd = [
     {
@@ -85,8 +65,8 @@ export default function ImageCompressorPage() {
 
         <h3>Related Tools</h3>
         <ul>
-          <li><a href="/image-resizer" className="text-rose-400 hover:underline">Image Resizer</a> — Resize dimensions before compressing.</li>
-          <li><a href="/background-remover" className="text-rose-400 hover:underline">Background Remover</a> — Isolate subjects with AI before optimizing.</li>
+          <li><a href="/tools/image-resizer" className="text-rose-400 hover:underline">Image Resizer</a> — Resize dimensions before compressing.</li>
+          <li><a href="/tools/background-remover" className="text-rose-400 hover:underline">Background Remover</a> — Isolate subjects with AI before optimizing.</li>
         </ul>
       </article>
     </div>

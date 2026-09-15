@@ -2,26 +2,6 @@ import type { Metadata } from 'next';
 import { Suspense } from 'react';
 import { BgRemovalClient } from '@/components/clients/BgRemovalClient';
 
-export const metadata: Metadata = {
-  title: 'Free Unlimited Image Resizer & Artboard Studio — No Signup',
-  description: 'Resize unlimited images to exact pixel dimensions, aspect ratios, and custom padding entirely inside your browser with no signup. 100% private, free forever, and instant.',
-  openGraph: {
-    title: 'Free Unlimited Image Resizer & Artboard Studio — No Signup | DevPantry',
-    description: 'Instant, unlimited image resizing, aspect ratio framing, and padding directly in your browser. No signup required, zero cloud uploads, 100% private.',
-    type: 'website',
-    images: [{ url: '/og-image-studio.png', width: 1200, height: 630, alt: 'DevPantry Image Resizer Studio' }],
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: 'Free Unlimited Image Resizer & Artboard Studio — No Signup | DevPantry',
-    description: 'Resize and frame unlimited images directly in your browser with no signup. 100% private, zero uploads, custom aspect ratios and target pixel sizes.',
-    images: ['/og-image-studio.png'],
-  },
-  alternates: {
-    canonical: 'https://devpantry.com/image-resizer',
-  },
-};
-
 export default function ImageResizerPage() {
   const jsonLd = [
     {
@@ -85,8 +65,8 @@ export default function ImageResizerPage() {
 
         <h3>Related Tools</h3>
         <ul>
-          <li><a href="/image-compressor" className="text-rose-400 hover:underline">Image Compressor</a> — Compress your resized images to save bandwidth.</li>
-          <li><a href="/background-remover" className="text-rose-400 hover:underline">Background Remover</a> — Extract subjects from backgrounds with Edge AI.</li>
+          <li><a href="/tools/image-compressor" className="text-rose-400 hover:underline">Image Compressor</a> — Compress your resized images to save bandwidth.</li>
+          <li><a href="/tools/background-remover" className="text-rose-400 hover:underline">Background Remover</a> — Extract subjects from backgrounds with Edge AI.</li>
         </ul>
       </article>
     </div>

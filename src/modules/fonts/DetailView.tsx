@@ -63,8 +63,8 @@ export default function FontsDetailView({ item }: { item: any }) {
         <h3>Related Tools</h3>
         <ul>
           <li><a href="/icons" className="text-rose-400 hover:underline">Icon Library</a> — Pair {font.name} with vector icons.</li>
-          <li><a href="/image-resizer" className="text-rose-400 hover:underline">Image Resizer</a> — Pad images for social media covers.</li>
-          <li><a href="/jwt-decoder" className="text-rose-400 hover:underline">JWT Decoder</a> — Inspect client tokens without data leaks.</li>
+          <li><a href="/tools/image-resizer" className="text-rose-400 hover:underline">Image Resizer</a> — Pad images for social media covers.</li>
+          <li><a href="/tools/jwt-decoder" className="text-rose-400 hover:underline">JWT Decoder</a> — Inspect client tokens without data leaks.</li>
         </ul>
       </article>
     </div>

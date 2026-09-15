@@ -2,26 +2,6 @@ import type { Metadata } from 'next';
 import { Suspense } from 'react';
 import { BgRemovalClient } from '@/components/clients/BgRemovalClient';
 
-export const metadata: Metadata = {
-  title: 'Free Background Remover — AI-Powered, No Signup | DevPantry',
-  description: 'Remove backgrounds from unlimited images instantly inside your browser with zero server uploads and no signup required. Powered by Edge AI, ONNX Runtime Web, and WebGPU neural acceleration. 100% private, free forever.',
-  openGraph: {
-    title: 'Free Client-Side AI Background Remover — No Signup & Unlimited | DevPantry',
-    description: 'Instant, unlimited background removal powered by Edge AI & ONNX WebAssembly. No signup, zero server uploads, high-resolution PNG/WebP exports, and interactive before/after comparison.',
-    type: 'website',
-    images: [{ url: '/og-image-studio.png', width: 1200, height: 630, alt: 'DevPantry AI Background Remover' }],
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: 'Free Client-Side AI Background Remover — No Signup & Unlimited | DevPantry',
-    description: 'Remove image backgrounds from unlimited photos entirely inside your browser. No signup required, 100% private, zero server uploads, powered by Edge AI.',
-    images: ['/og-image-studio.png'],
-  },
-  alternates: {
-    canonical: 'https://devpantry.com/background-remover',
-  },
-};
-
 export default function BackgroundRemovalPage() {
   const jsonLd = [
     {
@@ -90,8 +70,8 @@ export default function BackgroundRemovalPage() {
         
         <h3>Related Tools</h3>
         <ul>
-          <li><a href="/image-resizer" className="text-rose-400 hover:underline">Image Resizer</a> — Crop and resize your transparent cutout.</li>
-          <li><a href="/image-compressor" className="text-rose-400 hover:underline">Image Compressor</a> — Optimize your final PNG or WebP for web delivery.</li>
+          <li><a href="/tools/image-resizer" className="text-rose-400 hover:underline">Image Resizer</a> — Crop and resize your transparent cutout.</li>
+          <li><a href="/tools/image-compressor" className="text-rose-400 hover:underline">Image Compressor</a> — Optimize your final PNG or WebP for web delivery.</li>
         </ul>
       </article>
     </div>

@@ -2,25 +2,6 @@ import type { Metadata } from 'next';
 import { Suspense } from 'react';
 import { ChaosDataClient } from '@/components/clients/ChaosDataClient';
 
-export const metadata: Metadata = {
-  title: 'Mock Data Generator — Realistic Test Data Online | DevPantry',
-  description: 'Generate high-entropy, realistic mock data for UI and API stress testing. Includes Naughty Strings, Unicode anomalies, max-bounds integers, and schema builders. 100% private, client-side generation.',
-  openGraph: {
-    title: 'Mock Data Generator — Edge-Case Test Data & Schema Builder | DevPantry',
-    description: 'High-entropy edge-case testing: 100+ BLNS naughty strings, custom schemas, 13+ field types, and 5 export formats.',
-    images: [{ url: '/og-image-devtools.png', width: 1200, height: 630, alt: 'DevPantry Chaos Mock Data Generator' }],
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: 'Mock Data Generator & Schema Builder',
-    description: 'Generate dirty mock data with 100+ naughty strings and export to JSON, CSV, SQL, Zod, and TypeScript.',
-    images: ['/og-image-devtools.png'],
-  },
-  alternates: {
-    canonical: 'https://devpantry.com/mock-data',
-  },
-};
-
 export default function ChaosDataPage() {
   const jsonLd = [
     {
@@ -81,9 +62,9 @@ export default function ChaosDataPage() {
 
         <h3>Related Tools</h3>
         <ul>
-          <li><a href="/api-templates" className="text-rose-400 hover:underline">API Templates</a> — Inject mock data directly into production schemas.</li>
-          <li><a href="/jwt-decoder" className="text-rose-400 hover:underline">JWT Decoder</a> — Inspect tokens generated from mock claims.</li>
-          <li><a href="/collab" className="text-rose-400 hover:underline">P2P Collab Editor (Beta)</a> — Share and edit your mock payloads securely in real-time.</li>
+          <li><a href="/tools/api-templates" className="text-rose-400 hover:underline">API Templates</a> — Inject mock data directly into production schemas.</li>
+          <li><a href="/tools/jwt-decoder" className="text-rose-400 hover:underline">JWT Decoder</a> — Inspect tokens generated from mock claims.</li>
+          <li><a href="/tools/collab" className="text-rose-400 hover:underline">P2P Collab Editor (Beta)</a> — Share and edit your mock payloads securely in real-time.</li>
         </ul>
       </article>
     </div>

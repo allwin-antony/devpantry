@@ -1669,7 +1669,7 @@ export function BgRemovalClient({ initialMode = 'bg-removal' }: BgRemovalClientP
               {/* Studio Tool Navigation Switcher */}
               <div className="w-full max-w-xl mb-4 flex items-center justify-center gap-1.5 p-1 rounded-xl bg-[var(--bg-panel)] border border-[var(--border-dev)] text-xs shadow-sm">
                 <Link
-                  href="/background-remover"
+                  href="/tools/background-remover"
                   className={`flex-1 py-1.5 px-2 rounded-lg flex items-center justify-center gap-1.5 font-bold transition-all text-center ${initialMode === 'bg-removal'
                       ? 'bg-rose-500 text-white shadow-sm'
                       : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--pill-bg)]'
@@ -1679,7 +1679,7 @@ export function BgRemovalClient({ initialMode = 'bg-removal' }: BgRemovalClientP
                   <span className="truncate">AI BG Removal</span>
                 </Link>
                 <Link
-                  href="/image-resizer"
+                  href="/tools/image-resizer"
                   className={`flex-1 py-1.5 px-2 rounded-lg flex items-center justify-center gap-1.5 font-bold transition-all text-center ${initialMode === 'resizer'
                       ? 'bg-rose-500 text-white shadow-sm'
                       : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--pill-bg)]'
@@ -1689,7 +1689,7 @@ export function BgRemovalClient({ initialMode = 'bg-removal' }: BgRemovalClientP
                   <span className="truncate">Resizer &amp; Artboard</span>
                 </Link>
                 <Link
-                  href="/image-compressor"
+                  href="/tools/image-compressor"
                   className={`flex-1 py-1.5 px-2 rounded-lg flex items-center justify-center gap-1.5 font-bold transition-all text-center ${initialMode === 'compressor'
                       ? 'bg-rose-500 text-white shadow-sm'
                       : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--pill-bg)]'
@@ -3318,7 +3318,7 @@ export function BgRemovalClient({ initialMode = 'bg-removal' }: BgRemovalClientP
                 <div className="flex flex-col gap-1.5 text-xs">
                   {initialMode !== 'bg-removal' && (
                     <Link
-                      href="/background-remover"
+                      href="/tools/background-remover"
                       className="flex items-center justify-between p-2 rounded bg-[var(--bg-panel)] hover:bg-[var(--pill-bg)] border border-[var(--border-dev)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-all group"
                     >
                       <div className="flex items-center gap-1.5 truncate">
@@ -3330,7 +3330,7 @@ export function BgRemovalClient({ initialMode = 'bg-removal' }: BgRemovalClientP
                   )}
                   {initialMode !== 'resizer' && (
                     <Link
-                      href="/image-resizer"
+                      href="/tools/image-resizer"
                       className="flex items-center justify-between p-2 rounded bg-[var(--bg-panel)] hover:bg-[var(--pill-bg)] border border-[var(--border-dev)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-all group"
                     >
                       <div className="flex items-center gap-1.5 truncate">
@@ -3342,7 +3342,7 @@ export function BgRemovalClient({ initialMode = 'bg-removal' }: BgRemovalClientP
                   )}
                   {initialMode !== 'compressor' && (
                     <Link
-                      href="/image-compressor"
+                      href="/tools/image-compressor"
                       className="flex items-center justify-between p-2 rounded bg-[var(--bg-panel)] hover:bg-[var(--pill-bg)] border border-[var(--border-dev)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-all group"
                     >
                       <div className="flex items-center gap-1.5 truncate">
@@ -3521,19 +3521,19 @@ export function BgRemovalClient({ initialMode = 'bg-removal' }: BgRemovalClientP
               <span className="text-[10px] text-[var(--text-muted)] font-mono">Next Workflow Step:</span>
               <div className="flex items-center gap-3 text-[11px]">
                 {initialMode !== 'resizer' && (
-                  <Link href="/image-resizer" className="text-rose-500 hover:underline flex items-center gap-1 font-semibold">
+                  <Link href="/tools/image-resizer" className="text-rose-500 hover:underline flex items-center gap-1 font-semibold">
                     <Maximize2 className="w-3 h-3" />
                     <span>Resize &amp; Frame</span>
                   </Link>
                 )}
                 {initialMode !== 'compressor' && (
-                  <Link href="/image-compressor" className="text-amber-500 hover:underline flex items-center gap-1 font-semibold">
+                  <Link href="/tools/image-compressor" className="text-amber-500 hover:underline flex items-center gap-1 font-semibold">
                     <HardDrive className="w-3 h-3" />
                     <span>Compress for Web</span>
                   </Link>
                 )}
                 {initialMode !== 'bg-removal' && (
-                  <Link href="/background-remover" className="text-rose-500 hover:underline flex items-center gap-1 font-semibold">
+                  <Link href="/tools/background-remover" className="text-rose-500 hover:underline flex items-center gap-1 font-semibold">
                     <Sparkles className="w-3 h-3" />
                     <span>AI Background Remover</span>
                   </Link>

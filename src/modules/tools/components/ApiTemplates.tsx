@@ -2,25 +2,6 @@ import type { Metadata } from 'next';
 import { Suspense } from 'react';
 import { ChaosTemplatesClient } from '@/components/clients/ChaosTemplatesClient';
 
-export const metadata: Metadata = {
-  title: 'API Mock Responses — Stripe, Google, GitHub Templates | DevPantry',
-  description: 'Stress-test your frontend and API handlers with real-world response schemas from Google SSO, GitHub OAuth, Stripe Billing, Shopify, Supabase, and Resend filled with high-entropy chaos mock data.',
-  openGraph: {
-    title: 'API Mock Response Templates & Chaos Sandbox | DevPantry',
-    description: '17 real-world production API templates (Google, GitHub, Stripe, Supabase) filled with high-entropy edge cases, Unicode injections, and floating-point traps.',
-    images: [{ url: '/og-image-devtools.png', width: 1200, height: 630, alt: 'DevPantry API Mock Templates & Chaos Sandbox' }],
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: 'API Mock Response Templates | DevPantry',
-    description: 'Stress test your app with dirty mock data injected into real-world API schemas.',
-    images: ['/og-image-devtools.png'],
-  },
-  alternates: {
-    canonical: 'https://devpantry.com/api-templates',
-  },
-};
-
 export default function ChaosTemplatesPage() {
   const jsonLd = [
     {
@@ -84,9 +65,9 @@ export default function ChaosTemplatesPage() {
 
         <h3>Related Tools</h3>
         <ul>
-          <li><a href="/mock-data" className="text-rose-400 hover:underline">Mock Data Generator</a> — Customize and expand these templates with your own schemas.</li>
-          <li><a href="/jwt-decoder" className="text-rose-400 hover:underline">JWT Decoder</a> — Debug the authentication tokens embedded in these responses.</li>
-          <li><a href="/collab" className="text-rose-400 hover:underline">P2P Collab Editor (Beta)</a> — Real-time peer-to-peer editor to discuss API schemas.</li>
+          <li><a href="/tools/mock-data" className="text-rose-400 hover:underline">Mock Data Generator</a> — Customize and expand these templates with your own schemas.</li>
+          <li><a href="/tools/jwt-decoder" className="text-rose-400 hover:underline">JWT Decoder</a> — Debug the authentication tokens embedded in these responses.</li>
+          <li><a href="/tools/collab" className="text-rose-400 hover:underline">P2P Collab Editor (Beta)</a> — Real-time peer-to-peer editor to discuss API schemas.</li>
         </ul>
       </article>
     </div>

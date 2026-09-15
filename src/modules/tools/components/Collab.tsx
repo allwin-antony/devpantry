@@ -2,24 +2,6 @@ import { Metadata } from 'next';
 import { Suspense } from 'react';
 import { CollabWrapper } from '@/components/collaboration/CollabWrapper';
 
-export const metadata: Metadata = {
-  title: 'P2P Collaborative Editor | DevPantry',
-  description: 'Zero-knowledge, real-time collaborative text and code editor powered by pure WebRTC and Yjs CRDTs. No central database, 100% encrypted.',
-  openGraph: {
-    title: 'P2P Collaborative Editor | DevPantry',
-    description: 'Zero-knowledge, real-time collaborative text and code editor powered by pure WebRTC and Yjs CRDTs.',
-    type: 'website',
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: 'DevPantry P2P Collaborative Editor',
-    description: 'Real-time collaborative code editor with Zero-Knowledge AES-GCM encryption.',
-  },
-  alternates: {
-    canonical: 'https://devpantry.com/collab',
-  },
-};
-
 export default function CollabPage() {
   const jsonLd = [
     {
@@ -88,9 +70,9 @@ export default function CollabPage() {
 
             <h3>Related Tools</h3>
             <ul>
-              <li><a href="/jwt-decoder" className="text-rose-500 hover:underline">JWT Decoder</a> — Validate auth tokens before setting up collab sessions.</li>
-              <li><a href="/mock-data" className="text-rose-500 hover:underline">Chaos Data</a> — Need data to paste into the editor? Synthesize mock data instantly.</li>
-              <li><a href="/api-templates" className="text-rose-500 hover:underline">API Mocks</a> — View production WebRTC/Signaling JSON payloads.</li>
+              <li><a href="/tools/jwt-decoder" className="text-rose-500 hover:underline">JWT Decoder</a> — Validate auth tokens before setting up collab sessions.</li>
+              <li><a href="/tools/mock-data" className="text-rose-500 hover:underline">Chaos Data</a> — Need data to paste into the editor? Synthesize mock data instantly.</li>
+              <li><a href="/tools/api-templates" className="text-rose-500 hover:underline">API Mocks</a> — View production WebRTC/Signaling JSON payloads.</li>
             </ul>
           </article>
         </Suspense>

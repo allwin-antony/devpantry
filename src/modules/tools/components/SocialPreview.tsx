@@ -2,30 +2,6 @@ import type { Metadata } from 'next';
 import { Suspense } from 'react';
 import { SocialPreviewClient } from '@/components/clients/SocialPreviewClient';
 
-export const metadata: Metadata = {
-  title: 'Social Share Preview — Open Graph & Twitter Card Checker | DevPantry',
-  description:
-    'Instantly preview how your page looks when shared on Twitter/X, LinkedIn, Facebook, Discord, Slack, and WhatsApp. Inspect og:title, og:image, og:description, and twitter:card tags with validation warnings. No cache, no ownership verification, works on staging via paste-source mode.',
-  openGraph: {
-    title: 'Social Share Preview — Open Graph & Twitter Card Checker | DevPantry',
-    description:
-      'Preview social share cards for any URL across Twitter/X, LinkedIn, Facebook, Discord, Slack, and WhatsApp. Validate Open Graph and Twitter Card meta tags instantly.',
-    url: 'https://devpantry.com/social-preview',
-    type: 'website',
-    images: [{ url: '/og-image-devtools.png', width: 1200, height: 630, alt: 'DevPantry Social Share Preview Tool' }],
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: 'Social Share Preview — Open Graph & Twitter Card Checker | DevPantry',
-    description:
-      'Preview how your page appears on Twitter/X, LinkedIn, Facebook, Discord, Slack, and WhatsApp. Validate OG tags, check image dimensions, and catch missing metadata.',
-    images: ['/og-image-devtools.png'],
-  },
-  alternates: {
-    canonical: 'https://devpantry.com/social-preview',
-  },
-};
-
 export default function SocialPreviewPage() {
   const jsonLd = [
     {
@@ -102,10 +78,10 @@ export default function SocialPreviewPage() {
 
           <h3>Related Tools</h3>
           <ul>
-            <li><a href="/jwt-decoder" className="text-rose-400 hover:underline">JWT Decoder</a> — Inspect and chaos-test authentication tokens client-side.</li>
-            <li><a href="/mock-data" className="text-rose-400 hover:underline">Mock Data Generator</a> — Synthesize edge-case test data for any schema.</li>
-            <li><a href="/api-templates" className="text-rose-400 hover:underline">API Templates</a> — Real-world OAuth, webhook, and REST response fixtures.</li>
-            <li><a href="/collab" className="text-rose-400 hover:underline">P2P Collab Editor (Beta)</a> — Code and preview open graph tags collaboratively.</li>
+            <li><a href="/tools/jwt-decoder" className="text-rose-400 hover:underline">JWT Decoder</a> — Inspect and chaos-test authentication tokens client-side.</li>
+            <li><a href="/tools/mock-data" className="text-rose-400 hover:underline">Mock Data Generator</a> — Synthesize edge-case test data for any schema.</li>
+            <li><a href="/tools/api-templates" className="text-rose-400 hover:underline">API Templates</a> — Real-world OAuth, webhook, and REST response fixtures.</li>
+            <li><a href="/tools/collab" className="text-rose-400 hover:underline">P2P Collab Editor (Beta)</a> — Code and preview open graph tags collaboratively.</li>
           </ul>
         </article>
       </div>
