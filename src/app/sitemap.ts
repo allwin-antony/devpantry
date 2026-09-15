@@ -43,8 +43,12 @@ export default async function sitemap(props: { id: Promise<string> }): Promise<M
   }
 
   if (id === 'fonts') {
-    const allFonts = require('@/lib/loaders/fontLoader').getAllFonts();
-    const { isFontIndexable } = require('@/lib/loaders/fontLoader');
+    const { moduleRegistry } = await import('@/lib/moduleRegistry');
+    const fontsModule = moduleRegistry.find(m => m.type === 'fonts');
+    if (!fontsModule) return [];
+
+    const allFonts = await fontsModule.loader.listAll();
+    const { isFontIndexable } = await import('@/lib/loaders/fontLoader');
     
     const indexableFonts = allFonts.filter((f: any) => isFontIndexable(f));
 
@@ -57,9 +61,13 @@ export default async function sitemap(props: { id: Promise<string> }): Promise<M
   }
 
   if (id === 'icons') {
-    const iconPrefixes = getAllIconPrefixes();
-    return iconPrefixes.map(prefix => ({
-      url: `${baseUrl}/icons/${prefix}`,
+    const { moduleRegistry } = await import('@/lib/moduleRegistry');
+    const iconsModule = moduleRegistry.find(m => m.type === 'icons');
+    if (!iconsModule) return [];
+
+    const allIcons = await iconsModule.loader.listAll();
+    return allIcons.map((i: any) => ({
+      url: `${baseUrl}/icons/${i.slug}`,
       lastModified: staticDate,
       changeFrequency: 'monthly',
       priority: 0.8,

@@ -1,51 +1,8 @@
-import { notFound } from 'next/navigation';
-import type { Metadata } from 'next';
-import { getAllFonts, getFontBySlug, getAllFontSlugs, getFontPairings } from '@/lib/loaders/fontLoader';
+import { getFontPairings, isFontIndexable } from '@/lib/loaders/fontLoader';
 import { FontDetailClient } from '@/components/clients/FontDetailClient';
 
-interface PageProps {
-  params: Promise<{ slug: string }>;
-}
-
-export async function generateStaticParams() {
-  const slugs = getAllFontSlugs();
-  return slugs.map(slug => ({ slug }));
-}
-
-export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
-  const { slug } = await params;
-  const font = getFontBySlug(slug);
-
-  if (!font) {
-    return {
-      title: 'Font Not Found | DevPantry',
-      description: 'The requested open-source font could not be found.',
-    };
-  }
-
-  return {
-    title: `${font.name} Font — Free Open Source ${font.category} Typography`,
-    description: `Test, preview, and download ${font.name}, a free ${font.category} font by ${font.designers.join(', ')} (${font.publisher}). Includes CSS @import, HTML link, Tailwind config, and npm install snippet.`,
-
-    openGraph: {
-      title: `${font.name} Font — Free Open-Source Typography | DevPantry`,
-      description: `Live interactive tester, weight specimens, and copy-paste code snippets for ${font.name}.`,
-    },
-    alternates: {
-      canonical: `https://devpantry.com/fonts/${font.slug}`,
-    },
-  };
-}
-
-export default async function FontDetailPage({ params }: PageProps) {
-  const { slug } = await params;
-  const font = getFontBySlug(slug);
-  const { isFontIndexable } = await import('@/lib/loaders/fontLoader');
-
-  if (!font) {
-    notFound();
-  }
-
+export default function FontsDetailView({ item }: { item: any }) {
+  const font = item;
   const isIndexable = isFontIndexable(font);
   const pairings = getFontPairings(font);
 
@@ -96,7 +53,7 @@ export default async function FontDetailPage({ params }: PageProps) {
           Creating typographic contrast is essential for high-impact web design. Here are battle-tested typeface pairings for {font.name}:
         </p>
         <ul>
-          {pairings.map(pairing => (
+          {pairings.map((pairing: any) => (
             <li key={pairing.slug}>
               <strong><a href={`/fonts/${pairing.slug}`} className="text-rose-500 dark:text-rose-400 hover:underline">{pairing.name}</a></strong> ({pairing.category}) — <em>{pairing.role}</em>: {pairing.reason}
             </li>
