@@ -1,0 +1,59 @@
+{
+  "categories": [
+    {
+      "id": "core_engine",
+      "name": "Core Map Engine",
+      "description": "The base mapping library that renders the map (e.g., Leaflet, MapLibre GL JS)."
+    },
+    {
+      "id": "framework_wrapper",
+      "name": "Framework Wrapper",
+      "description": "Wrappers for core engines to use in specific frameworks like React, Vue, Svelte (e.g., react-leaflet)."
+    },
+    {
+      "id": "geocoder",
+      "name": "Geocoder / Search",
+      "description": "UI control for searching and navigating to locations or addresses."
+    },
+    {
+      "id": "drawing",
+      "name": "Drawing Tools",
+      "description": "UI controls for drawing polygons, lines, and markers on the map."
+    },
+    {
+      "id": "clustering",
+      "name": "Clustering",
+      "description": "Plugins for grouping multiple markers into clusters at higher zoom levels."
+    },
+    {
+      "id": "routing",
+      "name": "Routing & Directions",
+      "description": "UI controls for calculating and displaying routes between points."
+    },
+    {
+      "id": "layer_control",
+      "name": "Layer Control",
+      "description": "UI components to toggle different base maps and overlays."
+    },
+    {
+      "id": "marker_popup",
+      "name": "Marker & Popup",
+      "description": "Custom markers, tooltips, and informational popups."
+    },
+    {
+      "id": "visualization",
+      "name": "Data Visualization",
+      "description": "Advanced rendering of large geospatial datasets (e.g., deck.gl heatmaps)."
+    },
+    {
+      "id": "legend",
+      "name": "Legend",
+      "description": "UI component displaying the meaning of symbols and colors on the map."
+    },
+    {
+      "id": "mini_map",
+      "name": "Mini Map",
+      "description": "A small overview map to provide context for the main map view."
+    }
+  ]
+}

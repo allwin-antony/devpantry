@@ -33,7 +33,12 @@ export interface ModuleManifest {
 import { fontsManifest } from '../modules/fonts/manifest';
 import { iconsManifest } from '../modules/icons/manifest';
 
+import componentsManifest from '@/modules/components/manifest';
+import mapsManifest from '@/modules/maps/manifest';
+
 export const moduleRegistry: ModuleManifest[] = [
   fontsManifest,
   iconsManifest,
+  componentsManifest,
+  mapsManifest
 ];
