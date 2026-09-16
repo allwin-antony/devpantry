@@ -18,7 +18,9 @@ import {
   HardDrive,
   Key,
   Share2,
-  Users
+  Users,
+  Map,
+  Layers
 } from 'lucide-react';
 import { IconRenderer, loadMultiPrefixIcons } from '@/lib/iconBatchLoader';
 
@@ -143,6 +145,20 @@ export function HomeClient() {
       desc: 'Zero-knowledge, real-time collaborative text and code editor powered by WebRTC and Yjs.',
       href: '/tools/collab',
       badge: 'BETA',
+    },
+    {
+      icon: Layers,
+      title: 'UI Components',
+      desc: 'Premium React components, headless UI snippets, and design system starters.',
+      href: '/components',
+      badge: 'ASSETS',
+    },
+    {
+      icon: Map,
+      title: 'Interactive Maps',
+      desc: 'Leaflet, Mapbox, and interactive geographical data visualization components.',
+      href: '/maps',
+      badge: 'ASSETS',
     },
     {
       icon: Type,
