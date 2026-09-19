@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Flame, Type, Box, Radio, Sun, Moon, Terminal, Sparkles, Key, Search, Menu, X, Share2, Users, ChevronDown, Map, Layers } from 'lucide-react';
+import { Flame, Type, Box, Radio, Sun, Moon, Terminal, Sparkles, Key, Search, Menu, X, Share2, Users, ChevronDown } from 'lucide-react';
 import { useTheme } from './ThemeProvider';
 import { CommandPalette } from './CommandPalette';
 import { DevPantryLogo } from './DevPantryLogo';
@@ -47,11 +47,9 @@ export const Header: React.FC = () => {
 
   const mainNavItems = [
     { href: '/', label: 'Overview', shortLabel: 'Overview', icon: Terminal },
-    { href: '/components', label: 'Components', shortLabel: 'UI', icon: Layers },
+    { href: '/tools/background-remover', label: 'AI Studio', shortLabel: 'AI Studio', icon: Sparkles },
     { href: '/fonts', label: 'Fonts', shortLabel: 'Fonts', icon: Type },
     { href: '/icons', label: 'Icons', shortLabel: 'Icons', icon: Box },
-    { href: '/maps', label: 'Maps', shortLabel: 'Maps', icon: Map },
-    { href: '/tools/background-remover', label: 'AI Studio', shortLabel: 'AI Studio', icon: Sparkles },
   ];
 
   const moreNavItems = [
