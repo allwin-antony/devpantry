@@ -19,27 +19,34 @@ export default async function sitemap(props: { id: Promise<string> }): Promise<M
   if (id === 'core') {
     return [
       { url: baseUrl, lastModified: staticDate, changeFrequency: 'daily', priority: 1.0 },
-      { url: `${baseUrl}/mock-data`, lastModified: staticDate, changeFrequency: 'weekly', priority: 0.95 },
+      { url: `${baseUrl}/tools`, lastModified: staticDate, changeFrequency: 'weekly', priority: 0.95 },
       { url: `${baseUrl}/fonts`, lastModified: staticDate, changeFrequency: 'weekly', priority: 0.95 },
       { url: `${baseUrl}/icons`, lastModified: staticDate, changeFrequency: 'weekly', priority: 0.95 },
-      { url: `${baseUrl}/api-templates`, lastModified: staticDate, changeFrequency: 'weekly', priority: 0.9 },
-      { url: `${baseUrl}/background-remover`, lastModified: staticDate, changeFrequency: 'weekly', priority: 0.95 },
-      { url: `${baseUrl}/image-resizer`, lastModified: staticDate, changeFrequency: 'weekly', priority: 0.95 },
-      { url: `${baseUrl}/image-compressor`, lastModified: staticDate, changeFrequency: 'weekly', priority: 0.95 },
-      { url: `${baseUrl}/jwt-decoder`, lastModified: staticDate, changeFrequency: 'weekly', priority: 0.95 },
-      { url: `${baseUrl}/social-preview`, lastModified: staticDate, changeFrequency: 'weekly', priority: 0.95 },
-      { url: `${baseUrl}/collab`, lastModified: staticDate, changeFrequency: 'weekly', priority: 0.95 },
     ];
   }
 
   if (id === 'tools') {
+    const { moduleRegistry } = await import('@/lib/moduleRegistry');
+    const toolsModule = moduleRegistry.find(m => m.type === 'tools');
+    if (!toolsModule) return [];
+
+    const allTools = await toolsModule.loader.listAll();
+    const toolRoutes = allTools.map((t: any) => ({
+      url: `${baseUrl}/tools/${t.slug}`,
+      lastModified: staticDate,
+      changeFrequency: 'weekly' as const,
+      priority: 0.9,
+    }));
+
     const socialPlatforms = ['twitter', 'facebook', 'linkedin', 'discord', 'slack', 'whatsapp'];
-    return socialPlatforms.map(platform => ({
-      url: `${baseUrl}/social-preview/${platform}`,
+    const socialPreviewSubRoutes = socialPlatforms.map(platform => ({
+      url: `${baseUrl}/tools/social-preview/${platform}`,
       lastModified: staticDate,
       changeFrequency: 'weekly' as const,
       priority: 0.85,
     }));
+
+    return [...toolRoutes, ...socialPreviewSubRoutes];
   }
 
   if (id === 'fonts') {
@@ -77,7 +84,7 @@ export default async function sitemap(props: { id: Promise<string> }): Promise<M
   if (id === 'templates') {
     const templateIds = getAllServiceResponseIds();
     return templateIds.map(tid => ({
-      url: `${baseUrl}/api-templates/${tid}`,
+      url: `${baseUrl}/tools/api-templates/${tid}`,
       lastModified: staticDate,
       changeFrequency: 'weekly',
       priority: 0.85,
