@@ -1,0 +1,84 @@
+{
+  "libraries": [
+    {
+      "id": "leaflet",
+      "name": "Leaflet",
+      "repo": "https://github.com/Leaflet/Leaflet",
+      "category": "core_engine",
+      "license": "BSD-2-Clause",
+      "description": "JavaScript library for mobile-friendly interactive maps."
+    },
+    {
+      "id": "maplibre-gl",
+      "name": "MapLibre GL JS",
+      "repo": "https://github.com/maplibre/maplibre-gl-js",
+      "category": "core_engine",
+      "license": "BSD-3-Clause",
+      "description": "Open-source WebGL map rendering."
+    },
+    {
+      "id": "openlayers",
+      "name": "OpenLayers",
+      "repo": "https://github.com/openlayers/openlayers",
+      "category": "core_engine",
+      "license": "BSD-2-Clause",
+      "description": "A high-performance, feature-packed library for all your mapping needs."
+    },
+    {
+      "id": "cesium",
+      "name": "CesiumJS",
+      "repo": "https://github.com/CesiumGS/cesium",
+      "category": "core_engine",
+      "license": "Apache-2.0",
+      "description": "An open-source JavaScript library for world-class 3D globes and maps."
+    },
+    {
+      "id": "react-leaflet",
+      "name": "React Leaflet",
+      "repo": "https://github.com/PaulLeCam/react-leaflet",
+      "category": "framework_wrapper",
+      "license": "Hippocratic-2.1",
+      "description": "React components for Leaflet maps."
+    },
+    {
+      "id": "react-map-gl",
+      "name": "react-map-gl",
+      "repo": "https://github.com/visgl/react-map-gl",
+      "category": "framework_wrapper",
+      "license": "MIT",
+      "description": "React friendly API wrapper around MapboxGL JS and MapLibre GL JS."
+    },
+    {
+      "id": "deck.gl",
+      "name": "deck.gl",
+      "repo": "https://github.com/visgl/deck.gl",
+      "category": "visualization",
+      "license": "MIT",
+      "description": "WebGL2 powered geospatial visualization framework."
+    },
+    {
+      "id": "leaflet-draw",
+      "name": "Leaflet.draw",
+      "repo": "https://github.com/Leaflet/Leaflet.draw",
+      "category": "drawing",
+      "license": "MIT",
+      "description": "Vector drawing and editing plugin for Leaflet."
+    },
+    {
+      "id": "maplibre-gl-geocoder",
+      "name": "maplibre-gl-geocoder",
+      "repo": "https://github.com/maplibre/maplibre-gl-geocoder",
+      "category": "geocoder",
+      "license": "ISC",
+      "description": "A geocoder control for MapLibre GL JS."
+    },
+    {
+      "id": "leaflet-markercluster",
+      "name": "Leaflet.markercluster",
+      "repo": "https://github.com/Leaflet/Leaflet.markercluster",
+      "category": "clustering",
+      "license": "MIT",
+      "description": "Marker Clustering plugin for Leaflet."
+    }
+  ]
+}

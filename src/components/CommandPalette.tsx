@@ -48,7 +48,7 @@ const PALETTE_ITEMS: PaletteItem[] = [
     category: 'Tools',
     title: 'Edge AI Background Remover',
     subtitle: 'Zero-latency, client-side WebAssembly neural segmentation',
-    href: '/background-remover',
+    href: '/tools/background-remover',
     icon: Sparkles,
     badge: 'Edge AI',
     keywords: ['remove', 'cutout', 'transparent', 'matte', 'bokeh', 'ai']
@@ -58,7 +58,7 @@ const PALETTE_ITEMS: PaletteItem[] = [
     category: 'Tools',
     title: 'Image Resizer & Artboard Studio',
     subtitle: 'Dimension scaling, aspect ratio framing, artboard padding',
-    href: '/image-resizer',
+    href: '/tools/image-resizer',
     icon: Crop,
     badge: 'Artboard',
     keywords: ['crop', 'scale', 'aspect ratio', 'dimensions', 'canvas']
@@ -68,7 +68,7 @@ const PALETTE_ITEMS: PaletteItem[] = [
     category: 'Tools',
     title: 'Image Compressor & WebP Converter',
     subtitle: 'Target file-size budgeting (< 500 KB, < 1 MB) & WebP conversion',
-    href: '/image-compressor',
+    href: '/tools/image-compressor',
     icon: FileArchive,
     badge: 'Budgeting',
     keywords: ['compress', 'webp', 'optimize', 'file size', 'shrink', 'quality']
@@ -98,7 +98,7 @@ const PALETTE_ITEMS: PaletteItem[] = [
     category: 'Tools',
     title: 'Client-Side JWT Inspector & Chaos Tamperer',
     subtitle: '100% in-memory token decoder, RFC claim hints & auth chaos simulation',
-    href: '/jwt-decoder',
+    href: '/tools/jwt-decoder',
     icon: Key,
     badge: 'Zero Leak',
     keywords: ['jwt', 'oauth', 'token', 'decode', 'tamper', 'none', 'hs256', 'bearer']
@@ -108,7 +108,7 @@ const PALETTE_ITEMS: PaletteItem[] = [
     category: 'Tools',
     title: 'Chaos Data Studio & Schema Builder',
     subtitle: 'High-entropy mock generator with 13+ types, BLNS & custom schemas',
-    href: '/mock-data',
+    href: '/tools/mock-data',
     icon: Flame,
     badge: 'GUI',
     keywords: ['mock', 'faker', 'blns', 'entropy', 'dirty data', 'sql', 'zod', 'csv']
@@ -118,7 +118,7 @@ const PALETTE_ITEMS: PaletteItem[] = [
     category: 'Tools',
     title: 'API Chaos Templates & Mock Vault',
     subtitle: 'Real-world response fixtures for Stripe, Supabase, Google SSO & GitHub',
-    href: '/api-templates',
+    href: '/tools/api-templates',
     icon: Radio,
     badge: '17 APIs',
     keywords: ['stripe', 'supabase', 'oauth', 'fixture', 'sso', 'mock response']
@@ -128,7 +128,7 @@ const PALETTE_ITEMS: PaletteItem[] = [
     category: 'Tools',
     title: 'Social Share Preview & OG Checker',
     subtitle: 'Preview cards for Twitter/X, LinkedIn, Facebook, Discord, Slack & WhatsApp',
-    href: '/social-preview',
+    href: '/tools/social-preview',
     icon: Share2,
     badge: '6 Platforms',
     keywords: ['og', 'open graph', 'twitter card', 'meta', 'social', 'share', 'preview', 'linkedin', 'discord', 'slack', 'whatsapp']
@@ -138,7 +138,7 @@ const PALETTE_ITEMS: PaletteItem[] = [
     category: 'Tools',
     title: 'P2P Collaborative Editor',
     subtitle: 'Zero-knowledge, real-time code editor powered by WebRTC & Yjs',
-    href: '/collab',
+    href: '/tools/collab',
     icon: Users,
     badge: 'Beta',
     keywords: ['collab', 'collaborate', 'webrtc', 'p2p', 'editor', 'yjs', 'code', 'real-time', 'zero-knowledge', 'encryption']
@@ -296,7 +296,7 @@ const PALETTE_ITEMS: PaletteItem[] = [
     category: 'Actions',
     title: 'Simulate Expired JWT (-5m)',
     subtitle: 'Jump to JWT Inspector with active expiry test',
-    href: '/jwt-decoder',
+    href: '/tools/jwt-decoder',
     icon: Sliders,
     badge: 'Tamper',
     keywords: ['expire', 'jwt', 'auth guard', '401']
@@ -306,7 +306,7 @@ const PALETTE_ITEMS: PaletteItem[] = [
     category: 'Actions',
     title: 'Simulate "alg": "none" Exploit',
     subtitle: 'Test backend signature verification against algorithm confusion',
-    href: '/jwt-decoder',
+    href: '/tools/jwt-decoder',
     icon: Key,
     badge: 'Exploit',
     keywords: ['alg', 'none', 'cve', 'exploit', 'jwt']

@@ -1,0 +1,482 @@
+[
+  {
+    "category": "Actions",
+    "name": "Button",
+    "slug": "button",
+    "aliases": ["Action Button", "Call to Action (CTA)", "Icon Button"],
+    "description": "Interactive control enabling users to trigger actions or events.",
+    "wai_aria_role": "button",
+    "variants": ["primary", "secondary", "outline", "ghost", "destructive/danger", "link"],
+    "anatomy": ["ButtonRoot", "ButtonIconLeft", "ButtonText", "ButtonIconRight", "Spinner"]
+  },
+  {
+    "category": "Actions",
+    "name": "Button Group",
+    "slug": "button-group",
+    "aliases": ["Segmented Control", "Toggle Button Group", "Action Group"],
+    "description": "Group of related buttons arranged horizontally or vertically.",
+    "wai_aria_role": "group",
+    "variants": ["connected", "separated", "icon group"],
+    "anatomy": ["ButtonGroupRoot", "ButtonItem"]
+  },
+  {
+    "category": "Actions",
+    "name": "Dropdown Menu",
+    "slug": "dropdown-menu",
+    "aliases": ["Action Menu", "Context Menu", "Menu Popover"],
+    "description": "Toggleable menu displaying a list of clickable actions or links.",
+    "wai_aria_role": "menu",
+    "variants": ["simple", "with icons", "with shortcuts", "nested submenu", "checkbox/radio items"],
+    "anatomy": ["MenuRoot", "MenuTrigger", "MenuContent", "MenuItem", "MenuSeparator"]
+  },
+  {
+    "category": "Actions",
+    "name": "Split Button",
+    "slug": "split-button",
+    "aliases": ["Action Menu Button", "Dual Action Button"],
+    "description": "Combines a primary direct action button with a secondary dropdown chevron.",
+    "wai_aria_role": "group",
+    "variants": ["primary split", "secondary split"],
+    "anatomy": ["SplitButtonRoot", "PrimaryAction", "DropdownTrigger", "DropdownMenu"]
+  },
+  {
+    "category": "Actions",
+    "name": "Floating Action Button",
+    "slug": "fab",
+    "aliases": ["FAB", "Sticky Action Button"],
+    "description": "Elevated circular button that performs the primary action on a screen.",
+    "wai_aria_role": "button",
+    "variants": ["standard circular", "extended with label", "mini FAB"],
+    "anatomy": ["FABRoot", "FABIcon", "FABLabel"]
+  },
+  {
+    "category": "Form Inputs",
+    "name": "Text Input",
+    "slug": "input",
+    "aliases": ["Text Field", "Form Input", "Text Box"],
+    "description": "Single-line input allowing users to enter and edit text or numbers.",
+    "wai_aria_role": "textbox",
+    "variants": ["standard", "floating label", "with icon", "error state", "disabled"],
+    "anatomy": ["FormItem", "FormLabel", "FormControl", "FormDescription", "FormMessage"]
+  },
+  {
+    "category": "Form Inputs",
+    "name": "Textarea",
+    "slug": "textarea",
+    "aliases": ["Multi-line Input", "Comment Box"],
+    "description": "Multi-line text input control for longer textual content.",
+    "wai_aria_role": "textbox",
+    "variants": ["resizable", "fixed height", "auto-expanding"],
+    "anatomy": ["TextareaRoot", "TextareaLabel", "TextareaCharacterCount"]
+  },
+  {
+    "category": "Form Inputs",
+    "name": "Select / Listbox",
+    "slug": "select",
+    "aliases": ["Dropdown Select", "Picker", "Option List"],
+    "description": "Allows users to choose one option from a collapsible list.",
+    "wai_aria_role": "combobox / listbox",
+    "variants": ["single select", "grouped options", "searchable select"],
+    "anatomy": ["SelectRoot", "SelectTrigger", "SelectValue", "SelectContent", "SelectItem"]
+  },
+  {
+    "category": "Form Inputs",
+    "name": "Combobox / Autocomplete",
+    "slug": "combobox",
+    "aliases": ["Autocomplete", "Typeahead", "Search Select"],
+    "description": "Input field paired with a listbox popup allowing users to filter and pick options.",
+    "wai_aria_role": "combobox",
+    "variants": ["single selection", "multi-select chips", "async remote search"],
+    "anatomy": ["ComboboxRoot", "ComboboxInput", "ComboboxTrigger", "ComboboxOptions", "ComboboxEmpty"]
+  },
+  {
+    "category": "Form Inputs",
+    "name": "Checkbox",
+    "slug": "checkbox",
+    "aliases": ["Check Control", "Boolean Input"],
+    "description": "Allows user to toggle between checked, unchecked, or indeterminate states.",
+    "wai_aria_role": "checkbox",
+    "variants": ["standard", "with description", "card checkbox", "indeterminate"],
+    "anatomy": ["CheckboxRoot", "CheckboxIndicator", "CheckboxLabel"]
+  },
+  {
+    "category": "Form Inputs",
+    "name": "Radio Group",
+    "slug": "radio-group",
+    "aliases": ["Radio Buttons", "Single Choice Group"],
+    "description": "Set of checkable buttons where only one item can be checked at a time.",
+    "wai_aria_role": "radiogroup",
+    "variants": ["standard vertical", "horizontal list", "radio card selector"],
+    "anatomy": ["RadioGroupRoot", "RadioGroupItem", "RadioGroupIndicator", "RadioGroupLabel"]
+  },
+  {
+    "category": "Form Inputs",
+    "name": "Switch / Toggle",
+    "slug": "switch",
+    "aliases": ["Toggle Switch", "Flip Switch"],
+    "description": "Control used to quickly toggle between binary on/off states.",
+    "wai_aria_role": "switch",
+    "variants": ["standard", "with icons", "labeled with text"],
+    "anatomy": ["SwitchRoot", "SwitchThumb", "SwitchLabel"]
+  },
+  {
+    "category": "Form Inputs",
+    "name": "Slider",
+    "slug": "slider",
+    "aliases": ["Range Input", "Track Bar"],
+    "description": "Allows users to select a value from a continuous or discrete range.",
+    "wai_aria_role": "slider",
+    "variants": ["single thumb", "with tick marks", "vertical slider"],
+    "anatomy": ["SliderRoot", "SliderTrack", "SliderRange", "SliderThumb"]
+  },
+  {
+    "category": "Form Inputs",
+    "name": "Range Slider",
+    "slug": "range-slider",
+    "aliases": ["Dual Slider", "Min-Max Slider"],
+    "description": "Two-thumb slider for selecting lower and upper bound values.",
+    "wai_aria_role": "slider",
+    "variants": ["price range", "timeline range"],
+    "anatomy": ["RangeSliderRoot", "Track", "RangeHighlight", "LowerThumb", "UpperThumb"]
+  },
+  {
+    "category": "Form Inputs",
+    "name": "Date Picker",
+    "slug": "date-picker",
+    "aliases": ["Calendar Picker", "Date Input"],
+    "description": "Allows user to pick a date via text or interactive popover calendar.",
+    "wai_aria_role": "dialog / grid",
+    "variants": ["single date", "date range picker", "inline calendar", "with presets"],
+    "anatomy": ["DatePickerRoot", "DatePickerTrigger", "CalendarGrid", "MonthNavigation"]
+  },
+  {
+    "category": "Form Inputs",
+    "name": "Time Picker",
+    "slug": "time-picker",
+    "aliases": ["Clock Input", "Time Input"],
+    "description": "Control to pick hour, minute, and AM/PM times.",
+    "wai_aria_role": "combobox / spinbutton",
+    "variants": ["12-hour", "24-hour", "scroll wheels", "clock face"],
+    "anatomy": ["TimePickerRoot", "HourInput", "MinuteInput", "PeriodToggle"]
+  },
+  {
+    "category": "Form Inputs",
+    "name": "File Upload / Dropzone",
+    "slug": "file-upload",
+    "aliases": ["Dropzone", "File Picker", "Attachment Control"],
+    "description": "Allows users to drag and drop or browse for local files to upload.",
+    "wai_aria_role": "button / region",
+    "variants": ["dropzone box", "button attachment", "preview list with progress"],
+    "anatomy": ["DropzoneRoot", "DropzonePrompt", "FileInput", "FileList", "FileItem"]
+  },
+  {
+    "category": "Form Inputs",
+    "name": "Color Picker",
+    "slug": "color-picker",
+    "aliases": ["Color Palette", "Hex Selector"],
+    "description": "Allows picking a color via canvas slider, eyedropper, or hex input.",
+    "wai_aria_role": "dialog / button",
+    "variants": ["popover picker", "inline swatches", "compact hex trigger"],
+    "anatomy": ["ColorPickerRoot", "SaturationCanvas", "HueSlider", "HexInput", "SwatchList"]
+  },
+  {
+    "category": "Form Inputs",
+    "name": "PIN / OTP Input",
+    "slug": "otp-input",
+    "aliases": ["One-Time Password", "PIN Field", "Verification Code"],
+    "description": "Segmented input fields for verification codes, auto-advancing focus.",
+    "wai_aria_role": "group",
+    "variants": ["4-digit", "6-digit", "with separator dash"],
+    "anatomy": ["InputOTPRoot", "InputOTPGroup", "InputOTPSlot", "InputOTPSeparator"]
+  },
+  {
+    "category": "Overlays",
+    "name": "Modal / Dialog",
+    "slug": "dialog",
+    "aliases": ["Dialog", "Popup", "Lightbox"],
+    "description": "Overlay window rendering underlying content inert with trapped focus.",
+    "wai_aria_role": "dialog",
+    "variants": ["standard", "centered alert", "full-width sheet"],
+    "anatomy": ["DialogRoot", "DialogTrigger", "DialogPortal", "DialogOverlay", "DialogContent", "DialogHeader", "DialogTitle", "DialogDescription", "DialogFooter", "DialogClose"]
+  },
+  {
+    "category": "Overlays",
+    "name": "Alert Dialog",
+    "slug": "alert-dialog",
+    "aliases": ["Confirm Dialog", "Destructive Warning"],
+    "description": "Modal dialog that interrupts the user with critical information requiring confirmation.",
+    "wai_aria_role": "alertdialog",
+    "variants": ["destructive warning", "confirmation prompt"],
+    "anatomy": ["AlertDialogRoot", "AlertDialogTrigger", "AlertDialogContent", "AlertDialogAction", "AlertDialogCancel"]
+  },
+  {
+    "category": "Overlays",
+    "name": "Drawer / Bottom Sheet",
+    "slug": "drawer",
+    "aliases": ["Slide-over", "Off-canvas", "Bottom Sheet"],
+    "description": "Panel sliding in from screen edge (left, right, bottom, or top).",
+    "wai_aria_role": "dialog",
+    "variants": ["left slide-over", "right sheet", "mobile bottom sheet"],
+    "anatomy": ["DrawerRoot", "DrawerTrigger", "DrawerOverlay", "DrawerContent", "DrawerHeader"]
+  },
+  {
+    "category": "Overlays",
+    "name": "Popover",
+    "slug": "popover",
+    "aliases": ["Flyout", "Callout", "Popup Card"],
+    "description": "Non-modal floating container triggered by a button click.",
+    "wai_aria_role": "dialog",
+    "variants": ["rich content", "form popover", "compact card"],
+    "anatomy": ["PopoverRoot", "PopoverTrigger", "PopoverContent", "PopoverArrow"]
+  },
+  {
+    "category": "Overlays",
+    "name": "Tooltip",
+    "slug": "tooltip",
+    "aliases": ["Hint", "Hover Label", "Infotip"],
+    "description": "Brief popup displaying informational text when element receives hover or focus.",
+    "wai_aria_role": "tooltip",
+    "variants": ["simple label", "with keyboard shortcut", "arrow pointer"],
+    "anatomy": ["TooltipRoot", "TooltipTrigger", "TooltipContent"]
+  },
+  {
+    "category": "Overlays",
+    "name": "Context Menu",
+    "slug": "context-menu",
+    "aliases": ["Right-click Menu"],
+    "description": "Displays an action menu located at the pointer coordinates on secondary click.",
+    "wai_aria_role": "menu",
+    "variants": ["standard", "with submenus"],
+    "anatomy": ["ContextMenuRoot", "ContextMenuTrigger", "ContextMenuContent", "ContextMenuItem"]
+  },
+  {
+    "category": "Navigation",
+    "name": "Navbar / Header",
+    "slug": "navbar",
+    "aliases": ["Top Nav", "App Header", "Navigation Bar"],
+    "description": "Top-level application navigation bar with branding, links, and user menu.",
+    "wai_aria_role": "navigation",
+    "variants": ["sticky", "floating glass", "with search bar", "mega menu dropdown"],
+    "anatomy": ["NavbarRoot", "NavbarBrand", "NavbarNav", "NavbarActions", "MobileToggle"]
+  },
+  {
+    "category": "Navigation",
+    "name": "Sidebar",
+    "slug": "sidebar",
+    "aliases": ["Side Nav", "Drawer Nav", "Admin Nav"],
+    "description": "Vertical navigation container displaying application sections and menu groups.",
+    "wai_aria_role": "navigation",
+    "variants": ["expanded", "collapsed icons-only", "floating rail"],
+    "anatomy": ["SidebarRoot", "SidebarHeader", "SidebarContent", "SidebarGroup", "SidebarMenu", "SidebarFooter"]
+  },
+  {
+    "category": "Navigation",
+    "name": "Breadcrumb",
+    "slug": "breadcrumb",
+    "aliases": ["Path Indicator", "Crumbs"],
+    "description": "Hierarchy navigation showing user's current location within site structure.",
+    "wai_aria_role": "navigation",
+    "variants": ["slash separator", "chevron separator", "collapsed with ellipsis"],
+    "anatomy": ["BreadcrumbRoot", "BreadcrumbList", "BreadcrumbItem", "BreadcrumbLink", "BreadcrumbSeparator", "BreadcrumbPage"]
+  },
+  {
+    "category": "Navigation",
+    "name": "Pagination",
+    "slug": "pagination",
+    "aliases": ["Page Switcher", "Paging Controls"],
+    "description": "Navigational control dividing datasets into sequential pages.",
+    "wai_aria_role": "navigation",
+    "variants": ["numbered", "compact previous/next", "with per-page selector"],
+    "anatomy": ["PaginationRoot", "PaginationContent", "PaginationItem", "PaginationLink", "PaginationPrevious", "PaginationNext", "PaginationEllipsis"]
+  },
+  {
+    "category": "Navigation",
+    "name": "Tabs",
+    "slug": "tabs",
+    "aliases": ["Tab Bar", "Segmented View"],
+    "description": "Layered sections of content allowing users to toggle between panels.",
+    "wai_aria_role": "tablist",
+    "variants": ["underline", "pill/boxed", "vertical tabs"],
+    "anatomy": ["TabsRoot", "TabsList", "TabsTrigger", "TabsContent"]
+  },
+  {
+    "category": "Navigation",
+    "name": "Stepper / Wizard",
+    "slug": "stepper",
+    "aliases": ["Progress Stepper", "Multi-step Flow"],
+    "description": "Displays sequential progress across a multi-step user workflow.",
+    "wai_aria_role": "list / navigation",
+    "variants": ["horizontal", "vertical", "bulleted", "numbered"],
+    "anatomy": ["StepperRoot", "StepItem", "StepIndicator", "StepTitle", "StepDescription", "StepSeparator"]
+  },
+  {
+    "category": "Navigation",
+    "name": "Command Palette / Spotlight",
+    "slug": "command",
+    "aliases": ["Quick Search", "Spotlight Search", "CMD+K"],
+    "description": "Fast keyboard-driven modal palette to search, navigate, and trigger commands.",
+    "wai_aria_role": "combobox / dialog",
+    "variants": ["global CMD+K", "inline filter palette"],
+    "anatomy": ["CommandDialog", "CommandInput", "CommandList", "CommandEmpty", "CommandGroup", "CommandItem", "CommandShortcut"]
+  },
+  {
+    "category": "Navigation",
+    "name": "Mega Menu",
+    "slug": "mega-menu",
+    "aliases": ["Full Width Menu", "Multi-column Navigation"],
+    "description": "Expandable multi-column navigation menu showing deep site hierarchy.",
+    "wai_aria_role": "navigation",
+    "variants": ["full width", "featured cards", "categorized links"],
+    "anatomy": ["MegaMenuRoot", "MegaMenuTrigger", "MegaMenuPanel", "MegaMenuColumn"]
+  },
+  {
+    "category": "Data Display",
+    "name": "Data Table / Grid",
+    "slug": "table",
+    "aliases": ["Data Grid", "List Table", "Sortable Table"],
+    "description": "Displays tabular data in rows and columns with sorting and pagination.",
+    "wai_aria_role": "table / grid",
+    "variants": ["striped", "sortable", "paginated", "expandable rows", "checkbox selection"],
+    "anatomy": ["TableRoot", "TableHeader", "TableBody", "TableFooter", "TableRow", "TableHead", "TableCell"]
+  },
+  {
+    "category": "Data Display",
+    "name": "Card",
+    "slug": "card",
+    "aliases": ["Content Tile", "Summary Card", "Product Card"],
+    "description": "Container grouping related information and actions about a single subject.",
+    "wai_aria_role": "region / article",
+    "variants": ["interactive card", "pricing card", "metric card", "e-commerce product card"],
+    "anatomy": ["CardRoot", "CardHeader", "CardTitle", "CardDescription", "CardContent", "CardFooter"]
+  },
+  {
+    "category": "Data Display",
+    "name": "Badge / Tag",
+    "slug": "badge",
+    "aliases": ["Tag", "Chip", "Pill", "Status Label"],
+    "description": "Small visual status descriptor for categorizing content or highlighting counts.",
+    "wai_aria_role": "status",
+    "variants": ["primary", "secondary", "destructive", "outline", "removable chip"],
+    "anatomy": ["BadgeRoot", "BadgeIcon", "BadgeLabel", "BadgeRemoveButton"]
+  },
+  {
+    "category": "Data Display",
+    "name": "Avatar / Avatar Group",
+    "slug": "avatar",
+    "aliases": ["Profile Picture", "User Badge"],
+    "description": "Visual representation of a user through image, initials, or fallback icon.",
+    "wai_aria_role": "img",
+    "variants": ["circular", "rounded square", "overlapping group", "with status dot"],
+    "anatomy": ["AvatarRoot", "AvatarImage", "AvatarFallback", "AvatarGroup"]
+  },
+  {
+    "category": "Data Display",
+    "name": "Accordion / Collapsible",
+    "slug": "accordion",
+    "aliases": ["Collapsible Panel", "FAQ Toggle"],
+    "description": "Vertically stacked headers that reveal or hide content panels.",
+    "wai_aria_role": "region",
+    "variants": ["single item open", "multiple items open", "bordered", "flush"],
+    "anatomy": ["AccordionRoot", "AccordionItem", "AccordionHeader", "AccordionTrigger", "AccordionContent"]
+  },
+  {
+    "category": "Data Display",
+    "name": "Timeline",
+    "slug": "timeline",
+    "aliases": ["Activity Feed", "History Log", "Milestone Tracker"],
+    "description": "Chronological list of events, milestones, or activity entries.",
+    "wai_aria_role": "list",
+    "variants": ["vertical", "horizontal", "with status icons"],
+    "anatomy": ["TimelineRoot", "TimelineItem", "TimelineDot", "TimelineLine", "TimelineContent", "TimelineDate"]
+  },
+  {
+    "category": "Data Display",
+    "name": "Tree View",
+    "slug": "tree-view",
+    "aliases": ["File Tree", "Nested Hierarchy"],
+    "description": "Hierarchical list representing folder structures or nested data categories.",
+    "wai_aria_role": "tree",
+    "variants": ["collapsible folders", "selectable nodes"],
+    "anatomy": ["TreeRoot", "TreeNode", "TreeTrigger", "TreeGroup"]
+  },
+  {
+    "category": "Feedback",
+    "name": "Toast / Notification",
+    "slug": "toast",
+    "aliases": ["Snackbar", "Growl Notification", "Floating Alert"],
+    "description": "Temporary floating message communicating confirmation, warnings, or errors.",
+    "wai_aria_role": "status / alert",
+    "variants": ["success", "error", "warning", "info", "with action button"],
+    "anatomy": ["ToastProvider", "ToastViewport", "ToastRoot", "ToastTitle", "ToastDescription", "ToastClose", "ToastAction"]
+  },
+  {
+    "category": "Feedback",
+    "name": "Alert / Banner",
+    "slug": "alert",
+    "aliases": ["Callout", "Inline Notice", "System Banner"],
+    "description": "Prominent inline message communicating important persistent system status.",
+    "wai_aria_role": "alert",
+    "variants": ["default", "destructive", "warning", "success"],
+    "anatomy": ["AlertRoot", "AlertIcon", "AlertTitle", "AlertDescription"]
+  },
+  {
+    "category": "Feedback",
+    "name": "Progress Bar",
+    "slug": "progress",
+    "aliases": ["Progress Indicator", "Loading Bar"],
+    "description": "Displays progression of an operation toward completion.",
+    "wai_aria_role": "progressbar",
+    "variants": ["determinate percentage", "indeterminate loop", "multi-step segments"],
+    "anatomy": ["ProgressRoot", "ProgressTrack", "ProgressIndicator"]
+  },
+  {
+    "category": "Feedback",
+    "name": "Spinner / Loader",
+    "slug": "spinner",
+    "aliases": ["Activity Indicator", "Loading Spinner"],
+    "description": "Animated visual cue communicating that a background process is active.",
+    "wai_aria_role": "status",
+    "variants": ["circular spinner", "pulsing dots", "bars loader"],
+    "anatomy": ["SpinnerRoot", "ScreenReaderFallback"]
+  },
+  {
+    "category": "Feedback",
+    "name": "Skeleton Placeholder",
+    "slug": "skeleton",
+    "aliases": ["Shimmer Box", "Ghost Element"],
+    "description": "Animated placeholder wireframe displayed while content finishes loading.",
+    "wai_aria_role": "status",
+    "variants": ["card wireframe", "text line", "circular avatar placeholder"],
+    "anatomy": ["SkeletonRoot"]
+  },
+  {
+    "category": "Marketing & Dashboards",
+    "name": "Stat / Metric Card",
+    "slug": "stat-card",
+    "aliases": ["KPI Card", "Metric Box", "Summary Widget"],
+    "description": "Key performance indicator card highlighting numeric stats and percentage deltas.",
+    "wai_aria_role": "region",
+    "variants": ["single metric", "with trend sparkline", "delta badge indicator"],
+    "anatomy": ["StatCardRoot", "StatTitle", "StatValue", "StatDelta", "StatIcon"]
+  },
+  {
+    "category": "Marketing & Dashboards",
+    "name": "Pricing Table",
+    "slug": "pricing-table",
+    "aliases": ["Tier Card", "Plan Comparison"],
+    "description": "Comparative table or card grid highlighting pricing tiers and feature lists.",
+    "wai_aria_role": "region",
+    "variants": ["card grid", "feature comparison table", "monthly/annual billing toggle"],
+    "anatomy": ["PricingRoot", "PlanCard", "PlanTitle", "PlanPrice", "PlanFeatures", "PlanCTA"]
+  },
+  {
+    "category": "Marketing & Dashboards",
+    "name": "Hero Section",
+    "slug": "hero",
+    "aliases": ["Landing Banner", "Header Showcase"],
+    "description": "Top-of-fold marketing banner with main headline, value prop, and call to action.",
+    "wai_aria_role": "banner / section",
+    "variants": ["centered text", "split with preview image", "with video/mockup"],
+    "anatomy": ["HeroRoot", "HeroBadge", "HeroHeadline", "HeroSubtext", "HeroActions", "HeroMedia"]
+  }
+]

@@ -400,7 +400,7 @@ export function ChaosTemplatesClient({ initialServiceId, initialMode }: ChaosTem
 
           {/* Quick link to Columnar Schema GUI */}
           <Link
-            href="/mock-data"
+            href="/tools/mock-data"
             className="text-[11px] text-[var(--text-muted)] hover:text-[var(--text-primary)] flex items-center justify-between px-1 transition-colors"
           >
             <span>Need Columnar Tables GUI?</span>

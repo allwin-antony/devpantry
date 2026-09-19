@@ -1,0 +1,2238 @@
+[
+  {
+    "id": "shadcn-accordion",
+    "name": "Accordion (shadcn/ui)",
+    "slug": "accordion",
+    "canonical_category": "accordion",
+    "frameworks": [
+      "react",
+      "nextjs",
+      "tailwind"
+    ],
+    "styling": "tailwind",
+    "component_type": "copy_paste",
+    "description": "A vertically stacked set of interactive headings that each reveal a section of content.",
+    "license": {
+      "spdx": "MIT",
+      "is_free": true,
+      "commercial_use_allowed": true,
+      "attribution_required": false
+    },
+    "source_provider": "shadcn/ui",
+    "source_url": "https://ui.shadcn.com/docs/components/accordion",
+    "repository_url": "https://github.com/shadcn-ui/ui",
+    "registry_endpoint": "https://ui.shadcn.com/r/styles/default/accordion.json",
+    "cli_command": "npx shadcn@latest add accordion",
+    "dependencies": [
+      "@radix-ui/react-accordion",
+      "lucide-react"
+    ],
+    "registry_dependencies": [],
+    "required_utilities": [
+      "cn"
+    ],
+    "tailwind_config_requirements": [
+      "tailwindcss-animate"
+    ]
+  },
+  {
+    "id": "shadcn-alert",
+    "name": "Alert (shadcn/ui)",
+    "slug": "alert",
+    "canonical_category": "alert",
+    "frameworks": [
+      "react",
+      "nextjs",
+      "tailwind"
+    ],
+    "styling": "tailwind",
+    "component_type": "copy_paste",
+    "description": "Displays a callout for user attention.",
+    "license": {
+      "spdx": "MIT",
+      "is_free": true,
+      "commercial_use_allowed": true,
+      "attribution_required": false
+    },
+    "source_provider": "shadcn/ui",
+    "source_url": "https://ui.shadcn.com/docs/components/alert",
+    "repository_url": "https://github.com/shadcn-ui/ui",
+    "registry_endpoint": "https://ui.shadcn.com/r/styles/default/alert.json",
+    "cli_command": "npx shadcn@latest add alert",
+    "dependencies": [],
+    "registry_dependencies": [],
+    "required_utilities": [
+      "cn"
+    ],
+    "tailwind_config_requirements": [
+      "tailwindcss-animate"
+    ]
+  },
+  {
+    "id": "shadcn-alert-dialog",
+    "name": "Alert Dialog (shadcn/ui)",
+    "slug": "alert-dialog",
+    "canonical_category": "alert-dialog",
+    "frameworks": [
+      "react",
+      "nextjs",
+      "tailwind"
+    ],
+    "styling": "tailwind",
+    "component_type": "copy_paste",
+    "description": "A modal dialog that interrupts the user with important content and expects a response.",
+    "license": {
+      "spdx": "MIT",
+      "is_free": true,
+      "commercial_use_allowed": true,
+      "attribution_required": false
+    },
+    "source_provider": "shadcn/ui",
+    "source_url": "https://ui.shadcn.com/docs/components/alert-dialog",
+    "repository_url": "https://github.com/shadcn-ui/ui",
+    "registry_endpoint": "https://ui.shadcn.com/r/styles/default/alert-dialog.json",
+    "cli_command": "npx shadcn@latest add alert-dialog",
+    "dependencies": [
+      "@radix-ui/react-alert-dialog"
+    ],
+    "registry_dependencies": [
+      "button"
+    ],
+    "required_utilities": [
+      "cn"
+    ],
+    "tailwind_config_requirements": [
+      "tailwindcss-animate"
+    ]
+  },
+  {
+    "id": "shadcn-aspect-ratio",
+    "name": "Aspect Ratio (shadcn/ui)",
+    "slug": "aspect-ratio",
+    "canonical_category": "card",
+    "frameworks": [
+      "react",
+      "nextjs",
+      "tailwind"
+    ],
+    "styling": "tailwind",
+    "component_type": "copy_paste",
+    "description": "Displays content within a desired ratio.",
+    "license": {
+      "spdx": "MIT",
+      "is_free": true,
+      "commercial_use_allowed": true,
+      "attribution_required": false
+    },
+    "source_provider": "shadcn/ui",
+    "source_url": "https://ui.shadcn.com/docs/components/aspect-ratio",
+    "repository_url": "https://github.com/shadcn-ui/ui",
+    "registry_endpoint": "https://ui.shadcn.com/r/styles/default/aspect-ratio.json",
+    "cli_command": "npx shadcn@latest add aspect-ratio",
+    "dependencies": [
+      "@radix-ui/react-aspect-ratio"
+    ],
+    "registry_dependencies": [],
+    "required_utilities": [
+      "cn"
+    ],
+    "tailwind_config_requirements": [
+      "tailwindcss-animate"
+    ]
+  },
+  {
+    "id": "shadcn-attachment",
+    "name": "Attachment (shadcn/ui)",
+    "slug": "attachment",
+    "canonical_category": "file-upload",
+    "frameworks": [
+      "react",
+      "nextjs",
+      "tailwind"
+    ],
+    "styling": "tailwind",
+    "component_type": "copy_paste",
+    "description": "Accessible React Attachment component.",
+    "license": {
+      "spdx": "MIT",
+      "is_free": true,
+      "commercial_use_allowed": true,
+      "attribution_required": false
+    },
+    "source_provider": "shadcn/ui",
+    "source_url": "https://ui.shadcn.com/docs/components/attachment",
+    "repository_url": "https://github.com/shadcn-ui/ui",
+    "registry_endpoint": "https://ui.shadcn.com/r/styles/default/attachment.json",
+    "cli_command": "npx shadcn@latest add attachment",
+    "dependencies": [],
+    "registry_dependencies": [
+      "button"
+    ],
+    "required_utilities": [
+      "cn"
+    ],
+    "tailwind_config_requirements": [
+      "tailwindcss-animate"
+    ]
+  },
+  {
+    "id": "shadcn-avatar",
+    "name": "Avatar (shadcn/ui)",
+    "slug": "avatar",
+    "canonical_category": "avatar",
+    "frameworks": [
+      "react",
+      "nextjs",
+      "tailwind"
+    ],
+    "styling": "tailwind",
+    "component_type": "copy_paste",
+    "description": "An image element with a fallback for representing the user.",
+    "license": {
+      "spdx": "MIT",
+      "is_free": true,
+      "commercial_use_allowed": true,
+      "attribution_required": false
+    },
+    "source_provider": "shadcn/ui",
+    "source_url": "https://ui.shadcn.com/docs/components/avatar",
+    "repository_url": "https://github.com/shadcn-ui/ui",
+    "registry_endpoint": "https://ui.shadcn.com/r/styles/default/avatar.json",
+    "cli_command": "npx shadcn@latest add avatar",
+    "dependencies": [
+      "@radix-ui/react-avatar"
+    ],
+    "registry_dependencies": [],
+    "required_utilities": [
+      "cn"
+    ],
+    "tailwind_config_requirements": [
+      "tailwindcss-animate"
+    ]
+  },
+  {
+    "id": "shadcn-badge",
+    "name": "Badge (shadcn/ui)",
+    "slug": "badge",
+    "canonical_category": "badge",
+    "frameworks": [
+      "react",
+      "nextjs",
+      "tailwind"
+    ],
+    "styling": "tailwind",
+    "component_type": "copy_paste",
+    "description": "Displays a badge or a component that looks like a badge.",
+    "license": {
+      "spdx": "MIT",
+      "is_free": true,
+      "commercial_use_allowed": true,
+      "attribution_required": false
+    },
+    "source_provider": "shadcn/ui",
+    "source_url": "https://ui.shadcn.com/docs/components/badge",
+    "repository_url": "https://github.com/shadcn-ui/ui",
+    "registry_endpoint": "https://ui.shadcn.com/r/styles/default/badge.json",
+    "cli_command": "npx shadcn@latest add badge",
+    "dependencies": [],
+    "registry_dependencies": [],
+    "required_utilities": [
+      "cn"
+    ],
+    "tailwind_config_requirements": [
+      "tailwindcss-animate"
+    ]
+  },
+  {
+    "id": "shadcn-breadcrumb",
+    "name": "Breadcrumb (shadcn/ui)",
+    "slug": "breadcrumb",
+    "canonical_category": "breadcrumb",
+    "frameworks": [
+      "react",
+      "nextjs",
+      "tailwind"
+    ],
+    "styling": "tailwind",
+    "component_type": "copy_paste",
+    "description": "Displays the path to the current resource using a hierarchy of links.",
+    "license": {
+      "spdx": "MIT",
+      "is_free": true,
+      "commercial_use_allowed": true,
+      "attribution_required": false
+    },
+    "source_provider": "shadcn/ui",
+    "source_url": "https://ui.shadcn.com/docs/components/breadcrumb",
+    "repository_url": "https://github.com/shadcn-ui/ui",
+    "registry_endpoint": "https://ui.shadcn.com/r/styles/default/breadcrumb.json",
+    "cli_command": "npx shadcn@latest add breadcrumb",
+    "dependencies": [
+      "@radix-ui/react-slot",
+      "lucide-react"
+    ],
+    "registry_dependencies": [],
+    "required_utilities": [
+      "cn"
+    ],
+    "tailwind_config_requirements": [
+      "tailwindcss-animate"
+    ]
+  },
+  {
+    "id": "shadcn-bubble",
+    "name": "Bubble (shadcn/ui)",
+    "slug": "bubble",
+    "canonical_category": "card",
+    "frameworks": [
+      "react",
+      "nextjs",
+      "tailwind"
+    ],
+    "styling": "tailwind",
+    "component_type": "copy_paste",
+    "description": "Accessible React Bubble component.",
+    "license": {
+      "spdx": "MIT",
+      "is_free": true,
+      "commercial_use_allowed": true,
+      "attribution_required": false
+    },
+    "source_provider": "shadcn/ui",
+    "source_url": "https://ui.shadcn.com/docs/components/bubble",
+    "repository_url": "https://github.com/shadcn-ui/ui",
+    "registry_endpoint": "https://ui.shadcn.com/r/styles/default/bubble.json",
+    "cli_command": "npx shadcn@latest add bubble",
+    "dependencies": [],
+    "registry_dependencies": [],
+    "required_utilities": [
+      "cn"
+    ],
+    "tailwind_config_requirements": [
+      "tailwindcss-animate"
+    ]
+  },
+  {
+    "id": "shadcn-button",
+    "name": "Button (shadcn/ui)",
+    "slug": "button",
+    "canonical_category": "button",
+    "frameworks": [
+      "react",
+      "nextjs",
+      "tailwind"
+    ],
+    "styling": "tailwind",
+    "component_type": "copy_paste",
+    "description": "Displays a button or a component that looks like a button.",
+    "license": {
+      "spdx": "MIT",
+      "is_free": true,
+      "commercial_use_allowed": true,
+      "attribution_required": false
+    },
+    "source_provider": "shadcn/ui",
+    "source_url": "https://ui.shadcn.com/docs/components/button",
+    "repository_url": "https://github.com/shadcn-ui/ui",
+    "registry_endpoint": "https://ui.shadcn.com/r/styles/default/button.json",
+    "cli_command": "npx shadcn@latest add button",
+    "dependencies": [
+      "@radix-ui/react-slot"
+    ],
+    "registry_dependencies": [],
+    "required_utilities": [
+      "cn"
+    ],
+    "tailwind_config_requirements": [
+      "tailwindcss-animate"
+    ]
+  },
+  {
+    "id": "shadcn-button-group",
+    "name": "Button Group (shadcn/ui)",
+    "slug": "button-group",
+    "canonical_category": "button-group",
+    "frameworks": [
+      "react",
+      "nextjs",
+      "tailwind"
+    ],
+    "styling": "tailwind",
+    "component_type": "copy_paste",
+    "description": "Accessible React Button Group component.",
+    "license": {
+      "spdx": "MIT",
+      "is_free": true,
+      "commercial_use_allowed": true,
+      "attribution_required": false
+    },
+    "source_provider": "shadcn/ui",
+    "source_url": "https://ui.shadcn.com/docs/components/button-group",
+    "repository_url": "https://github.com/shadcn-ui/ui",
+    "registry_endpoint": "https://ui.shadcn.com/r/styles/default/button-group.json",
+    "cli_command": "npx shadcn@latest add button-group",
+    "dependencies": [],
+    "registry_dependencies": [
+      "separator"
+    ],
+    "required_utilities": [
+      "cn"
+    ],
+    "tailwind_config_requirements": [
+      "tailwindcss-animate"
+    ]
+  },
+  {
+    "id": "shadcn-calendar",
+    "name": "Calendar (shadcn/ui)",
+    "slug": "calendar",
+    "canonical_category": "date-picker",
+    "frameworks": [
+      "react",
+      "nextjs",
+      "tailwind"
+    ],
+    "styling": "tailwind",
+    "component_type": "copy_paste",
+    "description": "A date field component that allows users to enter and edit dates.",
+    "license": {
+      "spdx": "MIT",
+      "is_free": true,
+      "commercial_use_allowed": true,
+      "attribution_required": false
+    },
+    "source_provider": "shadcn/ui",
+    "source_url": "https://ui.shadcn.com/docs/components/calendar",
+    "repository_url": "https://github.com/shadcn-ui/ui",
+    "registry_endpoint": "https://ui.shadcn.com/r/styles/default/calendar.json",
+    "cli_command": "npx shadcn@latest add calendar",
+    "dependencies": [
+      "react-day-picker@latest",
+      "date-fns"
+    ],
+    "registry_dependencies": [
+      "button"
+    ],
+    "required_utilities": [
+      "cn"
+    ],
+    "tailwind_config_requirements": [
+      "tailwindcss-animate"
+    ]
+  },
+  {
+    "id": "shadcn-card",
+    "name": "Card (shadcn/ui)",
+    "slug": "card",
+    "canonical_category": "card",
+    "frameworks": [
+      "react",
+      "nextjs",
+      "tailwind"
+    ],
+    "styling": "tailwind",
+    "component_type": "copy_paste",
+    "description": "Displays a card with header, content, and footer.",
+    "license": {
+      "spdx": "MIT",
+      "is_free": true,
+      "commercial_use_allowed": true,
+      "attribution_required": false
+    },
+    "source_provider": "shadcn/ui",
+    "source_url": "https://ui.shadcn.com/docs/components/card",
+    "repository_url": "https://github.com/shadcn-ui/ui",
+    "registry_endpoint": "https://ui.shadcn.com/r/styles/default/card.json",
+    "cli_command": "npx shadcn@latest add card",
+    "dependencies": [],
+    "registry_dependencies": [],
+    "required_utilities": [
+      "cn"
+    ],
+    "tailwind_config_requirements": [
+      "tailwindcss-animate"
+    ]
+  },
+  {
+    "id": "shadcn-carousel",
+    "name": "Carousel (shadcn/ui)",
+    "slug": "carousel",
+    "canonical_category": "card",
+    "frameworks": [
+      "react",
+      "nextjs",
+      "tailwind"
+    ],
+    "styling": "tailwind",
+    "component_type": "copy_paste",
+    "description": "A carousel with motion and swipe built using Embla Carousel.",
+    "license": {
+      "spdx": "MIT",
+      "is_free": true,
+      "commercial_use_allowed": true,
+      "attribution_required": false
+    },
+    "source_provider": "shadcn/ui",
+    "source_url": "https://ui.shadcn.com/docs/components/carousel",
+    "repository_url": "https://github.com/shadcn-ui/ui",
+    "registry_endpoint": "https://ui.shadcn.com/r/styles/default/carousel.json",
+    "cli_command": "npx shadcn@latest add carousel",
+    "dependencies": [
+      "embla-carousel-react"
+    ],
+    "registry_dependencies": [
+      "button"
+    ],
+    "required_utilities": [
+      "cn"
+    ],
+    "tailwind_config_requirements": [
+      "tailwindcss-animate"
+    ]
+  },
+  {
+    "id": "shadcn-chart",
+    "name": "Chart (shadcn/ui)",
+    "slug": "chart",
+    "canonical_category": "card",
+    "frameworks": [
+      "react",
+      "nextjs",
+      "tailwind"
+    ],
+    "styling": "tailwind",
+    "component_type": "copy_paste",
+    "description": "Accessible React Chart component.",
+    "license": {
+      "spdx": "MIT",
+      "is_free": true,
+      "commercial_use_allowed": true,
+      "attribution_required": false
+    },
+    "source_provider": "shadcn/ui",
+    "source_url": "https://ui.shadcn.com/docs/components/chart",
+    "repository_url": "https://github.com/shadcn-ui/ui",
+    "registry_endpoint": "https://ui.shadcn.com/r/styles/default/chart.json",
+    "cli_command": "npx shadcn@latest add chart",
+    "dependencies": [
+      "recharts@3.8.0"
+    ],
+    "registry_dependencies": [
+      "card"
+    ],
+    "required_utilities": [
+      "cn"
+    ],
+    "tailwind_config_requirements": [
+      "tailwindcss-animate"
+    ]
+  },
+  {
+    "id": "shadcn-checkbox",
+    "name": "Checkbox (shadcn/ui)",
+    "slug": "checkbox",
+    "canonical_category": "checkbox",
+    "frameworks": [
+      "react",
+      "nextjs",
+      "tailwind"
+    ],
+    "styling": "tailwind",
+    "component_type": "copy_paste",
+    "description": "A control that allows the user to toggle between checked and not checked.",
+    "license": {
+      "spdx": "MIT",
+      "is_free": true,
+      "commercial_use_allowed": true,
+      "attribution_required": false
+    },
+    "source_provider": "shadcn/ui",
+    "source_url": "https://ui.shadcn.com/docs/components/checkbox",
+    "repository_url": "https://github.com/shadcn-ui/ui",
+    "registry_endpoint": "https://ui.shadcn.com/r/styles/default/checkbox.json",
+    "cli_command": "npx shadcn@latest add checkbox",
+    "dependencies": [
+      "@radix-ui/react-checkbox",
+      "lucide-react"
+    ],
+    "registry_dependencies": [],
+    "required_utilities": [
+      "cn"
+    ],
+    "tailwind_config_requirements": [
+      "tailwindcss-animate"
+    ]
+  },
+  {
+    "id": "shadcn-collapsible",
+    "name": "Collapsible (shadcn/ui)",
+    "slug": "collapsible",
+    "canonical_category": "accordion",
+    "frameworks": [
+      "react",
+      "nextjs",
+      "tailwind"
+    ],
+    "styling": "tailwind",
+    "component_type": "copy_paste",
+    "description": "An interactive component which expands/collapses a panel.",
+    "license": {
+      "spdx": "MIT",
+      "is_free": true,
+      "commercial_use_allowed": true,
+      "attribution_required": false
+    },
+    "source_provider": "shadcn/ui",
+    "source_url": "https://ui.shadcn.com/docs/components/collapsible",
+    "repository_url": "https://github.com/shadcn-ui/ui",
+    "registry_endpoint": "https://ui.shadcn.com/r/styles/default/collapsible.json",
+    "cli_command": "npx shadcn@latest add collapsible",
+    "dependencies": [
+      "@radix-ui/react-collapsible"
+    ],
+    "registry_dependencies": [],
+    "required_utilities": [
+      "cn"
+    ],
+    "tailwind_config_requirements": [
+      "tailwindcss-animate"
+    ]
+  },
+  {
+    "id": "shadcn-combobox",
+    "name": "Combobox (shadcn/ui)",
+    "slug": "combobox",
+    "canonical_category": "combobox",
+    "frameworks": [
+      "react",
+      "nextjs",
+      "tailwind"
+    ],
+    "styling": "tailwind",
+    "component_type": "copy_paste",
+    "description": "Autocomplete input and command palette with a list of suggestions.",
+    "license": {
+      "spdx": "MIT",
+      "is_free": true,
+      "commercial_use_allowed": true,
+      "attribution_required": false
+    },
+    "source_provider": "shadcn/ui",
+    "source_url": "https://ui.shadcn.com/docs/components/combobox",
+    "repository_url": "https://github.com/shadcn-ui/ui",
+    "registry_endpoint": "https://ui.shadcn.com/r/styles/default/combobox.json",
+    "cli_command": "npx shadcn@latest add combobox",
+    "dependencies": [
+      "@base-ui/react"
+    ],
+    "registry_dependencies": [
+      "button",
+      "input-group"
+    ],
+    "required_utilities": [
+      "cn"
+    ],
+    "tailwind_config_requirements": [
+      "tailwindcss-animate"
+    ]
+  },
+  {
+    "id": "shadcn-command",
+    "name": "Command (shadcn/ui)",
+    "slug": "command",
+    "canonical_category": "command",
+    "frameworks": [
+      "react",
+      "nextjs",
+      "tailwind"
+    ],
+    "styling": "tailwind",
+    "component_type": "copy_paste",
+    "description": "Fast, composable, unstyled command menu for React.",
+    "license": {
+      "spdx": "MIT",
+      "is_free": true,
+      "commercial_use_allowed": true,
+      "attribution_required": false
+    },
+    "source_provider": "shadcn/ui",
+    "source_url": "https://ui.shadcn.com/docs/components/command",
+    "repository_url": "https://github.com/shadcn-ui/ui",
+    "registry_endpoint": "https://ui.shadcn.com/r/styles/default/command.json",
+    "cli_command": "npx shadcn@latest add command",
+    "dependencies": [
+      "cmdk"
+    ],
+    "registry_dependencies": [
+      "dialog",
+      "input-group"
+    ],
+    "required_utilities": [
+      "cn"
+    ],
+    "tailwind_config_requirements": [
+      "tailwindcss-animate"
+    ]
+  },
+  {
+    "id": "shadcn-context-menu",
+    "name": "Context Menu (shadcn/ui)",
+    "slug": "context-menu",
+    "canonical_category": "context-menu",
+    "frameworks": [
+      "react",
+      "nextjs",
+      "tailwind"
+    ],
+    "styling": "tailwind",
+    "component_type": "copy_paste",
+    "description": "Displays a menu to the user \u2014 triggered by a right-click or press-and-hold.",
+    "license": {
+      "spdx": "MIT",
+      "is_free": true,
+      "commercial_use_allowed": true,
+      "attribution_required": false
+    },
+    "source_provider": "shadcn/ui",
+    "source_url": "https://ui.shadcn.com/docs/components/context-menu",
+    "repository_url": "https://github.com/shadcn-ui/ui",
+    "registry_endpoint": "https://ui.shadcn.com/r/styles/default/context-menu.json",
+    "cli_command": "npx shadcn@latest add context-menu",
+    "dependencies": [
+      "@radix-ui/react-context-menu",
+      "lucide-react"
+    ],
+    "registry_dependencies": [],
+    "required_utilities": [
+      "cn"
+    ],
+    "tailwind_config_requirements": [
+      "tailwindcss-animate"
+    ]
+  },
+  {
+    "id": "shadcn-dialog",
+    "name": "Dialog (shadcn/ui)",
+    "slug": "dialog",
+    "canonical_category": "dialog",
+    "frameworks": [
+      "react",
+      "nextjs",
+      "tailwind"
+    ],
+    "styling": "tailwind",
+    "component_type": "copy_paste",
+    "description": "A window overlaid on either the primary window or another dialog window, rendering the content underneath inert.",
+    "license": {
+      "spdx": "MIT",
+      "is_free": true,
+      "commercial_use_allowed": true,
+      "attribution_required": false
+    },
+    "source_provider": "shadcn/ui",
+    "source_url": "https://ui.shadcn.com/docs/components/dialog",
+    "repository_url": "https://github.com/shadcn-ui/ui",
+    "registry_endpoint": "https://ui.shadcn.com/r/styles/default/dialog.json",
+    "cli_command": "npx shadcn@latest add dialog",
+    "dependencies": [
+      "@radix-ui/react-dialog",
+      "lucide-react"
+    ],
+    "registry_dependencies": [
+      "button"
+    ],
+    "required_utilities": [
+      "cn"
+    ],
+    "tailwind_config_requirements": [
+      "tailwindcss-animate"
+    ]
+  },
+  {
+    "id": "shadcn-direction",
+    "name": "Direction (shadcn/ui)",
+    "slug": "direction",
+    "canonical_category": "card",
+    "frameworks": [
+      "react",
+      "nextjs",
+      "tailwind"
+    ],
+    "styling": "tailwind",
+    "component_type": "copy_paste",
+    "description": "Accessible React Direction component.",
+    "license": {
+      "spdx": "MIT",
+      "is_free": true,
+      "commercial_use_allowed": true,
+      "attribution_required": false
+    },
+    "source_provider": "shadcn/ui",
+    "source_url": "https://ui.shadcn.com/docs/components/direction",
+    "repository_url": "https://github.com/shadcn-ui/ui",
+    "registry_endpoint": "https://ui.shadcn.com/r/styles/default/direction.json",
+    "cli_command": "npx shadcn@latest add direction",
+    "dependencies": [
+      "@base-ui/react"
+    ],
+    "registry_dependencies": [],
+    "required_utilities": [
+      "cn"
+    ],
+    "tailwind_config_requirements": [
+      "tailwindcss-animate"
+    ]
+  },
+  {
+    "id": "shadcn-drawer",
+    "name": "Drawer (shadcn/ui)",
+    "slug": "drawer",
+    "canonical_category": "drawer",
+    "frameworks": [
+      "react",
+      "nextjs",
+      "tailwind"
+    ],
+    "styling": "tailwind",
+    "component_type": "copy_paste",
+    "description": "A drawer component for React built on top of Vaul.",
+    "license": {
+      "spdx": "MIT",
+      "is_free": true,
+      "commercial_use_allowed": true,
+      "attribution_required": false
+    },
+    "source_provider": "shadcn/ui",
+    "source_url": "https://ui.shadcn.com/docs/components/drawer",
+    "repository_url": "https://github.com/shadcn-ui/ui",
+    "registry_endpoint": "https://ui.shadcn.com/r/styles/default/drawer.json",
+    "cli_command": "npx shadcn@latest add drawer",
+    "dependencies": [
+      "@base-ui/react"
+    ],
+    "registry_dependencies": [],
+    "required_utilities": [
+      "cn"
+    ],
+    "tailwind_config_requirements": [
+      "tailwindcss-animate"
+    ]
+  },
+  {
+    "id": "shadcn-dropdown-menu",
+    "name": "Dropdown Menu (shadcn/ui)",
+    "slug": "dropdown-menu",
+    "canonical_category": "dropdown-menu",
+    "frameworks": [
+      "react",
+      "nextjs",
+      "tailwind"
+    ],
+    "styling": "tailwind",
+    "component_type": "copy_paste",
+    "description": "Displays a menu to the user \u2014 such as a set of actions or functions \u2014 triggered by a button.",
+    "license": {
+      "spdx": "MIT",
+      "is_free": true,
+      "commercial_use_allowed": true,
+      "attribution_required": false
+    },
+    "source_provider": "shadcn/ui",
+    "source_url": "https://ui.shadcn.com/docs/components/dropdown-menu",
+    "repository_url": "https://github.com/shadcn-ui/ui",
+    "registry_endpoint": "https://ui.shadcn.com/r/styles/default/dropdown-menu.json",
+    "cli_command": "npx shadcn@latest add dropdown-menu",
+    "dependencies": [
+      "@radix-ui/react-dropdown-menu",
+      "lucide-react"
+    ],
+    "registry_dependencies": [],
+    "required_utilities": [
+      "cn"
+    ],
+    "tailwind_config_requirements": [
+      "tailwindcss-animate"
+    ]
+  },
+  {
+    "id": "shadcn-empty",
+    "name": "Empty (shadcn/ui)",
+    "slug": "empty",
+    "canonical_category": "card",
+    "frameworks": [
+      "react",
+      "nextjs",
+      "tailwind"
+    ],
+    "styling": "tailwind",
+    "component_type": "copy_paste",
+    "description": "Accessible React Empty component.",
+    "license": {
+      "spdx": "MIT",
+      "is_free": true,
+      "commercial_use_allowed": true,
+      "attribution_required": false
+    },
+    "source_provider": "shadcn/ui",
+    "source_url": "https://ui.shadcn.com/docs/components/empty",
+    "repository_url": "https://github.com/shadcn-ui/ui",
+    "registry_endpoint": "https://ui.shadcn.com/r/styles/default/empty.json",
+    "cli_command": "npx shadcn@latest add empty",
+    "dependencies": [],
+    "registry_dependencies": [],
+    "required_utilities": [
+      "cn"
+    ],
+    "tailwind_config_requirements": [
+      "tailwindcss-animate"
+    ]
+  },
+  {
+    "id": "shadcn-field",
+    "name": "Field (shadcn/ui)",
+    "slug": "field",
+    "canonical_category": "input",
+    "frameworks": [
+      "react",
+      "nextjs",
+      "tailwind"
+    ],
+    "styling": "tailwind",
+    "component_type": "copy_paste",
+    "description": "Accessible React Field component.",
+    "license": {
+      "spdx": "MIT",
+      "is_free": true,
+      "commercial_use_allowed": true,
+      "attribution_required": false
+    },
+    "source_provider": "shadcn/ui",
+    "source_url": "https://ui.shadcn.com/docs/components/field",
+    "repository_url": "https://github.com/shadcn-ui/ui",
+    "registry_endpoint": "https://ui.shadcn.com/r/styles/default/field.json",
+    "cli_command": "npx shadcn@latest add field",
+    "dependencies": [],
+    "registry_dependencies": [
+      "label",
+      "separator"
+    ],
+    "required_utilities": [
+      "cn"
+    ],
+    "tailwind_config_requirements": [
+      "tailwindcss-animate"
+    ]
+  },
+  {
+    "id": "shadcn-form",
+    "name": "Form (shadcn/ui)",
+    "slug": "form",
+    "canonical_category": "input",
+    "frameworks": [
+      "react",
+      "nextjs",
+      "tailwind"
+    ],
+    "styling": "tailwind",
+    "component_type": "copy_paste",
+    "description": "Building forms with React Hook Form and Zod validation.",
+    "license": {
+      "spdx": "MIT",
+      "is_free": true,
+      "commercial_use_allowed": true,
+      "attribution_required": false
+    },
+    "source_provider": "shadcn/ui",
+    "source_url": "https://ui.shadcn.com/docs/components/form",
+    "repository_url": "https://github.com/shadcn-ui/ui",
+    "registry_endpoint": "https://ui.shadcn.com/r/styles/default/form.json",
+    "cli_command": "npx shadcn@latest add form",
+    "dependencies": [
+      "@radix-ui/react-label",
+      "@radix-ui/react-slot",
+      "react-hook-form",
+      "@hookform/resolvers",
+      "zod"
+    ],
+    "registry_dependencies": [
+      "button",
+      "label"
+    ],
+    "required_utilities": [
+      "cn"
+    ],
+    "tailwind_config_requirements": [
+      "tailwindcss-animate"
+    ]
+  },
+  {
+    "id": "shadcn-hover-card",
+    "name": "Hover Card (shadcn/ui)",
+    "slug": "hover-card",
+    "canonical_category": "card",
+    "frameworks": [
+      "react",
+      "nextjs",
+      "tailwind"
+    ],
+    "styling": "tailwind",
+    "component_type": "copy_paste",
+    "description": "For sighted users to preview content available behind a link.",
+    "license": {
+      "spdx": "MIT",
+      "is_free": true,
+      "commercial_use_allowed": true,
+      "attribution_required": false
+    },
+    "source_provider": "shadcn/ui",
+    "source_url": "https://ui.shadcn.com/docs/components/hover-card",
+    "repository_url": "https://github.com/shadcn-ui/ui",
+    "registry_endpoint": "https://ui.shadcn.com/r/styles/default/hover-card.json",
+    "cli_command": "npx shadcn@latest add hover-card",
+    "dependencies": [
+      "@radix-ui/react-hover-card"
+    ],
+    "registry_dependencies": [],
+    "required_utilities": [
+      "cn"
+    ],
+    "tailwind_config_requirements": [
+      "tailwindcss-animate"
+    ]
+  },
+  {
+    "id": "shadcn-input",
+    "name": "Input (shadcn/ui)",
+    "slug": "input",
+    "canonical_category": "input",
+    "frameworks": [
+      "react",
+      "nextjs",
+      "tailwind"
+    ],
+    "styling": "tailwind",
+    "component_type": "copy_paste",
+    "description": "Displays a form input field or a component that looks like an input field.",
+    "license": {
+      "spdx": "MIT",
+      "is_free": true,
+      "commercial_use_allowed": true,
+      "attribution_required": false
+    },
+    "source_provider": "shadcn/ui",
+    "source_url": "https://ui.shadcn.com/docs/components/input",
+    "repository_url": "https://github.com/shadcn-ui/ui",
+    "registry_endpoint": "https://ui.shadcn.com/r/styles/default/input.json",
+    "cli_command": "npx shadcn@latest add input",
+    "dependencies": [],
+    "registry_dependencies": [],
+    "required_utilities": [
+      "cn"
+    ],
+    "tailwind_config_requirements": [
+      "tailwindcss-animate"
+    ]
+  },
+  {
+    "id": "shadcn-input-group",
+    "name": "Input Group (shadcn/ui)",
+    "slug": "input-group",
+    "canonical_category": "input",
+    "frameworks": [
+      "react",
+      "nextjs",
+      "tailwind"
+    ],
+    "styling": "tailwind",
+    "component_type": "copy_paste",
+    "description": "Accessible React Input Group component.",
+    "license": {
+      "spdx": "MIT",
+      "is_free": true,
+      "commercial_use_allowed": true,
+      "attribution_required": false
+    },
+    "source_provider": "shadcn/ui",
+    "source_url": "https://ui.shadcn.com/docs/components/input-group",
+    "repository_url": "https://github.com/shadcn-ui/ui",
+    "registry_endpoint": "https://ui.shadcn.com/r/styles/default/input-group.json",
+    "cli_command": "npx shadcn@latest add input-group",
+    "dependencies": [],
+    "registry_dependencies": [
+      "button",
+      "input",
+      "textarea"
+    ],
+    "required_utilities": [
+      "cn"
+    ],
+    "tailwind_config_requirements": [
+      "tailwindcss-animate"
+    ]
+  },
+  {
+    "id": "shadcn-input-otp",
+    "name": "Input Otp (shadcn/ui)",
+    "slug": "input-otp",
+    "canonical_category": "input",
+    "frameworks": [
+      "react",
+      "nextjs",
+      "tailwind"
+    ],
+    "styling": "tailwind",
+    "component_type": "copy_paste",
+    "description": "Accessible one-time password component with copy paste functionality.",
+    "license": {
+      "spdx": "MIT",
+      "is_free": true,
+      "commercial_use_allowed": true,
+      "attribution_required": false
+    },
+    "source_provider": "shadcn/ui",
+    "source_url": "https://ui.shadcn.com/docs/components/input-otp",
+    "repository_url": "https://github.com/shadcn-ui/ui",
+    "registry_endpoint": "https://ui.shadcn.com/r/styles/default/input-otp.json",
+    "cli_command": "npx shadcn@latest add input-otp",
+    "dependencies": [
+      "input-otp"
+    ],
+    "registry_dependencies": [],
+    "required_utilities": [
+      "cn"
+    ],
+    "tailwind_config_requirements": [
+      "tailwindcss-animate"
+    ]
+  },
+  {
+    "id": "shadcn-item",
+    "name": "Item (shadcn/ui)",
+    "slug": "item",
+    "canonical_category": "card",
+    "frameworks": [
+      "react",
+      "nextjs",
+      "tailwind"
+    ],
+    "styling": "tailwind",
+    "component_type": "copy_paste",
+    "description": "Accessible React Item component.",
+    "license": {
+      "spdx": "MIT",
+      "is_free": true,
+      "commercial_use_allowed": true,
+      "attribution_required": false
+    },
+    "source_provider": "shadcn/ui",
+    "source_url": "https://ui.shadcn.com/docs/components/item",
+    "repository_url": "https://github.com/shadcn-ui/ui",
+    "registry_endpoint": "https://ui.shadcn.com/r/styles/default/item.json",
+    "cli_command": "npx shadcn@latest add item",
+    "dependencies": [],
+    "registry_dependencies": [
+      "separator"
+    ],
+    "required_utilities": [
+      "cn"
+    ],
+    "tailwind_config_requirements": [
+      "tailwindcss-animate"
+    ]
+  },
+  {
+    "id": "shadcn-kbd",
+    "name": "Kbd (shadcn/ui)",
+    "slug": "kbd",
+    "canonical_category": "card",
+    "frameworks": [
+      "react",
+      "nextjs",
+      "tailwind"
+    ],
+    "styling": "tailwind",
+    "component_type": "copy_paste",
+    "description": "Accessible React Kbd component.",
+    "license": {
+      "spdx": "MIT",
+      "is_free": true,
+      "commercial_use_allowed": true,
+      "attribution_required": false
+    },
+    "source_provider": "shadcn/ui",
+    "source_url": "https://ui.shadcn.com/docs/components/kbd",
+    "repository_url": "https://github.com/shadcn-ui/ui",
+    "registry_endpoint": "https://ui.shadcn.com/r/styles/default/kbd.json",
+    "cli_command": "npx shadcn@latest add kbd",
+    "dependencies": [],
+    "registry_dependencies": [],
+    "required_utilities": [
+      "cn"
+    ],
+    "tailwind_config_requirements": [
+      "tailwindcss-animate"
+    ]
+  },
+  {
+    "id": "shadcn-label",
+    "name": "Label (shadcn/ui)",
+    "slug": "label",
+    "canonical_category": "tooltip",
+    "frameworks": [
+      "react",
+      "nextjs",
+      "tailwind"
+    ],
+    "styling": "tailwind",
+    "component_type": "copy_paste",
+    "description": "Renders an accessible label associated with controls.",
+    "license": {
+      "spdx": "MIT",
+      "is_free": true,
+      "commercial_use_allowed": true,
+      "attribution_required": false
+    },
+    "source_provider": "shadcn/ui",
+    "source_url": "https://ui.shadcn.com/docs/components/label",
+    "repository_url": "https://github.com/shadcn-ui/ui",
+    "registry_endpoint": "https://ui.shadcn.com/r/styles/default/label.json",
+    "cli_command": "npx shadcn@latest add label",
+    "dependencies": [
+      "@radix-ui/react-label"
+    ],
+    "registry_dependencies": [],
+    "required_utilities": [
+      "cn"
+    ],
+    "tailwind_config_requirements": [
+      "tailwindcss-animate"
+    ]
+  },
+  {
+    "id": "shadcn-marker",
+    "name": "Marker (shadcn/ui)",
+    "slug": "marker",
+    "canonical_category": "card",
+    "frameworks": [
+      "react",
+      "nextjs",
+      "tailwind"
+    ],
+    "styling": "tailwind",
+    "component_type": "copy_paste",
+    "description": "Accessible React Marker component.",
+    "license": {
+      "spdx": "MIT",
+      "is_free": true,
+      "commercial_use_allowed": true,
+      "attribution_required": false
+    },
+    "source_provider": "shadcn/ui",
+    "source_url": "https://ui.shadcn.com/docs/components/marker",
+    "repository_url": "https://github.com/shadcn-ui/ui",
+    "registry_endpoint": "https://ui.shadcn.com/r/styles/default/marker.json",
+    "cli_command": "npx shadcn@latest add marker",
+    "dependencies": [],
+    "registry_dependencies": [],
+    "required_utilities": [
+      "cn"
+    ],
+    "tailwind_config_requirements": [
+      "tailwindcss-animate"
+    ]
+  },
+  {
+    "id": "shadcn-menubar",
+    "name": "Menubar (shadcn/ui)",
+    "slug": "menubar",
+    "canonical_category": "dropdown-menu",
+    "frameworks": [
+      "react",
+      "nextjs",
+      "tailwind"
+    ],
+    "styling": "tailwind",
+    "component_type": "copy_paste",
+    "description": "A visually persistent menu common in desktop applications that provides quick access to a consistent set of commands.",
+    "license": {
+      "spdx": "MIT",
+      "is_free": true,
+      "commercial_use_allowed": true,
+      "attribution_required": false
+    },
+    "source_provider": "shadcn/ui",
+    "source_url": "https://ui.shadcn.com/docs/components/menubar",
+    "repository_url": "https://github.com/shadcn-ui/ui",
+    "registry_endpoint": "https://ui.shadcn.com/r/styles/default/menubar.json",
+    "cli_command": "npx shadcn@latest add menubar",
+    "dependencies": [
+      "@radix-ui/react-menubar",
+      "lucide-react"
+    ],
+    "registry_dependencies": [
+      "dropdown-menu"
+    ],
+    "required_utilities": [
+      "cn"
+    ],
+    "tailwind_config_requirements": [
+      "tailwindcss-animate"
+    ]
+  },
+  {
+    "id": "shadcn-message",
+    "name": "Message (shadcn/ui)",
+    "slug": "message",
+    "canonical_category": "card",
+    "frameworks": [
+      "react",
+      "nextjs",
+      "tailwind"
+    ],
+    "styling": "tailwind",
+    "component_type": "copy_paste",
+    "description": "Accessible React Message component.",
+    "license": {
+      "spdx": "MIT",
+      "is_free": true,
+      "commercial_use_allowed": true,
+      "attribution_required": false
+    },
+    "source_provider": "shadcn/ui",
+    "source_url": "https://ui.shadcn.com/docs/components/message",
+    "repository_url": "https://github.com/shadcn-ui/ui",
+    "registry_endpoint": "https://ui.shadcn.com/r/styles/default/message.json",
+    "cli_command": "npx shadcn@latest add message",
+    "dependencies": [],
+    "registry_dependencies": [],
+    "required_utilities": [
+      "cn"
+    ],
+    "tailwind_config_requirements": [
+      "tailwindcss-animate"
+    ]
+  },
+  {
+    "id": "shadcn-message-scroller",
+    "name": "Message Scroller (shadcn/ui)",
+    "slug": "message-scroller",
+    "canonical_category": "card",
+    "frameworks": [
+      "react",
+      "nextjs",
+      "tailwind"
+    ],
+    "styling": "tailwind",
+    "component_type": "copy_paste",
+    "description": "Accessible React Message Scroller component.",
+    "license": {
+      "spdx": "MIT",
+      "is_free": true,
+      "commercial_use_allowed": true,
+      "attribution_required": false
+    },
+    "source_provider": "shadcn/ui",
+    "source_url": "https://ui.shadcn.com/docs/components/message-scroller",
+    "repository_url": "https://github.com/shadcn-ui/ui",
+    "registry_endpoint": "https://ui.shadcn.com/r/styles/default/message-scroller.json",
+    "cli_command": "npx shadcn@latest add message-scroller",
+    "dependencies": [
+      "@shadcn/react"
+    ],
+    "registry_dependencies": [
+      "button"
+    ],
+    "required_utilities": [
+      "cn"
+    ],
+    "tailwind_config_requirements": [
+      "tailwindcss-animate"
+    ]
+  },
+  {
+    "id": "shadcn-native-select",
+    "name": "Native Select (shadcn/ui)",
+    "slug": "native-select",
+    "canonical_category": "select",
+    "frameworks": [
+      "react",
+      "nextjs",
+      "tailwind"
+    ],
+    "styling": "tailwind",
+    "component_type": "copy_paste",
+    "description": "Accessible React Native Select component.",
+    "license": {
+      "spdx": "MIT",
+      "is_free": true,
+      "commercial_use_allowed": true,
+      "attribution_required": false
+    },
+    "source_provider": "shadcn/ui",
+    "source_url": "https://ui.shadcn.com/docs/components/native-select",
+    "repository_url": "https://github.com/shadcn-ui/ui",
+    "registry_endpoint": "https://ui.shadcn.com/r/styles/default/native-select.json",
+    "cli_command": "npx shadcn@latest add native-select",
+    "dependencies": [],
+    "registry_dependencies": [],
+    "required_utilities": [
+      "cn"
+    ],
+    "tailwind_config_requirements": [
+      "tailwindcss-animate"
+    ]
+  },
+  {
+    "id": "shadcn-navigation-menu",
+    "name": "Navigation Menu (shadcn/ui)",
+    "slug": "navigation-menu",
+    "canonical_category": "dropdown-menu",
+    "frameworks": [
+      "react",
+      "nextjs",
+      "tailwind"
+    ],
+    "styling": "tailwind",
+    "component_type": "copy_paste",
+    "description": "A collection of links for navigating websites.",
+    "license": {
+      "spdx": "MIT",
+      "is_free": true,
+      "commercial_use_allowed": true,
+      "attribution_required": false
+    },
+    "source_provider": "shadcn/ui",
+    "source_url": "https://ui.shadcn.com/docs/components/navigation-menu",
+    "repository_url": "https://github.com/shadcn-ui/ui",
+    "registry_endpoint": "https://ui.shadcn.com/r/styles/default/navigation-menu.json",
+    "cli_command": "npx shadcn@latest add navigation-menu",
+    "dependencies": [
+      "@radix-ui/react-navigation-menu",
+      "lucide-react"
+    ],
+    "registry_dependencies": [],
+    "required_utilities": [
+      "cn"
+    ],
+    "tailwind_config_requirements": [
+      "tailwindcss-animate"
+    ]
+  },
+  {
+    "id": "shadcn-pagination",
+    "name": "Pagination (shadcn/ui)",
+    "slug": "pagination",
+    "canonical_category": "pagination",
+    "frameworks": [
+      "react",
+      "nextjs",
+      "tailwind"
+    ],
+    "styling": "tailwind",
+    "component_type": "copy_paste",
+    "description": "Pagination with page navigation, next and previous links and ellipsis.",
+    "license": {
+      "spdx": "MIT",
+      "is_free": true,
+      "commercial_use_allowed": true,
+      "attribution_required": false
+    },
+    "source_provider": "shadcn/ui",
+    "source_url": "https://ui.shadcn.com/docs/components/pagination",
+    "repository_url": "https://github.com/shadcn-ui/ui",
+    "registry_endpoint": "https://ui.shadcn.com/r/styles/default/pagination.json",
+    "cli_command": "npx shadcn@latest add pagination",
+    "dependencies": [
+      "lucide-react"
+    ],
+    "registry_dependencies": [
+      "button"
+    ],
+    "required_utilities": [
+      "cn"
+    ],
+    "tailwind_config_requirements": [
+      "tailwindcss-animate"
+    ]
+  },
+  {
+    "id": "shadcn-popover",
+    "name": "Popover (shadcn/ui)",
+    "slug": "popover",
+    "canonical_category": "popover",
+    "frameworks": [
+      "react",
+      "nextjs",
+      "tailwind"
+    ],
+    "styling": "tailwind",
+    "component_type": "copy_paste",
+    "description": "Displays rich content in a portal, triggered by a button.",
+    "license": {
+      "spdx": "MIT",
+      "is_free": true,
+      "commercial_use_allowed": true,
+      "attribution_required": false
+    },
+    "source_provider": "shadcn/ui",
+    "source_url": "https://ui.shadcn.com/docs/components/popover",
+    "repository_url": "https://github.com/shadcn-ui/ui",
+    "registry_endpoint": "https://ui.shadcn.com/r/styles/default/popover.json",
+    "cli_command": "npx shadcn@latest add popover",
+    "dependencies": [
+      "@radix-ui/react-popover"
+    ],
+    "registry_dependencies": [],
+    "required_utilities": [
+      "cn"
+    ],
+    "tailwind_config_requirements": [
+      "tailwindcss-animate"
+    ]
+  },
+  {
+    "id": "shadcn-progress",
+    "name": "Progress (shadcn/ui)",
+    "slug": "progress",
+    "canonical_category": "progress",
+    "frameworks": [
+      "react",
+      "nextjs",
+      "tailwind"
+    ],
+    "styling": "tailwind",
+    "component_type": "copy_paste",
+    "description": "Displays an indicator showing the completion progress of a task, typically displayed as a progress bar.",
+    "license": {
+      "spdx": "MIT",
+      "is_free": true,
+      "commercial_use_allowed": true,
+      "attribution_required": false
+    },
+    "source_provider": "shadcn/ui",
+    "source_url": "https://ui.shadcn.com/docs/components/progress",
+    "repository_url": "https://github.com/shadcn-ui/ui",
+    "registry_endpoint": "https://ui.shadcn.com/r/styles/default/progress.json",
+    "cli_command": "npx shadcn@latest add progress",
+    "dependencies": [
+      "@radix-ui/react-progress"
+    ],
+    "registry_dependencies": [],
+    "required_utilities": [
+      "cn"
+    ],
+    "tailwind_config_requirements": [
+      "tailwindcss-animate"
+    ]
+  },
+  {
+    "id": "shadcn-questionnaire",
+    "name": "Questionnaire (shadcn/ui)",
+    "slug": "questionnaire",
+    "canonical_category": "card",
+    "frameworks": [
+      "react",
+      "nextjs",
+      "tailwind"
+    ],
+    "styling": "tailwind",
+    "component_type": "copy_paste",
+    "description": "Accessible React Questionnaire component.",
+    "license": {
+      "spdx": "MIT",
+      "is_free": true,
+      "commercial_use_allowed": true,
+      "attribution_required": false
+    },
+    "source_provider": "shadcn/ui",
+    "source_url": "https://ui.shadcn.com/docs/components/questionnaire",
+    "repository_url": "https://github.com/shadcn-ui/ui",
+    "registry_endpoint": "https://ui.shadcn.com/r/styles/default/questionnaire.json",
+    "cli_command": "npx shadcn@latest add questionnaire",
+    "dependencies": [
+      "@shadcn/react"
+    ],
+    "registry_dependencies": [
+      "button"
+    ],
+    "required_utilities": [
+      "cn"
+    ],
+    "tailwind_config_requirements": [
+      "tailwindcss-animate"
+    ]
+  },
+  {
+    "id": "shadcn-radio-group",
+    "name": "Radio Group (shadcn/ui)",
+    "slug": "radio-group",
+    "canonical_category": "radio-group",
+    "frameworks": [
+      "react",
+      "nextjs",
+      "tailwind"
+    ],
+    "styling": "tailwind",
+    "component_type": "copy_paste",
+    "description": "A set of checkable buttons\u2014known as radio buttons\u2014where no more than one button can be checked at a time.",
+    "license": {
+      "spdx": "MIT",
+      "is_free": true,
+      "commercial_use_allowed": true,
+      "attribution_required": false
+    },
+    "source_provider": "shadcn/ui",
+    "source_url": "https://ui.shadcn.com/docs/components/radio-group",
+    "repository_url": "https://github.com/shadcn-ui/ui",
+    "registry_endpoint": "https://ui.shadcn.com/r/styles/default/radio-group.json",
+    "cli_command": "npx shadcn@latest add radio-group",
+    "dependencies": [
+      "@radix-ui/react-radio-group",
+      "lucide-react"
+    ],
+    "registry_dependencies": [],
+    "required_utilities": [
+      "cn"
+    ],
+    "tailwind_config_requirements": [
+      "tailwindcss-animate"
+    ]
+  },
+  {
+    "id": "shadcn-resizable",
+    "name": "Resizable (shadcn/ui)",
+    "slug": "resizable",
+    "canonical_category": "card",
+    "frameworks": [
+      "react",
+      "nextjs",
+      "tailwind"
+    ],
+    "styling": "tailwind",
+    "component_type": "copy_paste",
+    "description": "Accessible resizable panel groups and layouts with keyboard support.",
+    "license": {
+      "spdx": "MIT",
+      "is_free": true,
+      "commercial_use_allowed": true,
+      "attribution_required": false
+    },
+    "source_provider": "shadcn/ui",
+    "source_url": "https://ui.shadcn.com/docs/components/resizable",
+    "repository_url": "https://github.com/shadcn-ui/ui",
+    "registry_endpoint": "https://ui.shadcn.com/r/styles/default/resizable.json",
+    "cli_command": "npx shadcn@latest add resizable",
+    "dependencies": [
+      "react-resizable-panels"
+    ],
+    "registry_dependencies": [],
+    "required_utilities": [
+      "cn"
+    ],
+    "tailwind_config_requirements": [
+      "tailwindcss-animate"
+    ]
+  },
+  {
+    "id": "shadcn-scroll-area",
+    "name": "Scroll Area (shadcn/ui)",
+    "slug": "scroll-area",
+    "canonical_category": "card",
+    "frameworks": [
+      "react",
+      "nextjs",
+      "tailwind"
+    ],
+    "styling": "tailwind",
+    "component_type": "copy_paste",
+    "description": "Augments native scrollbars with custom, cross-browser styling.",
+    "license": {
+      "spdx": "MIT",
+      "is_free": true,
+      "commercial_use_allowed": true,
+      "attribution_required": false
+    },
+    "source_provider": "shadcn/ui",
+    "source_url": "https://ui.shadcn.com/docs/components/scroll-area",
+    "repository_url": "https://github.com/shadcn-ui/ui",
+    "registry_endpoint": "https://ui.shadcn.com/r/styles/default/scroll-area.json",
+    "cli_command": "npx shadcn@latest add scroll-area",
+    "dependencies": [
+      "@radix-ui/react-scroll-area"
+    ],
+    "registry_dependencies": [],
+    "required_utilities": [
+      "cn"
+    ],
+    "tailwind_config_requirements": [
+      "tailwindcss-animate"
+    ]
+  },
+  {
+    "id": "shadcn-select",
+    "name": "Select (shadcn/ui)",
+    "slug": "select",
+    "canonical_category": "select",
+    "frameworks": [
+      "react",
+      "nextjs",
+      "tailwind"
+    ],
+    "styling": "tailwind",
+    "component_type": "copy_paste",
+    "description": "Displays a list of options for the user to pick from\u2014triggered by a button.",
+    "license": {
+      "spdx": "MIT",
+      "is_free": true,
+      "commercial_use_allowed": true,
+      "attribution_required": false
+    },
+    "source_provider": "shadcn/ui",
+    "source_url": "https://ui.shadcn.com/docs/components/select",
+    "repository_url": "https://github.com/shadcn-ui/ui",
+    "registry_endpoint": "https://ui.shadcn.com/r/styles/default/select.json",
+    "cli_command": "npx shadcn@latest add select",
+    "dependencies": [
+      "@radix-ui/react-select",
+      "lucide-react"
+    ],
+    "registry_dependencies": [],
+    "required_utilities": [
+      "cn"
+    ],
+    "tailwind_config_requirements": [
+      "tailwindcss-animate"
+    ]
+  },
+  {
+    "id": "shadcn-separator",
+    "name": "Separator (shadcn/ui)",
+    "slug": "separator",
+    "canonical_category": "card",
+    "frameworks": [
+      "react",
+      "nextjs",
+      "tailwind"
+    ],
+    "styling": "tailwind",
+    "component_type": "copy_paste",
+    "description": "Visually or semantically separates content.",
+    "license": {
+      "spdx": "MIT",
+      "is_free": true,
+      "commercial_use_allowed": true,
+      "attribution_required": false
+    },
+    "source_provider": "shadcn/ui",
+    "source_url": "https://ui.shadcn.com/docs/components/separator",
+    "repository_url": "https://github.com/shadcn-ui/ui",
+    "registry_endpoint": "https://ui.shadcn.com/r/styles/default/separator.json",
+    "cli_command": "npx shadcn@latest add separator",
+    "dependencies": [
+      "@radix-ui/react-separator"
+    ],
+    "registry_dependencies": [],
+    "required_utilities": [
+      "cn"
+    ],
+    "tailwind_config_requirements": [
+      "tailwindcss-animate"
+    ]
+  },
+  {
+    "id": "shadcn-sheet",
+    "name": "Sheet (shadcn/ui)",
+    "slug": "sheet",
+    "canonical_category": "drawer",
+    "frameworks": [
+      "react",
+      "nextjs",
+      "tailwind"
+    ],
+    "styling": "tailwind",
+    "component_type": "copy_paste",
+    "description": "Extends the Dialog component to display content that complements the main screen on edge drawers.",
+    "license": {
+      "spdx": "MIT",
+      "is_free": true,
+      "commercial_use_allowed": true,
+      "attribution_required": false
+    },
+    "source_provider": "shadcn/ui",
+    "source_url": "https://ui.shadcn.com/docs/components/sheet",
+    "repository_url": "https://github.com/shadcn-ui/ui",
+    "registry_endpoint": "https://ui.shadcn.com/r/styles/default/sheet.json",
+    "cli_command": "npx shadcn@latest add sheet",
+    "dependencies": [
+      "@radix-ui/react-dialog",
+      "lucide-react"
+    ],
+    "registry_dependencies": [
+      "button"
+    ],
+    "required_utilities": [
+      "cn"
+    ],
+    "tailwind_config_requirements": [
+      "tailwindcss-animate"
+    ]
+  },
+  {
+    "id": "shadcn-sidebar",
+    "name": "Sidebar (shadcn/ui)",
+    "slug": "sidebar",
+    "canonical_category": "sidebar",
+    "frameworks": [
+      "react",
+      "nextjs",
+      "tailwind"
+    ],
+    "styling": "tailwind",
+    "component_type": "copy_paste",
+    "description": "Accessible React Sidebar component.",
+    "license": {
+      "spdx": "MIT",
+      "is_free": true,
+      "commercial_use_allowed": true,
+      "attribution_required": false
+    },
+    "source_provider": "shadcn/ui",
+    "source_url": "https://ui.shadcn.com/docs/components/sidebar",
+    "repository_url": "https://github.com/shadcn-ui/ui",
+    "registry_endpoint": "https://ui.shadcn.com/r/styles/default/sidebar.json",
+    "cli_command": "npx shadcn@latest add sidebar",
+    "dependencies": [],
+    "registry_dependencies": [
+      "button",
+      "input",
+      "separator",
+      "sheet",
+      "skeleton",
+      "tooltip",
+      "use-mobile"
+    ],
+    "required_utilities": [
+      "cn"
+    ],
+    "tailwind_config_requirements": [
+      "tailwindcss-animate"
+    ]
+  },
+  {
+    "id": "shadcn-skeleton",
+    "name": "Skeleton (shadcn/ui)",
+    "slug": "skeleton",
+    "canonical_category": "skeleton",
+    "frameworks": [
+      "react",
+      "nextjs",
+      "tailwind"
+    ],
+    "styling": "tailwind",
+    "component_type": "copy_paste",
+    "description": "Use to show a placeholder while content is loading.",
+    "license": {
+      "spdx": "MIT",
+      "is_free": true,
+      "commercial_use_allowed": true,
+      "attribution_required": false
+    },
+    "source_provider": "shadcn/ui",
+    "source_url": "https://ui.shadcn.com/docs/components/skeleton",
+    "repository_url": "https://github.com/shadcn-ui/ui",
+    "registry_endpoint": "https://ui.shadcn.com/r/styles/default/skeleton.json",
+    "cli_command": "npx shadcn@latest add skeleton",
+    "dependencies": [],
+    "registry_dependencies": [],
+    "required_utilities": [
+      "cn"
+    ],
+    "tailwind_config_requirements": [
+      "tailwindcss-animate"
+    ]
+  },
+  {
+    "id": "shadcn-slider",
+    "name": "Slider (shadcn/ui)",
+    "slug": "slider",
+    "canonical_category": "slider",
+    "frameworks": [
+      "react",
+      "nextjs",
+      "tailwind"
+    ],
+    "styling": "tailwind",
+    "component_type": "copy_paste",
+    "description": "An input where the user selects a value from within a given range.",
+    "license": {
+      "spdx": "MIT",
+      "is_free": true,
+      "commercial_use_allowed": true,
+      "attribution_required": false
+    },
+    "source_provider": "shadcn/ui",
+    "source_url": "https://ui.shadcn.com/docs/components/slider",
+    "repository_url": "https://github.com/shadcn-ui/ui",
+    "registry_endpoint": "https://ui.shadcn.com/r/styles/default/slider.json",
+    "cli_command": "npx shadcn@latest add slider",
+    "dependencies": [
+      "@radix-ui/react-slider"
+    ],
+    "registry_dependencies": [],
+    "required_utilities": [
+      "cn"
+    ],
+    "tailwind_config_requirements": [
+      "tailwindcss-animate"
+    ]
+  },
+  {
+    "id": "shadcn-sonner",
+    "name": "Sonner (shadcn/ui)",
+    "slug": "sonner",
+    "canonical_category": "card",
+    "frameworks": [
+      "react",
+      "nextjs",
+      "tailwind"
+    ],
+    "styling": "tailwind",
+    "component_type": "copy_paste",
+    "description": "An opinionated toast component for React built on Sonner.",
+    "license": {
+      "spdx": "MIT",
+      "is_free": true,
+      "commercial_use_allowed": true,
+      "attribution_required": false
+    },
+    "source_provider": "shadcn/ui",
+    "source_url": "https://ui.shadcn.com/docs/components/sonner",
+    "repository_url": "https://github.com/shadcn-ui/ui",
+    "registry_endpoint": "https://ui.shadcn.com/r/styles/default/sonner.json",
+    "cli_command": "npx shadcn@latest add sonner",
+    "dependencies": [
+      "sonner",
+      "next-themes"
+    ],
+    "registry_dependencies": [],
+    "required_utilities": [
+      "cn"
+    ],
+    "tailwind_config_requirements": [
+      "tailwindcss-animate"
+    ]
+  },
+  {
+    "id": "shadcn-spinner",
+    "name": "Spinner (shadcn/ui)",
+    "slug": "spinner",
+    "canonical_category": "spinner",
+    "frameworks": [
+      "react",
+      "nextjs",
+      "tailwind"
+    ],
+    "styling": "tailwind",
+    "component_type": "copy_paste",
+    "description": "Accessible React Spinner component.",
+    "license": {
+      "spdx": "MIT",
+      "is_free": true,
+      "commercial_use_allowed": true,
+      "attribution_required": false
+    },
+    "source_provider": "shadcn/ui",
+    "source_url": "https://ui.shadcn.com/docs/components/spinner",
+    "repository_url": "https://github.com/shadcn-ui/ui",
+    "registry_endpoint": "https://ui.shadcn.com/r/styles/default/spinner.json",
+    "cli_command": "npx shadcn@latest add spinner",
+    "dependencies": [],
+    "registry_dependencies": [],
+    "required_utilities": [
+      "cn"
+    ],
+    "tailwind_config_requirements": [
+      "tailwindcss-animate"
+    ]
+  },
+  {
+    "id": "shadcn-switch",
+    "name": "Switch (shadcn/ui)",
+    "slug": "switch",
+    "canonical_category": "switch",
+    "frameworks": [
+      "react",
+      "nextjs",
+      "tailwind"
+    ],
+    "styling": "tailwind",
+    "component_type": "copy_paste",
+    "description": "A control that allows the user to toggle between checked and not checked.",
+    "license": {
+      "spdx": "MIT",
+      "is_free": true,
+      "commercial_use_allowed": true,
+      "attribution_required": false
+    },
+    "source_provider": "shadcn/ui",
+    "source_url": "https://ui.shadcn.com/docs/components/switch",
+    "repository_url": "https://github.com/shadcn-ui/ui",
+    "registry_endpoint": "https://ui.shadcn.com/r/styles/default/switch.json",
+    "cli_command": "npx shadcn@latest add switch",
+    "dependencies": [
+      "@radix-ui/react-switch"
+    ],
+    "registry_dependencies": [],
+    "required_utilities": [
+      "cn"
+    ],
+    "tailwind_config_requirements": [
+      "tailwindcss-animate"
+    ]
+  },
+  {
+    "id": "shadcn-table",
+    "name": "Table (shadcn/ui)",
+    "slug": "table",
+    "canonical_category": "table",
+    "frameworks": [
+      "react",
+      "nextjs",
+      "tailwind"
+    ],
+    "styling": "tailwind",
+    "component_type": "copy_paste",
+    "description": "A responsive data table component.",
+    "license": {
+      "spdx": "MIT",
+      "is_free": true,
+      "commercial_use_allowed": true,
+      "attribution_required": false
+    },
+    "source_provider": "shadcn/ui",
+    "source_url": "https://ui.shadcn.com/docs/components/table",
+    "repository_url": "https://github.com/shadcn-ui/ui",
+    "registry_endpoint": "https://ui.shadcn.com/r/styles/default/table.json",
+    "cli_command": "npx shadcn@latest add table",
+    "dependencies": [],
+    "registry_dependencies": [],
+    "required_utilities": [
+      "cn"
+    ],
+    "tailwind_config_requirements": [
+      "tailwindcss-animate"
+    ]
+  },
+  {
+    "id": "shadcn-tabs",
+    "name": "Tabs (shadcn/ui)",
+    "slug": "tabs",
+    "canonical_category": "tabs",
+    "frameworks": [
+      "react",
+      "nextjs",
+      "tailwind"
+    ],
+    "styling": "tailwind",
+    "component_type": "copy_paste",
+    "description": "A set of layered sections of content\u2014known as tab panels\u2014that are displayed one at a time.",
+    "license": {
+      "spdx": "MIT",
+      "is_free": true,
+      "commercial_use_allowed": true,
+      "attribution_required": false
+    },
+    "source_provider": "shadcn/ui",
+    "source_url": "https://ui.shadcn.com/docs/components/tabs",
+    "repository_url": "https://github.com/shadcn-ui/ui",
+    "registry_endpoint": "https://ui.shadcn.com/r/styles/default/tabs.json",
+    "cli_command": "npx shadcn@latest add tabs",
+    "dependencies": [
+      "@radix-ui/react-tabs"
+    ],
+    "registry_dependencies": [],
+    "required_utilities": [
+      "cn"
+    ],
+    "tailwind_config_requirements": [
+      "tailwindcss-animate"
+    ]
+  },
+  {
+    "id": "shadcn-textarea",
+    "name": "Textarea (shadcn/ui)",
+    "slug": "textarea",
+    "canonical_category": "textarea",
+    "frameworks": [
+      "react",
+      "nextjs",
+      "tailwind"
+    ],
+    "styling": "tailwind",
+    "component_type": "copy_paste",
+    "description": "Displays a form textarea or a component that looks like a textarea.",
+    "license": {
+      "spdx": "MIT",
+      "is_free": true,
+      "commercial_use_allowed": true,
+      "attribution_required": false
+    },
+    "source_provider": "shadcn/ui",
+    "source_url": "https://ui.shadcn.com/docs/components/textarea",
+    "repository_url": "https://github.com/shadcn-ui/ui",
+    "registry_endpoint": "https://ui.shadcn.com/r/styles/default/textarea.json",
+    "cli_command": "npx shadcn@latest add textarea",
+    "dependencies": [],
+    "registry_dependencies": [],
+    "required_utilities": [
+      "cn"
+    ],
+    "tailwind_config_requirements": [
+      "tailwindcss-animate"
+    ]
+  },
+  {
+    "id": "shadcn-toast",
+    "name": "Toast (shadcn/ui)",
+    "slug": "toast",
+    "canonical_category": "toast",
+    "frameworks": [
+      "react",
+      "nextjs",
+      "tailwind"
+    ],
+    "styling": "tailwind",
+    "component_type": "copy_paste",
+    "description": "A succinct message that is displayed temporarily.",
+    "license": {
+      "spdx": "MIT",
+      "is_free": true,
+      "commercial_use_allowed": true,
+      "attribution_required": false
+    },
+    "source_provider": "shadcn/ui",
+    "source_url": "https://ui.shadcn.com/docs/components/toast",
+    "repository_url": "https://github.com/shadcn-ui/ui",
+    "registry_endpoint": "https://ui.shadcn.com/r/styles/default/toast.json",
+    "cli_command": "npx shadcn@latest add toast",
+    "dependencies": [
+      "@base-ui/react"
+    ],
+    "registry_dependencies": [
+      "button"
+    ],
+    "required_utilities": [
+      "cn"
+    ],
+    "tailwind_config_requirements": [
+      "tailwindcss-animate"
+    ]
+  },
+  {
+    "id": "shadcn-toggle",
+    "name": "Toggle (shadcn/ui)",
+    "slug": "toggle",
+    "canonical_category": "button-group",
+    "frameworks": [
+      "react",
+      "nextjs",
+      "tailwind"
+    ],
+    "styling": "tailwind",
+    "component_type": "copy_paste",
+    "description": "A two-state button that can be either on or off.",
+    "license": {
+      "spdx": "MIT",
+      "is_free": true,
+      "commercial_use_allowed": true,
+      "attribution_required": false
+    },
+    "source_provider": "shadcn/ui",
+    "source_url": "https://ui.shadcn.com/docs/components/toggle",
+    "repository_url": "https://github.com/shadcn-ui/ui",
+    "registry_endpoint": "https://ui.shadcn.com/r/styles/default/toggle.json",
+    "cli_command": "npx shadcn@latest add toggle",
+    "dependencies": [
+      "@radix-ui/react-toggle"
+    ],
+    "registry_dependencies": [],
+    "required_utilities": [
+      "cn"
+    ],
+    "tailwind_config_requirements": [
+      "tailwindcss-animate"
+    ]
+  },
+  {
+    "id": "shadcn-toggle-group",
+    "name": "Toggle Group (shadcn/ui)",
+    "slug": "toggle-group",
+    "canonical_category": "card",
+    "frameworks": [
+      "react",
+      "nextjs",
+      "tailwind"
+    ],
+    "styling": "tailwind",
+    "component_type": "copy_paste",
+    "description": "A set of two-state buttons that can be toggled on or off.",
+    "license": {
+      "spdx": "MIT",
+      "is_free": true,
+      "commercial_use_allowed": true,
+      "attribution_required": false
+    },
+    "source_provider": "shadcn/ui",
+    "source_url": "https://ui.shadcn.com/docs/components/toggle-group",
+    "repository_url": "https://github.com/shadcn-ui/ui",
+    "registry_endpoint": "https://ui.shadcn.com/r/styles/default/toggle-group.json",
+    "cli_command": "npx shadcn@latest add toggle-group",
+    "dependencies": [
+      "@radix-ui/react-toggle-group"
+    ],
+    "registry_dependencies": [
+      "toggle"
+    ],
+    "required_utilities": [
+      "cn"
+    ],
+    "tailwind_config_requirements": [
+      "tailwindcss-animate"
+    ]
+  },
+  {
+    "id": "shadcn-tooltip",
+    "name": "Tooltip (shadcn/ui)",
+    "slug": "tooltip",
+    "canonical_category": "tooltip",
+    "frameworks": [
+      "react",
+      "nextjs",
+      "tailwind"
+    ],
+    "styling": "tailwind",
+    "component_type": "copy_paste",
+    "description": "A popup that displays information related to an element when the element receives keyboard focus or the mouse hovers over it.",
+    "license": {
+      "spdx": "MIT",
+      "is_free": true,
+      "commercial_use_allowed": true,
+      "attribution_required": false
+    },
+    "source_provider": "shadcn/ui",
+    "source_url": "https://ui.shadcn.com/docs/components/tooltip",
+    "repository_url": "https://github.com/shadcn-ui/ui",
+    "registry_endpoint": "https://ui.shadcn.com/r/styles/default/tooltip.json",
+    "cli_command": "npx shadcn@latest add tooltip",
+    "dependencies": [
+      "@radix-ui/react-tooltip"
+    ],
+    "registry_dependencies": [],
+    "required_utilities": [
+      "cn"
+    ],
+    "tailwind_config_requirements": [
+      "tailwindcss-animate"
+    ]
+  }
+]

@@ -47,17 +47,17 @@ export const Header: React.FC = () => {
 
   const mainNavItems = [
     { href: '/', label: 'Overview', shortLabel: 'Overview', icon: Terminal },
-    { href: '/background-remover', label: 'AI Studio', shortLabel: 'AI Studio', icon: Sparkles },
+    { href: '/tools/background-remover', label: 'AI Studio', shortLabel: 'AI Studio', icon: Sparkles },
     { href: '/fonts', label: 'Fonts', shortLabel: 'Fonts', icon: Type },
     { href: '/icons', label: 'Icons', shortLabel: 'Icons', icon: Box },
   ];
 
   const moreNavItems = [
-    { href: '/collab', label: 'Collab Editor', shortLabel: 'Collab', icon: Users },
-    { href: '/jwt-decoder', label: 'JWT Decoder', shortLabel: 'JWT', icon: Key },
-    { href: '/mock-data', label: 'Mock Data', shortLabel: 'Mock', icon: Flame },
-    { href: '/social-preview', label: 'Social Preview', shortLabel: 'Social', icon: Share2 },
-    { href: '/api-templates', label: 'API Mocks', shortLabel: 'Mocks', icon: Radio },
+    { href: '/tools/collab', label: 'Collab Editor', shortLabel: 'Collab', icon: Users },
+    { href: '/tools/jwt-decoder', label: 'JWT Decoder', shortLabel: 'JWT', icon: Key },
+    { href: '/tools/mock-data', label: 'Mock Data', shortLabel: 'Mock', icon: Flame },
+    { href: '/tools/social-preview', label: 'Social Preview', shortLabel: 'Social', icon: Share2 },
+    { href: '/tools/api-templates', label: 'API Mocks', shortLabel: 'Mocks', icon: Radio },
   ];
 
   const allNavItems = [...mainNavItems, ...moreNavItems];
@@ -83,8 +83,8 @@ export const Header: React.FC = () => {
             const Icon = item.icon;
             const isActive = item.href === '/'
               ? pathname === '/'
-              : item.href === '/background-remover'
-              ? (pathname === '/background-remover' || pathname === '/image-resizer' || pathname === '/image-compressor')
+              : item.href === '/tools/background-remover'
+              ? (pathname === '/tools/background-remover' || pathname === '/tools/image-resizer' || pathname === '/tools/image-compressor')
               : pathname.startsWith(item.href);
 
             return (
@@ -202,8 +202,8 @@ export const Header: React.FC = () => {
             const Icon = item.icon;
             const isActive = item.href === '/'
               ? pathname === '/'
-              : item.href === '/background-remover'
-              ? (pathname === '/background-remover' || pathname === '/image-resizer' || pathname === '/image-compressor')
+              : item.href === '/tools/background-remover'
+              ? (pathname === '/tools/background-remover' || pathname === '/tools/image-resizer' || pathname === '/tools/image-compressor')
               : pathname.startsWith(item.href);
 
             return (

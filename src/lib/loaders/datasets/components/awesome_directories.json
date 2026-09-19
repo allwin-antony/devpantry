@@ -1,0 +1,72 @@
+[
+  {
+    "id": "component-gallery",
+    "name": "The Component Gallery",
+    "website": "https://component.gallery/",
+    "repository": "https://github.com/iainbean/component-gallery",
+    "curator": "Iain Bean",
+    "type": "directory",
+    "license": "MIT / Open Content",
+    "description": "An index of 60+ real-world design systems and component libraries, cataloging how design systems like Material, Apple, Atlassian, Shopify Polaris, and Gov.uk implement each UI control."
+  },
+  {
+    "id": "open-ui",
+    "name": "Open UI (WICG)",
+    "website": "https://open-ui.org/",
+    "repository": "https://github.com/openui/open-ui",
+    "curator": "WICG (Web Incubator Community Group / W3C)",
+    "type": "standardization_body",
+    "license": "W3C Software and Document License / CC0-1.0",
+    "description": "A collaborative community project by browser vendors and web developers to standardize UI component anatomy, behaviors, and native HTML controls (e.g., `<selectmenu>`, popover API, dialog, tabs)."
+  },
+  {
+    "id": "awesome-react-components",
+    "name": "Awesome React Components",
+    "website": "https://github.com/brillout/awesome-react-components",
+    "repository": "https://github.com/brillout/awesome-react-components",
+    "curator": "Romuald Brillout & Community",
+    "type": "awesome_list",
+    "license": "CC0-1.0 (Public Domain)",
+    "description": "Exhaustive, community-maintained list of React UI components, libraries, virtual tables, drag-and-drop engines, modal managers, and chart integrations."
+  },
+  {
+    "id": "awesome-vue",
+    "name": "Awesome Vue (Components & Libraries)",
+    "website": "https://github.com/vuejs/awesome-vue",
+    "repository": "https://github.com/vuejs/awesome-vue",
+    "curator": "Vue.js Community",
+    "type": "awesome_list",
+    "license": "MIT / CC0-1.0",
+    "description": "Official community-curated list of Vue component libraries, form validators, UI toolkits, and table components for Vue 3."
+  },
+  {
+    "id": "awesome-svelte",
+    "name": "Awesome Svelte (Component Libraries)",
+    "website": "https://github.com/svelte-community/awesome-svelte",
+    "repository": "https://github.com/svelte-community/awesome-svelte",
+    "curator": "Svelte Community",
+    "type": "awesome_list",
+    "license": "CC0-1.0 (Public Domain)",
+    "description": "Curated collection of Svelte component libraries (Skeleton UI, Flowbite Svelte, Shadcn Svelte, Svelte Material UI)."
+  },
+  {
+    "id": "awesome-web-components",
+    "name": "Awesome Web Components",
+    "website": "https://github.com/mateusortiz/web-components-the-right-way",
+    "repository": "https://github.com/mateusortiz/web-components-the-right-way",
+    "curator": "Mateus Ortiz & Community",
+    "type": "awesome_list",
+    "license": "CC0-1.0 (Public Domain)",
+    "description": "Curated guide and catalog of modern Web Components (Custom Elements, Shadow DOM, HTML Templates), interoperable across any frontend framework."
+  },
+  {
+    "id": "design-systems-repo",
+    "name": "Design Systems Repo",
+    "website": "https://designsystemsrepo.com/",
+    "repository": "https://github.com/jepser/design-systems-repo",
+    "curator": "Jepser",
+    "type": "directory",
+    "license": "MIT / Open Content",
+    "description": "Frequently updated collection of enterprise design systems, style guides, Figma files, and UI documentation from companies like GitHub, Uber, Audi, and Shopify."
+  }
+]

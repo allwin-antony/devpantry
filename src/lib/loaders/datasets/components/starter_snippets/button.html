@@ -1,0 +1,116 @@
+<!--
+  OpenSourceDataset: UIComponents
+  Component: Accessible Button System
+  License: MIT (Free for commercial and personal use)
+-->
+<style>
+  :root {
+    --btn-primary-bg: #2563eb;
+    --btn-primary-hover: #1d4ed8;
+    --btn-primary-text: #ffffff;
+    --btn-secondary-bg: #f1f5f9;
+    --btn-secondary-hover: #e2e8f0;
+    --btn-secondary-text: #0f172a;
+    --btn-danger-bg: #dc2626;
+    --btn-danger-hover: #b91c1c;
+    --btn-radius: 0.5rem;
+    --btn-focus-ring: rgba(37, 99, 235, 0.4);
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    font-family: inherit;
+    font-size: 0.875rem;
+    font-weight: 500;
+    line-height: 1.25rem;
+    padding: 0.625rem 1.25rem;
+    border-radius: var(--btn-radius);
+    border: 1px solid transparent;
+    cursor: pointer;
+    transition: background-color 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+    text-decoration: none;
+    user-select: none;
+  }
+
+  .btn:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 3px var(--btn-focus-ring);
+  }
+
+  .btn:disabled, .btn[aria-disabled="true"] {
+    opacity: 0.6;
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+
+  /* Variants */
+  .btn-primary {
+    background-color: var(--btn-primary-bg);
+    color: var(--btn-primary-text);
+  }
+  .btn-primary:hover {
+    background-color: var(--btn-primary-hover);
+  }
+
+  .btn-secondary {
+    background-color: var(--btn-secondary-bg);
+    color: var(--btn-secondary-text);
+    border-color: #cbd5e1;
+  }
+  .btn-secondary:hover {
+    background-color: var(--btn-secondary-hover);
+  }
+
+  .btn-outline {
+    background-color: transparent;
+    border-color: #cbd5e1;
+    color: #334155;
+  }
+  .btn-outline:hover {
+    background-color: #f8fafc;
+    border-color: #94a3b8;
+  }
+
+  .btn-ghost {
+    background-color: transparent;
+    color: #334155;
+  }
+  .btn-ghost:hover {
+    background-color: #f1f5f9;
+  }
+
+  .btn-danger {
+    background-color: var(--btn-danger-bg);
+    color: #ffffff;
+  }
+  .btn-danger:hover {
+    background-color: var(--btn-danger-hover);
+  }
+
+  /* Spinner for loading state */
+  .btn .spinner {
+    width: 1rem;
+    height: 1rem;
+    border: 2px solid currentColor;
+    border-right-color: transparent;
+    border-radius: 50%;
+    animation: btn-spin 0.6s linear infinite;
+  }
+  @keyframes btn-spin {
+    to { transform: rotate(360deg); }
+  }
+</style>
+
+<!-- Usage Examples -->
+<button type="button" class="btn btn-primary">Primary Button</button>
+<button type="button" class="btn btn-secondary">Secondary Button</button>
+<button type="button" class="btn btn-outline">Outline Button</button>
+<button type="button" class="btn btn-ghost">Ghost Button</button>
+<button type="button" class="btn btn-danger">Destructive Action</button>
+<button type="button" class="btn btn-primary" aria-busy="true" disabled>
+  <span class="spinner" aria-hidden="true"></span>
+  <span>Processing...</span>
+</button>

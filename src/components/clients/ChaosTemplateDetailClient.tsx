@@ -192,7 +192,7 @@ curl -X POST "https://api.mock.devpantry.com/v1/${service.id}" \\
       {/* ── Breadcrumb & Navigation Bar ── */}
       <div className="flex flex-wrap items-center justify-between gap-3 text-xs">
         <div className="flex items-center gap-2 text-[var(--text-muted)]">
-          <Link href="/api-templates" className="hover:text-rose-500 flex items-center gap-1">
+          <Link href="/tools/api-templates" className="hover:text-rose-500 flex items-center gap-1">
             <ArrowLeft className="w-3.5 h-3.5" />
             <span>All 17 Templates</span>
           </Link>
@@ -203,7 +203,7 @@ curl -X POST "https://api.mock.devpantry.com/v1/${service.id}" \\
         </div>
 
         <Link
-          href="/mock-data"
+          href="/tools/mock-data"
           className="text-[11px] text-cyan-600 dark:text-cyan-400 hover:underline flex items-center gap-1 font-bold"
         >
           <span>Need Columnar Tables GUI? Go to Schema Studio</span>
@@ -396,7 +396,7 @@ curl -X POST "https://api.mock.devpantry.com/v1/${service.id}" \\
           <span className="font-bold text-[var(--text-primary)] font-sans">
             Related Production API Chaos Templates
           </span>
-          <Link href="/api-templates" className="text-[11px] text-rose-500 hover:underline flex items-center gap-1 font-bold">
+          <Link href="/tools/api-templates" className="text-[11px] text-rose-500 hover:underline flex items-center gap-1 font-bold">
             <span>Browse All 17 Templates</span>
             <ArrowRight className="w-3 h-3" />
           </Link>

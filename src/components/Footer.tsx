@@ -17,17 +17,17 @@ export const Footer: React.FC = () => {
             </div>
             <ul className="flex flex-col gap-2 text-[11px]">
               <li>
-                <Link href="/background-remover" className="hover:text-[var(--text-primary)] hover:underline transition-colors">
+                <Link href="/tools/background-remover" className="hover:text-[var(--text-primary)] hover:underline transition-colors">
                   AI Background Remover
                 </Link>
               </li>
               <li>
-                <Link href="/image-resizer" className="hover:text-[var(--text-primary)] hover:underline transition-colors">
+                <Link href="/tools/image-resizer" className="hover:text-[var(--text-primary)] hover:underline transition-colors">
                   Image Resizer &amp; Artboard
                 </Link>
               </li>
               <li>
-                <Link href="/image-compressor" className="hover:text-[var(--text-primary)] hover:underline transition-colors">
+                <Link href="/tools/image-compressor" className="hover:text-[var(--text-primary)] hover:underline transition-colors">
                   Image Compressor &amp; WebP
                 </Link>
               </li>
@@ -47,32 +47,32 @@ export const Footer: React.FC = () => {
             </div>
             <ul className="flex flex-col gap-2 text-[11px]">
               <li>
-                <Link href="/jwt-decoder" className="hover:text-[var(--text-primary)] hover:underline transition-colors">
+                <Link href="/tools/jwt-decoder" className="hover:text-[var(--text-primary)] hover:underline transition-colors">
                   Zero-Leak JWT Decoder
                 </Link>
               </li>
               <li>
-                <Link href="/collab" className="hover:text-[var(--text-primary)] hover:underline transition-colors">
+                <Link href="/tools/collab" className="hover:text-[var(--text-primary)] hover:underline transition-colors">
                   P2P Collab Editor
                 </Link>
               </li>
               <li>
-                <Link href="/mock-data" className="hover:text-[var(--text-primary)] hover:underline transition-colors">
+                <Link href="/tools/mock-data" className="hover:text-[var(--text-primary)] hover:underline transition-colors">
                   Chaos Mock Data Generator
                 </Link>
               </li>
               <li>
-                <Link href="/mock-data" className="hover:text-[var(--text-primary)] hover:underline transition-colors">
+                <Link href="/tools/mock-data" className="hover:text-[var(--text-primary)] hover:underline transition-colors">
                   Custom Schema Builder
                 </Link>
               </li>
               <li>
-                <Link href="/social-preview" className="hover:text-[var(--text-primary)] hover:underline transition-colors">
+                <Link href="/tools/social-preview" className="hover:text-[var(--text-primary)] hover:underline transition-colors">
                   Social Share Preview
                 </Link>
               </li>
               <li>
-                <Link href="/api-templates" className="hover:text-[var(--text-primary)] hover:underline transition-colors">
+                <Link href="/tools/api-templates" className="hover:text-[var(--text-primary)] hover:underline transition-colors">
                   Production API Vault
                 </Link>
               </li>
@@ -187,7 +187,7 @@ export const Footer: React.FC = () => {
                 </Link>
               </li>
               <li>
-                <Link href="/api-templates" className="text-rose-500 dark:text-rose-400 font-semibold hover:underline transition-colors">
+                <Link href="/tools/api-templates" className="text-rose-500 dark:text-rose-400 font-semibold hover:underline transition-colors">
                   View 19 API Standards →
                 </Link>
               </li>
