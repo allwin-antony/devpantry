@@ -8,13 +8,14 @@ export async function generateSitemaps() {
     { id: 'fonts' },
     { id: 'icons' },
     { id: 'templates' },
+    { id: 'guides' },
   ];
 }
 
 export default async function sitemap(props: { id: Promise<string> }): Promise<MetadataRoute.Sitemap> {
   const id = await props.id;
   const baseUrl = 'https://devpantry.com';
-  const staticDate = new Date('2026-09-09');
+  const staticDate = new Date('2026-09-20');
 
   if (id === 'core') {
     return [
@@ -22,7 +23,18 @@ export default async function sitemap(props: { id: Promise<string> }): Promise<M
       { url: `${baseUrl}/tools`, lastModified: staticDate, changeFrequency: 'weekly', priority: 0.95 },
       { url: `${baseUrl}/fonts`, lastModified: staticDate, changeFrequency: 'weekly', priority: 0.95 },
       { url: `${baseUrl}/icons`, lastModified: staticDate, changeFrequency: 'weekly', priority: 0.95 },
+      { url: `${baseUrl}/guides`, lastModified: staticDate, changeFrequency: 'daily', priority: 0.95 },
     ];
+  }
+
+  if (id === 'guides') {
+    const { GUIDES_DATA } = await import('@/lib/guidesData');
+    return GUIDES_DATA.map((g) => ({
+      url: `${baseUrl}/guides/${g.slug}`,
+      lastModified: staticDate,
+      changeFrequency: 'weekly' as const,
+      priority: 0.9,
+    }));
   }
 
   if (id === 'tools') {

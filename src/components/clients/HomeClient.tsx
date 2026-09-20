@@ -18,7 +18,8 @@ import {
   HardDrive,
   Key,
   Share2,
-  Users
+  Users,
+  BookOpen
 } from 'lucide-react';
 import { IconRenderer, loadMultiPrefixIcons } from '@/lib/iconBatchLoader';
 
@@ -478,6 +479,70 @@ export function HomeClient() {
                 </Link>
               );
             })}
+          </div>
+        </section>
+
+        {/* Engineering Guides & Architecture Section */}
+        <section className="mt-8 border-t border-[var(--border-dev)] pt-12 flex flex-col gap-6 animate-fade-in-up-delay-3 font-mono">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+            <div className="flex flex-col gap-1">
+              <div className="flex items-center gap-2 text-xs font-semibold text-rose-500 uppercase tracking-widest">
+                <BookOpen className="w-4 h-4" />
+                <span>Knowledge &amp; Engineering Specs</span>
+              </div>
+              <h2 className="text-xl sm:text-2xl font-bold text-[var(--text-primary)]">
+                Engineering Guides &amp; Technical Deep Dives
+              </h2>
+              <p className="text-xs text-[var(--text-secondary)] font-sans">
+                Learn how DevPantry builds zero-latency WebRTC P2P collaboration, in-browser AI, and zero-leak cryptography.
+              </p>
+            </div>
+
+            <Link
+              href="/guides"
+              className="px-4 py-2 text-xs font-semibold text-rose-500 border border-rose-500/30 bg-rose-500/10 hover:bg-rose-500/20 rounded-lg transition-colors shrink-0 flex items-center gap-1.5"
+            >
+              <span>Browse All Guides</span>
+              <ArrowRight className="w-3.5 h-3.5" />
+            </Link>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <Link
+              href="/guides/p2p-webrtc-collaboration"
+              className="p-5 rounded-xl bg-[var(--bg-panel)] border border-[var(--border-dev)] hover:border-rose-500/50 transition-all flex flex-col gap-3 group"
+            >
+              <div className="flex items-center justify-between text-xs">
+                <span className="text-[10px] px-2 py-0.5 rounded bg-rose-500/10 text-rose-500 font-bold border border-rose-500/20">
+                  WebRTC &amp; P2P
+                </span>
+                <span className="text-[11px] text-[var(--text-muted)]">8 min read</span>
+              </div>
+              <h3 className="text-sm font-bold text-[var(--text-primary)] group-hover:text-rose-500 transition-colors">
+                Building a Real-Time Collaborative Code Editor with WebRTC, Yjs CRDTs &amp; Cloudflare Durable Objects
+              </h3>
+              <p className="text-xs text-[var(--text-secondary)] font-sans line-clamp-2 leading-relaxed">
+                Learn how to build a zero-server-database, zero-latency real-time collaborative text editor using WebRTC P2P DataChannels.
+              </p>
+            </Link>
+
+            <Link
+              href="/guides/browser-ai-background-removal"
+              className="p-5 rounded-xl bg-[var(--bg-panel)] border border-[var(--border-dev)] hover:border-rose-500/50 transition-all flex flex-col gap-3 group"
+            >
+              <div className="flex items-center justify-between text-xs">
+                <span className="text-[10px] px-2 py-0.5 rounded bg-rose-500/10 text-rose-500 font-bold border border-rose-500/20">
+                  AI &amp; WASM
+                </span>
+                <span className="text-[11px] text-[var(--text-muted)]">6 min read</span>
+              </div>
+              <h3 className="text-sm font-bold text-[var(--text-primary)] group-hover:text-rose-500 transition-colors">
+                Running AI Background Removal Client-Side using WebGPU, WASM &amp; ONNX Runtime
+              </h3>
+              <p className="text-xs text-[var(--text-secondary)] font-sans line-clamp-2 leading-relaxed">
+                Discover how DevPantry processes high-resolution image background removal 100% in the user browser using ONNX Runtime Web.
+              </p>
+            </Link>
           </div>
         </section>
       </main>

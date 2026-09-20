@@ -1,6 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
-import { Sparkles, Terminal, Type, Box, Radio, ShieldCheck, Heart } from 'lucide-react';
+import { Sparkles, Terminal, Type, Box, Radio, ShieldCheck, Heart, BookOpen } from 'lucide-react';
 import { DevPantryLogo } from './DevPantryLogo';
 
 export const Footer: React.FC = () => {
@@ -8,7 +8,7 @@ export const Footer: React.FC = () => {
     <footer className="w-full shrink-0 border-t border-[var(--border-dev)] bg-[var(--bg-panel)] font-mono text-xs text-[var(--text-muted)] transition-colors">
       {/* Top Sitemap Grid */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8 sm:py-12">
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-8">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-8">
           {/* Column 1: Image Studio */}
           <div className="flex flex-col gap-3">
             <div className="flex items-center gap-1.5 text-xs font-bold text-[var(--text-primary)] tracking-wide uppercase">
@@ -57,23 +57,23 @@ export const Footer: React.FC = () => {
                 </Link>
               </li>
               <li>
+                <Link href="/tools/json-formatter" className="hover:text-[var(--text-primary)] hover:underline transition-colors">
+                  JSON Formatter &amp; Validator
+                </Link>
+              </li>
+              <li>
                 <Link href="/tools/mock-data" className="hover:text-[var(--text-primary)] hover:underline transition-colors">
                   Chaos Mock Data Generator
                 </Link>
               </li>
               <li>
-                <Link href="/tools/mock-data" className="hover:text-[var(--text-primary)] hover:underline transition-colors">
-                  Custom Schema Builder
+                <Link href="/tools/diff-viewer" className="hover:text-[var(--text-primary)] hover:underline transition-colors">
+                  Text &amp; Code Diff Viewer
                 </Link>
               </li>
               <li>
                 <Link href="/tools/social-preview" className="hover:text-[var(--text-primary)] hover:underline transition-colors">
                   Social Share Preview
-                </Link>
-              </li>
-              <li>
-                <Link href="/tools/api-templates" className="hover:text-[var(--text-primary)] hover:underline transition-colors">
-                  Production API Vault
                 </Link>
               </li>
             </ul>
@@ -160,35 +160,70 @@ export const Footer: React.FC = () => {
           </div>
 
           {/* Column 5: Production API Mocks */}
-          <div className="flex flex-col gap-3 col-span-2 sm:col-span-1">
+          <div className="flex flex-col gap-3">
             <div className="flex items-center gap-1.5 text-xs font-bold text-[var(--text-primary)] tracking-wide uppercase">
               <Radio className="w-3.5 h-3.5 text-violet-500" />
               <span>API Fixtures</span>
             </div>
             <ul className="flex flex-col gap-2 text-[11px]">
               <li>
-                <Link href="/api-templates/stripe-billing" className="hover:text-[var(--text-primary)] hover:underline transition-colors">
+                <Link href="/tools/api-templates/stripe-billing" className="hover:text-[var(--text-primary)] hover:underline transition-colors">
                   Stripe Billing &amp; Webhooks
                 </Link>
               </li>
               <li>
-                <Link href="/api-templates/google-sso" className="hover:text-[var(--text-primary)] hover:underline transition-colors">
+                <Link href="/tools/api-templates/google-sso" className="hover:text-[var(--text-primary)] hover:underline transition-colors">
                   Google OAuth 2.0 / OIDC
                 </Link>
               </li>
               <li>
-                <Link href="/api-templates/github-webhooks" className="hover:text-[var(--text-primary)] hover:underline transition-colors">
+                <Link href="/tools/api-templates/github-webhooks" className="hover:text-[var(--text-primary)] hover:underline transition-colors">
                   GitHub Webhook Payloads
                 </Link>
               </li>
               <li>
-                <Link href="/api-templates/postgrest-supabase" className="hover:text-[var(--text-primary)] hover:underline transition-colors">
+                <Link href="/tools/api-templates/postgrest-supabase" className="hover:text-[var(--text-primary)] hover:underline transition-colors">
                   Supabase PostgREST
                 </Link>
               </li>
               <li>
                 <Link href="/tools/api-templates" className="text-rose-500 dark:text-rose-400 font-semibold hover:underline transition-colors">
                   View 19 API Standards →
+                </Link>
+              </li>
+            </ul>
+          </div>
+
+          {/* Column 6: Engineering Guides */}
+          <div className="flex flex-col gap-3 col-span-2 sm:col-span-1">
+            <div className="flex items-center gap-1.5 text-xs font-bold text-[var(--text-primary)] tracking-wide uppercase">
+              <BookOpen className="w-3.5 h-3.5 text-rose-500" />
+              <span>Engineering Guides</span>
+            </div>
+            <ul className="flex flex-col gap-2 text-[11px]">
+              <li>
+                <Link href="/guides/p2p-webrtc-collaboration" className="hover:text-[var(--text-primary)] hover:underline transition-colors">
+                  WebRTC P2P &amp; CRDT Sync
+                </Link>
+              </li>
+              <li>
+                <Link href="/guides/browser-ai-background-removal" className="hover:text-[var(--text-primary)] hover:underline transition-colors">
+                  Client-Side AI &amp; WebGPU
+                </Link>
+              </li>
+              <li>
+                <Link href="/guides/zero-leak-jwt-inspector" className="hover:text-[var(--text-primary)] hover:underline transition-colors">
+                  Zero-Leak JWT Cryptography
+                </Link>
+              </li>
+              <li>
+                <Link href="/guides/browser-image-compression" className="hover:text-[var(--text-primary)] hover:underline transition-colors">
+                  Browser Image Compression
+                </Link>
+              </li>
+              <li>
+                <Link href="/guides" className="text-rose-500 dark:text-rose-400 font-semibold hover:underline transition-colors">
+                  All Guides &amp; Specs →
                 </Link>
               </li>
             </ul>
