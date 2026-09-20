@@ -84,6 +84,40 @@ export default function RootLayout({
           href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap"
           rel="stylesheet"
         />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify([
+              {
+                '@context': 'https://schema.org',
+                '@type': 'WebApplication',
+                'name': 'DevPantry',
+                'url': 'https://devpantry.com',
+                'description': 'The ultimate developer pantry and utility suite: real-time WebRTC P2P collaborative editor, AI background remover, image studio, JWT inspector, 2,180+ typefaces, and 353,000+ vector icons.',
+                'applicationCategory': 'DeveloperApplication',
+                'operatingSystem': 'All',
+                'browserRequirements': 'Requires JavaScript and HTML5',
+                'offers': {
+                  '@type': 'Offer',
+                  'price': '0',
+                  'priceCurrency': 'USD'
+                },
+                'author': {
+                  '@type': 'Organization',
+                  'name': 'DevPantry Studio',
+                  'url': 'https://devpantry.com'
+                }
+              },
+              {
+                '@context': 'https://schema.org',
+                '@type': 'Organization',
+                'name': 'DevPantry',
+                'url': 'https://devpantry.com',
+                'logo': 'https://devpantry.com/favicon-32x32.png'
+              }
+            ])
+          }}
+        />
       </head>
       <body className="h-screen w-screen flex flex-col bg-[var(--bg-app)] text-[var(--text-primary)] selection:bg-rose-500 selection:text-white bg-dev-grid transition-colors">
         <Script

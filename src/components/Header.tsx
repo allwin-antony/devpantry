@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Flame, Type, Box, Radio, Sun, Moon, Terminal, Sparkles, Key, Search, Menu, X, Share2, Users, ChevronDown } from 'lucide-react';
+import { Flame, Type, Box, Radio, Sun, Moon, Terminal, Sparkles, Key, Search, Menu, X, Share2, Users, ChevronDown, BookOpen } from 'lucide-react';
 import { useTheme } from './ThemeProvider';
 import { CommandPalette } from './CommandPalette';
 import { DevPantryLogo } from './DevPantryLogo';
@@ -48,16 +48,17 @@ export const Header: React.FC = () => {
   const mainNavItems = [
     { href: '/', label: 'Overview', shortLabel: 'Overview', icon: Terminal },
     { href: '/tools/background-remover', label: 'AI Studio', shortLabel: 'AI Studio', icon: Sparkles },
+    { href: '/tools/collab', label: 'Collab', shortLabel: 'Collab', icon: Users },
     { href: '/fonts', label: 'Fonts', shortLabel: 'Fonts', icon: Type },
     { href: '/icons', label: 'Icons', shortLabel: 'Icons', icon: Box },
   ];
 
   const moreNavItems = [
-    { href: '/tools/collab', label: 'Collab Editor', shortLabel: 'Collab', icon: Users },
     { href: '/tools/jwt-decoder', label: 'JWT Decoder', shortLabel: 'JWT', icon: Key },
     { href: '/tools/mock-data', label: 'Mock Data', shortLabel: 'Mock', icon: Flame },
     { href: '/tools/social-preview', label: 'Social Preview', shortLabel: 'Social', icon: Share2 },
     { href: '/tools/api-templates', label: 'API Mocks', shortLabel: 'Mocks', icon: Radio },
+    { href: '/guides', label: 'Engineering Guides', shortLabel: 'Guides', icon: BookOpen },
   ];
 
   const allNavItems = [...mainNavItems, ...moreNavItems];
