@@ -4,6 +4,9 @@
   "assets": {
     "directory": "./out"
   },
+  "vars": {
+    "NEXT_PUBLIC_SIGNALING_URL": "wss://devpantry.santonyallwin.workers.dev"
+  },
   "main": "./src/workers/collaboration/index.ts",
   "durable_objects": {
     "bindings": [

@@ -9,16 +9,44 @@ const MESSAGE_SYNC = 0;
 const MESSAGE_AWARENESS = 1;
 const MESSAGE_AUTH = 2;
 
-// Use public STUN servers, plus a free TURN server for restrictive NAT traversal
-const ICE_SERVERS = [
+// Public STUN + TURN servers for NAT traversal.
+// Multiple STUN servers improve candidate gathering reliability.
+// The Metered free-tier TURN servers are more reliable than the old openrelay ones.
+const ICE_SERVERS: RTCIceServer[] = [
   { urls: 'stun:stun.l.google.com:19302' },
+  { urls: 'stun:stun1.l.google.com:19302' },
+  { urls: 'stun:stun2.l.google.com:19302' },
   { urls: 'stun:global.stun.twilio.com:3478' },
-  { urls: 'turn:openrelay.metered.ca:80', username: 'openrelayproject', credential: 'openrelayproject' },
-  { urls: 'turn:openrelay.metered.ca:443', username: 'openrelayproject', credential: 'openrelayproject' },
-  { urls: 'turn:openrelay.metered.ca:443?transport=tcp', username: 'openrelayproject', credential: 'openrelayproject' }
+  {
+    urls: 'turn:a.relay.metered.ca:80',
+    username: 'e8dd65b92f6eae1f404b4bfe',
+    credential: '5VfBSMfeOvGfLxoN'
+  },
+  {
+    urls: 'turn:a.relay.metered.ca:80?transport=tcp',
+    username: 'e8dd65b92f6eae1f404b4bfe',
+    credential: '5VfBSMfeOvGfLxoN'
+  },
+  {
+    urls: 'turn:a.relay.metered.ca:443',
+    username: 'e8dd65b92f6eae1f404b4bfe',
+    credential: '5VfBSMfeOvGfLxoN'
+  },
+  {
+    urls: 'turn:a.relay.metered.ca:443?transport=tcp',
+    username: 'e8dd65b92f6eae1f404b4bfe',
+    credential: '5VfBSMfeOvGfLxoN'
+  },
+  {
+    urls: 'turns:a.relay.metered.ca:443?transport=tcp',
+    username: 'e8dd65b92f6eae1f404b4bfe',
+    credential: '5VfBSMfeOvGfLxoN'
+  }
 ];
 
-type ConnectionState = 'INITIALIZING' | 'CONNECTING' | 'SIGNALING' | 'CONNECTING_PEER' | 'CONNECTED' | 'DISCONNECTED' | 'FAILED';
+const MAX_ICE_RESTART_ATTEMPTS = 2;
+
+type ConnectionState = 'INITIALIZING' | 'CONNECTING' | 'SIGNALING' | 'CONNECTING_PEER' | 'CONNECTED' | 'DISCONNECTED' | 'RECONNECTING' | 'FAILED';
 
 export class EncryptedWebRTCProvider {
   private peerConnections = new Map<string, RTCPeerConnection>();
@@ -28,6 +56,7 @@ export class EncryptedWebRTCProvider {
   private signaling: SignalingClient;
   private authenticatedPeers = new Set<string>();
   private authenticationTimers = new Map<string, ReturnType<typeof setTimeout>>();
+  private iceRestartAttempts = new Map<string, number>();
   private destroyed = false;
   public state: ConnectionState = 'INITIALIZING';
   public onStateChange?: (state: ConnectionState, peerId?: string, peersCount?: number) => void;
@@ -46,6 +75,14 @@ export class EncryptedWebRTCProvider {
       this.handleSignalingMessage.bind(this),
       this.handleSignalingDisconnect.bind(this)
     );
+
+    // Surface auto-reconnection attempts to the UI
+    this.signaling.onReconnecting = (_attempt, _max) => {
+      this.setState('RECONNECTING');
+    };
+    this.signaling.onReconnectFailed = () => {
+      this.setState('FAILED');
+    };
     
     // Listen for local document changes to broadcast to peers
     this.doc.on('update', this.handleLocalUpdate.bind(this));
@@ -73,6 +110,36 @@ export class EncryptedWebRTCProvider {
     this.authenticationTimers.clear();
     this.authenticatedPeers.clear();
     this.setState('DISCONNECTED');
+  }
+
+  /**
+   * Tear down all stale peer connections and re-establish the signaling
+   * connection from scratch. Called by the UI "Retry Connection" button.
+   */
+  reconnect() {
+    // Close every existing peer connection so we start fresh
+    for (const pc of this.peerConnections.values()) {
+      pc.ondatachannel = null;
+      pc.onicecandidate = null;
+      pc.onconnectionstatechange = null;
+      pc.oniceconnectionstatechange = null;
+      pc.onsignalingstatechange = null;
+      pc.onicegatheringstatechange = null;
+      pc.close();
+    }
+    this.peerConnections.clear();
+    this.dataChannels.clear();
+    this.pendingCandidates.clear();
+    this.connectionIds.clear();
+    for (const timer of this.authenticationTimers.values()) {
+      clearTimeout(timer);
+    }
+    this.authenticationTimers.clear();
+    this.authenticatedPeers.clear();
+
+    this.destroyed = false;
+    this.setState('RECONNECTING');
+    this.signaling.reconnect();
   }
 
   private updateOverallState() {
@@ -123,6 +190,10 @@ export class EncryptedWebRTCProvider {
   }
 
   private handleSignalingDisconnect() {
+    // The signaling client now handles auto-reconnection internally.
+    // We only set DISCONNECTED if this was a final failure (all retries
+    // exhausted), which the signaling client signals by calling this
+    // callback. So we just update state here.
     if (!this.destroyed) {
       this.setState('DISCONNECTED');
     }
@@ -153,23 +224,34 @@ export class EncryptedWebRTCProvider {
 
     pc.oniceconnectionstatechange = () => {
       console.log(`[WebRTC ${connectionId}] ICE connection:`, pc.iceConnectionState);
+      // Some browsers fire ICE 'failed' without firing connection 'failed'.
+      // Attempt an ICE restart in those cases too.
+      if (pc.iceConnectionState === 'failed') {
+        this.attemptIceRestart(peerId, pc, connectionId!);
+      }
     };
 
     pc.onconnectionstatechange = () => {
       console.log(`[WebRTC ${connectionId}] Connection:`, pc.connectionState);
       if (pc.connectionState === 'connected') {
+        // Connection recovered — reset ICE restart counter
+        this.iceRestartAttempts.delete(peerId);
         this.updateOverallState();
-      } else if (pc.connectionState === 'failed' || pc.connectionState === 'closed') {
+      } else if (pc.connectionState === 'failed') {
+        // Try an ICE restart before giving up
+        this.attemptIceRestart(peerId, pc, connectionId!);
+      } else if (pc.connectionState === 'closed') {
         this.closeConnection(peerId);
       } else if (pc.connectionState === 'disconnected') {
-        // Soft disconnect: WebRTC might recover. Wait 5 seconds before giving up.
+        // Soft disconnect: WebRTC might self-recover. Wait 8 seconds, then
+        // try an ICE restart rather than killing the connection outright.
         setTimeout(() => {
           const currentPc = this.peerConnections.get(peerId);
           if (currentPc && currentPc.connectionState === 'disconnected') {
-            console.log(`[WebRTC ${connectionId}] Connection timed out in disconnected state, closing.`);
-            this.closeConnection(peerId);
+            console.log(`[WebRTC ${connectionId}] Still disconnected after 8s, attempting ICE restart.`);
+            this.attemptIceRestart(peerId, currentPc, connectionId!);
           }
-        }, 5000);
+        }, 8000);
       }
     };
 
@@ -317,6 +399,44 @@ export class EncryptedWebRTCProvider {
     }
   }
 
+  /**
+   * Attempt an ICE restart for a degraded peer connection.
+   * If we've already exhausted MAX_ICE_RESTART_ATTEMPTS, close the connection
+   * entirely (which will trigger updateOverallState → reconnect flow).
+   */
+  private async attemptIceRestart(peerId: string, pc: RTCPeerConnection, connectionId: string) {
+    if (this.destroyed) return;
+
+    const attempts = (this.iceRestartAttempts.get(peerId) || 0) + 1;
+    this.iceRestartAttempts.set(peerId, attempts);
+
+    if (attempts > MAX_ICE_RESTART_ATTEMPTS) {
+      console.warn(`[WebRTC ${connectionId}] ICE restart attempts exhausted (${MAX_ICE_RESTART_ATTEMPTS}), closing connection to ${peerId.slice(0, 8)}.`);
+      this.closeConnection(peerId);
+      return;
+    }
+
+    console.log(`[WebRTC ${connectionId}] Attempting ICE restart ${attempts}/${MAX_ICE_RESTART_ATTEMPTS} for ${peerId.slice(0, 8)}`);
+
+    try {
+      // restartIce() tells the browser to gather new ICE candidates on the
+      // next createOffer call with iceRestart: true.
+      pc.restartIce();
+
+      const offer = await pc.createOffer({ iceRestart: true });
+      await pc.setLocalDescription(offer);
+
+      this.signaling.send({
+        type: 'offer',
+        targetPeerId: peerId,
+        sdp: pc.localDescription!
+      } as any);
+    } catch (e) {
+      console.error(`[WebRTC ${connectionId}] ICE restart failed:`, e);
+      this.closeConnection(peerId);
+    }
+  }
+
   private closeConnection(peerId: string) {
     const pc = this.peerConnections.get(peerId);
     if (pc) {
@@ -340,6 +460,7 @@ export class EncryptedWebRTCProvider {
     this.pendingCandidates.delete(peerId);
     this.authenticatedPeers.delete(peerId);
     this.connectionIds.delete(peerId);
+    this.iceRestartAttempts.delete(peerId);
     const authenticationTimer = this.authenticationTimers.get(peerId);
     if (authenticationTimer) {
       clearTimeout(authenticationTimer);
@@ -405,10 +526,12 @@ export class EncryptedWebRTCProvider {
 
     dc.onclose = () => {
       console.log(`[WebRTC] [${peerId.slice(0, 8)}] DataChannel closed.`);
+      this.closeConnection(peerId);
     };
 
     dc.onerror = (e) => {
       console.error(`[WebRTC] [${peerId.slice(0, 8)}] DataChannel error:`, e);
+      this.closeConnection(peerId);
     };
 
     dc.onmessage = async (event) => {

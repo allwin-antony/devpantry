@@ -10,7 +10,7 @@ import { EncryptedWebRTCProvider } from '@/lib/collaboration/webrtc';
 import { deriveKey } from '@/lib/collaboration/crypto';
 import { useSearchParams } from 'next/navigation';
 import dynamic from 'next/dynamic';
-import { Copy } from 'lucide-react';
+import { Copy, RefreshCw } from 'lucide-react';
 
 const CollabEditor = dynamic(() => import('./CollabEditor').then(mod => mod.CollabEditor), { ssr: false });
 
@@ -149,6 +149,15 @@ export function CollabClient() {
     );
   }
 
+  const handleRetry = () => {
+    if (webrtcProvider) {
+      setConnState('RECONNECTING');
+      webrtcProvider.reconnect();
+    }
+  };
+
+  const showRetryButton = connState === 'DISCONNECTED' || connState === 'FAILED';
+
   return (
     <div className="flex flex-col h-[calc(100vh-64px)] max-h-screen bg-[var(--bg-app)]">
       <header className="flex flex-wrap items-center justify-between p-4 sm:px-6 border-b border-[var(--border-dev)] bg-[var(--bg-panel)] shadow-sm gap-4">
@@ -164,6 +173,16 @@ export function CollabClient() {
           </div>
           <div className="hidden sm:block h-6 w-px bg-[var(--border-dev)] mx-2"></div>
           <ConnectionStatus state={connState} />
+          {showRetryButton && (
+            <button
+              onClick={handleRetry}
+              className="flex items-center gap-2 text-xs font-mono font-bold text-amber-500 hover:text-amber-400 transition-colors border border-amber-500/30 hover:border-amber-400/50 px-3 py-1.5 rounded-full bg-amber-500/10 hover:bg-amber-500/15 shadow-sm"
+              title="Retry Connection"
+            >
+              <RefreshCw size={14} />
+              <span>Retry</span>
+            </button>
+          )}
         </div>
         <div className="flex items-center gap-4">
           <ParticipantList count={participantCount} />
