@@ -1,7 +1,7 @@
 import React from 'react';
-import { AlertCircle, CheckCircle2, Loader2, WifiOff } from 'lucide-react';
+import { AlertCircle, CheckCircle2, Loader2, WifiOff, RefreshCw } from 'lucide-react';
 
-export type ConnectionState = 'INITIALIZING' | 'CONNECTING' | 'SIGNALING' | 'CONNECTING_PEER' | 'CONNECTED' | 'DISCONNECTED' | 'FAILED';
+export type ConnectionState = 'INITIALIZING' | 'CONNECTING' | 'SIGNALING' | 'CONNECTING_PEER' | 'CONNECTED' | 'DISCONNECTED' | 'RECONNECTING' | 'FAILED';
 
 export function ConnectionStatus({ state }: { state: ConnectionState }) {
   if (state === 'CONNECTED') {
@@ -13,11 +13,29 @@ export function ConnectionStatus({ state }: { state: ConnectionState }) {
     );
   }
 
-  if (state === 'FAILED' || state === 'DISCONNECTED') {
+  if (state === 'FAILED') {
+    return (
+      <div className="flex items-center text-red-500 text-sm gap-2 bg-red-500/10 px-3 py-1.5 rounded-full border border-red-500/20">
+        <WifiOff size={16} />
+        <span>Connection Failed</span>
+      </div>
+    );
+  }
+
+  if (state === 'DISCONNECTED') {
     return (
       <div className="flex items-center text-red-500 text-sm gap-2 bg-red-500/10 px-3 py-1.5 rounded-full border border-red-500/20">
         <WifiOff size={16} />
         <span>Disconnected</span>
+      </div>
+    );
+  }
+
+  if (state === 'RECONNECTING') {
+    return (
+      <div className="flex items-center text-amber-500 text-sm gap-2 bg-amber-500/10 px-3 py-1.5 rounded-full border border-amber-500/20 animate-pulse">
+        <RefreshCw size={16} className="animate-spin" />
+        <span>Reconnecting…</span>
       </div>
     );
   }
@@ -38,3 +56,4 @@ export function ConnectionStatus({ state }: { state: ConnectionState }) {
     </div>
   );
 }
+
