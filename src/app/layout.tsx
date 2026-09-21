@@ -133,6 +133,12 @@ export default function RootLayout({
             gtag('config', 'G-WYTNMC3H2B');
           `}
         </Script>
+        <Script
+          async
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3716959628089219"
+          crossOrigin="anonymous"
+          strategy="afterInteractive"
+        />
         <ThemeProvider>
           {/* Top Developer Navigation */}
           <Header />

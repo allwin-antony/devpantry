@@ -57,18 +57,13 @@ export const Footer: React.FC = () => {
                 </Link>
               </li>
               <li>
-                <Link href="/tools/json-formatter" className="hover:text-[var(--text-primary)] hover:underline transition-colors">
-                  JSON Formatter &amp; Validator
+                <Link href="/tools/api-templates" className="hover:text-[var(--text-primary)] hover:underline transition-colors">
+                  API Response Templates
                 </Link>
               </li>
               <li>
                 <Link href="/tools/mock-data" className="hover:text-[var(--text-primary)] hover:underline transition-colors">
                   Chaos Mock Data Generator
-                </Link>
-              </li>
-              <li>
-                <Link href="/tools/diff-viewer" className="hover:text-[var(--text-primary)] hover:underline transition-colors">
-                  Text &amp; Code Diff Viewer
                 </Link>
               </li>
               <li>
@@ -167,22 +162,22 @@ export const Footer: React.FC = () => {
             </div>
             <ul className="flex flex-col gap-2 text-[11px]">
               <li>
-                <Link href="/tools/api-templates/stripe-billing" className="hover:text-[var(--text-primary)] hover:underline transition-colors">
+                <Link href="/tools/api-templates?template=stripe-billing" className="hover:text-[var(--text-primary)] hover:underline transition-colors">
                   Stripe Billing &amp; Webhooks
                 </Link>
               </li>
               <li>
-                <Link href="/tools/api-templates/google-sso" className="hover:text-[var(--text-primary)] hover:underline transition-colors">
+                <Link href="/tools/api-templates?template=google-sso" className="hover:text-[var(--text-primary)] hover:underline transition-colors">
                   Google OAuth 2.0 / OIDC
                 </Link>
               </li>
               <li>
-                <Link href="/tools/api-templates/github-webhooks" className="hover:text-[var(--text-primary)] hover:underline transition-colors">
+                <Link href="/tools/api-templates?template=github-webhooks" className="hover:text-[var(--text-primary)] hover:underline transition-colors">
                   GitHub Webhook Payloads
                 </Link>
               </li>
               <li>
-                <Link href="/tools/api-templates/postgrest-supabase" className="hover:text-[var(--text-primary)] hover:underline transition-colors">
+                <Link href="/tools/api-templates?template=postgrest-supabase" className="hover:text-[var(--text-primary)] hover:underline transition-colors">
                   Supabase PostgREST
                 </Link>
               </li>

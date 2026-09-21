@@ -43,22 +43,12 @@ export default async function sitemap(props: { id: Promise<string> }): Promise<M
     if (!toolsModule) return [];
 
     const allTools = await toolsModule.loader.listAll();
-    const toolRoutes = allTools.map((t: any) => ({
+    return allTools.map((t: any) => ({
       url: `${baseUrl}/tools/${t.slug}`,
       lastModified: staticDate,
       changeFrequency: 'weekly' as const,
       priority: 0.9,
     }));
-
-    const socialPlatforms = ['twitter', 'facebook', 'linkedin', 'discord', 'slack', 'whatsapp'];
-    const socialPreviewSubRoutes = socialPlatforms.map(platform => ({
-      url: `${baseUrl}/tools/social-preview/${platform}`,
-      lastModified: staticDate,
-      changeFrequency: 'weekly' as const,
-      priority: 0.85,
-    }));
-
-    return [...toolRoutes, ...socialPreviewSubRoutes];
   }
 
   if (id === 'fonts') {
@@ -94,13 +84,14 @@ export default async function sitemap(props: { id: Promise<string> }): Promise<M
   }
 
   if (id === 'templates') {
-    const templateIds = getAllServiceResponseIds();
-    return templateIds.map(tid => ({
-      url: `${baseUrl}/tools/api-templates/${tid}`,
-      lastModified: staticDate,
-      changeFrequency: 'weekly',
-      priority: 0.85,
-    }));
+    return [
+      {
+        url: `${baseUrl}/tools/api-templates`,
+        lastModified: staticDate,
+        changeFrequency: 'weekly',
+        priority: 0.9,
+      }
+    ];
   }
 
   return [];
