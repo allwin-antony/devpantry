@@ -23,6 +23,7 @@ const componentMap: Record<string, React.ComponentType<any>> = {
   'public-apis': dynamic(() => import('./components/PublicApisRegistry')),
   'heic-converter': dynamic(() => import('./components/HeicConverter')),
   'json-to-ts-zod': dynamic(() => import('./components/JsonToTsZod')),
+  'exif-stripper': dynamic(() => import('./components/ExifStripper')),
 };
 
 export default function ToolsDetailView({ item }: { item: ToolItem }) {

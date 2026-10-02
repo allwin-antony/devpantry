@@ -28,6 +28,7 @@ import {
   Scissors,
   Image,
   Braces,
+  ImageMinus,
 } from 'lucide-react';
 import { IconRenderer, loadMultiPrefixIcons } from '@/lib/iconBatchLoader';
 import { getFeaturedTools } from '@/lib/loaders/toolLoader';
@@ -107,7 +108,7 @@ export function HomeClient() {
   // Pull featured tools from the single source of truth (toolLoader.ts)
   const ICON_MAP: Record<string, React.ComponentType<{ className?: string }>> = {
     Sparkles, FileText, HardDrive, Maximize2, Key, Globe, Share2,
-    Flame, Layers, Radio, Users, Settings, Scissors, Wrench, Box, Type, Image, Braces,
+    Flame, Layers, Radio, Users, Settings, Scissors, Wrench, Box, Type, Image, Braces, ImageMinus,
   };
   const featuredToolsData = getFeaturedTools();
   const featuredTools = featuredToolsData.slice(0, 2);

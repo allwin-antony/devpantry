@@ -85,6 +85,16 @@ const toolsData: ToolItem[] = [
     badge: 'Local',
     featured: true,
   },
+  {
+    slug: 'exif-stripper',
+    name: 'Image Metadata Stripper',
+    heroTagline: 'Analyze and strip EXIF / GPS data entirely in your browser',
+    description: 'Drop an image to reveal hidden GPS coordinates and camera specs, then instantly strip all metadata for safe sharing.',
+    category: 'Media',
+    icon: 'ImageMinus',
+    badge: 'Beta',
+    featured: true,
+  },
 
   // ── Developer ──────────────────────────────────────────────────────────────
   {
@@ -95,7 +105,7 @@ const toolsData: ToolItem[] = [
     category: 'Developer',
     icon: 'Key',
     badge: 'Zero Leak',
-    featured: true,
+    featured: false,
   },
   {
     slug: 'json-to-ts-zod',
@@ -105,7 +115,7 @@ const toolsData: ToolItem[] = [
     category: 'Developer',
     icon: 'Braces',
     badge: 'AST Parser',
-    featured: true,
+    featured: false,
   },
   {
     slug: 'public-apis',
@@ -114,7 +124,7 @@ const toolsData: ToolItem[] = [
     category: 'Developer',
     icon: 'Globe',
     badge: 'Dataset',
-    featured: false,
+    featured: true,
   },
   {
     slug: 'social-preview',
@@ -135,7 +145,7 @@ const toolsData: ToolItem[] = [
     category: 'Mocking',
     icon: 'Flame',
     badge: 'Presets',
-    featured: true,
+    featured: false,
   },
   {
     slug: 'mock-data#schema-builder',
@@ -164,7 +174,7 @@ const toolsData: ToolItem[] = [
     category: 'Collaboration',
     icon: 'Users',
     badge: 'Beta',
-    featured: false,
+    featured: true,
   },
 ];
 

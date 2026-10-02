@@ -1,6 +1,7 @@
 import type { UtilityDefinition, CategoryInfo, UtilityCategory } from '../types/utility';
 import { ChaosDataUtility } from '../utilities/chaos-data/ChaosDataUtility';
 import { SchemaBuilderUtility } from '../utilities/schema-builder/SchemaBuilderUtility';
+import { ExifStripperUtility } from '../utilities/exif-stripper/ExifStripperUtility';
 
 export const UTILITY_CATEGORIES: CategoryInfo[] = [
   {
@@ -14,6 +15,12 @@ export const UTILITY_CATEGORIES: CategoryInfo[] = [
     name: 'Custom Schema Builder',
     description: 'Visual field composer to design custom dirty schemas without code',
     badgeColor: 'violet'
+  },
+  {
+    id: 'media',
+    name: 'Media & Privacy',
+    description: 'Client-side zero-backend media utilities for privacy and analysis',
+    badgeColor: 'emerald'
   }
 ];
 
@@ -42,6 +49,19 @@ export const REGISTERED_UTILITIES: UtilityDefinition[] = [
     badgeType: 'violet',
     keywords: ['custom schema', 'field builder', 'uuid', 'email', 'custom mock data', 'visual builder'],
     component: SchemaBuilderUtility,
+    featured: true
+  },
+  {
+    id: 'exif-stripper',
+    name: 'Image Metadata Stripper',
+    tagline: 'Analyze and strip EXIF / GPS data entirely in your browser',
+    category: 'media',
+    description: 'Drop an image to reveal hidden GPS coordinates and camera specs, then instantly strip all metadata for safe sharing.',
+    iconName: 'ImageMinus',
+    badge: 'Zero Backend',
+    badgeType: 'emerald',
+    keywords: ['exif', 'metadata', 'gps', 'privacy', 'photo', 'stripper'],
+    component: ExifStripperUtility,
     featured: true
   }
 ];

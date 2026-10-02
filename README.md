@@ -58,6 +58,10 @@ A high-performance visual image suite running entirely inside the browser using 
 * **Compress PDF**: Lossless structural optimization to shrink PDF footprints by stripping hidden metadata and optimizing streams.
 * **Passport Photo Maker**: Precise cropping for official visa and passport form requirements.
 
+#### 🕵️ Free Image Metadata Viewer & EXIF Stripper (`/tools/exif-stripper`)
+* **100% Client-Side Privacy**: Analyze photos for hidden GPS coordinates, camera models, and EXIF footprints purely in your browser.
+* **Canvas Stripping Technique**: Instantly strip all metadata from JPEGs and PNGs without server uploads by re-rendering the image natively.
+
 ---
 
 ### 2. 🔤 Open Source Fonts Studio (`/fonts`)
