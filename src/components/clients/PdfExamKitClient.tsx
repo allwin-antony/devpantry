@@ -397,6 +397,37 @@ export const PdfExamKitClient: React.FC<{ initialTab?: 'img-to-pdf' | 'passport-
         )}
       </div>
 
+      {/* SEO & Educational Content */}
+      <div className="mt-12 space-y-8 text-[var(--text-secondary)] pb-8 border-t border-[var(--border-dev)] pt-8">
+        <section className="space-y-3">
+          <h2 className="text-xl font-bold text-[var(--text-primary)]">Why Use Our Client-Side PDF & Exam Tools?</h2>
+          <p className="text-sm leading-relaxed">
+            When applying for competitive exams, university admissions, or government jobs, portals often have strict file size and format requirements. Our suite of PDF and Image tools is designed to help you meet these exact specifications securely. Because all processing happens <strong>100% locally in your browser</strong>, your sensitive documents—such as passports, national IDs, and academic transcripts—are never uploaded to any external server.
+          </p>
+        </section>
+        
+        <section className="space-y-3">
+          <h2 className="text-xl font-bold text-[var(--text-primary)]">Key Features Tailored for Online Applications</h2>
+          <ul className="list-disc pl-5 space-y-2 text-sm">
+            <li><strong>Image to PDF Converter:</strong> Easily convert scanned assignment pages or test papers from JPEG or PNG into a single unified PDF document.</li>
+            <li><strong>Merge Multiple PDFs:</strong> Combine separate certificates, multi-page documents, or ID proofs into one seamless file for easy uploading.</li>
+            <li><strong>Passport Photo Resizer:</strong> Automatically compress your ID photos and signatures to exactly meet the strict KB limits (e.g., under 50KB or 200KB) required by online application portals.</li>
+            <li><strong>PDF Optimizer:</strong> Reduce the file size of your documents by stripping out unnecessary metadata and utilizing structural optimization, maximizing your chances of a successful upload.</li>
+          </ul>
+        </section>
+        
+        <section className="space-y-3">
+          <h2 className="text-xl font-bold text-[var(--text-primary)]">How to Compress Files for Exam Portals</h2>
+          <p className="text-sm leading-relaxed space-y-1">
+            <span className="block">1. Select the specific tool from the tabs above based on your current need.</span>
+            <span className="block">2. Upload your file(s) using the secure, in-browser uploader.</span>
+            <span className="block">3. For photos, specify your target maximum size in KB (e.g., 50KB for signatures, 200KB for photos).</span>
+            <span className="block">4. Click the action button to process the file instantly on your own device.</span>
+            <span className="block">5. Download the final output and rename it if necessary before submitting it to the portal.</span>
+          </p>
+        </section>
+      </div>
+
     </div>
   );
 };
