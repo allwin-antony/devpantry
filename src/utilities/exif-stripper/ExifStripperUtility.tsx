@@ -243,5 +243,3 @@ export const ExifStripperUtility: React.FC = () => {
   );
 };
 
-// Also require CheckCircle2 in imports up top - wait it's not imported.
-// I will patch the import just in case.
