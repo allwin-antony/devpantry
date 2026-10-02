@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useCallback, useMemo, useEffect } from 'react';
+import { triggerFeedbackNudge } from '@/lib/feedbackNudge';
 import {
   Globe, AlertTriangle, CheckCircle, ExternalLink, Copy, Check,
   Loader2, Share2, Code, Eye, ChevronDown, Info, Image as ImageIcon,
@@ -295,6 +296,7 @@ export function SocialPreviewClient({ initialPlatform, children }: SocialPreview
       }
 
       setOgData(data as OgMeta);
+      triggerFeedbackNudge('social-preview-fetch');
 
       // Update hash for shareability
       if (typeof window !== 'undefined') {
@@ -334,6 +336,7 @@ export function SocialPreviewClient({ initialPlatform, children }: SocialPreview
       try {
         const result = extractMetaFromHtml(trimmed);
         setOgData(result);
+        triggerFeedbackNudge('social-preview-parse');
       } catch {
         setErrorMessage('Failed to parse the HTML source. Ensure you pasted valid HTML.');
       } finally {
@@ -346,6 +349,7 @@ export function SocialPreviewClient({ initialPlatform, children }: SocialPreview
     if (typeof window === 'undefined') return;
     const shareUrl = `${window.location.origin}${window.location.pathname}#url=${encodeURIComponent(urlInput)}`;
     navigator.clipboard.writeText(shareUrl);
+    triggerFeedbackNudge('copy-action');
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   }, [urlInput]);

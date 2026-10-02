@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useRef, useEffect, useCallback, useMemo } from 'react';
+import { triggerFeedbackNudge } from '@/lib/feedbackNudge';
 import Link from 'next/link';
 import ReactCrop, { type Crop, type PixelCrop } from 'react-image-crop';
 import 'react-image-crop/dist/ReactCrop.css';
@@ -1356,6 +1357,8 @@ export function BgRemovalClient({ initialMode = 'bg-removal' }: BgRemovalClientP
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
+
+    triggerFeedbackNudge('bg-removal-download');
   };
 
   // Copy Cutout directly to Clipboard as Image
@@ -1373,6 +1376,7 @@ export function BgRemovalClient({ initialMode = 'bg-removal' }: BgRemovalClientP
 
       if (blobToCopy) {
         await navigator.clipboard.write([new ClipboardItem({ 'image/png': blobToCopy })]);
+        triggerFeedbackNudge('bg-removal-copy');
         setIsCopied(true);
         setTimeout(() => setIsCopied(false), 2000);
       }

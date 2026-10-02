@@ -2,6 +2,7 @@
 
 import React, { useState, useCallback, useRef } from 'react';
 import { Upload, Image as ImageIcon, Download, Trash, RefreshCw, CheckCircle } from 'lucide-react';
+import { triggerFeedbackNudge } from '@/lib/feedbackNudge';
 // We import heic2any dynamically to avoid SSR issues
 // import heic2any from 'heic2any';
 
@@ -61,6 +62,7 @@ export default function HeicConverter({ slug }: { slug?: string }) {
             : i
         )
       );
+      triggerFeedbackNudge('heic-convert');
     } catch (error: any) {
       console.error('Conversion failed:', error);
       setItems((prev) =>
@@ -89,6 +91,7 @@ export default function HeicConverter({ slug }: { slug?: string }) {
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
+    triggerFeedbackNudge('heic-download');
   };
 
   const removeItem = (id: string) => {

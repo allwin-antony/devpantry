@@ -1,5 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { UploadCloud, Image as ImageIcon, Download, Trash2, MapPin, Eye, FileJson, CheckCircle2, RefreshCw } from 'lucide-react';
+import { triggerFeedbackNudge } from '@/lib/feedbackNudge';
 import exifr from 'exifr';
 
 export const ExifStripperUtility: React.FC = () => {
@@ -56,6 +57,7 @@ export const ExifStripperUtility: React.FC = () => {
         if (blob) {
           const newUrl = URL.createObjectURL(blob);
           setStrippedBlobUrl(newUrl);
+          triggerFeedbackNudge('exif-stripper-success');
         }
         setIsStripping(false);
       }, file.type, 1.0); // 1.0 keeps max quality for formats like JPEG/WebP
@@ -79,6 +81,7 @@ export const ExifStripperUtility: React.FC = () => {
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
+    triggerFeedbackNudge('exif-stripper-download');
   };
 
   const hasGPS = metadata && (metadata.latitude !== undefined || metadata.GPSLatitude !== undefined);
@@ -240,5 +243,3 @@ export const ExifStripperUtility: React.FC = () => {
   );
 };
 
-// Also require CheckCircle2 in imports up top - wait it's not imported.
-// I will patch the import just in case.

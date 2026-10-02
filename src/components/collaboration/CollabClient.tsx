@@ -11,6 +11,7 @@ import { deriveKey } from '@/lib/collaboration/crypto';
 import { useSearchParams } from 'next/navigation';
 import dynamic from 'next/dynamic';
 import { Copy, RefreshCw } from 'lucide-react';
+import { triggerFeedbackNudge } from '@/lib/feedbackNudge';
 
 const CollabEditor = dynamic(() => import('./CollabEditor').then(mod => mod.CollabEditor), { ssr: false });
 
@@ -189,6 +190,7 @@ export function CollabClient() {
           <button 
             onClick={() => {
               navigator.clipboard.writeText(window.location.href);
+              triggerFeedbackNudge('collab-copy-invite');
               alert('Invite link copied to clipboard!');
             }}
             className="flex items-center gap-2 text-xs font-mono font-bold text-[var(--text-secondary)] hover:text-cyan-500 transition-colors border border-[var(--border-dev)] hover:border-cyan-500/50 px-4 py-2 rounded-lg bg-[var(--bg-sidebar)] shadow-sm"

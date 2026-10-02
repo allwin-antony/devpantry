@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { triggerFeedbackNudge } from '@/lib/feedbackNudge';
 import { Play, Copy, Check, AlertCircle, FileJson, FileCode, Braces } from 'lucide-react';
 
 type TsType = 
@@ -109,6 +110,7 @@ export function JsonToTsZodClient({ children }: { children?: React.ReactNode }) 
 
   const copyToClipboard = (text: string, type: 'ts' | 'zod') => {
     navigator.clipboard.writeText(text);
+    triggerFeedbackNudge(`schema-copy-${type}`);
     if (type === 'ts') {
       setCopiedTs(true);
       setTimeout(() => setCopiedTs(false), 2000);

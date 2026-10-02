@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
+import { triggerFeedbackNudge } from '@/lib/feedbackNudge';
 import Link from 'next/link';
 import {
   Flame,
@@ -101,6 +102,7 @@ export function HomeClient() {
 
   const copyText = (text: string, id: string) => {
     navigator.clipboard.writeText(text);
+    triggerFeedbackNudge('copy-action');
     setCopiedId(id);
     setTimeout(() => setCopiedId(null), 1800);
   };

@@ -4,6 +4,7 @@ import './globals.css';
 import { ThemeProvider } from '../components/ThemeProvider';
 import { Header } from '../components/Header';
 import { Footer } from '../components/Footer';
+import { FeedbackNudge } from '../components/FeedbackNudge';
 
 export const viewport: Viewport = {
   themeColor: [
@@ -152,6 +153,9 @@ export default function RootLayout({
             {/* Global Footer */}
             <Footer />
           </main>
+
+          {/* Non-intrusive feedback nudge — fires after tool success or 90s idle */}
+          <FeedbackNudge />
         </ThemeProvider>
       </body>
     </html>

@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useMemo, useEffect } from 'react';
+import { triggerFeedbackNudge } from '@/lib/feedbackNudge';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { ALL_SERVICE_RESPONSES, type ServiceResponseItem } from '@/lib/loaders/serviceResponseLoader';
@@ -352,6 +353,7 @@ export function ChaosTemplatesClient({ initialServiceId, initialMode }: ChaosTem
 
   const copyToClipboard = (text: string, id: string) => {
     navigator.clipboard.writeText(text);
+    triggerFeedbackNudge('copy-action');
     setCopiedCode(id);
     setTimeout(() => setCopiedCode(null), 1800);
   };

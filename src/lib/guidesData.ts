@@ -120,24 +120,25 @@ async function createPdfFromImages(imageFiles: File[]) {
   },
   {
     slug: 'p2p-webrtc-collaboration',
-    title: 'Building a Real-Time Collaborative Code Editor with WebRTC, Yjs CRDTs & Cloudflare Durable Objects',
-    description: 'Learn how to build a zero-server-database, zero-latency real-time collaborative text editor using WebRTC P2P DataChannels, Yjs conflict-free replicated data types (CRDTs), and Cloudflare Workers Durable Objects for $0-cost signaling.',
+    title: 'Building a Real-Time Collaborative Code Editor with Yjs CRDTs, E2E Encryption & Cloudflare Durable Objects',
+    description: 'Learn how to build a zero-knowledge, real-time collaborative text editor using Yjs CRDTs over WebSockets, 256-bit AES-GCM client-side encryption, Cloudflare Durable Objects as a relay with SQLite persistence, and IndexedDB for offline-first local state.',
     category: 'WebRTC & P2P',
     readingTime: '8 min read',
     publishedDate: 'September 20, 2026',
-    updatedDate: 'September 20, 2026',
+    updatedDate: 'October 2, 2026',
     author: {
       name: 'DevPantry Engineering',
       role: 'Systems & Real-time Architecture',
     },
     matchingToolUrl: '/tools/collab',
-    matchingToolName: 'P2P Collaborative Editor',
-    tags: ['WebRTC', 'Yjs', 'CRDT', 'Cloudflare Workers', 'Durable Objects', 'TypeScript', 'Web Crypto API'],
+    matchingToolName: 'Collaborative Editor',
+    tags: ['Yjs', 'CRDT', 'WebSocket', 'Cloudflare Workers', 'Durable Objects', 'TypeScript', 'Web Crypto API', 'IndexedDB'],
     keyTakeaways: [
-      'Direct Peer-to-Peer data channels eliminate central server database bottleneck and reduce latency to sub-10ms.',
+      'All document updates are encrypted client-side with AES-GCM 256-bit keys before leaving the browser — the Cloudflare relay is zero-knowledge and never sees plaintext.',
       'Yjs CRDTs automatically resolve concurrent document edits without requiring central lock servers or operational transformation.',
-      'AES-GCM 256-bit client-side encryption via Web Crypto API ensures even signaling servers cannot read collaborative document contents.',
-      'Cloudflare Durable Objects with WebSocket Hibernation API handle signaling for thousands of concurrent rooms at $0 cost.'
+      'Cloudflare Durable Objects with WebSocket Hibernation consume zero CPU when idle, making thousands of concurrent rooms cost $0.',
+      'SQLite persistence inside the Durable Object lets late-joining peers catch up to the full document state without requiring any other peer to be online.',
+      'IndexedDB local persistence (via y-indexeddb) gives each client offline-first access to their room\'s last known document state.'
     ],
     sections: [
       {
@@ -145,95 +146,151 @@ async function createPdfFromImages(imageFiles: File[]) {
         title: '1. Architecture & Threat Model Overview',
         content: `Traditional collaborative platforms (like Google Docs or Notion) route every keystroke through a central database cluster. This incurs high server costs, database concurrency bottlenecks, and potential privacy risks.
 
-DevPantry's collaborative editor takes a **Peer-to-Peer (P2P) approach**. Keystrokes, cursor positions, and selection states flow directly between peer browsers over encrypted **RTCDataChannel** connections.
+DevPantry's collaborative editor uses a **WebSocket relay** hosted on a Cloudflare Durable Object. Every peer maintains a persistent WebSocket connection to the same Durable Object room. The DO fans out messages between all connected peers and persists encrypted update snapshots in its SQLite storage.
 
-Cloudflare Workers and Durable Objects are used exclusively for **signaling**—helping Peer A and Peer B exchange SDP offers and ICE candidates to establish their peer-to-peer connection. Once connected, signaling activity ceases and data flows 100% P2P.`,
+Crucially, **all document data is encrypted client-side** using AES-GCM 256-bit keys derived from the room password via PBKDF2 (100,000 iterations). The Cloudflare relay only ever sees opaque Base64 ciphertext — it acts as a zero-knowledge relay and persistence layer.`,
         codeSnippet: {
           language: 'text',
-          title: 'Peer-to-Peer Data Flow Architecture',
-          code: `[Browser Peer A] <==== Encrypted RTCDataChannel (WebRTC P2P) ====> [Browser Peer B]
-        \\                                                                /
-         \\-- (Signaling only: SDP / ICE via Cloudflare Worker DO) ------/`
+          title: 'Relay Architecture (WebSocket Hub-and-Spoke)',
+          code: `[Browser Peer A] <==== Encrypted WebSocket ====> [Cloudflare DO Room]
+[Browser Peer B] <==== Encrypted WebSocket ====>  (SQLite persistence)
+[Browser Peer C] <==== Encrypted WebSocket ====> [Cloudflare DO Room]
+
+All payloads: Base64(AES-GCM-256(Yjs binary update))
+Cloudflare sees: zero plaintext — purely a zero-knowledge relay`
+        }
+      },
+      {
+        id: 'e2e-encryption',
+        title: '2. Zero-Knowledge E2E Encryption via Web Crypto API',
+        content: `The room password never leaves the client. On room creation or join, PBKDF2 (SHA-256, 100,000 iterations) derives a 256-bit AES-GCM \`CryptoKey\` from the password and a salt derived from the room ID. This key is never serialised or sent anywhere.
+
+Every Yjs binary update is encrypted before being sent, and decrypted immediately after receiving. A unique 12-byte IV is generated per message and prepended to the ciphertext. If a peer connects with the wrong password, decryption throws a \`PayloadDecryptionError\` and the connection is closed — both for live updates and for the historical updates replayed from the Durable Object's SQLite store on join.`,
+        codeSnippet: {
+          language: 'typescript',
+          title: 'crypto.ts — Key Derivation & AES-GCM Encrypt/Decrypt',
+          code: `// Derive AES-GCM 256-bit key from room password + room-ID-derived salt
+export async function deriveKey(password: string, salt: Uint8Array): Promise<CryptoKey> {
+  const passwordKey = await crypto.subtle.importKey(
+    'raw', new TextEncoder().encode(password),
+    { name: 'PBKDF2' }, false, ['deriveKey']
+  );
+  return crypto.subtle.deriveKey(
+    { name: 'PBKDF2', salt, iterations: 100_000, hash: 'SHA-256' },
+    passwordKey,
+    { name: 'AES-GCM', length: 256 },
+    false, ['encrypt', 'decrypt']
+  );
+}
+
+// Encrypt: prepend random 12-byte IV to ciphertext
+export async function encryptPayload(data: Uint8Array, key: CryptoKey): Promise<Uint8Array> {
+  const iv = crypto.getRandomValues(new Uint8Array(12));
+  const cipher = new Uint8Array(await crypto.subtle.encrypt({ name: 'AES-GCM', iv }, key, data));
+  const result = new Uint8Array(12 + cipher.length);
+  result.set(iv, 0);
+  result.set(cipher, 12);
+  return result;
+}
+
+// Decrypt: slice IV, then decrypt; throws PayloadDecryptionError on wrong key
+export async function decryptPayload(data: Uint8Array, key: CryptoKey): Promise<Uint8Array> {
+  const iv = data.slice(0, 12);
+  const cipher = data.slice(12);
+  const plain = await crypto.subtle.decrypt({ name: 'AES-GCM', iv }, key, cipher)
+    .catch(() => { throw new PayloadDecryptionError(); });
+  return new Uint8Array(plain);
+}`
         }
       },
       {
         id: 'crdt-yjs-sync',
-        title: '2. Conflict Resolution using Yjs CRDTs',
+        title: '3. Conflict Resolution using Yjs CRDTs & the Sync Protocol',
         content: `When two developers type at line 42 at the exact same millisecond, standard string concatenation produces corrupted states.
 
-We use **Yjs**, an open-source Conflict-free Replicated Data Type (CRDT) framework. Yjs models documents as a tree of immutable items with unique client IDs and logical clocks. When edits arrive out-of-order, Yjs deterministically converges both clients to the exact same document state without a central server authority.`,
+We use **Yjs**, an open-source Conflict-free Replicated Data Type (CRDT) framework. Yjs models documents as a tree of immutable items with unique client IDs and logical clocks. When edits arrive out-of-order, Yjs deterministically converges all clients to the exact same document state without a central server authority.
+
+To handle late-joining peers, the provider implements the **y-protocols sync handshake**: on connect (and on every \`peer-joined\` event), the client sends a \`sync-step-1\` message containing its current state vector. Any peer that holds updates the newcomer is missing replies with a \`sync-step-2\` containing those incremental updates — all encrypted. The Durable Object's SQLite store also replays its persisted updates on join via the \`room-init\` message, so a new peer catches up to the full document history even when joining an empty room.
+
+Local edits use the provider instance as the Yjs update \`origin\` to prevent re-broadcasting updates that were received from remote peers.`,
         codeSnippet: {
           language: 'typescript',
-          title: 'Yjs Document Synchronization & Crypto Binding',
-          code: `import * as Y from 'yjs';
+          title: 'webrtc.ts — Local update handler & sync-step-1 handshake',
+          code: `// Encrypt and broadcast every local Yjs update to the room.
+// origin === this means the update came from a remote peer — skip to avoid echo.
+private async handleLocalDocUpdate(update: Uint8Array, origin: any) {
+  if (origin === this) return;
 
-// Create a local Yjs document
-const doc = new Y.Doc();
-const yText = doc.getText('codemirror');
+  const encrypted = await encryptPayload(update, this.cryptoKey);
+  this.send({
+    type: 'sync-update',
+    peerId: this.localPeerId,
+    payload: buffer.toBase64(encrypted),
+  });
 
-// Observe local changes and broadcast encrypted binary update vectors
-doc.on('update', (update: Uint8Array, origin: any) => {
-  if (origin === 'remote') return; // Avoid echo back
-  
-  // Encrypt update vector with AES-GCM 256-bit key before sending over WebRTC
-  const encryptedPayload = await encryptPayload(update, roomKey);
-  dataChannel.send(encryptedPayload);
-});`
+  // Every 50 local updates, send a full snapshot so the DO can compact its SQLite log
+  if (++this.localUpdatesSinceSnapshot >= 50) {
+    this.localUpdatesSinceSnapshot = 0;
+    this.sendFullSnapshot();
+  }
+}
+
+// On connect and on peer-joined: broadcast our state vector so peers can diff
+private async sendSyncStep1() {
+  const encoder = encoding.createEncoder();
+  encoding.writeVarUint(encoder, 0); // messageSync
+  syncProtocol.writeSyncStep1(encoder, this.doc);
+  const encrypted = await encryptPayload(encoding.toUint8Array(encoder), this.cryptoKey);
+  this.send({ type: 'sync-step-1', peerId: this.localPeerId, payload: buffer.toBase64(encrypted) });
+}`
         }
       },
       {
-        id: 'webrtc-data-channel',
-        title: '3. WebRTC DataChannel Setup & Robust Recovery',
-        content: `Establishing WebRTC connections across complex firewalls and NATs requires robust candidate gathering. We configure multiple STUN servers for NAT mapping, combined with automatic ICE restarts when network conditions shift (e.g. switching from Wi-Fi to cellular data).
+        id: 'cloudflare-relay',
+        title: '4. Zero-Cost WebSocket Relay with Cloudflare Durable Objects',
+        content: `Each collaboration room is a single **Cloudflare Durable Object** instance. Peers connect to it via WebSocket at \`/api/collab/:roomId?peerId=<uuid>\`.
 
-If a connection state drops to 'disconnected' or 'failed', our custom provider attempts up to 2 ICE restarts before falling back to automatic signaling reconnection.`,
+The DO uses the **WebSocket Hibernation API** (\`this.ctx.acceptWebSocket(server)\`): idle WebSockets consume zero CPU, making thousands of concurrent rooms essentially free. It wakes up only when a message arrives.
+
+On connect, the DO sends a \`room-init\` message containing the list of already-connected peers and all encrypted updates stored in SQLite — allowing the new peer to reconstruct the full document history immediately. On subsequent updates, it broadcasts \`sync-update\` messages to all peers in the room and persists a running log of encrypted snapshots. When a snapshot is received, older update entries are compacted.
+
+Ping/pong heartbeats (every 20 seconds, with a 10-second pong timeout) detect stale connections. If the pong timeout fires, the client triggers an exponential-backoff reconnect (up to 5 attempts, starting at 1s).`,
         codeSnippet: {
           language: 'typescript',
-          title: 'ICE Restart & Recovery Handler',
-          code: `peerConnection.onconnectionstatechange = () => {
-  const state = peerConnection.connectionState;
-  
-  if (state === 'failed') {
-    console.warn('[WebRTC] Connection failed, attempting ICE restart...');
-    this.attemptIceRestart(peerId);
-  } else if (state === 'disconnected') {
-    // Wait 8s for automatic network self-healing before triggering ICE restart
-    setTimeout(() => {
-      if (peerConnection.connectionState === 'disconnected') {
-        this.attemptIceRestart(peerId);
-      }
-    }, 8000);
-  }
-};`
-        }
-      },
-      {
-        id: 'cloudflare-signaling',
-        title: '4. Zero-Cost Signaling with Cloudflare Durable Objects',
-        content: `Signaling servers usually incur high server costs due to long-lived WebSocket connections. By using Cloudflare Workers with **Durable Objects** and the **WebSocket Hibernation API** (\`this.ctx.acceptWebSocket(server)\`), idle WebSockets consume 0 CPU duration.
+          title: 'EncryptedCollabProvider — Connection & Heartbeat',
+          code: `export class EncryptedCollabProvider {
+  private ws: WebSocket | null = null;
+  private autoRetryCount = 0;
 
-The Durable Object hibernates in memory when idle and wakes up instantly when a new peer joins or sends an SDP candidate.`,
-        codeSnippet: {
-          language: 'typescript',
-          title: 'SignalingRoom.ts (Cloudflare Durable Object)',
-          code: `export class SignalingRoom extends DurableObject {
-  async fetch(request: Request): Promise<Response> {
-    const { 0: client, 1: server } = new WebSocketPair();
-    this.ctx.acceptWebSocket(server); // Hibernation API
-    
-    // Broadcast peer join to existing connections
-    this.broadcast(JSON.stringify({ type: 'peer-joined', peerId }), server);
-    return new Response(null, { status: 101, webSocket: client });
+  // MAX_AUTO_RETRIES = 5, BASE_BACKOFF_MS = 1000
+  // HEARTBEAT_INTERVAL_MS = 20000, PONG_TIMEOUT_MS = 10000
+
+  public connect() {
+    const wsUrl = \`wss://\${host}/api/collab/\${this.roomId}?peerId=\${this.localPeerId}\`;
+    this.ws = new WebSocket(wsUrl);
+
+    this.ws.onopen = () => {
+      this.autoRetryCount = 0;
+      this.startHeartbeat();
+      this.flushQueue();      // replay messages queued while offline
+      this.sendSyncStep1();   // request any updates we missed
+      this.broadcastLocalAwareness();
+    };
+
+    this.ws.onclose = () => {
+      this.cleanupHeartbeat();
+      if (!this.intentionalDisconnect) this.handleUnexpectedDisconnect();
+    };
   }
 
-  webSocketMessage(ws: WebSocket, message: string) {
-    const data = JSON.parse(message);
-    if (data.type === 'ping') {
-      ws.send(JSON.stringify({ type: 'pong' }));
-      return;
+  private handleUnexpectedDisconnect() {
+    if (this.autoRetryCount < 5) {
+      const delay = 1000 * Math.pow(2, this.autoRetryCount++); // 1s, 2s, 4s, 8s, 16s
+      this.setState('RECONNECTING');
+      this.reconnectTimer = setTimeout(() => this.connect(), delay);
+    } else {
+      this.setState('FAILED');
     }
-    // Route directed SDP/ICE messages
-    if (data.targetPeerId) this.sendTo(data.targetPeerId, message);
   }
 }`
         }

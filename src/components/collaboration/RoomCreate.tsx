@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { generateRoomId } from '@/lib/collaboration/room';
+import { triggerFeedbackNudge } from '@/lib/feedbackNudge';
 import { Copy, Plus, ArrowRight } from 'lucide-react';
 
 interface RoomCreateProps {
@@ -16,6 +17,7 @@ export function RoomCreate({ onJoin, onSwitchToJoin }: RoomCreateProps) {
       alert("Password is required to secure the room.");
       return;
     }
+    triggerFeedbackNudge('collab-create-room');
     onJoin(roomId, password);
   };
 
@@ -40,7 +42,10 @@ export function RoomCreate({ onJoin, onSwitchToJoin }: RoomCreateProps) {
             <button type="button" className="inline-flex items-center justify-center rounded-md text-sm font-medium border border-input bg-background hover:bg-accent hover:text-accent-foreground h-9 w-9" onClick={() => setRoomId(generateRoomId())}>
               <Plus size={16} />
             </button>
-            <button type="button" className="inline-flex items-center justify-center rounded-md text-sm font-medium border border-input bg-background hover:bg-accent hover:text-accent-foreground h-9 w-9" onClick={() => navigator.clipboard.writeText(roomId)}>
+            <button type="button" className="inline-flex items-center justify-center rounded-md text-sm font-medium border border-input bg-background hover:bg-accent hover:text-accent-foreground h-9 w-9" onClick={() => {
+              navigator.clipboard.writeText(roomId);
+              triggerFeedbackNudge('collab-copy-room-id');
+            }}>
               <Copy size={16} />
             </button>
           </div>

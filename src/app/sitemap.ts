@@ -24,6 +24,7 @@ export default async function sitemap(props: { id: Promise<string> }): Promise<M
       { url: `${baseUrl}/fonts`, lastModified: staticDate, changeFrequency: 'weekly', priority: 0.95 },
       { url: `${baseUrl}/icons`, lastModified: staticDate, changeFrequency: 'weekly', priority: 0.95 },
       { url: `${baseUrl}/guides`, lastModified: staticDate, changeFrequency: 'daily', priority: 0.95 },
+      { url: `${baseUrl}/feedback`, lastModified: staticDate, changeFrequency: 'monthly', priority: 0.8 },
     ];
   }
 
