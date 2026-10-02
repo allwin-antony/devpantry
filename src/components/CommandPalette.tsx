@@ -18,7 +18,11 @@ import {
   ArrowRight,
   X,
   Users,
-  Globe
+  Globe,
+  FileText,
+  Image as ImageIcon,
+  Settings,
+  Scissors
 } from 'lucide-react';
 
 interface PaletteItem {
@@ -53,6 +57,46 @@ const PALETTE_ITEMS: PaletteItem[] = [
     icon: Sparkles,
     badge: 'Edge AI',
     keywords: ['remove', 'cutout', 'transparent', 'matte', 'bokeh', 'ai']
+  },
+  {
+    id: 'tool-image-to-pdf',
+    category: 'Tools',
+    title: 'Image to PDF Converter',
+    subtitle: 'Convert multiple images into a single PDF instantly',
+    href: '/tools/image-to-pdf',
+    icon: ImageIcon,
+    badge: 'Privacy',
+    keywords: ['pdf', 'convert', 'image', 'exam']
+  },
+  {
+    id: 'tool-merge-pdf',
+    category: 'Tools',
+    title: 'Merge PDF',
+    subtitle: 'Combine multiple PDF files into one document',
+    href: '/tools/merge-pdf',
+    icon: FileText,
+    badge: 'Privacy',
+    keywords: ['pdf', 'merge', 'combine']
+  },
+  {
+    id: 'tool-compress-pdf',
+    category: 'Tools',
+    title: 'Compress PDF',
+    subtitle: 'Optimize PDF files to reduce file size',
+    href: '/tools/compress-pdf',
+    icon: Settings,
+    badge: 'Privacy',
+    keywords: ['pdf', 'compress', 'size']
+  },
+  {
+    id: 'tool-passport-photo',
+    category: 'Tools',
+    title: 'Passport Photo Maker',
+    subtitle: 'Resize and compress photos to exact dimensions',
+    href: '/tools/passport-photo-maker',
+    icon: Scissors,
+    badge: 'Privacy',
+    keywords: ['passport', 'photo', 'resize', 'compress']
   },
   {
     id: 'tool-resizer',

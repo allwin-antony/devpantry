@@ -31,6 +31,94 @@ export interface GuideArticle {
 
 export const GUIDES_DATA: GuideArticle[] = [
   {
+    slug: 'client-side-pdf-manipulation',
+    title: 'Client-Side PDF Manipulation & Structural Compression in the Browser',
+    description: 'Learn how to process, merge, and compress PDF documents securely in the browser using ArrayBuffers, PDF-lib, and structural optimization without server uploads.',
+    category: 'Media & Graphics',
+    readingTime: '5 min read',
+    publishedDate: 'October 2, 2026',
+    updatedDate: 'October 2, 2026',
+    author: {
+      name: 'DevPantry Engineering',
+      role: 'Media & Graphics Architecture',
+    },
+    matchingToolUrl: '/tools/image-to-pdf',
+    matchingToolName: 'PDF Exam & Photo Kit',
+    tags: ['PDF', 'Compression', 'Client-Side', 'Privacy', 'PDF-lib', 'JavaScript'],
+    keyTakeaways: [
+      'Client-side processing guarantees zero data leakage for highly sensitive documents like passports and IDs.',
+      'PDF-lib allows for deep structural manipulation by modifying cross-reference tables and stripping out hidden metadata.',
+      'True client-side structural compression focuses on lossless optimization (removing dead objects) rather than lossy image downsampling.',
+      'Converting modern image formats (like WebP) into PDF structures requires careful rasterization and canvas handling.'
+    ],
+    sections: [
+      {
+        id: 'overview',
+        title: '1. The Privacy Problem with Online PDF Tools',
+        content: `Every day, millions of users upload highly sensitive documents—Aadhar cards, SSNs, passports, and exam marksheets—to third-party server-side PDF compressors. These files reside on temporary cloud storage, often with unclear retention policies, creating a massive privacy risk.
+
+By moving PDF manipulation entirely to the client, we eliminate this attack surface. Browsers are incredibly powerful environments. Using modern Web APIs like \`FileReader\`, \`ArrayBuffer\`, and \`Blob\`, we can load megabytes of document data directly into browser memory, process them, and download them instantly—zero HTTP uploads required.`
+      },
+      {
+        id: 'structural-compression',
+        title: '2. How Client-Side PDF Compression Works',
+        content: `When compressing a PDF purely in the browser without WebAssembly image engines, we are inherently limited to **structural optimization**.
+
+Unlike server-side compressors (like Ghostscript) which deeply resample embedded JPEGs into lower qualities, our client-side structural compressor uses \`pdf-lib\` to:
+* Strip out unused embedded fonts.
+* Remove extraneous document metadata and XML objects.
+* Discard hidden interactive elements and dead reference objects.
+* Flatten cross-reference (xref) tables.
+
+If your PDF is primarily text-based or contains poorly structured object streams, this structural compression can yield huge file size savings. However, if your PDF is simply a wrapper around a massive 5MB scanned JPEG, structural compression will have minimal impact.
+
+*Try it yourself using the [Compress PDF](/tools/compress-pdf) tool!*`
+      },
+      {
+        id: 'image-to-pdf',
+        title: '3. Combining Images into PDFs',
+        content: `When creating PDFs from images, especially to hit strict \`< 200 KB\` limits enforced by job portals, the workflow should be:
+1. First, compress the raw images to your target size budget (e.g. 150KB).
+2. Second, embed those compressed images into a new, cleanly-structured PDF envelope.
+
+*Try it yourself using the [Image to PDF Converter](/tools/image-to-pdf) tool!*`,
+        codeSnippet: {
+          language: 'typescript',
+          title: 'Embedding Images into a PDF with pdf-lib',
+          code: `import { PDFDocument } from 'pdf-lib';
+
+async function createPdfFromImages(imageFiles: File[]) {
+  const pdfDoc = await PDFDocument.create();
+  
+  for (const file of imageFiles) {
+    const arrayBuffer = await file.arrayBuffer();
+    
+    // Embed the JPEG/PNG based on type
+    const image = file.type === 'image/jpeg' 
+      ? await pdfDoc.embedJpg(arrayBuffer)
+      : await pdfDoc.embedPng(arrayBuffer);
+      
+    // Create a new page matching the image dimensions
+    const page = pdfDoc.addPage([image.width, image.height]);
+    
+    // Draw the image onto the page
+    page.drawImage(image, {
+      x: 0,
+      y: 0,
+      width: image.width,
+      height: image.height,
+    });
+  }
+  
+  // Save structurally optimized PDF
+  const pdfBytes = await pdfDoc.save({ useObjectStreams: false });
+  return new Blob([pdfBytes], { type: 'application/pdf' });
+}`
+        }
+      }
+    ]
+  },
+  {
     slug: 'p2p-webrtc-collaboration',
     title: 'Building a Real-Time Collaborative Code Editor with WebRTC, Yjs CRDTs & Cloudflare Durable Objects',
     description: 'Learn how to build a zero-server-database, zero-latency real-time collaborative text editor using WebRTC P2P DataChannels, Yjs conflict-free replicated data types (CRDTs), and Cloudflare Workers Durable Objects for $0-cost signaling.',

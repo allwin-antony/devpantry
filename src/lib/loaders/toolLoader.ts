@@ -2,80 +2,180 @@ export interface ToolItem {
   slug: string;
   name: string;
   description: string;
+  heroTagline?: string; // Short punchy tagline for hero cards
   category: 'Developer' | 'Media' | 'Mocking' | 'Collaboration';
-  icon: string; // lucide icon name (as string) or similar representation, handled in UI
+  icon: string; // lucide icon name
+  badge?: string; // Label shown on cards (e.g. "Edge AI", "Zero Leak")
+  featured?: boolean; // Pinned as hero card at the top of /tools
 }
 
 const toolsData: ToolItem[] = [
-  {
-    slug: 'image-compressor',
-    name: 'Image Compressor',
-    description: 'Compress PNG, JPEG, and WebP images instantly in the browser without losing quality.',
-    category: 'Media',
-    icon: 'ImageIcon',
-  },
+  // ── Media ──────────────────────────────────────────────────────────────────
   {
     slug: 'background-remover',
-    name: 'Background Remover',
-    description: 'Remove backgrounds from images using local machine learning models.',
+    name: 'AI Background Remover',
+    heroTagline: 'Remove backgrounds instantly — 100% in your browser via WebGPU.',
+    description: 'Remove backgrounds from images using local machine learning models. Zero uploads, unlimited use.',
     category: 'Media',
-    icon: 'Eraser',
+    icon: 'Sparkles',
+    badge: 'Edge AI',
+    featured: true,
+  },
+  {
+    slug: 'image-to-pdf',
+    name: 'PDF Exam & Photo Kit',
+    heroTagline: 'Convert, merge, compress, and prep PDFs client-side — nothing leaves your machine.',
+    description: 'Convert images to PDF, merge documents, compress to exact KB limits, and make passport photos. Fully private.',
+    category: 'Media',
+    icon: 'FileText',
+    badge: 'Privacy',
+    featured: true,
+  },
+  {
+    slug: 'image-compressor',
+    name: 'Image Compressor & WebP Studio',
+    description: 'Compress PNG, JPEG, and WebP images instantly in the browser without losing quality. Target file-size budgeting.',
+    category: 'Media',
+    icon: 'HardDrive',
+    badge: 'Budgeting',
+    featured: false,
   },
   {
     slug: 'image-resizer',
-    name: 'Image Resizer',
-    description: 'Resize images for social media, avatars, and web use without server uploads.',
+    name: 'Image Resizer & Artboard Studio',
+    description: 'Resize images for social media, avatars, and web use with artboard padding and aspect ratio control.',
     category: 'Media',
     icon: 'Maximize',
+    badge: 'Artboard',
+    featured: false,
   },
   {
+    slug: 'merge-pdf',
+    name: 'Merge PDF',
+    description: 'Combine multiple PDF files into one document entirely locally. No uploads, no watermarks.',
+    category: 'Media',
+    icon: 'FileText',
+    badge: 'Privacy',
+    featured: false,
+  },
+  {
+    slug: 'compress-pdf',
+    name: 'Compress PDF',
+    description: 'Optimize PDF files to reduce file size for portals and forms. Structural lossless compression in browser.',
+    category: 'Media',
+    icon: 'Settings',
+    badge: 'Privacy',
+    featured: false,
+  },
+  {
+    slug: 'passport-photo-maker',
+    name: 'Passport Photo Maker',
+    description: 'Resize and compress photos to exact dimensions and KB limits for official forms and visa applications.',
+    category: 'Media',
+    icon: 'Scissors',
+    badge: 'Privacy',
+    featured: false,
+  },
+
+  // ── Developer ──────────────────────────────────────────────────────────────
+  {
     slug: 'jwt-decoder',
-    name: 'JWT Decoder',
-    description: 'Decode, inspect, and validate JSON Web Tokens securely right in your browser.',
+    name: 'JWT Inspector & Chaos Tamperer',
+    heroTagline: 'Decode, validate, and chaos-tamper JWTs — 100% in-memory, zero leaks.',
+    description: 'Decode, inspect, and validate JSON Web Tokens securely in your browser. Includes RFC claim hints and auth chaos simulation.',
     category: 'Developer',
     icon: 'Key',
+    badge: 'Zero Leak',
+    featured: true,
   },
   {
     slug: 'public-apis',
     name: 'Public APIs Registry',
-    description: 'Searchable registry of free public APIs for software and web development.',
+    description: 'Searchable registry of 2,900+ free public APIs for software and web development. Filter by CORS, Auth & HTTPS.',
     category: 'Developer',
     icon: 'Globe',
-  },
-  {
-    slug: 'mock-data',
-    name: 'Mock Data Generator',
-    description: 'Generate massive datasets of realistic fake data for your APIs and databases.',
-    category: 'Mocking',
-    icon: 'Database',
-  },
-  {
-    slug: 'api-templates',
-    name: 'API Templates',
-    description: 'Mock REST API templates with standard responses for OAuth, CRUD, and Webhooks.',
-    category: 'Mocking',
-    icon: 'Webhook',
+    badge: 'Dataset',
+    featured: false,
   },
   {
     slug: 'social-preview',
-    name: 'Social Preview Tester',
-    description: 'Test how your website looks when shared on Twitter, Slack, Discord, and LinkedIn.',
+    name: 'Social Share Preview & OG Checker',
+    description: 'Test how your website looks when shared on Twitter/X, Slack, Discord, LinkedIn, Facebook & WhatsApp.',
     category: 'Developer',
-    icon: 'Globe',
+    icon: 'Share2',
+    badge: '6 Platforms',
+    featured: false,
+  },
+
+  // ── Mocking ────────────────────────────────────────────────────────────────
+  {
+    slug: 'mock-data',
+    name: 'Chaos Data Studio',
+    heroTagline: 'Generate high-entropy, dirty mock datasets across real-world domains — one click.',
+    description: 'Generate massive dirty datasets across curated domains (E-Commerce, Users, Invoicing, BLNS) with multi-format export.',
+    category: 'Mocking',
+    icon: 'Flame',
+    badge: 'Presets',
+    featured: true,
   },
   {
+    slug: 'mock-data#schema-builder',
+    name: 'Custom Schema Builder',
+    description: 'Visually compose custom dirty data schemas with 13+ field types and per-column chaos sliders. No code required.',
+    category: 'Mocking',
+    icon: 'Layers',
+    badge: 'Visual Builder',
+    featured: false,
+  },
+  {
+    slug: 'api-templates',
+    name: 'API Chaos Templates & Mock Vault',
+    description: 'Real-world response fixtures for Stripe, Supabase, Google SSO, GitHub OAuth, and 13+ more APIs.',
+    category: 'Mocking',
+    icon: 'Radio',
+    badge: '17 APIs',
+    featured: false,
+  },
+
+  // ── Collaboration ──────────────────────────────────────────────────────────
+  {
     slug: 'collab',
-    name: 'Live Collaboration',
-    description: 'Real-time collaborative whiteboard and code sharing.',
+    name: 'P2P Collaborative Editor',
+    description: 'Zero-knowledge, real-time collaborative code editor powered by WebRTC & Yjs CRDTs. No server, no database.',
     category: 'Collaboration',
     icon: 'Users',
+    badge: 'Beta',
+    featured: false,
   },
 ];
 
 export function getAllTools(): ToolItem[] {
+  // Filter out virtual sub-utility slugs (e.g. "mock-data#schema-builder")
+  // they exist as discovery cards on /tools but don't have their own routes
+  return toolsData.filter((t) => !t.slug.includes('#'));
+}
+
+// Full list including virtual sub-utility entries — used for the /tools listing page
+export function getAllToolsForDisplay(): ToolItem[] {
   return toolsData;
 }
 
-export function getToolBySlug(slug: string): ToolItem | null {
-  return toolsData.find((t) => t.slug === slug) || null;
+export function getFeaturedTools(): ToolItem[] {
+  return toolsData.filter((t) => t.featured);
 }
+
+export function getToolBySlug(slug: string): ToolItem | null {
+  return toolsData.find((t) => t.slug === slug && !t.slug.includes('#')) || null;
+}
+
+export function getToolsByCategory(category: ToolItem['category']): ToolItem[] {
+  return toolsData.filter((t) => t.category === category);
+}
+
+export const TOOL_CATEGORIES: ToolItem['category'][] = [
+  'Developer',
+  'Media',
+  'Mocking',
+  'Collaboration',
+];
+

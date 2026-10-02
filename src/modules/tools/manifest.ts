@@ -1,7 +1,8 @@
 import type { ModuleManifest } from '@/lib/moduleRegistry';
-import { getAllTools, getToolBySlug } from '@/lib/loaders/toolLoader';
+import { getAllToolsForDisplay, getToolBySlug } from '@/lib/loaders/toolLoader';
 import ToolsListView from './ListView';
 import ToolsDetailView from './DetailView';
+
 
 const toolsManifest: ModuleManifest = {
   type: 'tools',
@@ -24,7 +25,8 @@ const toolsManifest: ModuleManifest = {
     },
   }),
   loader: {
-    listAll: getAllTools,
+    listAll: getAllToolsForDisplay,
+
     getBySlug: getToolBySlug,
   },
   renderers: {
