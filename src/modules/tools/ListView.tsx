@@ -4,7 +4,7 @@ import React, { useState, useMemo } from 'react';
 import Link from 'next/link';
 import {
   Search, Wrench, Sparkles, FileText, HardDrive, Maximize, Key, Globe, Share2,
-  Flame, Layers, Radio, Users, Settings, Scissors, ArrowRight, X
+  Flame, Layers, Radio, Users, Settings, Scissors, ArrowRight, X, Image, Braces
 } from 'lucide-react';
 import type { ToolItem } from '@/lib/loaders/toolLoader';
 import { TOOL_CATEGORIES } from '@/lib/loaders/toolLoader';
@@ -12,7 +12,7 @@ import { TOOL_CATEGORIES } from '@/lib/loaders/toolLoader';
 // Map string icon names to components
 const ICON_MAP: Record<string, React.ComponentType<{ className?: string }>> = {
   Sparkles, FileText, HardDrive, Maximize, Key, Globe, Share2,
-  Flame, Layers, Radio, Users, Settings, Scissors, Wrench,
+  Flame, Layers, Radio, Users, Settings, Scissors, Wrench, Image, Braces
 };
 
 function ToolIcon({ name, className }: { name: string; className?: string }) {

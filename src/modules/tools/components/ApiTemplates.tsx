@@ -65,6 +65,7 @@ export default function ChaosTemplatesPage() {
 
         <h3>Related Tools</h3>
         <ul>
+          <li><a href="/tools/json-to-ts-zod" className="text-rose-400 hover:underline">JSON to TS & Zod</a> — Generate strictly-typed interfaces and validation schemas directly from these templates.</li>
           <li><a href="/tools/mock-data" className="text-rose-400 hover:underline">Mock Data Generator</a> — Customize and expand these templates with your own schemas.</li>
           <li><a href="/tools/jwt-decoder" className="text-rose-400 hover:underline">JWT Decoder</a> — Debug the authentication tokens embedded in these responses.</li>
           <li><a href="/tools/collab" className="text-rose-400 hover:underline">P2P Collab Editor (Beta)</a> — Real-time peer-to-peer editor to discuss API schemas.</li>

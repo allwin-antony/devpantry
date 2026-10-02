@@ -98,6 +98,16 @@ const toolsData: ToolItem[] = [
     featured: true,
   },
   {
+    slug: 'json-to-ts-zod',
+    name: 'JSON to TS & Zod',
+    heroTagline: 'Instantly convert JSON API responses into strict TypeScript interfaces and Zod schemas.',
+    description: 'Paste your API responses and get typed interfaces and Zod schemas instantly. 100% client-side AST parsing, completely private.',
+    category: 'Developer',
+    icon: 'Braces',
+    badge: 'AST Parser',
+    featured: true,
+  },
+  {
     slug: 'public-apis',
     name: 'Public APIs Registry',
     description: 'Searchable registry of 2,900+ free public APIs for software and web development. Filter by CORS, Auth & HTTPS.',

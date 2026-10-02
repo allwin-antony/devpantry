@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Flame, Type, Box, Radio, Sun, Moon, Terminal, Sparkles, Key, Search, Menu, X, Share2, Users, ChevronDown, BookOpen, Globe, Image as ImageIcon, Maximize, Eraser, Database, FileText, Wrench, HardDrive, Layers, Settings, Scissors } from 'lucide-react';
+import { Flame, Type, Box, Radio, Sun, Moon, Terminal, Sparkles, Key, Search, Menu, X, Share2, Users, ChevronDown, BookOpen, Globe, Image as ImageIcon, Maximize, Eraser, Database, FileText, Wrench, HardDrive, Layers, Settings, Scissors, Braces } from 'lucide-react';
 import { useTheme } from './ThemeProvider';
 import { CommandPalette } from './CommandPalette';
 import { DevPantryLogo } from './DevPantryLogo';
@@ -61,12 +61,14 @@ export const Header: React.FC = () => {
       items: [
         { href: '/tools/public-apis', label: 'Public APIs Registry', shortLabel: 'APIs', icon: Globe },
         { href: '/tools/jwt-decoder', label: 'JWT Inspector', shortLabel: 'JWT', icon: Key },
+        { href: '/tools/json-to-ts-zod', label: 'JSON to TS & Zod', shortLabel: 'JSON', icon: Braces },
         { href: '/tools/social-preview', label: 'Social Preview', shortLabel: 'Social', icon: Share2 },
       ],
     },
     {
       label: 'Media',
       items: [
+        { href: '/tools/heic-converter', label: 'HEIC Converter', shortLabel: 'HEIC', icon: ImageIcon },
         { href: '/tools/image-compressor', label: 'Image Compressor', shortLabel: 'Compress', icon: HardDrive },
         { href: '/tools/image-resizer', label: 'Image Resizer', shortLabel: 'Resize', icon: Maximize },
         { href: '/tools/compress-pdf', label: 'Compress PDF', shortLabel: 'PDF ↓', icon: Settings },
