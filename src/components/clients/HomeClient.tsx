@@ -19,7 +19,8 @@ import {
   Key,
   Share2,
   Users,
-  BookOpen
+  BookOpen,
+  Globe
 } from 'lucide-react';
 import { IconRenderer, loadMultiPrefixIcons } from '@/lib/iconBatchLoader';
 
@@ -96,6 +97,13 @@ export function HomeClient() {
   };
 
   const tools = [
+    {
+      icon: Globe,
+      title: 'Public APIs Registry',
+      desc: 'Search 2,900+ free APIs for your next project. Filter by CORS, Auth requirements, and HTTPS.',
+      href: '/tools/public-apis',
+      badge: 'DATABASE',
+    },
     {
       icon: HardDrive,
       title: 'Edge Image Compressor',

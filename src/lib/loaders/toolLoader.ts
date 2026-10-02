@@ -8,25 +8,11 @@ export interface ToolItem {
 
 const toolsData: ToolItem[] = [
   {
-    slug: 'jwt-decoder',
-    name: 'JWT Decoder',
-    description: 'Decode, inspect, and validate JSON Web Tokens securely right in your browser.',
-    category: 'Developer',
-    icon: 'Key',
-  },
-  {
     slug: 'image-compressor',
     name: 'Image Compressor',
     description: 'Compress PNG, JPEG, and WebP images instantly in the browser without losing quality.',
     category: 'Media',
     icon: 'ImageIcon',
-  },
-  {
-    slug: 'image-resizer',
-    name: 'Image Resizer',
-    description: 'Resize images for social media, avatars, and web use without server uploads.',
-    category: 'Media',
-    icon: 'Maximize',
   },
   {
     slug: 'background-remover',
@@ -36,6 +22,27 @@ const toolsData: ToolItem[] = [
     icon: 'Eraser',
   },
   {
+    slug: 'image-resizer',
+    name: 'Image Resizer',
+    description: 'Resize images for social media, avatars, and web use without server uploads.',
+    category: 'Media',
+    icon: 'Maximize',
+  },
+  {
+    slug: 'jwt-decoder',
+    name: 'JWT Decoder',
+    description: 'Decode, inspect, and validate JSON Web Tokens securely right in your browser.',
+    category: 'Developer',
+    icon: 'Key',
+  },
+  {
+    slug: 'public-apis',
+    name: 'Public APIs Registry',
+    description: 'Searchable registry of free public APIs for software and web development.',
+    category: 'Developer',
+    icon: 'Globe',
+  },
+  {
     slug: 'mock-data',
     name: 'Mock Data Generator',
     description: 'Generate massive datasets of realistic fake data for your APIs and databases.',
@@ -43,18 +50,18 @@ const toolsData: ToolItem[] = [
     icon: 'Database',
   },
   {
-    slug: 'social-preview',
-    name: 'Social Preview Tester',
-    description: 'Test how your website looks when shared on Twitter, Slack, Discord, and LinkedIn.',
-    category: 'Developer',
-    icon: 'Globe',
-  },
-  {
     slug: 'api-templates',
     name: 'API Templates',
     description: 'Mock REST API templates with standard responses for OAuth, CRUD, and Webhooks.',
     category: 'Mocking',
     icon: 'Webhook',
+  },
+  {
+    slug: 'social-preview',
+    name: 'Social Preview Tester',
+    description: 'Test how your website looks when shared on Twitter, Slack, Discord, and LinkedIn.',
+    category: 'Developer',
+    icon: 'Globe',
   },
   {
     slug: 'collab',

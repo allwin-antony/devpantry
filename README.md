@@ -214,10 +214,27 @@ A zero-knowledge, real-time collaborative text and code editor built on pure pee
 
 ---
 
-### 9. ⌨️ Global Command Palette (`Cmd + K` / `Ctrl + K`)
+### 9. 🌐 Public APIs Registry (`/tools/public-apis`)
+
+A massive, searchable, and filterable registry of nearly 3,000 free public APIs for software and web development.
+
+* **Massive Open-Source Aggregation**: 
+  * Automatically aggregated at build-time from three major GitHub repositories (`public-apis`, `public-api-lists`, and `marcelscruz`).
+  * Deduplicated and strictly sorted alphabetically by category and API name.
+* **Powerful Local Filtering**:
+  * Lightning-fast client-side search across all 3,000 APIs.
+  * Filter by **CORS** support (Yes, No, Unknown).
+  * Filter by **Auth requirements** (API Key, OAuth, or No Auth Required).
+  * 1-Click **HTTPS Only** toggle.
+* **SEO Optimized**:
+  * Integrates Next.js Dynamic Metadata and injects `Dataset` JSON-LD Structured Data to tell Google search crawlers about the massive registry.
+
+---
+
+### 10. ⌨️ Global Command Palette (`Cmd + K` / `Ctrl + K`)
 
 A unified search dialog accessible from anywhere in the suite via keyboard shortcut or header button:
-* **Instant Tool Switching**: Jump directly to Overview, AI Studio, Fonts, Icons, JWT Inspector, Chaos Data, or API Mocks.
+* **Instant Tool Switching**: Jump directly to Overview, AI Studio, Fonts, Icons, JWT Inspector, Chaos Data, Public APIs Registry, or API Mocks.
 * **Typeface Quick Jump**: Type "inter", "jetbrains", "satoshi", or "clash" to jump straight to the typeface preview.
 * **Icon Toolkit Search**: Type "lucide", "tabler", "heroicons", or "phosphor" to open the respective icon library.
 * **API Fixture Jump**: Type "stripe", "supabase", "google", or "github" to open the respective production mock response.

@@ -16,6 +16,7 @@ const componentMap: Record<string, React.ComponentType> = {
   'social-preview': dynamic(() => import('./components/SocialPreview')),
   'api-templates': dynamic(() => import('./components/ApiTemplates')),
   'collab': dynamic(() => import('./components/Collab')),
+  'public-apis': dynamic(() => import('./components/PublicApisRegistry')),
 };
 
 export default function ToolsDetailView({ item }: { item: ToolItem }) {

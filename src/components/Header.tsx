@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Flame, Type, Box, Radio, Sun, Moon, Terminal, Sparkles, Key, Search, Menu, X, Share2, Users, ChevronDown, BookOpen } from 'lucide-react';
+import { Flame, Type, Box, Radio, Sun, Moon, Terminal, Sparkles, Key, Search, Menu, X, Share2, Users, ChevronDown, BookOpen, Globe, Image as ImageIcon, Maximize, Eraser, Database } from 'lucide-react';
 import { useTheme } from './ThemeProvider';
 import { CommandPalette } from './CommandPalette';
 import { DevPantryLogo } from './DevPantryLogo';
@@ -48,20 +48,33 @@ export const Header: React.FC = () => {
   const mainNavItems = [
     { href: '/', label: 'Overview', shortLabel: 'Overview', icon: Terminal },
     { href: '/tools/background-remover', label: 'AI Studio', shortLabel: 'AI Studio', icon: Sparkles },
-    { href: '/tools/collab', label: 'Collab', shortLabel: 'Collab', icon: Users },
-    { href: '/fonts', label: 'Fonts', shortLabel: 'Fonts', icon: Type },
     { href: '/icons', label: 'Icons', shortLabel: 'Icons', icon: Box },
+    { href: '/fonts', label: 'Fonts', shortLabel: 'Fonts', icon: Type },
+    { href: '/tools/public-apis', label: 'Public APIs', shortLabel: 'APIs', icon: Globe },
   ];
 
   const moreNavItems = [
     { href: '/tools/jwt-decoder', label: 'JWT Decoder', shortLabel: 'JWT', icon: Key },
-    { href: '/tools/mock-data', label: 'Mock Data', shortLabel: 'Mock', icon: Flame },
-    { href: '/tools/social-preview', label: 'Social Preview', shortLabel: 'Social', icon: Share2 },
+    { href: '/tools/mock-data', label: 'Mock Data', shortLabel: 'Mock', icon: Database },
     { href: '/tools/api-templates', label: 'API Mocks', shortLabel: 'Mocks', icon: Radio },
+    { href: '/tools/social-preview', label: 'Social Preview', shortLabel: 'Social', icon: Share2 },
+    { href: '/tools/collab', label: 'Collab', shortLabel: 'Collab', icon: Users },
     { href: '/guides', label: 'Engineering Guides', shortLabel: 'Guides', icon: BookOpen },
   ];
 
   const allNavItems = [...mainNavItems, ...moreNavItems];
+
+  let displayMainNavItems = [...mainNavItems];
+  let displayMoreNavItems = [...moreNavItems];
+
+  // If the current path belongs to a tool in moreNavItems, swap it with the last item in displayMainNavItems
+  const activeMoreItemIndex = displayMoreNavItems.findIndex(item => pathname.startsWith(item.href));
+  if (activeMoreItemIndex !== -1) {
+    const activeMoreItem = displayMoreNavItems[activeMoreItemIndex];
+    const lastMainItem = displayMainNavItems.pop()!;
+    displayMainNavItems.push(activeMoreItem);
+    displayMoreNavItems[activeMoreItemIndex] = lastMainItem;
+  }
 
   return (
     <>
@@ -80,23 +93,22 @@ export const Header: React.FC = () => {
 
         {/* Center: Top Navigation Tabs (Exact h-8 height, zero-scroll & clutter-free across laptops and desktops) */}
         <nav className="hidden md:flex items-center h-8 bg-[var(--bg-sidebar)] p-0.5 rounded-lg border border-[var(--border-dev)] text-xs gap-0.5 shrink-0">
-          {mainNavItems.map(item => {
+          {displayMainNavItems.map(item => {
             const Icon = item.icon;
             const isActive = item.href === '/'
               ? pathname === '/'
               : item.href === '/tools/background-remover'
-              ? (pathname === '/tools/background-remover' || pathname === '/tools/image-resizer' || pathname === '/tools/image-compressor')
-              : pathname.startsWith(item.href);
+                ? (pathname === '/tools/background-remover' || pathname === '/tools/image-resizer' || pathname === '/tools/image-compressor')
+                : pathname.startsWith(item.href);
 
             return (
               <Link
                 key={item.href}
                 href={item.href}
-                className={`h-7 px-2 lg:px-2.5 rounded-md flex items-center gap-1.5 transition-all cursor-pointer whitespace-nowrap shrink-0 text-xs ${
-                  isActive
+                className={`h-7 px-2 lg:px-2.5 rounded-md flex items-center gap-1.5 transition-all cursor-pointer whitespace-nowrap shrink-0 text-xs ${isActive
                     ? 'bg-rose-500/10 dark:bg-rose-500/15 text-rose-600 dark:text-rose-400 border border-rose-500/30 font-semibold shadow-xs'
                     : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--pill-bg)] border border-transparent'
-                }`}
+                  }`}
               >
                 <Icon className="w-3.5 h-3.5 shrink-0" />
                 <span className="hidden xl:inline">{item.label}</span>
@@ -108,20 +120,19 @@ export const Header: React.FC = () => {
           <div className="relative" ref={moreMenuRef}>
             <button
               onClick={() => setIsMoreMenuOpen(prev => !prev)}
-              className={`h-7 px-2 lg:px-2.5 rounded-md flex items-center gap-1.5 transition-all cursor-pointer whitespace-nowrap shrink-0 text-xs ${
-                moreNavItems.some(item => pathname.startsWith(item.href))
+              className={`h-7 px-2 lg:px-2.5 rounded-md flex items-center gap-1.5 transition-all cursor-pointer whitespace-nowrap shrink-0 text-xs ${displayMoreNavItems.some(item => pathname.startsWith(item.href))
                   ? 'text-rose-600 dark:text-rose-400 font-semibold'
                   : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--pill-bg)] border border-transparent'
-              }`}
+                }`}
             >
               <span className="hidden xl:inline">More Tools</span>
               <span className="xl:hidden">More</span>
               <ChevronDown className={`w-3.5 h-3.5 transition-transform ${isMoreMenuOpen ? 'rotate-180' : ''}`} />
             </button>
-            
+
             {isMoreMenuOpen && (
               <div className="absolute top-full left-0 mt-2 w-48 bg-[var(--bg-panel)] border border-[var(--border-dev)] rounded-lg shadow-lg flex flex-col p-1.5 z-50 animate-in fade-in zoom-in-95 duration-100">
-                {moreNavItems.map(item => {
+                {displayMoreNavItems.map(item => {
                   const Icon = item.icon;
                   const isActive = pathname.startsWith(item.href);
                   return (
@@ -129,11 +140,10 @@ export const Header: React.FC = () => {
                       key={item.href}
                       href={item.href}
                       onClick={() => setIsMoreMenuOpen(false)}
-                      className={`px-3 py-2 rounded-md flex items-center gap-2.5 transition-colors text-xs ${
-                        isActive
+                      className={`px-3 py-2 rounded-md flex items-center gap-2.5 transition-colors text-xs ${isActive
                           ? 'bg-rose-500/10 text-rose-600 dark:text-rose-400 font-semibold'
                           : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--pill-bg)]'
-                      }`}
+                        }`}
                     >
                       <Icon className="w-4 h-4 shrink-0" />
                       <span>{item.label}</span>
@@ -171,7 +181,7 @@ export const Header: React.FC = () => {
             className="hidden sm:flex h-8 w-8 items-center justify-center rounded-lg bg-[var(--bg-sidebar)] border border-[var(--border-dev)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:border-rose-500/40 transition-colors cursor-pointer"
           >
             <svg viewBox="0 0 24 24" fill="currentColor" stroke="none" className="w-[15px] h-[15px]">
-              <path d="M12 2A10 10 0 0 0 2 12c0 4.42 2.87 8.17 6.84 9.5.5.08.66-.23.66-.5v-1.69c-2.77.6-3.36-1.34-3.36-1.34-.45-1.15-1.11-1.46-1.11-1.46-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.87 1.52 2.34 1.07 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.92 0-1.11.38-2 1.03-2.71-.1-.25-.45-1.29.1-2.64 0 0 .84-.27 2.75 1.02.79-.22 1.65-.33 2.5-.33.85 0 1.71.11 2.5.33 1.91-1.29 2.75-1.02 2.75-1.02.55 1.35.2 2.39.1 2.64.65.71 1.03 1.6 1.03 2.71 0 3.82-2.34 4.66-4.57 4.91.36.31.69.92.69 1.85V21c0 .27.16.59.67.5C19.14 20.16 22 16.42 22 12A10 10 0 0 0 12 2z"/>
+              <path d="M12 2A10 10 0 0 0 2 12c0 4.42 2.87 8.17 6.84 9.5.5.08.66-.23.66-.5v-1.69c-2.77.6-3.36-1.34-3.36-1.34-.45-1.15-1.11-1.46-1.11-1.46-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.87 1.52 2.34 1.07 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.92 0-1.11.38-2 1.03-2.71-.1-.25-.45-1.29.1-2.64 0 0 .84-.27 2.75 1.02.79-.22 1.65-.33 2.5-.33.85 0 1.71.11 2.5.33 1.91-1.29 2.75-1.02 2.75-1.02.55 1.35.2 2.39.1 2.64.65.71 1.03 1.6 1.03 2.71 0 3.82-2.34 4.66-4.57 4.91.36.31.69.92.69 1.85V21c0 .27.16.59.67.5C19.14 20.16 22 16.42 22 12A10 10 0 0 0 12 2z" />
             </svg>
           </a>
 
@@ -204,19 +214,18 @@ export const Header: React.FC = () => {
             const isActive = item.href === '/'
               ? pathname === '/'
               : item.href === '/tools/background-remover'
-              ? (pathname === '/tools/background-remover' || pathname === '/tools/image-resizer' || pathname === '/tools/image-compressor')
-              : pathname.startsWith(item.href);
+                ? (pathname === '/tools/background-remover' || pathname === '/tools/image-resizer' || pathname === '/tools/image-compressor')
+                : pathname.startsWith(item.href);
 
             return (
               <Link
                 key={item.href}
                 href={item.href}
                 onClick={() => setIsMobileMenuOpen(false)}
-                className={`h-9 px-3 rounded-lg flex items-center gap-2.5 text-xs font-medium transition-colors ${
-                  isActive
+                className={`h-9 px-3 rounded-lg flex items-center gap-2.5 text-xs font-medium transition-colors ${isActive
                     ? 'bg-rose-500/10 text-rose-600 dark:text-rose-400 font-bold border border-rose-500/30'
                     : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--pill-bg)]'
-                }`}
+                  }`}
               >
                 <Icon className="w-4 h-4 shrink-0 text-rose-500" />
                 <span>{item.label}</span>
