@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Flame, Type, Box, Radio, Sun, Moon, Terminal, Sparkles, Key, Search, Menu, X, Share2, Users, ChevronDown, BookOpen, Globe, Image as ImageIcon, Maximize, Eraser, Database } from 'lucide-react';
+import { Flame, Type, Box, Radio, Sun, Moon, Terminal, Sparkles, Key, Search, Menu, X, Share2, Users, ChevronDown, BookOpen, Globe, Image as ImageIcon, Maximize, Eraser, Database, FileText, Wrench, HardDrive, Layers, Settings, Scissors, Braces } from 'lucide-react';
 import { useTheme } from './ThemeProvider';
 import { CommandPalette } from './CommandPalette';
 import { DevPantryLogo } from './DevPantryLogo';
@@ -46,35 +46,59 @@ export const Header: React.FC = () => {
   }, []);
 
   const mainNavItems = [
-    { href: '/', label: 'Overview', shortLabel: 'Overview', icon: Terminal },
-    { href: '/tools/background-remover', label: 'AI Studio', shortLabel: 'AI Studio', icon: Sparkles },
+    { href: '/', label: 'Overview', shortLabel: 'Home', icon: Terminal },
+    { href: '/tools', label: 'All Tools', shortLabel: 'Tools', icon: Wrench },
+    { href: '/tools/background-remover', label: 'AI Studio', shortLabel: 'AI', icon: Sparkles },
+    { href: '/tools/image-to-pdf', label: 'PDF Kit', shortLabel: 'PDF', icon: FileText },
     { href: '/icons', label: 'Icons', shortLabel: 'Icons', icon: Box },
     { href: '/fonts', label: 'Fonts', shortLabel: 'Fonts', icon: Type },
-    { href: '/tools/public-apis', label: 'Public APIs', shortLabel: 'APIs', icon: Globe },
   ];
 
-  const moreNavItems = [
-    { href: '/tools/jwt-decoder', label: 'JWT Decoder', shortLabel: 'JWT', icon: Key },
-    { href: '/tools/mock-data', label: 'Mock Data', shortLabel: 'Mock', icon: Database },
-    { href: '/tools/api-templates', label: 'API Mocks', shortLabel: 'Mocks', icon: Radio },
-    { href: '/tools/social-preview', label: 'Social Preview', shortLabel: 'Social', icon: Share2 },
-    { href: '/tools/collab', label: 'Collab', shortLabel: 'Collab', icon: Users },
-    { href: '/guides', label: 'Engineering Guides', shortLabel: 'Guides', icon: BookOpen },
+  // Grouped for the More dropdown — displayed with category section headers
+  const moreNavGroups = [
+    {
+      label: 'Developer',
+      items: [
+        { href: '/tools/public-apis', label: 'Public APIs Registry', shortLabel: 'APIs', icon: Globe },
+        { href: '/tools/jwt-decoder', label: 'JWT Inspector', shortLabel: 'JWT', icon: Key },
+        { href: '/tools/json-to-ts-zod', label: 'JSON to TS & Zod', shortLabel: 'JSON', icon: Braces },
+        { href: '/tools/social-preview', label: 'Social Preview', shortLabel: 'Social', icon: Share2 },
+      ],
+    },
+    {
+      label: 'Media',
+      items: [
+        { href: '/tools/heic-converter', label: 'HEIC Converter', shortLabel: 'HEIC', icon: ImageIcon },
+        { href: '/tools/image-compressor', label: 'Image Compressor', shortLabel: 'Compress', icon: HardDrive },
+        { href: '/tools/image-resizer', label: 'Image Resizer', shortLabel: 'Resize', icon: Maximize },
+        { href: '/tools/compress-pdf', label: 'Compress PDF', shortLabel: 'PDF ↓', icon: Settings },
+        { href: '/tools/merge-pdf', label: 'Merge PDF', shortLabel: 'Merge', icon: FileText },
+        { href: '/tools/passport-photo-maker', label: 'Passport Photos', shortLabel: 'Passport', icon: Scissors },
+      ],
+    },
+    {
+      label: 'Mocking',
+      items: [
+        { href: '/tools/mock-data', label: 'Chaos Data Studio', shortLabel: 'Mock', icon: Database },
+        { href: '/tools/api-templates', label: 'API Templates', shortLabel: 'Mocks', icon: Radio },
+      ],
+    },
+    {
+      label: 'Collab & Guides',
+      items: [
+        { href: '/tools/collab', label: 'P2P Collab Editor', shortLabel: 'Collab', icon: Users },
+        { href: '/guides', label: 'Engineering Guides', shortLabel: 'Guides', icon: BookOpen },
+      ],
+    },
   ];
+
+  // Flat list for mobile menu and active-state detection
+  const moreNavItems = moreNavGroups.flatMap(g => g.items);
 
   const allNavItems = [...mainNavItems, ...moreNavItems];
 
-  let displayMainNavItems = [...mainNavItems];
-  let displayMoreNavItems = [...moreNavItems];
 
-  // If the current path belongs to a tool in moreNavItems, swap it with the last item in displayMainNavItems
-  const activeMoreItemIndex = displayMoreNavItems.findIndex(item => pathname.startsWith(item.href));
-  if (activeMoreItemIndex !== -1) {
-    const activeMoreItem = displayMoreNavItems[activeMoreItemIndex];
-    const lastMainItem = displayMainNavItems.pop()!;
-    displayMainNavItems.push(activeMoreItem);
-    displayMoreNavItems[activeMoreItemIndex] = lastMainItem;
-  }
+
 
   return (
     <>
@@ -93,12 +117,16 @@ export const Header: React.FC = () => {
 
         {/* Center: Top Navigation Tabs (Exact h-8 height, zero-scroll & clutter-free across laptops and desktops) */}
         <nav className="hidden md:flex items-center h-8 bg-[var(--bg-sidebar)] p-0.5 rounded-lg border border-[var(--border-dev)] text-xs gap-0.5 shrink-0">
-          {displayMainNavItems.map(item => {
+          {mainNavItems.map(item => {
             const Icon = item.icon;
             const isActive = item.href === '/'
               ? pathname === '/'
+              : item.href === '/tools'
+                ? pathname === '/tools'
               : item.href === '/tools/background-remover'
                 ? (pathname === '/tools/background-remover' || pathname === '/tools/image-resizer' || pathname === '/tools/image-compressor')
+              : item.href === '/tools/image-to-pdf'
+                ? (pathname === '/tools/image-to-pdf' || pathname === '/tools/merge-pdf' || pathname === '/tools/compress-pdf' || pathname === '/tools/passport-photo-maker')
                 : pathname.startsWith(item.href);
 
             return (
@@ -120,7 +148,7 @@ export const Header: React.FC = () => {
           <div className="relative" ref={moreMenuRef}>
             <button
               onClick={() => setIsMoreMenuOpen(prev => !prev)}
-              className={`h-7 px-2 lg:px-2.5 rounded-md flex items-center gap-1.5 transition-all cursor-pointer whitespace-nowrap shrink-0 text-xs ${displayMoreNavItems.some(item => pathname.startsWith(item.href))
+              className={`h-7 px-2 lg:px-2.5 rounded-md flex items-center gap-1.5 transition-all cursor-pointer whitespace-nowrap shrink-0 text-xs ${moreNavItems.some(item => pathname === item.href || (item.href !== '/' && pathname.startsWith(item.href)))
                   ? 'text-rose-600 dark:text-rose-400 font-semibold'
                   : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--pill-bg)] border border-transparent'
                 }`}
@@ -131,25 +159,33 @@ export const Header: React.FC = () => {
             </button>
 
             {isMoreMenuOpen && (
-              <div className="absolute top-full left-0 mt-2 w-48 bg-[var(--bg-panel)] border border-[var(--border-dev)] rounded-lg shadow-lg flex flex-col p-1.5 z-50 animate-in fade-in zoom-in-95 duration-100">
-                {displayMoreNavItems.map(item => {
-                  const Icon = item.icon;
-                  const isActive = pathname.startsWith(item.href);
-                  return (
-                    <Link
-                      key={item.href}
-                      href={item.href}
-                      onClick={() => setIsMoreMenuOpen(false)}
-                      className={`px-3 py-2 rounded-md flex items-center gap-2.5 transition-colors text-xs ${isActive
-                          ? 'bg-rose-500/10 text-rose-600 dark:text-rose-400 font-semibold'
-                          : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--pill-bg)]'
-                        }`}
-                    >
-                      <Icon className="w-4 h-4 shrink-0" />
-                      <span>{item.label}</span>
-                    </Link>
-                  );
-                })}
+              <div className="absolute top-full right-0 mt-2 w-56 bg-[var(--bg-panel)] border border-[var(--border-dev)] rounded-xl shadow-xl flex flex-col p-2 z-50 animate-in fade-in zoom-in-95 duration-100 max-h-[80vh] overflow-y-auto">
+                {moreNavGroups.map((group, gi) => (
+                  <div key={group.label}>
+                    {/* Section header */}
+                    <div className={`px-2 pb-1 text-[9px] font-bold uppercase tracking-widest text-[var(--text-muted)] ${gi > 0 ? 'pt-3 mt-1 border-t border-[var(--border-dev)]' : 'pt-1'}`}>
+                      {group.label}
+                    </div>
+                    {group.items.map(item => {
+                      const Icon = item.icon;
+                      const isActive = pathname === item.href || (item.href !== '/' && pathname.startsWith(item.href));
+                      return (
+                        <Link
+                          key={item.href}
+                          href={item.href}
+                          onClick={() => setIsMoreMenuOpen(false)}
+                          className={`px-2.5 py-1.5 rounded-lg flex items-center gap-2.5 transition-colors text-xs ${isActive
+                              ? 'bg-rose-500/10 text-rose-600 dark:text-rose-400 font-semibold'
+                              : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--pill-bg)]'
+                            }`}
+                        >
+                          <Icon className="w-3.5 h-3.5 shrink-0" />
+                          <span>{item.label}</span>
+                        </Link>
+                      );
+                    })}
+                  </div>
+                ))}
               </div>
             )}
           </div>
@@ -215,6 +251,8 @@ export const Header: React.FC = () => {
               ? pathname === '/'
               : item.href === '/tools/background-remover'
                 ? (pathname === '/tools/background-remover' || pathname === '/tools/image-resizer' || pathname === '/tools/image-compressor')
+              : item.href === '/tools/image-to-pdf'
+                ? (pathname === '/tools/image-to-pdf' || pathname === '/tools/merge-pdf' || pathname === '/tools/compress-pdf' || pathname === '/tools/passport-photo-maker')
                 : pathname.startsWith(item.href);
 
             return (

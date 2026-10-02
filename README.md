@@ -50,6 +50,18 @@ A high-performance visual image suite running entirely inside the browser using 
 * **Binary Search Quality Optimization**: Automatically iterates WebP/JPEG compression quality to meet the target file budget while preserving visual fidelity.
 * **Side-by-Side Export Diagnostics**: Live preview showing original file size, compressed file size, compression ratio percentage, output dimensions, and estimated savings before downloading.
 
+#### 📄 Free PDF Exam & Photo Kit (`/tools/image-to-pdf`, `/tools/merge-pdf`, `/tools/compress-pdf`, `/tools/passport-photo-maker`)
+* **100% Client-Side Privacy**: Perfect for sensitive documents like IDs, passports, and exam marksheets. Your files never leave your browser.
+* **Target Size Budgets (KB)**: Specifically built to hit strict file-size limits enforced by job portals and government exam forms (e.g. `< 200 KB`).
+* **Image to PDF Converter**: Combine multiple JPEGs/PNGs into a single PDF instantly with a reorder-able multi-file upload UI.
+* **Merge PDF**: Append and combine multiple existing PDF documents locally.
+* **Compress PDF**: Lossless structural optimization to shrink PDF footprints by stripping hidden metadata and optimizing streams.
+* **Passport Photo Maker**: Precise cropping for official visa and passport form requirements.
+
+#### 🕵️ Free Image Metadata Viewer & EXIF Stripper (`/tools/exif-stripper`)
+* **100% Client-Side Privacy**: Analyze photos for hidden GPS coordinates, camera models, and EXIF footprints purely in your browser.
+* **Canvas Stripping Technique**: Instantly strip all metadata from JPEGs and PNGs without server uploads by re-rendering the image natively.
+
 ---
 
 ### 2. 🔤 Open Source Fonts Studio (`/fonts`)

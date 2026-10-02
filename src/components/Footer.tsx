@@ -13,7 +13,7 @@ export const Footer: React.FC = () => {
           <div className="flex flex-col gap-3">
             <div className="flex items-center gap-1.5 text-xs font-bold text-[var(--text-primary)] tracking-wide uppercase">
               <Sparkles className="w-3.5 h-3.5 text-rose-500" />
-              <span>Image Studio</span>
+              <span>Image &amp; PDF Studio</span>
             </div>
             <ul className="flex flex-col gap-2 text-[11px]">
               <li>
@@ -29,6 +29,26 @@ export const Footer: React.FC = () => {
               <li>
                 <Link href="/tools/image-compressor" className="hover:text-[var(--text-primary)] hover:underline transition-colors">
                   Image Compressor &amp; WebP
+                </Link>
+              </li>
+              <li>
+                <Link href="/tools/image-to-pdf" className="hover:text-[var(--text-primary)] hover:underline transition-colors">
+                  Image to PDF Converter
+                </Link>
+              </li>
+              <li>
+                <Link href="/tools/compress-pdf" className="hover:text-[var(--text-primary)] hover:underline transition-colors">
+                  PDF Size Compressor
+                </Link>
+              </li>
+              <li>
+                <Link href="/tools/merge-pdf" className="hover:text-[var(--text-primary)] hover:underline transition-colors">
+                  Merge PDF Documents
+                </Link>
+              </li>
+              <li>
+                <Link href="/tools/passport-photo-maker" className="hover:text-[var(--text-primary)] hover:underline transition-colors">
+                  Passport Photo Maker
                 </Link>
               </li>
               <li>
@@ -201,6 +221,11 @@ export const Footer: React.FC = () => {
               <span>Engineering Guides</span>
             </div>
             <ul className="flex flex-col gap-2 text-[11px]">
+              <li>
+                <Link href="/guides/client-side-pdf-manipulation" className="hover:text-[var(--text-primary)] hover:underline transition-colors">
+                  Client-Side PDF Architecture
+                </Link>
+              </li>
               <li>
                 <Link href="/guides/p2p-webrtc-collaboration" className="hover:text-[var(--text-primary)] hover:underline transition-colors">
                   WebRTC P2P &amp; CRDT Sync

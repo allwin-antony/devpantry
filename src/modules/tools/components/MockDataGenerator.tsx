@@ -62,6 +62,7 @@ export default function ChaosDataPage() {
 
         <h3>Related Tools</h3>
         <ul>
+          <li><a href="/tools/json-to-ts-zod" className="text-rose-400 hover:underline">JSON to TS & Zod</a> — Generate strictly-typed interfaces and validation schemas for your mock JSON output.</li>
           <li><a href="/tools/api-templates" className="text-rose-400 hover:underline">API Templates</a> — Inject mock data directly into production schemas.</li>
           <li><a href="/tools/jwt-decoder" className="text-rose-400 hover:underline">JWT Decoder</a> — Inspect tokens generated from mock claims.</li>
           <li><a href="/tools/collab" className="text-rose-400 hover:underline">P2P Collab Editor (Beta)</a> — Share and edit your mock payloads securely in real-time.</li>

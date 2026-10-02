@@ -7,16 +7,23 @@ import type { ToolItem } from '@/lib/loaders/toolLoader';
 // This allows us to have standard Next.js code splitting.
 import dynamic from 'next/dynamic';
 
-const componentMap: Record<string, React.ComponentType> = {
+const componentMap: Record<string, React.ComponentType<any>> = {
   'jwt-decoder': dynamic(() => import('./components/JwtDecoder')),
   'image-compressor': dynamic(() => import('./components/ImageCompressor')),
   'image-resizer': dynamic(() => import('./components/ImageResizer')),
+  'image-to-pdf': dynamic(() => import('./components/PdfExamKit')),
+  'merge-pdf': dynamic(() => import('./components/PdfExamKit')),
+  'compress-pdf': dynamic(() => import('./components/PdfExamKit')),
+  'passport-photo-maker': dynamic(() => import('./components/PdfExamKit')),
   'background-remover': dynamic(() => import('./components/BackgroundRemover')),
   'mock-data': dynamic(() => import('./components/MockDataGenerator')),
   'social-preview': dynamic(() => import('./components/SocialPreview')),
   'api-templates': dynamic(() => import('./components/ApiTemplates')),
   'collab': dynamic(() => import('./components/Collab')),
   'public-apis': dynamic(() => import('./components/PublicApisRegistry')),
+  'heic-converter': dynamic(() => import('./components/HeicConverter')),
+  'json-to-ts-zod': dynamic(() => import('./components/JsonToTsZod')),
+  'exif-stripper': dynamic(() => import('./components/ExifStripper')),
 };
 
 export default function ToolsDetailView({ item }: { item: ToolItem }) {
@@ -33,5 +40,5 @@ export default function ToolsDetailView({ item }: { item: ToolItem }) {
 
   // The DetailView for tools simply delegates completely to the standalone React Component.
   // This is because tools are interactive full-page experiences, unlike data catalogs.
-  return <Component />;
+  return <Component slug={item.slug} />;
 }

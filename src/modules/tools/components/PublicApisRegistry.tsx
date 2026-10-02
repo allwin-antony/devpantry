@@ -318,6 +318,23 @@ export default function PublicApisRegistry() {
         )}
       </div>
 
+      <article className="mt-12 tool-seo-content prose prose-sm max-w-none dark:prose-invert">
+        <h2>Free Public APIs for Web Development</h2>
+        <p>
+          Discover thousands of free, public APIs for your next side project, hackathon, or startup. We've aggregated data from multiple community-driven repositories to provide a single, searchable interface for finding APIs across categories like Finance, Weather, Sports, and Machine Learning.
+        </p>
+        
+        <h3>Build with Public APIs</h3>
+        <p>
+          Once you find an API you want to build with, use our suite of free developer tools to accelerate your workflow:
+        </p>
+        <ul>
+          <li><a href="/tools/json-to-ts-zod" className="text-blue-500 hover:underline">JSON to TS & Zod</a> — Paste the API's JSON response to instantly generate TypeScript interfaces and Zod validation schemas.</li>
+          <li><a href="/tools/mock-data" className="text-blue-500 hover:underline">Mock Data Generator</a> — Build your own mock endpoints based on the schemas of these public APIs.</li>
+          <li><a href="/tools/jwt-decoder" className="text-blue-500 hover:underline">JWT Decoder</a> — If the API requires OAuth or JWT authentication, use this tool to inspect the token claims.</li>
+        </ul>
+      </article>
+
       <div className="mt-12 pt-6 border-t border-[var(--border-dev)] flex flex-col items-center justify-center text-center gap-2">
         <span className="text-xs font-medium text-[var(--text-secondary)] uppercase tracking-widest">Data Sources & Credits</span>
         <div className="flex flex-wrap justify-center items-center gap-2 text-xs text-[var(--text-tertiary)]">

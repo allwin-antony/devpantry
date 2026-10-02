@@ -20,9 +20,18 @@ import {
   Share2,
   Users,
   BookOpen,
-  Globe
+  Globe,
+  FileText,
+  Wrench,
+  Layers,
+  Settings,
+  Scissors,
+  Image,
+  Braces,
+  ImageMinus,
 } from 'lucide-react';
 import { IconRenderer, loadMultiPrefixIcons } from '@/lib/iconBatchLoader';
+import { getFeaturedTools } from '@/lib/loaders/toolLoader';
 
 export function HomeClient() {
   const [activeTab, setActiveTab] = useState<'fonts' | 'icons'>('fonts');
@@ -96,88 +105,14 @@ export function HomeClient() {
     setTimeout(() => setCopiedId(null), 1800);
   };
 
-  const tools = [
-    {
-      icon: Globe,
-      title: 'Public APIs Registry',
-      desc: 'Search 2,900+ free APIs for your next project. Filter by CORS, Auth requirements, and HTTPS.',
-      href: '/tools/public-apis',
-      badge: 'DATABASE',
-    },
-    {
-      icon: HardDrive,
-      title: 'Edge Image Compressor',
-      desc: 'Compress unlimited images under target budgets (<500 KB, <1 MB) and convert between WebP, PNG, and JPEG.',
-      href: '/tools/image-compressor',
-      badge: 'UTILITY',
-    },
-    {
-      icon: Sparkles,
-      title: 'Edge AI Background Removal',
-      desc: 'Instant, private background removal powered entirely in your browser via WebGPU. Unlimited cutouts, no signup.',
-      href: '/tools/background-remover',
-      badge: 'BETA',
-    },
-    {
-      icon: Maximize2,
-      title: 'Image Resizer',
-      desc: 'Batch process image assets for responsive breakpoints with aggressive compression.',
-      href: '/tools/image-resizer',
-      badge: 'UTILITY',
-    },
-    {
-      icon: Key,
-      title: 'JWT Inspector',
-      desc: 'Local-only token decoder and validator for secure payload inspection during development.',
-      href: '/tools/jwt-decoder',
-      badge: 'SECURITY',
-    },
-    {
-      icon: Share2,
-      title: 'Social Share Preview',
-      desc: 'Preview and validate Open Graph & Twitter Cards across 6 platforms instantly. Zero cache lock-in.',
-      href: '/tools/social-preview',
-      badge: 'SEO',
-    },
-    {
-      icon: Box,
-      title: 'Vector Icons',
-      desc: 'High-density SVG icon repository with integrated styling controls and immediate copy hooks.',
-      href: '/icons',
-      badge: 'ASSETS',
-    },
-    {
-      icon: Users,
-      title: 'P2P Collab Editor',
-      desc: 'Zero-knowledge, real-time collaborative text and code editor powered by WebRTC and Yjs.',
-      href: '/tools/collab',
-      badge: 'BETA',
-    },
-    {
-      icon: Type,
-      title: 'Fonts Studio',
-      desc: 'Variable font playground with granular axis controls and layout preview matrices.',
-      href: '/fonts',
-      badge: 'TYPOGRAPHY',
-    },
-    {
-      icon: Flame,
-      title: 'Chaos Data',
-      desc: 'Generate malformed, extremely large, or edge-case JSON datasets for robust stress testing.',
-      href: '/tools/mock-data',
-      badge: 'TESTING',
-    },
-    {
-      icon: Radio,
-      title: 'API Templates',
-      desc: 'Scaffold standardized API route structures and middleware stacks for edge deployments.',
-      href: '/tools/api-templates',
-      badge: 'SCAFFOLD',
-    }
-  ];
-
-  const featuredTools = tools.slice(0, 2);
-  const remainingTools = tools.slice(2);
+  // Pull featured tools from the single source of truth (toolLoader.ts)
+  const ICON_MAP: Record<string, React.ComponentType<{ className?: string }>> = {
+    Sparkles, FileText, HardDrive, Maximize2, Key, Globe, Share2,
+    Flame, Layers, Radio, Users, Settings, Scissors, Wrench, Box, Type, Image, Braces, ImageMinus,
+  };
+  const featuredToolsData = getFeaturedTools();
+  const featuredTools = featuredToolsData.slice(0, 2);
+  const remainingFeatured = featuredToolsData.slice(2);
 
   // Ambient Mouse Spotlight & Precision Dot
   const spotlightRef = useRef<HTMLDivElement>(null);
@@ -271,22 +206,23 @@ export function HomeClient() {
         </section>
 
         {/* Featured Tools (Above the fold) */}
-        <section className="mb-12 animate-fade-in-up-delay-1">
+        <section className="mb-6 animate-fade-in-up-delay-1">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {featuredTools.map(t => {
-              const Icon = t.icon;
+              const Icon = ICON_MAP[t.icon] ?? Wrench;
+              const href = t.slug.includes('#') ? `/tools/${t.slug.split('#')[0]}` : `/tools/${t.slug}`;
               return (
                 <Link
-                  key={t.title}
-                  href={t.href}
+                  key={t.slug}
+                  href={href}
                   className="bg-[var(--bg-panel)] border border-[var(--border-dev)] rounded-xl p-8 hover:border-[var(--border-focus)] hover:-translate-y-1 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col h-full group relative overflow-hidden"
                 >
                   <div className="absolute top-0 right-0 p-8 opacity-5 group-hover:opacity-10 transition-opacity duration-300 pointer-events-none">
                     <Icon className="w-32 h-32 text-[var(--text-primary)]" />
                   </div>
                   <Icon className="w-8 h-8 text-[var(--accent-blue)] mb-6 group-hover:scale-110 transition-transform duration-300" />
-                  <h3 className="text-xl font-bold text-[var(--text-primary)] font-sans mb-3 group-hover:text-[var(--accent-blue)] transition-colors">{t.title}</h3>
-                  <p className="text-base text-[var(--text-muted)] font-sans mb-8 flex-grow pr-8 leading-relaxed">{t.desc}</p>
+                  <h3 className="text-xl font-bold text-[var(--text-primary)] font-sans mb-3 group-hover:text-[var(--accent-blue)] transition-colors">{t.name}</h3>
+                  <p className="text-base text-[var(--text-muted)] font-sans mb-8 flex-grow pr-8 leading-relaxed">{t.description}</p>
                   <div className="mt-auto flex justify-between items-center z-10">
                     <span className="text-[11px] font-mono font-bold tracking-wider uppercase bg-[var(--bg-app)] border border-[var(--border-dev)] px-2 py-1 rounded-sm text-[var(--text-muted)]">
                       {t.badge}
@@ -296,6 +232,18 @@ export function HomeClient() {
                 </Link>
               );
             })}
+          </div>
+
+          {/* Browse All Tools CTA */}
+          <div className="mt-4 flex justify-end">
+            <Link
+              href="/tools"
+              className="flex items-center gap-1.5 text-xs font-semibold text-[var(--text-muted)] hover:text-[var(--accent-blue)] transition-colors group"
+            >
+              <Wrench className="w-3.5 h-3.5" />
+              <span>Browse all {/* total */} tools</span>
+              <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
+            </Link>
           </div>
         </section>
 
@@ -464,20 +412,21 @@ export function HomeClient() {
           </div>
         </section>
 
-        {/* Remaining Tools Grid Section */}
+        {/* Remaining Featured Tools Grid Section */}
         <section className="animate-fade-in-up-delay-2">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {remainingTools.map(t => {
-              const Icon = t.icon;
+            {remainingFeatured.map(t => {
+              const Icon = ICON_MAP[t.icon] ?? Wrench;
+              const href = t.slug.includes('#') ? `/tools/${t.slug.split('#')[0]}` : `/tools/${t.slug}`;
               return (
                 <Link
-                  key={t.title}
-                  href={t.href}
+                  key={t.slug}
+                  href={href}
                   className="bg-[var(--bg-panel)] border border-[var(--border-dev)] rounded-xl p-6 hover:border-[var(--border-focus)] hover:-translate-y-1 hover:shadow-lg transition-all duration-300 flex flex-col h-full group"
                 >
                   <Icon className="w-6 h-6 text-[var(--text-muted)] mb-4 group-hover:text-[var(--accent-blue)] group-hover:scale-110 transition-all duration-300" />
-                  <h3 className="text-lg font-semibold text-[var(--text-primary)] font-sans mb-2 group-hover:text-[var(--accent-blue)] transition-colors">{t.title}</h3>
-                  <p className="text-sm text-[var(--text-muted)] font-sans mb-6 flex-grow">{t.desc}</p>
+                  <h3 className="text-lg font-semibold text-[var(--text-primary)] font-sans mb-2 group-hover:text-[var(--accent-blue)] transition-colors">{t.name}</h3>
+                  <p className="text-sm text-[var(--text-muted)] font-sans mb-6 flex-grow">{t.description}</p>
                   <div className="mt-auto flex justify-between items-center">
                     <span className="text-[11px] font-mono font-bold tracking-wider uppercase bg-[var(--bg-app)] border border-[var(--border-dev)] px-2 py-1 rounded-sm text-[var(--text-muted)]">
                       {t.badge}

@@ -1,6 +1,6 @@
 import React from 'react';
 
-export type UtilityCategory = 'presets' | 'custom';
+export type UtilityCategory = 'presets' | 'custom' | 'media';
 
 export interface CategoryInfo {
   id: UtilityCategory;
