@@ -47,6 +47,11 @@ export const Footer: React.FC = () => {
             </div>
             <ul className="flex flex-col gap-2 text-[11px]">
               <li>
+                <Link href="/tools/public-apis" className="hover:text-[var(--text-primary)] hover:underline transition-colors font-medium text-cyan-600 dark:text-cyan-400">
+                  Public APIs Registry
+                </Link>
+              </li>
+              <li>
                 <Link href="/tools/jwt-decoder" className="hover:text-[var(--text-primary)] hover:underline transition-colors">
                   Zero-Leak JWT Decoder
                 </Link>

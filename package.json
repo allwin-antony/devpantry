@@ -9,7 +9,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "oxlint",
-    "postinstall": "node scripts/fetch-imgly-models.mjs"
+    "postinstall": "node scripts/fetch-imgly-models.mjs",
+    "sync-apis": "npx -y tsx scripts/sync-public-apis.ts"
   },
   "dependencies": {
     "@codemirror/state": "^6.7.4",

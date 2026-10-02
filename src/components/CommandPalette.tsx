@@ -17,7 +17,8 @@ import {
   Share2,
   ArrowRight,
   X,
-  Users
+  Users,
+  Globe
 } from 'lucide-react';
 
 interface PaletteItem {
@@ -142,6 +143,16 @@ const PALETTE_ITEMS: PaletteItem[] = [
     icon: Users,
     badge: 'Beta',
     keywords: ['collab', 'collaborate', 'webrtc', 'p2p', 'editor', 'yjs', 'code', 'real-time', 'zero-knowledge', 'encryption']
+  },
+  {
+    id: 'tool-public-apis',
+    category: 'Tools',
+    title: 'Public APIs Registry',
+    subtitle: 'Search 2,900+ free APIs for your next project. Filter by CORS, Auth & HTTPS.',
+    href: '/tools/public-apis',
+    icon: Globe,
+    badge: 'Dataset',
+    keywords: ['api', 'public', 'free', 'registry', 'cors', 'auth', 'database']
   },
 
   // Popular Typefaces
