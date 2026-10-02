@@ -76,6 +76,15 @@ const toolsData: ToolItem[] = [
     badge: 'Privacy',
     featured: false,
   },
+  {
+    slug: 'heic-converter',
+    name: 'HEIC to JPG Converter',
+    description: 'Convert iPhone HEIC photos to widely supported JPG format entirely locally in your browser. Fast and private.',
+    category: 'Media',
+    icon: 'Image',
+    badge: 'Local',
+    featured: true,
+  },
 
   // ── Developer ──────────────────────────────────────────────────────────────
   {
