@@ -29,10 +29,13 @@ export async function deriveKey(password: string, salt: Uint8Array): Promise<Cry
     ['deriveKey']
   );
 
+  // Guarantee salt is exactly the intended bytes regardless of backing ArrayBuffer allocation
+  const saltBuffer = salt.buffer.slice(salt.byteOffset, salt.byteOffset + salt.byteLength) as BufferSource;
+
   return crypto.subtle.deriveKey(
     {
       name: 'PBKDF2',
-      salt: salt.buffer as BufferSource,
+      salt: saltBuffer,
       iterations: PBKDF2_ITERATIONS,
       hash: 'SHA-256',
     },

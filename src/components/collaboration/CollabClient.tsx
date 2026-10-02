@@ -164,8 +164,8 @@ export function CollabClient() {
         <div className="flex items-center gap-4">
           <div className="flex flex-col">
             <h1 className="font-bold text-lg text-[var(--text-primary)] font-sans flex items-center gap-2">
-              <span className="bg-rose-500/10 text-rose-500 px-2 py-0.5 rounded text-xs font-mono tracking-wider border border-rose-500/20">BETA</span>
-              P2P Collab Editor
+              <span className="bg-rose-500/10 text-rose-500 px-2 py-0.5 rounded text-xs font-mono tracking-wider border border-rose-500/20">LIVE</span>
+              Collab Editor
               <span className="ml-2 text-sm text-[var(--text-secondary)] font-mono font-normal opacity-70">
                 {activeRoomId && `Room: ${activeRoomId}`}
               </span>

@@ -8,7 +8,7 @@ export function ConnectionStatus({ state }: { state: ConnectionState }) {
     return (
       <div className="flex items-center text-green-500 text-sm gap-2 bg-green-500/10 px-3 py-1.5 rounded-full border border-green-500/20">
         <CheckCircle2 size={16} />
-        <span>P2P Connected</span>
+        <span>Connected</span>
       </div>
     );
   }
