@@ -211,33 +211,35 @@ export default function HeicConverter({ slug }: { slug?: string }) {
             
             <ul className="divide-y divide-[var(--border-dev)]">
               {items.map((item) => (
-                <li key={item.id} className="p-4 flex items-center gap-4 hover:bg-[var(--bg-app)]/30 transition-colors">
-                  {item.previewUrl ? (
-                    <img src={item.previewUrl} alt="Preview" className="w-16 h-16 object-cover rounded-md border border-[var(--border-dev)] bg-[var(--bg-app)]" />
-                  ) : (
-                    <div className="w-16 h-16 rounded-md bg-[var(--bg-app)] border border-[var(--border-dev)] flex items-center justify-center text-[var(--text-muted)]">
-                      <ImageIcon size={24} />
+                <li key={item.id} className="p-4 flex flex-col sm:flex-row sm:items-center gap-4 hover:bg-[var(--bg-app)]/30 transition-colors">
+                  <div className="flex items-center gap-4 flex-1 min-w-0 w-full">
+                    {item.previewUrl ? (
+                      <img src={item.previewUrl} alt="Preview" className="w-16 h-16 object-cover rounded-md border border-[var(--border-dev)] bg-[var(--bg-app)] shrink-0" />
+                    ) : (
+                      <div className="w-16 h-16 rounded-md bg-[var(--bg-app)] border border-[var(--border-dev)] flex items-center justify-center text-[var(--text-muted)] shrink-0">
+                        <ImageIcon size={24} />
+                      </div>
+                    )}
+                    
+                    <div className="flex-1 min-w-0">
+                      <p className="font-medium text-[var(--text-primary)] truncate">{item.file.name}</p>
+                      <p className="text-xs text-[var(--text-secondary)] mt-1">
+                        {(item.file.size / 1024 / 1024).toFixed(2)} MB
+                      </p>
                     </div>
-                  )}
-                  
-                  <div className="flex-1 min-w-0">
-                    <p className="font-medium text-[var(--text-primary)] truncate">{item.file.name}</p>
-                    <p className="text-xs text-[var(--text-secondary)] mt-1">
-                      {(item.file.size / 1024 / 1024).toFixed(2)} MB
-                    </p>
                   </div>
                   
-                  <div className="flex items-center justify-end min-w-[120px] gap-2">
+                  <div className="flex items-center justify-end sm:min-w-[120px] gap-2 w-full sm:w-auto pt-3 sm:pt-0 border-t sm:border-0 border-[var(--border-dev)]">
                     {item.status === 'idle' && (
                       <button
                         onClick={() => convertItem(item.id)}
-                        className="px-3 py-1.5 text-sm font-medium rounded-md text-rose-500 hover:bg-rose-500/10 transition-colors"
+                        className="flex-1 sm:flex-none px-3 py-1.5 text-sm font-medium rounded-md text-rose-500 hover:bg-rose-500/10 transition-colors border border-rose-500/20 sm:border-transparent"
                       >
                         Convert
                       </button>
                     )}
                     {item.status === 'converting' && (
-                      <div className="flex items-center gap-2 text-[var(--text-secondary)] text-sm">
+                      <div className="flex-1 sm:flex-none flex items-center justify-center gap-2 text-[var(--text-secondary)] text-sm">
                         <RefreshCw size={14} className="animate-spin" />
                         Converting...
                       </div>
@@ -245,19 +247,19 @@ export default function HeicConverter({ slug }: { slug?: string }) {
                     {item.status === 'done' && (
                       <button
                         onClick={() => downloadItem(item.id)}
-                        className="px-3 py-1.5 text-sm font-medium rounded-md bg-[var(--bg-app)] border border-[var(--border-dev)] text-[var(--text-primary)] hover:bg-[var(--bg-panel)] transition-colors flex items-center gap-2"
+                        className="flex-1 sm:flex-none px-3 py-1.5 text-sm font-medium rounded-md bg-[var(--bg-app)] border border-[var(--border-dev)] text-[var(--text-primary)] hover:bg-[var(--bg-panel)] transition-colors flex items-center justify-center gap-2"
                       >
                         <Download size={14} />
                         Download
                       </button>
                     )}
                     {item.status === 'error' && (
-                      <span className="text-sm text-red-500">{item.error}</span>
+                      <span className="flex-1 sm:flex-none text-sm text-red-500 truncate text-center sm:text-left">{item.error}</span>
                     )}
                     
                     <button
                       onClick={() => removeItem(item.id)}
-                      className="p-1.5 text-[var(--text-muted)] hover:text-red-500 rounded-md hover:bg-red-500/10 transition-colors ml-2"
+                      className="p-1.5 text-[var(--text-muted)] hover:text-red-500 rounded-md hover:bg-red-500/10 transition-colors ml-2 shrink-0 border border-[var(--border-dev)] sm:border-transparent"
                       title="Remove"
                     >
                       <Trash size={16} />

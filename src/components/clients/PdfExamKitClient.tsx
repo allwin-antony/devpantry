@@ -231,9 +231,9 @@ export const PdfExamKitClient: React.FC<{ initialTab?: 'img-to-pdf' | 'passport-
             <p className="text-sm text-[var(--text-secondary)]">
               Resize your photo and strictly compress it below a target KB size for portals.
             </p>
-            <div className="flex items-center gap-4">
+            <div className="flex flex-col sm:flex-row sm:items-center gap-4">
               <div className="flex items-center gap-2">
-                <label className="text-sm font-semibold text-[var(--text-primary)]">Max Size (KB):</label>
+                <label className="text-sm font-semibold text-[var(--text-primary)] whitespace-nowrap">Max Size (KB):</label>
                 <input 
                   type="number" 
                   value={targetKb} 
@@ -244,7 +244,7 @@ export const PdfExamKitClient: React.FC<{ initialTab?: 'img-to-pdf' | 'passport-
               <button
                 onClick={handleCompressImage}
                 disabled={selectedFiles.length === 0 || isProcessing}
-                className="px-4 py-2 bg-rose-600 text-white rounded-lg text-sm font-semibold disabled:opacity-50 flex items-center gap-2"
+                className="w-full sm:w-auto px-4 py-2 bg-rose-600 text-white rounded-lg text-sm font-semibold disabled:opacity-50 flex items-center justify-center gap-2"
               >
                 {isProcessing ? 'Compressing...' : 'Compress Photo'}
                 {!isProcessing && <Scissors className="w-4 h-4" />}
@@ -282,7 +282,7 @@ export const PdfExamKitClient: React.FC<{ initialTab?: 'img-to-pdf' | 'passport-
   };
 
   return (
-    <div className="max-w-4xl mx-auto space-y-6 pb-20 pt-12">
+    <div className="max-w-4xl mx-auto space-y-6 pb-20 pt-8 sm:pt-12 px-4 sm:px-6">
       {/* Header */}
       <div className="mb-6">
         <h1 className="text-2xl font-bold text-[var(--text-primary)]">PDF & Exam Form Kit</h1>
@@ -292,7 +292,7 @@ export const PdfExamKitClient: React.FC<{ initialTab?: 'img-to-pdf' | 'passport-
       </div>
 
       {/* Tabs */}
-      <div className="flex border-b border-[var(--border-dev)] gap-4 overflow-x-auto">
+      <div className="flex w-full max-w-full border-b border-[var(--border-dev)] gap-4 overflow-x-auto pb-1 scrollbar-hide">
         <button 
           onClick={() => handleTabClick('img-to-pdf')}
           className={`pb-3 text-sm font-semibold whitespace-nowrap border-b-2 transition-colors ${activeTab === 'img-to-pdf' ? 'border-rose-500 text-rose-500' : 'border-transparent text-[var(--text-secondary)] hover:text-[var(--text-primary)]'}`}
@@ -325,7 +325,7 @@ export const PdfExamKitClient: React.FC<{ initialTab?: 'img-to-pdf' | 'passport-
           <label className="block text-sm font-semibold text-[var(--text-primary)] mb-3">
             {activeTab === 'img-to-pdf' ? 'Select Images (Multiple allowed)' : 'Select Files'}
           </label>
-          <div className="flex items-center gap-4">
+          <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4">
             <input
               type="file"
               ref={fileInputRef}
@@ -337,12 +337,12 @@ export const PdfExamKitClient: React.FC<{ initialTab?: 'img-to-pdf' | 'passport-
             />
             <label
               htmlFor="file-upload-input"
-              className="px-4 py-2 bg-[var(--pill-bg)] hover:bg-[var(--pill-bg-hover)] text-[var(--text-primary)] border border-[var(--border-dev)] rounded-lg text-sm font-semibold cursor-pointer transition-colors"
+              className="w-full sm:w-auto text-center px-4 py-2.5 bg-[var(--pill-bg)] hover:bg-[var(--pill-bg-hover)] text-[var(--text-primary)] border border-[var(--border-dev)] rounded-lg text-sm font-semibold cursor-pointer transition-colors"
             >
               + Add File(s)
             </label>
             {selectedFiles.length > 0 && (
-              <button onClick={clearFiles} className="p-2 text-[var(--text-secondary)] hover:text-red-500 transition-colors flex items-center gap-1 text-sm font-medium">
+              <button onClick={clearFiles} className="w-full sm:w-auto justify-center p-2 text-[var(--text-secondary)] hover:text-red-500 transition-colors flex items-center gap-1.5 text-sm font-medium border border-[var(--border-dev)] sm:border-transparent rounded-lg sm:rounded-none bg-[var(--bg-body)] sm:bg-transparent">
                 <Trash2 className="w-4 h-4" /> Clear All
               </button>
             )}
@@ -350,10 +350,10 @@ export const PdfExamKitClient: React.FC<{ initialTab?: 'img-to-pdf' | 'passport-
           {selectedFiles.length > 0 && (
             <div className="mt-4 flex flex-wrap gap-2">
               {selectedFiles.map((f, i) => (
-                <div key={i} className="flex items-center gap-2 text-xs px-2 py-1.5 bg-[var(--pill-bg)] border border-[var(--border-dev)] rounded-md">
-                  <span className="truncate max-w-[200px] font-mono">{f.name}</span>
-                  <span className="text-[var(--text-secondary)]">({(f.size / 1024).toFixed(1)} KB)</span>
-                  <button onClick={() => removeFile(i)} className="text-[var(--text-secondary)] hover:text-red-500 transition-colors ml-1" title="Remove file">
+                <div key={i} className="flex items-center gap-2 text-xs px-2 py-1.5 bg-[var(--pill-bg)] border border-[var(--border-dev)] rounded-md max-w-full">
+                  <span className="truncate flex-1 min-w-0 font-mono" title={f.name}>{f.name}</span>
+                  <span className="text-[var(--text-secondary)] shrink-0">({(f.size / 1024).toFixed(1)} KB)</span>
+                  <button onClick={() => removeFile(i)} className="text-[var(--text-secondary)] hover:text-red-500 transition-colors ml-1 shrink-0" title="Remove file">
                     <X className="w-3.5 h-3.5" />
                   </button>
                 </div>

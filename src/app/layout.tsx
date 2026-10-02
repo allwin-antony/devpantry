@@ -119,7 +119,7 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className="h-screen w-screen flex flex-col bg-[var(--bg-app)] text-[var(--text-primary)] selection:bg-rose-500 selection:text-white bg-dev-grid transition-colors">
+      <body className="h-screen w-full overflow-x-hidden flex flex-col bg-[var(--bg-app)] text-[var(--text-primary)] selection:bg-rose-500 selection:text-white bg-dev-grid transition-colors">
         <Script
           src="https://www.googletagmanager.com/gtag/js?id=G-WYTNMC3H2B"
           strategy="afterInteractive"
@@ -144,8 +144,8 @@ export default function RootLayout({
           <Header />
 
           {/* Main Viewport Container */}
-          <main className="flex-1 min-h-0 overflow-y-auto min-w-0 flex flex-col relative">
-            <div className="flex-1 shrink-0 flex flex-col">
+          <main className="flex-1 min-h-0 overflow-y-auto min-w-0 flex flex-col relative overflow-x-hidden">
+            <div className="flex-1 shrink-0 flex flex-col min-w-0 w-full">
               {children}
             </div>
             
