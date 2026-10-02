@@ -1,6 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
-import { Sparkles, Terminal, Type, Box, Radio, ShieldCheck, Heart, BookOpen } from 'lucide-react';
+import { Sparkles, Terminal, Type, Box, Radio, ShieldCheck, Heart, BookOpen, MessageSquare } from 'lucide-react';
 import { DevPantryLogo } from './DevPantryLogo';
 
 export const Footer: React.FC = () => {
@@ -286,6 +286,13 @@ export const Footer: React.FC = () => {
             </Link>
             <Link href="/security" className="text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors">
               Security Architecture
+            </Link>
+            <Link
+              href="/feedback"
+              className="flex items-center gap-1.5 text-[var(--text-secondary)] hover:text-rose-500 transition-colors"
+            >
+              <MessageSquare className="w-3 h-3" />
+              Feedback
             </Link>
           </nav>
         </div>

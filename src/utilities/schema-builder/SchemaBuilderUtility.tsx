@@ -20,6 +20,7 @@ import {
   Layers,
   Share2
 } from 'lucide-react';
+import { triggerFeedbackNudge } from '@/lib/feedbackNudge';
 
 const STORAGE_KEY = 'devpantry-custom-schema';
 
@@ -147,6 +148,7 @@ export const SchemaBuilderUtility: React.FC = () => {
 
   const handleCopy = () => {
     navigator.clipboard.writeText(exportedString);
+    triggerFeedbackNudge('schema-builder-copy');
     setCopied(true);
     setTimeout(() => setCopied(false), 1500);
   };
@@ -157,6 +159,7 @@ export const SchemaBuilderUtility: React.FC = () => {
       const b64 = btoa(encodeURIComponent(jsonStr));
       const shareUrl = `${window.location.origin}${window.location.pathname}#schema=${b64}`;
       navigator.clipboard.writeText(shareUrl);
+      triggerFeedbackNudge('schema-builder-share');
       if (typeof window !== 'undefined') {
         window.location.hash = `schema=${b64}`;
       }
@@ -183,6 +186,7 @@ export const SchemaBuilderUtility: React.FC = () => {
     link.download = `custom-schema-${Date.now()}.${ext}`;
     link.click();
     URL.revokeObjectURL(url);
+    triggerFeedbackNudge('schema-builder-download');
   };
 
   return (

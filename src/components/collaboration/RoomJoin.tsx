@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { ArrowRight } from 'lucide-react';
 import { isValidRoomId } from '@/lib/collaboration/room';
+import { triggerFeedbackNudge } from '@/lib/feedbackNudge';
 
 interface RoomJoinProps {
   onJoin: (roomId: string, password: string) => void;
@@ -23,6 +24,7 @@ export function RoomJoin({ onJoin, onSwitchToCreate, error, initialRoomId = '' }
       alert("Password is required.");
       return;
     }
+    triggerFeedbackNudge('collab-join-room');
     onJoin(upperRoomId, password);
   };
 

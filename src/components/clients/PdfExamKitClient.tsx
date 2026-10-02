@@ -3,6 +3,7 @@
 import React, { useState, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { PDFDocument } from 'pdf-lib';
+import { triggerFeedbackNudge } from '@/lib/feedbackNudge';
 import { FileText, Image as ImageIcon, Scissors, Settings, Download, Trash2, ArrowRight, Merge, X, AlertTriangle } from 'lucide-react';
 
 export const PdfExamKitClient: React.FC<{ initialTab?: 'img-to-pdf' | 'passport-photo' | 'pdf-compress' | 'pdf-merge' }> = ({ initialTab }) => {
@@ -85,6 +86,7 @@ export const PdfExamKitClient: React.FC<{ initialTab?: 'img-to-pdf' | 'passport-
       const blob = new Blob([pdfBytes as any], { type: 'application/pdf' });
       const url = URL.createObjectURL(blob);
       setOutputUrl(url);
+      triggerFeedbackNudge('pdf-exam-kit-generate');
     } catch (err) {
       console.error(err);
       alert('Error creating PDF');
@@ -114,6 +116,7 @@ export const PdfExamKitClient: React.FC<{ initialTab?: 'img-to-pdf' | 'passport-
       const blob = new Blob([pdfBytes as any], { type: 'application/pdf' });
       const url = URL.createObjectURL(blob);
       setOutputUrl(url);
+      triggerFeedbackNudge('pdf-exam-kit-merge');
     } catch (err) {
       console.error(err);
       alert('Error merging PDFs');
@@ -150,6 +153,7 @@ export const PdfExamKitClient: React.FC<{ initialTab?: 'img-to-pdf' | 'passport-
       
       if (blob) {
         setOutputUrl(URL.createObjectURL(blob));
+        triggerFeedbackNudge('pdf-exam-kit-compress');
       } else {
         alert('Could not compress to the target size.');
       }
@@ -179,6 +183,7 @@ export const PdfExamKitClient: React.FC<{ initialTab?: 'img-to-pdf' | 'passport-
       const pdfBytes = await pdf.save({ useObjectStreams: true });
       const blob = new Blob([pdfBytes as any], { type: 'application/pdf' });
       setOutputUrl(URL.createObjectURL(blob));
+      triggerFeedbackNudge('pdf-exam-kit-compress-pdf');
     } catch (err) {
       console.error(err);
       alert('Error compressing PDF');
@@ -382,6 +387,7 @@ export const PdfExamKitClient: React.FC<{ initialTab?: 'img-to-pdf' | 'passport-
               <a
                 href={outputUrl}
                 download={outputFileName.trim() ? (outputFileName.trim().toLowerCase().endsWith(activeTab.includes('pdf') ? '.pdf' : '.jpg') ? outputFileName.trim() : `${outputFileName.trim()}.${activeTab.includes('pdf') ? 'pdf' : 'jpg'}`) : `processed-${Date.now()}.${activeTab.includes('pdf') ? 'pdf' : 'jpg'}`}
+                onClick={() => triggerFeedbackNudge('pdf-exam-kit-download')}
                 className="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg text-sm font-semibold flex items-center justify-center gap-2 transition-colors whitespace-nowrap"
               >
                 <Download className="w-4 h-4" /> Download

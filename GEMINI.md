@@ -21,3 +21,10 @@ Whenever a new page, tool, or route is created, you must strictly ensure the fol
 1. **Sitemaps (`src/app/sitemap.ts`)**: Add the new route to the appropriate sitemap partition (e.g., `core`, `tools`, etc.).
 2. **Robots.txt (`src/app/robots.ts`)**: If a new sitemap partition was created in `sitemap.ts`, you MUST add the URL to the `sitemap:` array in `robots.ts`.
 3. **Google Search Console Reminder**: You must explicitly remind the user in your response to log into Google Search Console and manually submit the new sitemap URL (e.g., `https://devpantry.com/sitemap/tools.xml`) to force a faster crawl queue.
+
+## Feedback Nudge Requirement (Mandatory for Tools)
+
+Whenever a new tool component is created or an existing one is heavily modified, you must ensure it triggers the global feedback nudge upon successful actions.
+- **Requirement**: Import `triggerFeedbackNudge` from `@/lib/feedbackNudge` and call it inside the primary success handler (e.g., after an image download, copying a payload to clipboard, or generating a result).
+- **Format**: `triggerFeedbackNudge('<tool-action-name>');` (e.g., `triggerFeedbackNudge('bg-removal-download');`).
+- **Why**: This ensures we contextually capture user feedback at their highest point of satisfaction without being intrusive.

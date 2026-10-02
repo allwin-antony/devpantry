@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useMemo, useEffect, useRef } from 'react';
+import { triggerFeedbackNudge } from '@/lib/feedbackNudge';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { type IconCollectionItem } from '@/lib/loaders/iconLoader';
@@ -191,6 +192,7 @@ export function IconDetailClient({ collection }: { collection: IconCollectionIte
 
   const copyToClipboard = (text: string, id: string, toastLabel?: string) => {
     navigator.clipboard.writeText(text);
+    triggerFeedbackNudge('copy-action');
     setCopiedCode(id);
     setCopiedToast(toastLabel || text);
     setTimeout(() => {

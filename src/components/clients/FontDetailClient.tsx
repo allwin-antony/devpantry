@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import { triggerFeedbackNudge } from '@/lib/feedbackNudge';
 import Link from 'next/link';
 import { getFontCdnStylesheet, type FontItem, type FontPairing } from '@/lib/loaders/fontLoader';
 import { 
@@ -42,6 +43,7 @@ export function FontDetailClient({ font, pairings }: { font: FontItem; pairings?
 
   const copyToClipboard = (text: string, id: string) => {
     navigator.clipboard.writeText(text);
+    triggerFeedbackNudge('copy-action');
     setCopiedCode(id);
     setTimeout(() => setCopiedCode(null), 1800);
   };
@@ -145,6 +147,7 @@ module.exports = {
               href={font.download_url}
               target="_blank"
               rel="noopener noreferrer"
+              onClick={() => triggerFeedbackNudge('font-download')}
               className="px-3.5 py-2 rounded-lg bg-rose-500 text-white text-xs font-bold hover:bg-rose-600 flex items-center gap-1.5 transition-colors shadow-sm shadow-rose-500/20"
             >
               <Download className="w-3.5 h-3.5" />

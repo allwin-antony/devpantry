@@ -1,6 +1,7 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { CHAOS_PRESETS, exportData } from './chaosDataEngine';
+import { triggerFeedbackNudge } from '@/lib/feedbackNudge';
 import { Copy, Download, RefreshCw, Eye, CheckCircle2, Database } from 'lucide-react';
 
 export const ChaosDataUtility: React.FC = () => {
@@ -74,6 +75,7 @@ export const ChaosDataUtility: React.FC = () => {
 
   const handleCopy = () => {
     navigator.clipboard.writeText(exportedString);
+    triggerFeedbackNudge('chaos-data-copy');
     setCopied(true);
     setTimeout(() => setCopied(false), 1500);
   };
@@ -87,6 +89,7 @@ export const ChaosDataUtility: React.FC = () => {
     link.download = `devpantry-${selectedPreset.id}-${Date.now()}.${ext}`;
     link.click();
     URL.revokeObjectURL(url);
+    triggerFeedbackNudge('chaos-data-download');
   };
 
   const columns = useMemo(() => {

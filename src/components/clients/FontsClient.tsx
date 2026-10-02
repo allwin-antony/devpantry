@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useMemo, useEffect, useRef } from 'react';
+import { triggerFeedbackNudge } from '@/lib/feedbackNudge';
 import Link from 'next/link';
 import { getAllFonts, getFontCdnStylesheet, type FontItem } from '@/lib/loaders/fontLoader';
 import { 
@@ -126,6 +127,7 @@ export function FontsClient() {
 
   const copyToClipboard = (text: string, id: string) => {
     navigator.clipboard.writeText(text);
+    triggerFeedbackNudge('copy-action');
     setCopiedCode(id);
     setTimeout(() => setCopiedCode(null), 1800);
   };

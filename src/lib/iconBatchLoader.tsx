@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useSyncExternalStore } from 'react';
+import { triggerFeedbackNudge } from '@/lib/feedbackNudge';
 
 export interface IconData {
   body: string;
@@ -288,6 +289,7 @@ export function downloadSvgFile(
   anchor.click();
   document.body.removeChild(anchor);
   URL.revokeObjectURL(url);
+  triggerFeedbackNudge('icon-download');
 }
 
 /**

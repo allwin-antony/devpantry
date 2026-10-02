@@ -1,5 +1,7 @@
 'use client';
 
+import { triggerFeedbackNudge } from '@/lib/feedbackNudge';
+
 import React, { useState, useEffect, useMemo, useCallback, useSyncExternalStore } from 'react';
 
 const emptySubscribe = () => () => {};
@@ -198,6 +200,7 @@ export const JwtInspectorClient: React.FC<{ children?: React.ReactNode }> = ({ c
 
   const triggerCopy = useCallback((text: string, label: string) => {
     navigator.clipboard.writeText(text);
+    triggerFeedbackNudge('jwt-copy');
     setCopyFeedback(label);
     setTimeout(() => setCopyFeedback(null), 2000);
   }, []);
