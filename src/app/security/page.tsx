@@ -30,7 +30,7 @@ export default function SecurityPage() {
           <p className="mt-5 max-w-2xl text-lg leading-8 text-[var(--text-secondary)]">
             DevPantry reduces exposure by running its utilities in the browser. This page explains the protections we rely on—and the limits you should understand before using any web application.
           </p>
-          <p className="mt-4 font-mono text-xs text-[var(--text-muted)]">Security architecture · Last updated September 9, 2026</p>
+          <p className="mt-4 font-mono text-xs text-[var(--text-muted)]">Security architecture · Last updated October 3, 2026</p>
         </header>
 
         <section className="mt-10 grid gap-4 md:grid-cols-3" aria-label="Security controls">
@@ -51,7 +51,7 @@ export default function SecurityPage() {
           <div className="rounded-2xl border border-[var(--border-dev)] bg-[var(--bg-panel)] p-6 sm:p-8">
             <div className="prose prose-sm max-w-none dark:prose-invert prose-headings:text-[var(--text-primary)] prose-p:text-[var(--text-secondary)] prose-li:text-[var(--text-secondary)]">
               <h2>How the tools are isolated</h2>
-              <p>Image tools use browser-side APIs, WebAssembly, and supported GPU capabilities to transform images locally. The JWT Decoder parses token data in browser memory and uses the Web Crypto API for supported cryptographic operations. Mock-data tools generate data in the active browser session.</p>
+              <p>Image tools use browser-side APIs, WebAssembly, and supported GPU capabilities to transform images locally. The JWT Decoder parses token data in browser memory and uses the Web Crypto API for supported cryptographic operations. Mock-data tools generate data in the active browser session. PDF modifications and WebRTC real-time connections occur entirely client-to-client or client-locally, ensuring no intermediate server stores the data.</p>
               <p>DevPantry does not provide an API endpoint for uploading tool inputs. It also does not intentionally persist JWTs, images, custom schemas, or generated records in browser storage.</p>
               <h2>Security boundaries</h2>
               <p>Client-side processing protects data from being sent to DevPantry for tool execution. It cannot protect a compromised device, a malicious browser extension, copied output, or data shared with another website after export. Review sensitive output before saving or sharing it.</p>

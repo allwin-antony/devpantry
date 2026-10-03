@@ -30,7 +30,7 @@ export default function PrivacyPage() {
           <p className="mt-5 max-w-2xl text-lg leading-8 text-[var(--text-secondary)]">
             DevPantry is designed for working with images, tokens, and test data without sending that content to a DevPantry application server.
           </p>
-          <p className="mt-4 font-mono text-xs text-[var(--text-muted)]">Privacy policy · Last updated September 9, 2026</p>
+          <p className="mt-4 font-mono text-xs text-[var(--text-muted)]">Privacy policy · Last updated October 3, 2026</p>
         </header>
 
         <section className="mt-10 grid gap-4 sm:grid-cols-3" aria-label="Privacy summary">
@@ -51,7 +51,7 @@ export default function PrivacyPage() {
           <div className="prose prose-sm max-w-none dark:prose-invert prose-headings:text-[var(--text-primary)] prose-p:text-[var(--text-secondary)] prose-li:text-[var(--text-secondary)]">
             <h2>How DevPantry handles data</h2>
             <h3>What stays in the browser</h3>
-            <p>Image editing, background removal, mock-data generation, and JWT decoding run in the browser. Inputs used by these tools are not submitted to a DevPantry API for processing or retained in a DevPantry database.</p>
+            <p>Image editing, background removal, PDF form processing, WebRTC communication, mock-data generation, and JWT decoding run in the browser. Inputs used by these tools are not submitted to a DevPantry API for processing or retained in a DevPantry database.</p>
             <h3>What we collect</h3>
             <p>DevPantry does not ask for a name, email address, or account to use its tools. The application does not currently load advertising or behavioural-analytics scripts. A hosting provider may process standard technical request data, such as an IP address and request time, to deliver the website; that does not include the content entered into a tool.</p>
             <h3>Browser storage</h3>
