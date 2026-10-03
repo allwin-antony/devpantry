@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Flame, Type, Box, Radio, Sun, Moon, Terminal, Sparkles, Key, Search, Menu, X, Share2, Users, ChevronDown, BookOpen, Globe, Image as ImageIcon, Maximize, Eraser, Database, FileText, Wrench, HardDrive, Layers, Settings, Scissors, Braces } from 'lucide-react';
+import { Flame, Type, Box, Radio, Sun, Moon, Terminal, Sparkles, Key, Search, Menu, X, Share2, Users, ChevronDown, BookOpen, Globe, Blocks, Image as ImageIcon, Maximize, Eraser, Database, FileText, Wrench, HardDrive, Layers, Settings, Scissors, Braces } from 'lucide-react';
 import { useTheme } from './ThemeProvider';
 import { CommandPalette } from './CommandPalette';
 import { DevPantryLogo } from './DevPantryLogo';
@@ -60,6 +60,7 @@ export const Header: React.FC = () => {
       label: 'Developer',
       items: [
         { href: '/tools/public-apis', label: 'Public APIs Registry', shortLabel: 'APIs', icon: Globe },
+        { href: '/tools/mcp-registry', label: 'AI MCP Registry', shortLabel: 'MCP', icon: Blocks },
         { href: '/tools/jwt-decoder', label: 'JWT Inspector', shortLabel: 'JWT', icon: Key },
         { href: '/tools/json-to-ts-zod', label: 'JSON to TS & Zod', shortLabel: 'JSON', icon: Braces },
         { href: '/tools/social-preview', label: 'Social Preview', shortLabel: 'Social', icon: Share2 },

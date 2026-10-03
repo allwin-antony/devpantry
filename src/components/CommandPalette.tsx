@@ -22,7 +22,8 @@ import {
   FileText,
   Image as ImageIcon,
   Settings,
-  Scissors
+  Scissors,
+  Blocks
 } from 'lucide-react';
 
 interface PaletteItem {
@@ -192,11 +193,21 @@ const PALETTE_ITEMS: PaletteItem[] = [
     id: 'tool-public-apis',
     category: 'Tools',
     title: 'Public APIs Registry',
-    subtitle: 'Search 2,900+ free APIs for your next project. Filter by CORS, Auth & HTTPS.',
+    subtitle: 'Search 3,000+ free APIs for your next project. Filter by CORS, Auth & HTTPS.',
     href: '/tools/public-apis',
     icon: Globe,
-    badge: 'Dataset',
+    badge: '3,000+ APIs',
     keywords: ['api', 'public', 'free', 'registry', 'cors', 'auth', 'database']
+  },
+  {
+    id: 'tool-mcp-registry',
+    category: 'Tools',
+    title: 'AI MCP & Tools Registry',
+    subtitle: 'Search 4,000+ free open-source MCP servers for Claude and other AI agents.',
+    href: '/tools/mcp-registry',
+    icon: Blocks,
+    badge: 'Dataset',
+    keywords: ['mcp', 'model context protocol', 'ai', 'agents', 'claude', 'cursor']
   },
 
   // Popular Typefaces

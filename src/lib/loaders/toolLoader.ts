@@ -120,10 +120,21 @@ const toolsData: ToolItem[] = [
   {
     slug: 'public-apis',
     name: 'Public APIs Registry',
-    description: 'Searchable registry of 2,900+ free public APIs for software and web development. Filter by CORS, Auth & HTTPS.',
+    heroTagline: 'Search over 3,000 free public APIs for software and web development.',
+    description: 'Searchable registry of 3,000+ free public APIs for software and web development. Filter by CORS, Auth & HTTPS.',
     category: 'Developer',
     icon: 'Globe',
-    badge: 'Dataset',
+    badge: '3,000+ APIs',
+    featured: true,
+  },
+  {
+    slug: 'mcp-registry',
+    name: 'AI MCP & Tools Registry',
+    heroTagline: 'Search over 4,000 open-source Model Context Protocol (MCP) servers for AI agents.',
+    description: 'A searchable collective list of free open-source MCP servers for Claude Desktop, Cursor, and custom AI agents.',
+    category: 'Developer',
+    icon: 'Blocks',
+    badge: '4,000+ Servers',
     featured: true,
   },
   {

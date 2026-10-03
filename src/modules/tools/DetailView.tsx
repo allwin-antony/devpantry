@@ -21,6 +21,7 @@ const componentMap: Record<string, React.ComponentType<any>> = {
   'api-templates': dynamic(() => import('./components/ApiTemplates')),
   'collab': dynamic(() => import('./components/Collab')),
   'public-apis': dynamic(() => import('./components/PublicApisRegistry')),
+  'mcp-registry': dynamic(() => import('./components/McpToolsRegistry')),
   'heic-converter': dynamic(() => import('./components/HeicConverter')),
   'json-to-ts-zod': dynamic(() => import('./components/JsonToTsZod')),
   'exif-stripper': dynamic(() => import('./components/ExifStripper')),

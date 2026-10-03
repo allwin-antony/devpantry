@@ -1,6 +1,8 @@
 import React, { useState, useMemo, useRef, useEffect } from 'react';
+import Link from 'next/link';
 import publicApisData from '@/data/public-apis.json';
-import { Search, ExternalLink, ShieldCheck, ShieldAlert, Globe, Lock, ChevronLeft, ChevronRight, ChevronDown } from 'lucide-react';
+import { Search, ExternalLink, ShieldCheck, ShieldAlert, Globe, Lock, ChevronLeft, ChevronRight, ChevronDown, ArrowRight, Blocks } from 'lucide-react';
+import { triggerFeedbackNudge } from '@/lib/feedbackNudge';
 
 interface PublicApiEntry {
   API: string;
@@ -125,7 +127,7 @@ export default function PublicApisRegistry() {
     '@context': 'https://schema.org',
     '@type': 'Dataset',
     name: 'Public APIs Registry',
-    description: 'A massive collective list of free APIs for use in software and web development. Data is sourced from community-driven repositories.',
+    description: 'A massive collective list of 3,000+ free APIs for use in software and web development. Data is sourced from community-driven repositories.',
     url: 'https://devpantry.com/tools/public-apis',
     creator: {
       '@type': 'Organization',
@@ -142,12 +144,22 @@ export default function PublicApisRegistry() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold text-[var(--text-primary)] mb-2">Public APIs Registry</h1>
-        <p className="text-[var(--text-secondary)] mb-4">
-          A collective list of free APIs for use in software and web development.
-          Data is sourced from community-driven repositories.
-        </p>
+      <div className="mb-8 flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div>
+          <h1 className="text-3xl font-bold text-[var(--text-primary)] mb-2">Public APIs Registry</h1>
+          <p className="text-[var(--text-secondary)]">
+            A collective list of 3,000+ free APIs for use in software and web development.
+            Data is sourced from community-driven repositories.
+          </p>
+        </div>
+        <Link
+          href="/tools/mcp-registry"
+          className="inline-flex items-center gap-2.5 px-4 py-2 text-sm font-medium rounded-xl border border-[var(--border-dev)] bg-[var(--bg-panel)] hover:bg-[var(--bg-sidebar)] text-[var(--text-primary)] hover:border-cyan-500/40 shadow-sm transition-all group shrink-0"
+        >
+          <div className="w-2 h-2 rounded-full bg-cyan-500 group-hover:scale-125 transition-transform" />
+          <span>Browse 4,000+ AI MCP Servers</span>
+          <ArrowRight className="w-4 h-4 text-[var(--text-tertiary)] group-hover:text-cyan-500 group-hover:translate-x-0.5 transition-all" />
+        </Link>
       </div>
 
       <div className="flex flex-col gap-4 mb-6">
@@ -156,7 +168,7 @@ export default function PublicApisRegistry() {
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-[var(--text-tertiary)]" />
             <input
               type="text"
-              placeholder="Search 2,700+ APIs by name or description..."
+              placeholder="Search 3,000+ APIs by name or description..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               className="w-full pl-10 pr-4 py-2 bg-[var(--bg-panel)] border border-[var(--border-dev)] rounded-lg text-[var(--text-primary)] focus:outline-none focus:ring-2 focus:ring-blue-500 transition-shadow"
@@ -231,6 +243,7 @@ export default function PublicApisRegistry() {
                         href={api.Link}
                         target="_blank"
                         rel="noopener noreferrer"
+                        onClick={() => triggerFeedbackNudge('public-apis-visit')}
                         className="font-medium text-blue-500 hover:text-blue-600 dark:text-blue-400 dark:hover:text-blue-300 flex items-center gap-1.5"
                       >
                         {api.API}
@@ -321,7 +334,7 @@ export default function PublicApisRegistry() {
       <article className="mt-12 tool-seo-content prose prose-sm max-w-none dark:prose-invert">
         <h2>Free Public APIs for Web Development</h2>
         <p>
-          Discover thousands of free, public APIs for your next side project, hackathon, or startup. We've aggregated data from multiple community-driven repositories to provide a single, searchable interface for finding APIs across categories like Finance, Weather, Sports, and Machine Learning.
+          Discover over 3,000 free, public APIs for your next side project, hackathon, or startup. We've aggregated data from multiple community-driven repositories to provide a single, searchable interface for finding APIs across categories like Finance, Weather, Sports, and Machine Learning.
         </p>
         
         <h3>Build with Public APIs</h3>
@@ -329,9 +342,10 @@ export default function PublicApisRegistry() {
           Once you find an API you want to build with, use our suite of free developer tools to accelerate your workflow:
         </p>
         <ul>
-          <li><a href="/tools/json-to-ts-zod" className="text-blue-500 hover:underline">JSON to TS & Zod</a> — Paste the API's JSON response to instantly generate TypeScript interfaces and Zod validation schemas.</li>
-          <li><a href="/tools/mock-data" className="text-blue-500 hover:underline">Mock Data Generator</a> — Build your own mock endpoints based on the schemas of these public APIs.</li>
-          <li><a href="/tools/jwt-decoder" className="text-blue-500 hover:underline">JWT Decoder</a> — If the API requires OAuth or JWT authentication, use this tool to inspect the token claims.</li>
+          <li><Link href="/tools/mcp-registry" className="text-blue-500 hover:underline font-medium">AI MCP & Tools Registry</Link> — Want to expose or consume APIs through AI agents? Explore 4,000+ open-source Model Context Protocol servers for Claude Desktop, Cursor, and custom agents.</li>
+          <li><Link href="/tools/json-to-ts-zod" className="text-blue-500 hover:underline">JSON to TS & Zod</Link> — Paste the API's JSON response to instantly generate TypeScript interfaces and Zod validation schemas.</li>
+          <li><Link href="/tools/mock-data" className="text-blue-500 hover:underline">Mock Data Generator</Link> — Build your own mock endpoints based on the schemas of these public APIs.</li>
+          <li><Link href="/tools/jwt-decoder" className="text-blue-500 hover:underline">JWT Decoder</Link> — If the API requires OAuth or JWT authentication, use this tool to inspect the token claims.</li>
         </ul>
       </article>
 

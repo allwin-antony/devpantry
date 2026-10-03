@@ -10,7 +10,8 @@
     "start": "next start",
     "lint": "oxlint",
     "postinstall": "node scripts/fetch-imgly-models.mjs",
-    "sync-apis": "npx -y tsx scripts/sync-public-apis.ts"
+    "sync-apis": "npx -y tsx scripts/sync-public-apis.ts",
+    "sync-mcp": "npx -y tsx scripts/sync-mcp-tools.ts"
   },
   "dependencies": {
     "@codemirror/state": "^6.7.4",
