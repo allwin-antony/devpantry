@@ -459,9 +459,14 @@ export function MyComponent() {
                 }`}
               >
                 <div className="flex items-center justify-between gap-1">
-                  <span className={`text-xs font-bold font-sans truncate ${isSelected ? 'text-cyan-500' : 'text-[var(--text-primary)]'}`}>
+                  <Link 
+                    href={`/icons/${col.prefix}`}
+                    onClick={(e) => e.stopPropagation()}
+                    title={`View ${col.name} dedicated page`}
+                    className={`text-xs font-bold font-sans truncate hover:underline hover:text-cyan-500 transition-colors ${isSelected ? 'text-cyan-500' : 'text-[var(--text-primary)]'}`}
+                  >
                     {col.name}
-                  </span>
+                  </Link>
                   <span className="text-[10px] font-bold px-1.5 py-0.2 rounded bg-[var(--pill-bg)] text-[var(--text-muted)] shrink-0">
                     {col.total_icons.toLocaleString()}
                   </span>

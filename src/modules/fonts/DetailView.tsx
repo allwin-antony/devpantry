@@ -1,9 +1,8 @@
-import { getFontPairings, isFontIndexable } from '@/lib/loaders/fontLoader';
+import { getFontPairings } from '@/lib/loaders/fontLoader';
 import { FontDetailClient } from '@/components/clients/FontDetailClient';
 
 export default function FontsDetailView({ item }: { item: any }) {
   const font = item;
-  const isIndexable = isFontIndexable(font);
   const pairings = getFontPairings(font);
 
   const jsonLd = {
@@ -22,7 +21,6 @@ export default function FontsDetailView({ item }: { item: any }) {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      {!isIndexable && <meta name="robots" content="noindex" />}
       
       <div className="flex flex-col shrink-0 w-full">
         <h1 className="sr-only">{font.name} Font</h1>

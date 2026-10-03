@@ -1,5 +1,4 @@
 import { MetadataRoute } from 'next';
-import { getAllIconPrefixes, getAllServiceResponseIds } from '@/lib/datasetLoader';
 
 export async function generateSitemaps() {
   return [
@@ -24,7 +23,10 @@ export default async function sitemap(props: { id: Promise<string> }): Promise<M
       { url: `${baseUrl}/fonts`, lastModified: staticDate, changeFrequency: 'weekly', priority: 0.95 },
       { url: `${baseUrl}/icons`, lastModified: staticDate, changeFrequency: 'weekly', priority: 0.95 },
       { url: `${baseUrl}/guides`, lastModified: staticDate, changeFrequency: 'daily', priority: 0.95 },
-      { url: `${baseUrl}/feedback`, lastModified: staticDate, changeFrequency: 'monthly', priority: 0.8 },
+      { url: `${baseUrl}/about`, lastModified: staticDate, changeFrequency: 'monthly', priority: 0.7 },
+      { url: `${baseUrl}/privacy`, lastModified: staticDate, changeFrequency: 'monthly', priority: 0.3 },
+      { url: `${baseUrl}/security`, lastModified: staticDate, changeFrequency: 'monthly', priority: 0.3 },
+      { url: `${baseUrl}/feedback`, lastModified: staticDate, changeFrequency: 'monthly', priority: 0.6 },
     ];
   }
 
@@ -66,7 +68,7 @@ export default async function sitemap(props: { id: Promise<string> }): Promise<M
       url: `${baseUrl}/fonts/${f.slug}`,
       lastModified: staticDate,
       changeFrequency: 'monthly',
-      priority: 0.8,
+      priority: 0.85,
     }));
   }
 
@@ -76,11 +78,15 @@ export default async function sitemap(props: { id: Promise<string> }): Promise<M
     if (!iconsModule) return [];
 
     const allIcons = await iconsModule.loader.listAll();
-    return allIcons.map((i: any) => ({
+    const { isIconIndexable } = await import('@/lib/loaders/iconLoader');
+
+    const indexableIcons = allIcons.filter((i: any) => isIconIndexable(i));
+
+    return indexableIcons.map((i: any) => ({
       url: `${baseUrl}/icons/${i.slug}`,
       lastModified: staticDate,
       changeFrequency: 'monthly',
-      priority: 0.8,
+      priority: 0.85,
     }));
   }
 
