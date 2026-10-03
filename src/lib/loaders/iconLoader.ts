@@ -53,6 +53,11 @@ export const FAMOUS_ICON_PREFIXES = [
   'iconoir'
 ];
 
+export function isIconIndexable(collection: IconCollectionItem): boolean {
+  return FAMOUS_ICON_PREFIXES.includes(collection.prefix) ||
+         collection.total_icons >= 500;
+}
+
 export function getAllIconLibraries(): IconLibraryItem[] {
   return (iconLibrariesRaw as any[]).map(lib => ({
     ...lib,
