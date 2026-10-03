@@ -228,13 +228,13 @@ A zero-knowledge, real-time collaborative text and code editor built on pure pee
 
 ### 9. 🌐 Public APIs Registry (`/tools/public-apis`)
 
-A massive, searchable, and filterable registry of nearly 3,000 free public APIs for software and web development.
+A massive, searchable, and filterable registry of 3,000+ free public APIs for software and web development.
 
 * **Massive Open-Source Aggregation**: 
-  * Automatically aggregated at build-time from three major GitHub repositories (`public-apis`, `public-api-lists`, and `marcelscruz`).
+  * Automatically aggregated via `npm run sync-apis` from three major GitHub repositories (`public-apis`, `public-api-lists`, and `marcelscruz`).
   * Deduplicated and strictly sorted alphabetically by category and API name.
 * **Powerful Local Filtering**:
-  * Lightning-fast client-side search across all 3,000 APIs.
+  * Lightning-fast client-side search across all 3,000+ APIs.
   * Filter by **CORS** support (Yes, No, Unknown).
   * Filter by **Auth requirements** (API Key, OAuth, or No Auth Required).
   * 1-Click **HTTPS Only** toggle.
@@ -243,7 +243,21 @@ A massive, searchable, and filterable registry of nearly 3,000 free public APIs 
 
 ---
 
-### 10. ⌨️ Global Command Palette (`Cmd + K` / `Ctrl + K`)
+### 10. 🤖 AI MCP & Tools Registry (`/tools/mcp-registry`)
+
+A collective list of 4,000+ open-source Model Context Protocol (MCP) servers and tools for AI agents (Claude Desktop, Cursor, and autonomous agents).
+
+* **Multi-Source Aggregation**: 
+  * Aggregated via `npm run sync-mcp-tools` from major community repositories (e.g., `punkpeye`, `wong2`, `habitoai`) and the official MCP registry.
+* **Powerful Local Filtering**:
+  * Instant, client-side search across all 4,000+ servers by name or description.
+  * Rapid contextual filtering and categorisation.
+* **Seamless Internal Workflow**:
+  * Tightly integrated with the Public APIs registry to easily find APIs to wrap into custom MCP servers.
+
+---
+
+### 11. ⌨️ Global Command Palette (`Cmd + K` / `Ctrl + K`)
 
 A unified search dialog accessible from anywhere in the suite via keyboard shortcut or header button:
 * **Instant Tool Switching**: Jump directly to Overview, AI Studio, Fonts, Icons, JWT Inspector, Chaos Data, Public APIs Registry, or API Mocks.
@@ -306,6 +320,10 @@ cd failstate
 
 # Install dependencies (Automatically downloads ~200MB of AI models locally via postinstall)
 npm install
+
+# Update data registries with latest upstream GitHub data (optional)
+npm run sync-apis
+npm run sync-mcp-tools
 
 # Start local development server
 npm run dev
