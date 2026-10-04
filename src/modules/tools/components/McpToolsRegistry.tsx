@@ -134,6 +134,7 @@ export default function McpToolsRegistry() {
       name: 'DevPantry Community'
     },
     isAccessibleForFree: true,
+    license: 'https://opensource.org/licenses/MIT',
     keywords: ['mcp servers', 'ai agents', 'model context protocol', 'ai tools', ...categories.slice(1, 10)]
   };
 
