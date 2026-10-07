@@ -16,6 +16,8 @@
   "dependencies": {
     "@codemirror/state": "^6.7.4",
     "@codemirror/view": "^6.43.11",
+    "@contentauth/c2pa-web": "^0.15.3",
+    "@huggingface/transformers": "^4.3.0",
     "@imgly/background-removal": "^1.7.0",
     "@tailwindcss/postcss": "^4.3.3",
     "@tailwindcss/typography": "^0.5.20",

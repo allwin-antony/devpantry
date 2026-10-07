@@ -12,6 +12,16 @@ export interface ToolItem {
 const toolsData: ToolItem[] = [
   // ── Media ──────────────────────────────────────────────────────────────────
   {
+    slug: 'ai-image-detector',
+    name: 'AI Image Detector',
+    heroTagline: 'Detect AI-generated images — C2PA, SynthID signal & EXIF analysis, 100% in-browser.',
+    description: 'Multi-layer AI image forensics: deep-learning classifier, C2PA Content Credentials, SynthID frequency signal, and EXIF provenance. Fully private, runs on-device.',
+    category: 'Media',
+    icon: 'ScanEye',
+    badge: 'Edge AI',
+    featured: true,
+  },
+  {
     slug: 'background-remover',
     name: 'AI Background Remover',
     heroTagline: 'Remove backgrounds instantly — 100% in your browser via WebGPU.',

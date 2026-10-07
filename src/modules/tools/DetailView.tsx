@@ -8,6 +8,7 @@ import type { ToolItem } from '@/lib/loaders/toolLoader';
 import dynamic from 'next/dynamic';
 
 const componentMap: Record<string, React.ComponentType<any>> = {
+  'ai-image-detector': dynamic(() => import('./components/AiImageDetector')),
   'jwt-decoder': dynamic(() => import('./components/JwtDecoder')),
   'image-compressor': dynamic(() => import('./components/ImageCompressor')),
   'image-resizer': dynamic(() => import('./components/ImageResizer')),
