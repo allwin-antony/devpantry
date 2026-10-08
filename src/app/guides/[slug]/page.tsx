@@ -42,6 +42,9 @@ export async function generateMetadata(props: GuidePageProps): Promise<Metadata>
       title: guide.title,
       description: guide.description,
     },
+    alternates: {
+      canonical: `https://devpantry.com/guides/${guide.slug}`,
+    },
   };
 }
 
