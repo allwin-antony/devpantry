@@ -3563,6 +3563,13 @@
     "Category": "CAD and Design"
   },
   {
+    "API": "PubChem MCP Server",
+    "Description": "Searches compounds and retrieves chemical properties, safety data, bioactivity, interactions, and 3D structures from PubChem.",
+    "Language": "Unknown",
+    "Link": "https://github.com/cyanheads/pubchem-mcp-server",
+    "Category": "Chemistry"
+  },
+  {
     "API": "4everland/4everland-hosting-mcp",
     "Description": "Deploy AI-generated code to decentralized storage networks such as Greenfield, IPFS and Arweave via 4EVERLAND Hosting.",
     "Language": "TypeScript",
@@ -6665,7 +6672,7 @@
   },
   {
     "API": "SwarmMemo",
-    "Description": "Public message board for AI agents. The remote MCP endpoint (https://swarmmemo.com/mcp) reads and posts in public rooms with no account, and offers a notary, small-model inference and public data on a free daily allowance.",
+    "Description": "Public message board for AI agents. The remote MCP endpoint (https://swarmmemo.com/mcp) reads and posts in public rooms with no account, offers an agent toolkit (web fetch, memory, wake-ups, webhook receivers) and paid APIs on a free daily allowance, and supports OAuth sign-in.",
     "Language": "Unknown",
     "Link": "https://github.com/Hugo0/swarmmemo",
     "Category": "Communication"
@@ -14371,6 +14378,27 @@
     "Category": "Environment & Nature"
   },
   {
+    "API": "GBIF Biodiversity MCP",
+    "Description": "Searches GBIF taxonomy, species occurrences, datasets, and publishers through read-only MCP tools.",
+    "Language": "Unknown",
+    "Link": "https://github.com/cyanheads/gbif-biodiversity-mcp-server",
+    "Category": "Environment and Nature"
+  },
+  {
+    "API": "iNaturalist MCP Server",
+    "Description": "Searches iNaturalist wildlife observations and taxa by place and date, with tools for identification threads, species counts, phenology, and similar taxa.",
+    "Language": "Unknown",
+    "Link": "https://github.com/cyanheads/inaturalist-mcp-server",
+    "Category": "Environment and Nature"
+  },
+  {
+    "API": "NEPA MCP Toolkit",
+    "Description": "Provides MCP tools for federal environmental and regulatory data research, geospatial screening, and interactive mapping in NEPA workflows.",
+    "Language": "Unknown",
+    "Link": "https://github.com/pnnl/nepa-mcp",
+    "Category": "Environment and Nature"
+  },
+  {
     "API": "8b-is/smart-tree",
     "Description": "Directory visualization with semantic analysis, compressed AI-oriented output formats and file categorization.",
     "Language": "Rust",
@@ -20860,6 +20888,13 @@
     "Category": "Knowledge and Memory"
   },
   {
+    "API": "Anansi Haven",
+    "Description": "Remote MCP server (also A2A and HTTP) that gives agents a persistent identity, key-value memory that survives restarts, client-side encrypted storage, a searchable agent directory and a shared skills library.",
+    "Language": "Unknown",
+    "Link": "https://github.com/kburrus64-max/anansi-haven",
+    "Category": "Knowledge and Memory"
+  },
+  {
     "API": "Anki",
     "Description": "Manages and interacts with Anki flashcards via a server, enabling card creation, review, and data retrieval",
     "Language": "Unknown",
@@ -21602,10 +21637,24 @@
     "Category": "MCP Infrastructure"
   },
   {
+    "API": "MCPJungle",
+    "Description": "Consolidates registered MCP servers behind a Streamable HTTP endpoint, with unified tool, resource, and prompt discovery plus optional tool groups.",
+    "Language": "Unknown",
+    "Link": "https://github.com/mcpjungle/MCPJungle",
+    "Category": "MCP Infrastructure"
+  },
+  {
     "API": "Microsoft MCP Gateway",
     "Description": "Deploys and governs MCP adapters and agents behind a centralized gateway.",
     "Language": "Unknown",
     "Link": "https://github.com/microsoft/mcp-gateway",
+    "Category": "MCP Infrastructure"
+  },
+  {
+    "API": "ToolHive",
+    "Description": "Runs MCP servers in isolated containers and can aggregate backend tools into virtual MCP servers, with local and Kubernetes runtimes.",
+    "Language": "Unknown",
+    "Link": "https://github.com/stacklok/toolhive",
     "Category": "MCP Infrastructure"
   },
   {
@@ -22834,6 +22883,13 @@
     "Category": "Monitoring"
   },
   {
+    "API": "OpenTelemetry MCP Server",
+    "Description": "Searches and analyzes traces and spans from Jaeger, Tempo, and Traceloop backends, with filters for LLM models, errors, and token usage.",
+    "Language": "Unknown",
+    "Link": "https://github.com/traceloop/opentelemetry-mcp-server",
+    "Category": "Monitoring"
+  },
+  {
     "API": "OrcaReplay",
     "Description": "Local recorder with MCP tools for inspecting agent traces, replaying tool calls, and comparing runs; replay and comparison can make live external calls.",
     "Language": "Unknown",
@@ -23020,6 +23076,13 @@
     "Description": "Website audits: SEO, security headers and SSL, Lighthouse performance, broken links, WCAG accessibility, Schema.org validation, competitor gaps and robots.txt.",
     "Language": "Python",
     "Link": "https://github.com/vdalhambra/siteaudit-mcp",
+    "Category": "Monitoring"
+  },
+  {
+    "API": "VictoriaMetrics MCP Server",
+    "Description": "Queries VictoriaMetrics metrics and alerts, inspects rules and query behavior, and searches embedded documentation.",
+    "Language": "Unknown",
+    "Link": "https://github.com/VictoriaMetrics/mcp-victoriametrics",
     "Category": "Monitoring"
   },
   {
@@ -24892,6 +24955,13 @@
     "Category": "Official Servers"
   },
   {
+    "API": "CKAN MCP Server",
+    "Description": "Searches CKAN portals for datasets and metadata, explores organizations and tags, and queries DataStore tables.",
+    "Language": "Unknown",
+    "Link": "https://github.com/ondata/ckan-mcp-server",
+    "Category": "Open Data"
+  },
+  {
     "API": "data.gouv.fr MCP Server",
     "Description": "Official server for searching and exploring datasets on France's national open-data platform.",
     "Language": "Unknown",
@@ -24910,6 +24980,13 @@
     "Description": "Connects to 70 Brazilian public-data sources covering government, finance, law, elections, health, education, and more.",
     "Language": "Unknown",
     "Link": "https://github.com/Mcp-Brasil/mcp-brasil",
+    "Category": "Open Data"
+  },
+  {
+    "API": "U.S. Government Open Data MCP",
+    "Description": "Queries 40+ U.S. government and international data APIs across economic, legislative, health, environmental, and spending domains with 300+ tools.",
+    "Language": "Unknown",
+    "Link": "https://github.com/lzinga/us-gov-open-data-mcp",
     "Category": "Open Data"
   },
   {
@@ -29939,6 +30016,13 @@
     "Category": "Security"
   },
   {
+    "API": "Cycode CLI MCP",
+    "Description": "Experimental MCP mode for the Cycode CLI, exposing status checks and file or path scans for secrets, dependency vulnerabilities and license issues, IaC misconfigurations, and SAST findings.",
+    "Language": "Unknown",
+    "Link": "https://github.com/cycodehq/cycode-cli",
+    "Category": "Security"
+  },
+  {
     "API": "cyntrisec/cyntrisec-cli",
     "Description": "Local-first AWS security analyzer that discovers attack paths and generates remediations using graph theory.",
     "Language": "Python",
@@ -30825,6 +30909,13 @@
     "Description": "DNS and email security scans via IntoDNS.ai: SPF, DKIM, DMARC, DNSSEC, MTA-STS, BIMI, TLS, blacklist and deliverability checks plus security header analysis.",
     "Language": "TypeScript",
     "Link": "https://github.com/RoscoNL/intodns-mcp-server",
+    "Category": "Security"
+  },
+  {
+    "API": "Rubrik MCP",
+    "Description": "Supports offline Rubrik Security Cloud API discovery and authenticated queries for workloads, events, clusters, and SLA domains; write tools require local policy enablement.",
+    "Language": "Unknown",
+    "Link": "https://github.com/rubrikinc/rubrik-mcp",
     "Category": "Security"
   },
   {
@@ -32277,6 +32368,13 @@
     "Category": "System Automation"
   },
   {
+    "API": "Cua Driver",
+    "Description": "Provides MCP tools for controlling native desktop apps and browsers across macOS, Windows, and Linux.",
+    "Language": "Unknown",
+    "Link": "https://github.com/trycua/cua",
+    "Category": "System Automation"
+  },
+  {
     "API": "Frank Fiegel",
     "Description": "Automates processes",
     "Language": "Unknown",
@@ -32872,6 +32970,13 @@
     "Category": "Travel and Transportation"
   },
   {
+    "API": "OneBusAway MCP Server",
+    "Description": "Queries OneBusAway transit APIs for stops, routes, real-time arrivals, vehicle positions, schedules, and service alerts.",
+    "Language": "Unknown",
+    "Link": "https://github.com/cyanheads/onebusaway-mcp-server",
+    "Category": "Travel and Transportation"
+  },
+  {
     "API": "Pocket Drives",
     "Description": "Search peer-to-peer luxury, exotic, and electric-vehicle rentals; booking finishes in the iOS app.",
     "Language": "Unknown",
@@ -32890,6 +32995,13 @@
     "Description": "Read-only MCP server for food travel data, verified restaurants and markets, food festivals, and trip planning across 214 cities.",
     "Language": "Unknown",
     "Link": "https://github.com/lewismvaughan/tablejourney-mcp",
+    "Category": "Travel and Transportation"
+  },
+  {
+    "API": "Transitland MCP Server",
+    "Description": "Searches Transitland’s global transit registry for operators, GTFS, GTFS-Realtime and GBFS feeds with license terms, routes, stops, and departures.",
+    "Language": "Unknown",
+    "Link": "https://github.com/cyanheads/transitland-mcp-server",
     "Category": "Travel and Transportation"
   },
   {

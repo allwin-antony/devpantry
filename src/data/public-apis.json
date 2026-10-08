@@ -234,6 +234,15 @@
     "Category": "AI"
   },
   {
+    "API": "TranslateMyImage",
+    "Description": "Translate the text inside JPG, PNG or WEBP images into 9 languages and get the translated image back",
+    "Auth": "`apiKey`",
+    "HTTPS": true,
+    "CORS": "No",
+    "Link": "https://translatemyimage.com",
+    "Category": "AI"
+  },
+  {
     "API": "UnoRouter",
     "Description": "OpenAI-compatible gateway routing chat/completions across 500+ models with a free tier",
     "Auth": "`apiKey`",
@@ -1332,6 +1341,15 @@
     "Category": "Art & Design"
   },
   {
+    "API": "PickShade",
+    "Description": "Convert colors, check WCAG and APCA contrast, build palettes, gradients and tokens",
+    "Auth": "",
+    "HTTPS": true,
+    "CORS": "Yes",
+    "Link": "https://pickshade.com/api",
+    "Category": "Art & Design"
+  },
+  {
     "API": "Picsart",
     "Description": "Image & video editing, generative AI, 100+ AI models via unified API",
     "Auth": "`apiKey`",
@@ -1356,6 +1374,15 @@
     "HTTPS": true,
     "CORS": "No",
     "Link": "https://pixelencounter.com/api",
+    "Category": "Art & Design"
+  },
+  {
+    "API": "raFont",
+    "Description": "1,500+ free downloadable fonts with categories, tags and preview images",
+    "Auth": "",
+    "HTTPS": true,
+    "CORS": "Yes",
+    "Link": "https://rafont.com/api-docs",
     "Category": "Art & Design"
   },
   {
@@ -1647,6 +1674,15 @@
     "Category": "Blockchain"
   },
   {
+    "API": "Dwellir",
+    "Description": "RPC endpoints for 150+ blockchain networks, including Ethereum, Solana, Polkadot and Hyperliquid",
+    "Auth": "`apiKey`",
+    "HTTPS": true,
+    "CORS": "Yes",
+    "Link": "https://www.dwellir.com/docs",
+    "Category": "Blockchain"
+  },
+  {
     "API": "Etherscan",
     "Description": "Ethereum explorer API",
     "Auth": "`apiKey`",
@@ -1815,6 +1851,15 @@
     "HTTPS": true,
     "CORS": "Yes",
     "Link": "https://bigbookapi.com",
+    "Category": "Books"
+  },
+  {
+    "API": "BookRank",
+    "Description": "Book rankings from open reader ratings: books, series, reading orders and authors",
+    "Auth": "",
+    "HTTPS": true,
+    "CORS": "Yes",
+    "Link": "https://openbookrank.com/en/open-data",
     "Category": "Books"
   },
   {
@@ -2466,6 +2511,15 @@
     "Category": "Business"
   },
   {
+    "API": "PeopleSearch",
+    "Description": "People and company search in plain English, with verified work emails and email verification",
+    "Auth": "`apiKey`",
+    "HTTPS": true,
+    "CORS": "No",
+    "Link": "https://peoplesearch.im/developers",
+    "Category": "Business"
+  },
+  {
     "API": "Pick an Agency",
     "Description": "Search 47,000+ marketing agencies by service, location and rating",
     "Auth": "",
@@ -2673,6 +2727,15 @@
     "Category": "Business"
   },
   {
+    "API": "UGC VZ",
+    "Description": "Directory of DACH user-generated-content creators with topics, cities, rates and contact requests",
+    "Auth": "",
+    "HTTPS": true,
+    "CORS": "No",
+    "Link": "https://ugc-vz.de/developers",
+    "Category": "Business"
+  },
+  {
     "API": "USPTO Trademark",
     "Description": "Trademark keyword search, availability, owner, serial search, attorney info, MCP ready",
     "Auth": "`apiKey`",
@@ -2841,6 +2904,15 @@
     "HTTPS": true,
     "CORS": "Unknown",
     "Link": "https://holidayapi.com/",
+    "Category": "Calendar"
+  },
+  {
+    "API": "India Public Holidays",
+    "Description": "Official Indian public holidays for the Central government and 36 states/UTs",
+    "Auth": "",
+    "HTTPS": true,
+    "CORS": "Yes",
+    "Link": "https://calendar-api-web.vercel.app/docs",
     "Category": "Calendar"
   },
   {
@@ -3375,6 +3447,15 @@
     "Category": "Cryptocurrency"
   },
   {
+    "API": "bilbop",
+    "Description": "Solana USDC x402 pay-per-call tools for agents: SPL mint info, token brief, text summarize, Piper TTS, brand feedback",
+    "Auth": "",
+    "HTTPS": true,
+    "CORS": "Yes",
+    "Link": "https://api.bilbop.org",
+    "Category": "Cryptocurrency"
+  },
+  {
     "API": "Binance",
     "Description": "Exchange for Trading Cryptocurrencies based in China",
     "Auth": "`apiKey`",
@@ -3426,6 +3507,24 @@
     "HTTPS": true,
     "CORS": "Unknown",
     "Link": "https://bitcoincharts.com/about/exchanges/",
+    "Category": "Cryptocurrency"
+  },
+  {
+    "API": "BitcoinYield",
+    "Description": "Live yields on BTC, ETH and stablecoins across DeFi and CeFi, with an A-D risk grade per offer",
+    "Auth": "",
+    "HTTPS": true,
+    "CORS": "Yes",
+    "Link": "https://bitcoinyield.co/docs",
+    "Category": "Cryptocurrency"
+  },
+  {
+    "API": "Bitculator",
+    "Description": "Crypto prices, OHLCV history, sentiment, technical indicators, exchanges and liquidations",
+    "Auth": "`apiKey`",
+    "HTTPS": true,
+    "CORS": "Yes",
+    "Link": "https://bitculator.com/en/documentation/api/v1",
     "Category": "Cryptocurrency"
   },
   {
@@ -3948,6 +4047,15 @@
     "HTTPS": true,
     "CORS": "No",
     "Link": "https://docs.dexpaprika.com",
+    "Category": "Cryptocurrency"
+  },
+  {
+    "API": "Dudelytics",
+    "Description": "Productive crypto indices, daily benchmarks, sector indices and market-stress data",
+    "Auth": "",
+    "HTTPS": true,
+    "CORS": "No",
+    "Link": "https://dudelytics.com/en/dpmi/data/",
     "Category": "Cryptocurrency"
   },
   {
@@ -4833,6 +4941,15 @@
     "Category": "Currency Exchange"
   },
   {
+    "API": "Nerkhsanj",
+    "Description": "Iran free-market USD, EUR, CNY, gold and coin rates in toman, live and daily archive since 2010",
+    "Auth": "",
+    "HTTPS": true,
+    "CORS": "No",
+    "Link": "https://nerkh.jahankhahan.shop/developers/en",
+    "Category": "Currency Exchange"
+  },
+  {
     "API": "paralelo.bo",
     "Description": "Bolivia parallel-market USD/BOB exchange rate, aggregated from P2P sources every 60s",
     "Auth": "",
@@ -5406,6 +5523,15 @@
     "HTTPS": true,
     "CORS": "Yes",
     "Link": "https://apistatuscheck.com",
+    "Category": "Development"
+  },
+  {
+    "API": "API Tool Calls",
+    "Description": "API Tool Calls: Home cost planners, page to Markdown, SEO checks and recalls",
+    "Auth": "",
+    "HTTPS": true,
+    "CORS": "No",
+    "Link": "https://apitoolcalls.com/api/",
     "Category": "Development"
   },
   {
@@ -6579,6 +6705,15 @@
     "Category": "Development"
   },
   {
+    "API": "jstash",
+    "Description": "Save JSON with one request and get a URL; private JSON for each signed-in user of your app",
+    "Auth": "`apiKey`",
+    "HTTPS": true,
+    "CORS": "No",
+    "Link": "https://jstash.app/docs/",
+    "Category": "Development"
+  },
+  {
     "API": "Keyvalue",
     "Description": "Simple key-value storage REST API for quick prototyping",
     "Auth": "",
@@ -7200,6 +7335,15 @@
     "Category": "Development"
   },
   {
+    "API": "RealUptime",
+    "Description": "Manage uptime monitors, heartbeat checks, incidents and status pages with an API key",
+    "Auth": "`apiKey`",
+    "HTTPS": true,
+    "CORS": "No",
+    "Link": "https://realuptime.io/docs/api",
+    "Category": "Development"
+  },
+  {
     "API": "Rejax",
     "Description": "Reverse AJAX service to notify clients",
     "Auth": "`apiKey`",
@@ -7305,6 +7449,15 @@
     "HTTPS": true,
     "CORS": "Unknown",
     "Link": "https://scrapingant.com",
+    "Category": "Development"
+  },
+  {
+    "API": "ScrapingBot",
+    "Description": "Web scraping, AI extraction, and public TikTok, Instagram, Google and Amazon data as JSON",
+    "Auth": "`apiKey`",
+    "HTTPS": true,
+    "CORS": "No",
+    "Link": "https://scrapingbot.io",
     "Category": "Development"
   },
   {
@@ -7470,6 +7623,15 @@
     "Category": "Development"
   },
   {
+    "API": "SnapRender",
+    "Description": "Website screenshots as PNG, JPEG, WebP or PDF, and page content as markdown, with a free tier",
+    "Auth": "`apiKey`",
+    "HTTPS": true,
+    "CORS": "Yes",
+    "Link": "https://snap-render.com/docs",
+    "Category": "Development"
+  },
+  {
     "API": "SnoopScan",
     "Description": "Scrape, crawl, map and search the web as clean markdown or JSON, with a free monthly tier",
     "Auth": "`apiKey`",
@@ -7593,6 +7755,15 @@
     "HTTPS": true,
     "CORS": "Unknown",
     "Link": "https://thunderbit.com/docs/introduction",
+    "Category": "Development"
+  },
+  {
+    "API": "TidyTools",
+    "Description": "Web page to clean Markdown and AI crawler robots.txt checks, free without a key (rate limited)",
+    "Auth": "",
+    "HTTPS": true,
+    "CORS": "Yes",
+    "Link": "https://tools.yukai.uk/llms.txt",
     "Category": "Development"
   },
   {
@@ -8685,6 +8856,15 @@
     "Category": "Documents & Productivity"
   },
   {
+    "API": "Thirds",
+    "Description": "Create branded PDFs and images from HTML or reusable templates",
+    "Auth": "`apiKey`",
+    "HTTPS": true,
+    "CORS": "No",
+    "Link": "https://thirds.ai/docs/api",
+    "Category": "Documents & Productivity"
+  },
+  {
     "API": "Todoist",
     "Description": "Todo Lists",
     "Auth": "`OAuth`",
@@ -9045,6 +9225,15 @@
     "Category": "Email"
   },
   {
+    "API": "MailChannels",
+    "Description": "Send transactional email over HTTPS with official JavaScript, Python and PHP SDKs",
+    "Auth": "`apiKey`",
+    "HTTPS": true,
+    "CORS": "No",
+    "Link": "https://www.mailchannels.com/email-api/",
+    "Category": "Email"
+  },
+  {
     "API": "MailCheck.ai",
     "Description": "Prevent users to sign up with temporary email addresses",
     "Auth": "",
@@ -9060,6 +9249,15 @@
     "HTTPS": true,
     "CORS": "Yes",
     "Link": "https://mailfornet.com/api",
+    "Category": "Email"
+  },
+  {
+    "API": "MailRambo",
+    "Description": "Verify email deliverability with a strict yes/no, disposable and catch-all detection",
+    "Auth": "`apiKey`",
+    "HTTPS": true,
+    "CORS": "No",
+    "Link": "https://www.mailrambo.com/developers",
     "Category": "Email"
   },
   {
@@ -10125,6 +10323,15 @@
     "Category": "Finance"
   },
   {
+    "API": "Brainy Prices",
+    "Description": "UAE living costs: KHDA fees, DLD rents, fuel, utilities, telecom and relocation, with dated sources",
+    "Auth": "",
+    "HTTPS": true,
+    "CORS": "Yes",
+    "Link": "https://prices.brainy.ae/developers.html",
+    "Category": "Finance"
+  },
+  {
     "API": "BriefTape",
     "Description": "Real-time AI-summarized SEC filings, Fed, FDA and BLS data, ticker-tagged",
     "Auth": "`apiKey`",
@@ -10431,6 +10638,15 @@
     "Category": "Finance"
   },
   {
+    "API": "FloorGuard",
+    "Description": "Sourced prop firm daily-loss and max-drawdown rules, plus a drawdown-room check",
+    "Auth": "",
+    "HTTPS": true,
+    "CORS": "Yes",
+    "Link": "https://floorguard-kappa.vercel.app/api/",
+    "Category": "Finance"
+  },
+  {
     "API": "FRED",
     "Description": "Economic data from the Federal Reserve Bank of St. Louis",
     "Auth": "`apiKey`",
@@ -10674,6 +10890,15 @@
     "Category": "Finance"
   },
   {
+    "API": "LiquiLens",
+    "Description": "Public-record bank and lender failure-risk evidence",
+    "Auth": "",
+    "HTTPS": true,
+    "CORS": "Yes",
+    "Link": "https://liquilens.in",
+    "Category": "Finance"
+  },
+  {
     "API": "Marketstack",
     "Description": "Real-Time, Intraday & Historical Market Data API",
     "Auth": "`apiKey`",
@@ -10800,12 +11025,30 @@
     "Category": "Finance"
   },
   {
+    "API": "outcometick",
+    "Description": "Historical tick data for Polymarket and Predict.fun crypto Up/Down markets: Chainlink settlement feeds, order books, strikes and outcomes",
+    "Auth": "`apiKey`",
+    "HTTPS": true,
+    "CORS": "No",
+    "Link": "https://outcometick.com",
+    "Category": "Finance"
+  },
+  {
     "API": "ParityVend",
     "Description": "Globalize your business by auto-adapting pricing for each visitor with Purchasing Power Parity",
     "Auth": "`apiKey`",
     "HTTPS": true,
     "CORS": "Yes",
     "Link": "https://www.ambeteco.com/ParityVend/",
+    "Category": "Finance"
+  },
+  {
+    "API": "Pink Agentic AI Payments",
+    "Description": "Approval layer for AI agent payments: per-agent budgets, rules, single-use credentials, sandbox",
+    "Auth": "`apiKey`",
+    "HTTPS": true,
+    "CORS": "Yes",
+    "Link": "https://pinkwallet.com/agentic/developers/",
     "Category": "Finance"
   },
   {
@@ -10998,6 +11241,15 @@
     "Category": "Finance"
   },
   {
+    "API": "Seiche",
+    "Description": "Free public funding, FX and capital-market evidence with source clocks",
+    "Auth": "",
+    "HTTPS": true,
+    "CORS": "Yes",
+    "Link": "https://seiche.info",
+    "Category": "Finance"
+  },
+  {
     "API": "SiftingIO",
     "Description": "Market data for stocks, forex, crypto, commodities and DEX",
     "Auth": "`apiKey`",
@@ -11052,6 +11304,15 @@
     "Category": "Finance"
   },
   {
+    "API": "StockDrifts",
+    "Description": "Rated US 13F fund holdings, company KPIs, Korean insider trades and Japanese large-shareholder filings",
+    "Auth": "`apiKey`",
+    "HTTPS": true,
+    "CORS": "No",
+    "Link": "https://www.stockdrifts.io",
+    "Category": "Finance"
+  },
+  {
     "API": "StockFit",
     "Description": "SEC filings, financial statements, earnings, ETF holdings and ownership data",
     "Auth": "`apiKey`",
@@ -11103,6 +11364,15 @@
     "HTTPS": true,
     "CORS": "Unknown",
     "Link": "https://apilayer.com/marketplace/tax_data-api",
+    "Category": "Finance"
+  },
+  {
+    "API": "TerraScoutX",
+    "Description": "Free US property records by address from county sources: parcel, owner, appraised value and history, tax, FEMA flood zone, nearby schools and risk",
+    "Auth": "`apiKey`",
+    "HTTPS": true,
+    "CORS": "Yes",
+    "Link": "https://terrascoutx.com",
     "Category": "Finance"
   },
   {
@@ -11175,6 +11445,15 @@
     "HTTPS": true,
     "CORS": "Unknown",
     "Link": "https://twelvedata.com/",
+    "Category": "Finance"
+  },
+  {
+    "API": "Undertow",
+    "Description": "Public market-depth and sized exit estimates, not executable quotes",
+    "Auth": "",
+    "HTTPS": true,
+    "CORS": "Yes",
+    "Link": "https://liquilens-undertow.com",
     "Category": "Finance"
   },
   {
@@ -11364,6 +11643,15 @@
     "HTTPS": true,
     "CORS": "Unknown",
     "Link": "https://coffee.alexflipnote.dev/",
+    "Category": "Food & Drink"
+  },
+  {
+    "API": "CookbookSocial Nutrition",
+    "Description": "Nutrition data for 4,631 ingredients with food names in 19 languages",
+    "Auth": "`apiKey`",
+    "HTTPS": true,
+    "CORS": "No",
+    "Link": "https://cookbooksocial.app/api",
     "Category": "Food & Drink"
   },
   {
@@ -11643,6 +11931,24 @@
     "HTTPS": true,
     "CORS": "Yes",
     "Link": "https://www.themealdb.com/api.php",
+    "Category": "Food & Drink"
+  },
+  {
+    "API": "Tiny Plates",
+    "Description": "Structured recipes, semantic search, serving adjustments and shopping lists",
+    "Auth": "`apiKey`",
+    "HTTPS": true,
+    "CORS": "Yes",
+    "Link": "https://www.tinyplates.dev/docs",
+    "Category": "Food & Drink"
+  },
+  {
+    "API": "Tiny Plates",
+    "Description": "Structured recipes, semantic search, ingredient substitutions, serving adjustments and shopping lists",
+    "Auth": "`apiKey`",
+    "HTTPS": true,
+    "CORS": "Yes",
+    "Link": "https://www.tinyplates.dev/",
     "Category": "Food & Drink"
   },
   {
@@ -13950,6 +14256,15 @@
     "Category": "Geocoding"
   },
   {
+    "API": "Locio",
+    "Description": "Australian address autocomplete, validation and geocoding from the G-NAF national register",
+    "Auth": "`apiKey`",
+    "HTTPS": true,
+    "CORS": "Yes",
+    "Link": "https://locio.com.au/docs/",
+    "Category": "Geocoding"
+  },
+  {
     "API": "Longdo Map",
     "Description": "Interactive map with detailed places and information portal in Thailand",
     "Auth": "`apiKey`",
@@ -14217,6 +14532,15 @@
     "HTTPS": true,
     "CORS": "Unknown",
     "Link": "https://rapidapi.com/victorkarangwa4/api/rwanda",
+    "Category": "Geocoding"
+  },
+  {
+    "API": "SearchPinCode",
+    "Description": "Indian postal PIN code lookup, post office locator and district data",
+    "Auth": "",
+    "HTTPS": true,
+    "CORS": "Yes",
+    "Link": "https://searchpincode.in/api",
     "Category": "Geocoding"
   },
   {
@@ -14757,6 +15081,15 @@
     "HTTPS": true,
     "CORS": "Unknown",
     "Link": "https://data.colorado.gov/",
+    "Category": "Government"
+  },
+  {
+    "API": "ContaCLT",
+    "Description": "Brazilian payroll and labor calculations: net salary, INSS, IRRF, unemployment insurance",
+    "Auth": "",
+    "HTTPS": true,
+    "CORS": "Yes",
+    "Link": "https://contaclt.com/dados/api/",
     "Category": "Government"
   },
   {
@@ -15804,6 +16137,15 @@
     "Category": "Government"
   },
   {
+    "API": "Veridion",
+    "Description": "US congressional stock-trade disclosures and the President's OGE reports, linked to each filing",
+    "Auth": "",
+    "HTTPS": true,
+    "CORS": "Yes",
+    "Link": "https://www.veridionmarkets.com/data-api/docs",
+    "Category": "Government"
+  },
+  {
     "API": "Vett",
     "Description": "Screen names & companies against OFAC, PEP, watchlists & recalls",
     "Auth": "",
@@ -16417,6 +16759,15 @@
   },
   {
     "API": "Dabloons",
+    "Description": "Bounty board where AI agents post and work tasks like PR reviews, bug repros and install checks",
+    "Auth": "`apiKey`",
+    "HTTPS": true,
+    "CORS": "No",
+    "Link": "https://dabloons.net/llms.txt",
+    "Category": "Jobs"
+  },
+  {
+    "API": "Dabloons",
     "Description": "Bounty board where AI agents post and work tasks such as PR reviews, bug repros, install checks and site walkthroughs; free to use",
     "Auth": "`apiKey`",
     "HTTPS": true,
@@ -16497,6 +16848,15 @@
     "Category": "Jobs"
   },
   {
+    "API": "HireLayer",
+    "Description": "Parse resumes and job descriptions into structured JSON, normalize skills, and match and rank candidates against a job",
+    "Auth": "`apiKey`",
+    "HTTPS": true,
+    "CORS": "Yes",
+    "Link": "https://hirelayer.co",
+    "Category": "Jobs"
+  },
+  {
     "API": "Hiring Index",
     "Description": "Live job postings read from ten employer applicant tracking systems, with market aggregates",
     "Auth": "`apiKey`",
@@ -16515,8 +16875,8 @@
     "Category": "Jobs"
   },
   {
-    "API": "Job Opportunities",
-    "Description": "Employer-direct job postings with per-field provenance and retained closures, 248 countries; 2.3M+ live rows, keyless statistics endpoints.",
+    "API": "Job Opportunities API (JOA)",
+    "Description": "Employer-direct job postings from company career sites and ATSs, with per-field provenance and closure dates. Free key, no card.",
     "Auth": "`apiKey`",
     "HTTPS": true,
     "CORS": "Yes",
@@ -16911,6 +17271,15 @@
     "Category": "Machine Learning"
   },
   {
+    "API": "Cohere",
+    "Description": "NLP API for text generation, embeddings, classification and summarization with a free trial tier",
+    "Auth": "`apiKey`",
+    "HTTPS": true,
+    "CORS": "Yes",
+    "Link": "https://docs.cohere.com/reference/about",
+    "Category": "Machine Learning"
+  },
+  {
     "API": "CrowdSorcerer",
     "Description": "Web research, entity enrichment, document parsing, code execution, LLM generation, PII detection",
     "Auth": "`apiKey`",
@@ -16962,6 +17331,15 @@
     "HTTPS": true,
     "CORS": "Yes",
     "Link": "http://uttesh.com/exude-api/",
+    "Category": "Machine Learning"
+  },
+  {
+    "API": "GEN",
+    "Description": "Create and edit video projects, with credit-based AI media generation",
+    "Auth": "`apiKey`",
+    "HTTPS": true,
+    "CORS": "Yes",
+    "Link": "https://gen.pro/docs#ai-agents",
     "Category": "Machine Learning"
   },
   {
@@ -17118,6 +17496,15 @@
     "Category": "Machine Learning"
   },
   {
+    "API": "Nonobench",
+    "Description": "Open-source benchmark of how well LLMs solve nonogram puzzles",
+    "Auth": "",
+    "HTTPS": true,
+    "CORS": "Yes",
+    "Link": "https://www.nonobench.com/how-it-works",
+    "Category": "Machine Learning"
+  },
+  {
     "API": "Not Human Search",
     "Description": "AI tool discovery with agentic scoring for 8,600+ tools and MCP servers",
     "Auth": "",
@@ -17133,6 +17520,15 @@
     "HTTPS": true,
     "CORS": "No",
     "Link": "https://onomeo.com/docs",
+    "Category": "Machine Learning"
+  },
+  {
+    "API": "OpenRouter",
+    "Description": "Unified API for 300+ LLMs from OpenAI, Anthropic, Meta, Mistral and more, with a free tier",
+    "Auth": "`apiKey`",
+    "HTTPS": true,
+    "CORS": "Yes",
+    "Link": "https://openrouter.ai/docs/quick-start",
     "Category": "Machine Learning"
   },
   {
@@ -17155,7 +17551,7 @@
   },
   {
     "API": "Replicate",
-    "Description": "Run and deploy machine learning models in the cloud",
+    "Description": "Run open-source AI models in the cloud including image generation, LLMs and audio models",
     "Auth": "`apiKey`",
     "HTTPS": true,
     "CORS": "Yes",
@@ -17181,12 +17577,30 @@
     "Category": "Machine Learning"
   },
   {
+    "API": "SafeReel",
+    "Description": "NSFW detection for images and full-length videos by URL, free tier",
+    "Auth": "`apiKey`",
+    "HTTPS": true,
+    "CORS": "Yes",
+    "Link": "https://safereel.ai/docs",
+    "Category": "Machine Learning"
+  },
+  {
     "API": "SkyBiometry",
     "Description": "Face Detection, Face Recognition and Face Grouping",
     "Auth": "`apiKey`",
     "HTTPS": true,
     "CORS": "Unknown",
     "Link": "https://skybiometry.com/documentation/",
+    "Category": "Machine Learning"
+  },
+  {
+    "API": "Speak AI",
+    "Description": "Transcribe and analyze audio and video in 100+ languages",
+    "Auth": "`apiKey`",
+    "HTTPS": true,
+    "CORS": "Unknown",
+    "Link": "https://docs.speakai.co",
     "Category": "Machine Learning"
   },
   {
@@ -17214,6 +17628,15 @@
     "HTTPS": true,
     "CORS": "Yes",
     "Link": "https://timedoor.io",
+    "Category": "Machine Learning"
+  },
+  {
+    "API": "Together AI",
+    "Description": "Fast inference API for open-source LLMs including Llama, Qwen, DeepSeek with a free tier",
+    "Auth": "`apiKey`",
+    "HTTPS": true,
+    "CORS": "Yes",
+    "Link": "https://docs.together.ai/docs/quickstart",
     "Category": "Machine Learning"
   },
   {
@@ -18126,6 +18549,15 @@
     "Category": "Open Data"
   },
   {
+    "API": "Band Atlas",
+    "Description": "Cellular IoT bands, 2G/3G sunsets and device compatibility for 46 countries",
+    "Auth": "",
+    "HTTPS": true,
+    "CORS": "Yes",
+    "Link": "https://www.aiotrf.com/en/ai/band-atlas/developers/",
+    "Category": "Open Data"
+  },
+  {
     "API": "BetTip",
     "Description": "Lottery draw results for UK49s, Gosloto and South African National Lottery",
     "Auth": "",
@@ -18189,12 +18621,30 @@
     "Category": "Open Data"
   },
   {
+    "API": "CityAlert",
+    "Description": "Live public-safety incidents: crime, fire, disaster, weather and news from 650+ official feeds",
+    "Auth": "",
+    "HTTPS": true,
+    "CORS": "No",
+    "Link": "https://cityalert.live/developers",
+    "Category": "Open Data"
+  },
+  {
     "API": "CivicFeed",
     "Description": "News articles and public datasets",
     "Auth": "`apiKey`",
     "HTTPS": true,
     "CORS": "Unknown",
     "Link": "https://developers.civicfeed.com/",
+    "Category": "Open Data"
+  },
+  {
+    "API": "CollegeCalcAI",
+    "Description": "US college admission chance estimates and admissions data for 1,100+ colleges",
+    "Auth": "",
+    "HTTPS": true,
+    "CORS": "Yes",
+    "Link": "https://collegecalcai.com/developers",
     "Category": "Open Data"
   },
   {
@@ -18276,6 +18726,15 @@
     "HTTPS": true,
     "CORS": "No",
     "Link": "https://api.dimdom.pl/api/public/docs",
+    "Category": "Open Data"
+  },
+  {
+    "API": "Edgepedia",
+    "Description": "Search and read Edgepedia, a free and growing encyclopedia with citations",
+    "Auth": "",
+    "HTTPS": true,
+    "CORS": "Yes",
+    "Link": "https://www.edgechat.ai/developers",
     "Category": "Open Data"
   },
   {
@@ -18711,6 +19170,15 @@
     "Category": "Open Data"
   },
   {
+    "API": "StatOrigin",
+    "Description": "Sourced industry statistics as JSON, with every data point linked to its original source; CC BY 4.0 compilation",
+    "Auth": "",
+    "HTTPS": true,
+    "CORS": "Yes",
+    "Link": "https://statorigin.org",
+    "Category": "Open Data"
+  },
+  {
     "API": "Teleport",
     "Description": "Quality of Life Data",
     "Auth": "",
@@ -18720,12 +19188,30 @@
     "Category": "Open Data"
   },
   {
+    "API": "TerraScoutX",
+    "Description": "US property records by address: parcel, owner, appraised value, tax, flood zone and nearby schools",
+    "Auth": "`apiKey`",
+    "HTTPS": true,
+    "CORS": "Yes",
+    "Link": "https://terrascoutx.com/developers/",
+    "Category": "Open Data"
+  },
+  {
     "API": "The Deploy Log",
     "Description": "1,000+ AI deployments, each linked to the publisher's own page, JSON and CSV, CC BY 4.0",
     "Auth": "",
     "HTTPS": true,
     "CORS": "Yes",
     "Link": "https://github.com/dotcomjack/the-deploy-log",
+    "Category": "Open Data"
+  },
+  {
+    "API": "Tickerz",
+    "Description": "Daily indexes of real-world activity from public data, each reading timestamped in Bitcoin",
+    "Auth": "",
+    "HTTPS": true,
+    "CORS": "Yes",
+    "Link": "https://tickerz.com/docs",
     "Category": "Open Data"
   },
   {
@@ -18810,6 +19296,15 @@
     "Category": "Open Data"
   },
   {
+    "API": "Vuntum",
+    "Description": "Sourced, dated facts on consumer robots and physical AI, licensed CC BY 4.0",
+    "Auth": "",
+    "HTTPS": true,
+    "CORS": "Yes",
+    "Link": "https://vuntum.com/en/api-mcp",
+    "Category": "Open Data"
+  },
+  {
     "API": "Warnely",
     "Description": "Composite travel-safety scores for 180 countries (FCDO + US State + GPI + WGI + live incident wire), OpenAPI 3.1 spec, CC BY 4.0",
     "Auth": "",
@@ -18886,6 +19381,15 @@
     "Description": "Countly web analytics",
     "Auth": "",
     "HTTPS": false,
+    "CORS": "Unknown",
+    "Link": "https://api.count.ly/",
+    "Category": "Open Source Projects"
+  },
+  {
+    "API": "Countly",
+    "Description": "Countly web analytics",
+    "Auth": "",
+    "HTTPS": true,
     "CORS": "Unknown",
     "Link": "https://api.count.ly/reference",
     "Category": "Open Source Projects"
@@ -19068,6 +19572,15 @@
     "HTTPS": true,
     "CORS": "Yes",
     "Link": "https://akshaykumar-rest.vercel.app/",
+    "Category": "Personality"
+  },
+  {
+    "API": "Astro Agents",
+    "Description": "Deterministic Western and Vedic astrology: natal charts, transits, kundli, dashas, panchang",
+    "Auth": "",
+    "HTTPS": true,
+    "CORS": "Yes",
+    "Link": "https://astro-agent.dev/llms.txt",
     "Category": "Personality"
   },
   {
@@ -20169,6 +20682,15 @@
     "Category": "Science & Math"
   },
   {
+    "API": "Chempirical",
+    "Description": "Data for 48,000 chemical compounds: physical properties, Antoine constants, azeotropes, reactions, substructure and similarity search",
+    "Auth": "",
+    "HTTPS": true,
+    "CORS": "Yes",
+    "Link": "https://chempirical.com",
+    "Category": "Science & Math"
+  },
+  {
     "API": "CodeCogs",
     "Description": "Render LaTeX equations in PNG, GIF, SVG, EMF, PDF, JSON, or download formats with styling options",
     "Auth": "",
@@ -20400,6 +20922,15 @@
     "HTTPS": true,
     "CORS": "Unknown",
     "Link": "https://oceanfacts.herokuapp.com/",
+    "Category": "Science & Math"
+  },
+  {
+    "API": "Oliver's mTOR Atlas",
+    "Description": "Curated mTOR research: studies by evidence type, pathway claims, open questions",
+    "Auth": "",
+    "HTTPS": true,
+    "CORS": "Yes",
+    "Link": "https://mtor-atlas.org/api/",
     "Category": "Science & Math"
   },
   {
@@ -20975,6 +21506,15 @@
     "Auth": "`apiKey`",
     "HTTPS": true,
     "CORS": "Unknown",
+    "Link": "https://docs.greynoise.io/reference/getcommunityip",
+    "Category": "Security"
+  },
+  {
+    "API": "GreyNoise",
+    "Description": "Query IPs in the GreyNoise dataset and retrieve a subset of the full IP context data",
+    "Auth": "`apiKey`",
+    "HTTPS": true,
+    "CORS": "Unknown",
     "Link": "https://docs.greynoise.io/reference/get_v3-community-ip",
     "Category": "Security"
   },
@@ -21147,6 +21687,15 @@
     "HTTPS": true,
     "CORS": "Yes",
     "Link": "https://offendersearch.app",
+    "Category": "Security"
+  },
+  {
+    "API": "OSV",
+    "Description": "Open source vulnerability database and distributed triage infrastructure",
+    "Auth": "",
+    "HTTPS": true,
+    "CORS": "Yes",
+    "Link": "https://google.github.io/osv.dev/api/",
     "Category": "Security"
   },
   {
@@ -21438,6 +21987,15 @@
     "Category": "Shopping"
   },
   {
+    "API": "Clickwise",
+    "Description": "Affiliate product search by GTIN with tracked links, affiliate programs and deals; free sandbox key",
+    "Auth": "`apiKey`",
+    "HTTPS": true,
+    "CORS": "No",
+    "Link": "https://partners.clickwise.net/",
+    "Category": "Shopping"
+  },
+  {
     "API": "CompareFairly",
     "Description": "Neutral, sourced comparisons of products and services across any category, localized by language and country; per-criterion values, sub-scores and the source link behind each value",
     "Auth": "",
@@ -21696,6 +22254,15 @@
     "HTTPS": true,
     "CORS": "Yes",
     "Link": "https://shopsavvy.com/data",
+    "Category": "Shopping"
+  },
+  {
+    "API": "SoldStack",
+    "Description": "Sold resale listings from Poshmark with median price, days to sell and net payout after fees",
+    "Auth": "`apiKey`",
+    "HTTPS": true,
+    "CORS": "No",
+    "Link": "https://soldstack.fly.dev/docs",
     "Category": "Shopping"
   },
   {
@@ -23274,6 +23841,15 @@
     "Category": "Sports & Fitness"
   },
   {
+    "API": "WhensTheRace",
+    "Description": "F1 season schedule with UTC session start times as JSON, RSS and iCal",
+    "Auth": "",
+    "HTTPS": true,
+    "CORS": "Yes",
+    "Link": "https://whenstherace.com/f1-schedule-json/",
+    "Category": "Sports & Fitness"
+  },
+  {
     "API": "Your Move - Exercise API",
     "Description": "The complete exercise library and fitness API for your app. 698+ professional HD exercise videos with workout generation and program builder.",
     "Auth": "`apiKey`",
@@ -24399,6 +24975,24 @@
     "Category": "Transportation"
   },
   {
+    "API": "ConnectMeGuru",
+    "Description": "Search and purchase prepaid travel eSIM data plans across 190+ countries",
+    "Auth": "",
+    "HTTPS": true,
+    "CORS": "Yes",
+    "Link": "https://www.connectmeguru.com/api/mcp",
+    "Category": "Transportation"
+  },
+  {
+    "API": "Cruise Itinerary",
+    "Description": "Cruise sailings, day-by-day itineraries, weekly fare history, port traffic and a cruise price index",
+    "Auth": "`apiKey`",
+    "HTTPS": true,
+    "CORS": "Yes",
+    "Link": "https://cruise-itinerary.com/docs",
+    "Category": "Transportation"
+  },
+  {
     "API": "CruiseFeed",
     "Description": "Normalized cruise line inventory: ships, sailings, itineraries, ports and lead-in fares",
     "Auth": "`apiKey`",
@@ -24729,6 +25323,15 @@
     "HTTPS": true,
     "CORS": "Unknown",
     "Link": "https://developer.schiphol.nl/",
+    "Category": "Transportation"
+  },
+  {
+    "API": "SkyAccess",
+    "Description": "Search 5,000+ live empty leg flights, get charter price estimates and booking links. No account or API key.",
+    "Auth": "",
+    "HTTPS": true,
+    "CORS": "Yes",
+    "Link": "https://skyaccess.com",
     "Category": "Transportation"
   },
   {
@@ -25800,6 +26403,15 @@
     "HTTPS": true,
     "CORS": "Unknown",
     "Link": "https://anapioficeandfire.com/",
+    "Category": "Video"
+  },
+  {
+    "API": "Arcmira",
+    "Description": "Search indexed YouTube transcripts for timestamped passages and mentions",
+    "Auth": "`apiKey`",
+    "HTTPS": true,
+    "CORS": "Yes",
+    "Link": "https://arcmira.com/docs",
     "Category": "Video"
   },
   {
