@@ -1,5 +1,7 @@
 # DevPantry.com ⚡
 
+*[_link](https://devpantry.com/)*
+
 > **The Developer Asset Pantry, Edge Image Studio & Chaos Mock Data Suite.**  
 > *Built with Next.js 16 (App Router), React 19, TypeScript, and Tailwind CSS v4. 100% Client-Side Sandbox.*
 
