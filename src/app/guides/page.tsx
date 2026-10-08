@@ -11,6 +11,9 @@ export const metadata: Metadata = {
     title: 'Engineering Guides & Architecture Deep Dives | DevPantry',
     description: 'Technical breakdowns on building WebRTC collaboration, client-side AI background removal, zero-leak JWT decoders, and browser performance.',
     url: 'https://devpantry.com/guides',
+  },
+  alternates: {
+    canonical: 'https://devpantry.com/guides',
   }
 };
 

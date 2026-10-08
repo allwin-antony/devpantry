@@ -36,6 +36,15 @@
     "Category": "AI"
   },
   {
+    "API": "APIClaw",
+    "Description": "Flat-rate OpenAI-compatible gateway for Claude, GPT, DeepSeek, Qwen, Kimi and GLM models",
+    "Auth": "`apiKey`",
+    "HTTPS": true,
+    "CORS": "Yes",
+    "Link": "https://apiclaw.biz",
+    "Category": "AI"
+  },
+  {
     "API": "Azurade",
     "Description": "Image and video generation with 30+ models (Veo, Seedance, Nano Banana) over one REST API, paid per generation from credits that never expire",
     "Auth": "`apiKey`",
@@ -16947,15 +16956,6 @@
     "Category": "Jobs"
   },
   {
-    "API": "JobsPipe",
-    "Description": "Search live job postings from job boards and company career sites, plus tech stack detection by domain",
-    "Auth": "`apiKey`",
-    "HTTPS": true,
-    "CORS": "Yes",
-    "Link": "https://jobspipe.dev/docs",
-    "Category": "Jobs"
-  },
-  {
     "API": "Jobspipe",
     "Description": "Jobspipe a unified jobs data API powering access to over 300 million public job postings worldwide. We aggregate, normalize, and enrich job data",
     "Auth": "`apiKey`",
@@ -18636,6 +18636,15 @@
     "HTTPS": true,
     "CORS": "Unknown",
     "Link": "https://developers.civicfeed.com/",
+    "Category": "Open Data"
+  },
+  {
+    "API": "College ROI",
+    "Description": "Lifetime ROI of US colleges and majors, static JSON, CC BY 4.0",
+    "Auth": "",
+    "HTTPS": true,
+    "CORS": "Yes",
+    "Link": "https://le-teen.com",
     "Category": "Open Data"
   },
   {
@@ -22293,6 +22302,15 @@
     "Category": "Shopping"
   },
   {
+    "API": "Zinc",
+    "Description": "Place, track and return orders at Amazon, Walmart, Target and other online retailers",
+    "Auth": "`apiKey`",
+    "HTTPS": true,
+    "CORS": "No",
+    "Link": "https://www.zinc.com",
+    "Category": "Shopping"
+  },
+  {
     "API": "4chan",
     "Description": "Simple image-based bulletin board dedicated to a variety of topics",
     "Auth": "",
@@ -23397,6 +23415,15 @@
     "HTTPS": true,
     "CORS": "No",
     "Link": "https://lumify.ai/docs",
+    "Category": "Sports & Fitness"
+  },
+  {
+    "API": "Lumify",
+    "Description": "Real-time sports intelligence: scores, odds, betting splits & AI bet analysis across 8 sports",
+    "Auth": "`apiKey`",
+    "HTTPS": true,
+    "CORS": "No",
+    "Link": "https://lumify.ai",
     "Category": "Sports & Fitness"
   },
   {
@@ -26712,6 +26739,15 @@
     "Category": "Video"
   },
   {
+    "API": "MakeAIVideo",
+    "Description": "Turn a prompt or script into a finished short-form video with AI voiceover, scenes, captions and music through a REST API",
+    "Auth": "`apiKey`",
+    "HTTPS": true,
+    "CORS": "No",
+    "Link": "https://makeaivideo.ai",
+    "Category": "Video"
+  },
+  {
     "API": "MCU Countdown",
     "Description": "A Countdown to the next MCU Film",
     "Auth": "",
@@ -27087,6 +27123,15 @@
     "HTTPS": true,
     "CORS": "Yes",
     "Link": "https://transcript-yt.com/docs",
+    "Category": "Video"
+  },
+  {
+    "API": "TranscriptYT",
+    "Description": "YouTube transcripts as JSON, text, SRT or VTT, with playlist, channel, search and translation endpoints, plus an MCP server",
+    "Auth": "`apiKey`",
+    "HTTPS": true,
+    "CORS": "Yes",
+    "Link": "https://transcript-yt.com",
     "Category": "Video"
   },
   {
