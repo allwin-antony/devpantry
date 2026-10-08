@@ -64,6 +64,10 @@ A high-performance visual image suite running entirely inside the browser using 
 * **100% Client-Side Privacy**: Analyze photos for hidden GPS coordinates, camera models, and EXIF footprints purely in your browser.
 * **Canvas Stripping Technique**: Instantly strip all metadata from JPEGs and PNGs without server uploads by re-rendering the image natively.
 
+#### 🔄 Free HEIC to JPG Converter (`/tools/heic-converter`)
+* **100% Local Conversion**: Convert Apple's HEIC photos to widely supported JPG format entirely in your browser without uploading your personal photos to a server.
+* **Fast & Private**: Uses WebAssembly to decode high-efficiency image containers instantly.
+
 ---
 
 ### 2. 🔤 Open Source Fonts Studio (`/fonts`)
@@ -207,7 +211,17 @@ Actual production API response payloads and edge-case schemas for 19 real-world 
 
 ---
 
-### 8. 🤝 Real-Time P2P Collaborative Editor (`/collab`)
+### 8. 🧩 JSON to TS & Zod Converter (`/tools/json-to-ts-zod`)
+
+Instantly convert JSON API responses into strict TypeScript interfaces and Zod validation schemas.
+
+* **100% Client-Side AST Parsing**: Paste your JSON payloads and get typed interfaces instantly without sending data to a server.
+* **Zod Schema Generation**: Automatically infers types and generates ready-to-use runtime Zod validation schemas (`z.object(...)`, `z.array(...)`, `z.string()`, etc.).
+* **Safe for Proprietary APIs**: Since parsing happens locally, it is completely safe for internal enterprise schemas and sensitive data structures.
+
+---
+
+### 9. 🤝 Real-Time P2P Collaborative Editor (`/collab`)
 
 A zero-knowledge, real-time collaborative text and code editor built on pure peer-to-peer WebRTC and CRDTs (Conflict-free Replicated Data Types).
 
@@ -228,7 +242,7 @@ A zero-knowledge, real-time collaborative text and code editor built on pure pee
 
 ---
 
-### 9. 🌐 Public APIs Registry (`/tools/public-apis`)
+### 10. 🌐 Public APIs Registry (`/tools/public-apis`)
 
 A massive, searchable, and filterable registry of 3,000+ free public APIs for software and web development.
 
@@ -245,7 +259,7 @@ A massive, searchable, and filterable registry of 3,000+ free public APIs for so
 
 ---
 
-### 10. 🤖 AI MCP & Tools Registry (`/tools/mcp-registry`)
+### 11. 🤖 AI MCP & Tools Registry (`/tools/mcp-registry`)
 
 A collective list of 4,000+ open-source Model Context Protocol (MCP) servers and tools for AI agents (Claude Desktop, Cursor, and autonomous agents).
 
@@ -259,7 +273,7 @@ A collective list of 4,000+ open-source Model Context Protocol (MCP) servers and
 
 ---
 
-### 11. ⌨️ Global Command Palette (`Cmd + K` / `Ctrl + K`)
+### 12. ⌨️ Global Command Palette (`Cmd + K` / `Ctrl + K`)
 
 A unified search dialog accessible from anywhere in the suite via keyboard shortcut or header button:
 * **Instant Tool Switching**: Jump directly to Overview, AI Studio, Fonts, Icons, JWT Inspector, Chaos Data, Public APIs Registry, or API Mocks.
