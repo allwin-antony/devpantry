@@ -127,10 +127,26 @@ async function assembleRawModel(chunks, destPath, chunksDir, expectedSize) {
 }
 
 export async function provisionModels(options = {}) {
-  const shouldAssemble = options.assemble ?? true;
+  const shouldAssemble = options.assemble ?? false;
   console.log(`[imgly] Initializing offline model asset provisioning for v${VERSION}...`);
   ensureDir(PRIMARY_DIR);
   ensureDir(LEGACY_DIR);
+
+  // Cloudflare Workers Static Assets has a hard limit of 25 MiB per file.
+  // The @imgly browser engine loads models in 4 MiB chunks via resources.json, so raw
+  // assembled .onnx files (which are 45-168 MiB) are never needed and break Wrangler deployment.
+  if (!shouldAssemble) {
+    for (const model of ['isnet.onnx', 'isnet_fp16.onnx', 'isnet_quint8.onnx']) {
+      const p = path.join(PRIMARY_DIR, model);
+      if (fs.existsSync(p)) {
+        try { fs.unlinkSync(p); } catch {}
+      }
+      const outP = path.resolve(CWD, 'out/models', model);
+      if (fs.existsSync(outP)) {
+        try { fs.unlinkSync(outP); } catch {}
+      }
+    }
+  }
 
   // 1. Resolve resources.json
   const primaryResourcesPath = path.join(PRIMARY_DIR, 'resources.json');
@@ -235,8 +251,8 @@ const isDirectRun = !process.env.IMGLY_NO_AUTO_RUN && (
 );
 
 if (isDirectRun) {
-  const noAssemble = process.argv.includes('--no-assemble');
-  provisionModels({ assemble: !noAssemble }).catch((err) => {
+  const shouldAssemble = process.argv.includes('--assemble');
+  provisionModels({ assemble: shouldAssemble }).catch((err) => {
     console.error(`[imgly] FATAL ERROR during model provisioning:`, err);
     process.exit(1);
   });

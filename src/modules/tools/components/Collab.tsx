@@ -68,6 +68,11 @@ export default function CollabPage() {
               While WebRTC connections are inherently encrypted (DTLS/SRTP), we wanted to guarantee absolute zero-knowledge security, even against our own signaling infrastructure. When you generate a room, you enter a Password. We use the standard browser <strong>Web Crypto API</strong> (PBKDF2) to derive a cryptographically strong 256-bit AES-GCM key purely in browser memory. Every packet is aggressively encrypted before transmission.
             </p>
 
+            <h3>Live Markdown Dual-Pane & Developer Workspace</h3>
+            <p>
+              DevPantry Collab features a split-pane GitHub Flavored Markdown (GFM) workspace. As you pair program or draft technical documentation, changes render in real time with styled tables, task checklists, and code snippets. With one-click starter templates (RFC specs, meeting notes, project READMEs) and instant 1-click zero-knowledge invite links, team onboarding takes seconds.
+            </p>
+
             <h3>Related Tools</h3>
             <ul>
               <li><a href="/tools/jwt-decoder" className="text-rose-500 hover:underline">JWT Decoder</a> — Validate auth tokens before setting up collab sessions.</li>
