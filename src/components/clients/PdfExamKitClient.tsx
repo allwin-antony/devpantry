@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { PDFDocument } from 'pdf-lib';
 import { triggerFeedbackNudge } from '@/lib/feedbackNudge';
@@ -14,7 +14,22 @@ export const PdfExamKitClient: React.FC<{ initialTab?: 'img-to-pdf' | 'passport-
   const [outputFileName, setOutputFileName] = useState('');
   const [targetKb, setTargetKb] = useState<number>(200);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const outputUrlRef = useRef<string | null>(null);
   const router = useRouter();
+
+  const updateOutputUrl = (newUrl: string | null) => {
+    if (outputUrlRef.current) {
+      URL.revokeObjectURL(outputUrlRef.current);
+    }
+    outputUrlRef.current = newUrl;
+    setOutputUrl(newUrl);
+  };
+
+  useEffect(() => {
+    return () => {
+      if (outputUrlRef.current) URL.revokeObjectURL(outputUrlRef.current);
+    };
+  }, []);
 
   const handleTabClick = (newTab: 'img-to-pdf' | 'passport-photo' | 'pdf-compress' | 'pdf-merge') => {
     setActiveTab(newTab);
@@ -32,7 +47,7 @@ export const PdfExamKitClient: React.FC<{ initialTab?: 'img-to-pdf' | 'passport-
     if (e.target.files && e.target.files.length > 0) {
       const newFiles = Array.from(e.target.files);
       setSelectedFiles(prev => [...prev, ...newFiles]);
-      setOutputUrl(null);
+      updateOutputUrl(null);
       
       // Defer resetting the input so React has time to process the file objects
       setTimeout(() => {
@@ -45,12 +60,12 @@ export const PdfExamKitClient: React.FC<{ initialTab?: 'img-to-pdf' | 'passport-
 
   const removeFile = (index: number) => {
     setSelectedFiles(prev => prev.filter((_, i) => i !== index));
-    setOutputUrl(null);
+    updateOutputUrl(null);
   };
 
   const clearFiles = () => {
     setSelectedFiles([]);
-    setOutputUrl(null);
+    updateOutputUrl(null);
     if (fileInputRef.current) {
       fileInputRef.current.value = '';
     }
@@ -85,7 +100,7 @@ export const PdfExamKitClient: React.FC<{ initialTab?: 'img-to-pdf' | 'passport-
       const pdfBytes = await pdfDoc.save({ useObjectStreams: true });
       const blob = new Blob([pdfBytes as any], { type: 'application/pdf' });
       const url = URL.createObjectURL(blob);
-      setOutputUrl(url);
+      updateOutputUrl(url);
       triggerFeedbackNudge('pdf-exam-kit-generate');
     } catch (err) {
       console.error(err);
@@ -115,7 +130,7 @@ export const PdfExamKitClient: React.FC<{ initialTab?: 'img-to-pdf' | 'passport-
       const pdfBytes = await mergedPdf.save({ useObjectStreams: true });
       const blob = new Blob([pdfBytes as any], { type: 'application/pdf' });
       const url = URL.createObjectURL(blob);
-      setOutputUrl(url);
+      updateOutputUrl(url);
       triggerFeedbackNudge('pdf-exam-kit-merge');
     } catch (err) {
       console.error(err);
@@ -131,31 +146,42 @@ export const PdfExamKitClient: React.FC<{ initialTab?: 'img-to-pdf' | 'passport-
     try {
       const file = selectedFiles[0];
       const img = document.createElement('img');
-      img.src = URL.createObjectURL(file);
-      await new Promise(resolve => (img.onload = resolve));
+      const tempImgUrl = URL.createObjectURL(file);
+      try {
+        img.src = tempImgUrl;
+        await new Promise((resolve, reject) => {
+          img.onload = resolve;
+          img.onerror = reject;
+        });
 
-      const canvas = document.createElement('canvas');
-      canvas.width = img.width;
-      canvas.height = img.height;
-      const ctx = canvas.getContext('2d')!;
-      ctx.drawImage(img, 0, 0);
+        const canvas = document.createElement('canvas');
+        canvas.width = img.width;
+        canvas.height = img.height;
+        const ctx = canvas.getContext('2d')!;
+        ctx.drawImage(img, 0, 0);
 
-      let quality = 0.95;
-      let blob: Blob | null = null;
-      
-      while (quality > 0.05) {
-        blob = await new Promise<Blob | null>(resolve => canvas.toBlob(resolve, 'image/jpeg', quality));
-        if (blob && blob.size <= targetKb * 1024) {
-          break;
+        let quality = 0.95;
+        let blob: Blob | null = null;
+        
+        while (quality > 0.05) {
+          blob = await new Promise<Blob | null>(resolve => canvas.toBlob(resolve, 'image/jpeg', quality));
+          if (blob && blob.size <= targetKb * 1024) {
+            break;
+          }
+          quality -= 0.05;
         }
-        quality -= 0.05;
-      }
-      
-      if (blob) {
-        setOutputUrl(URL.createObjectURL(blob));
-        triggerFeedbackNudge('pdf-exam-kit-compress');
-      } else {
-        alert('Could not compress to the target size.');
+
+        canvas.width = 0;
+        canvas.height = 0;
+        
+        if (blob) {
+          updateOutputUrl(URL.createObjectURL(blob));
+          triggerFeedbackNudge('pdf-exam-kit-compress');
+        } else {
+          alert('Could not compress to the target size.');
+        }
+      } finally {
+        URL.revokeObjectURL(tempImgUrl);
       }
     } catch (err) {
       console.error(err);
@@ -182,7 +208,7 @@ export const PdfExamKitClient: React.FC<{ initialTab?: 'img-to-pdf' | 'passport-
       
       const pdfBytes = await pdf.save({ useObjectStreams: true });
       const blob = new Blob([pdfBytes as any], { type: 'application/pdf' });
-      setOutputUrl(URL.createObjectURL(blob));
+      updateOutputUrl(URL.createObjectURL(blob));
       triggerFeedbackNudge('pdf-exam-kit-compress-pdf');
     } catch (err) {
       console.error(err);
@@ -386,7 +412,7 @@ export const PdfExamKitClient: React.FC<{ initialTab?: 'img-to-pdf' | 'passport-
               />
               <a
                 href={outputUrl}
-                download={outputFileName.trim() ? (outputFileName.trim().toLowerCase().endsWith(activeTab.includes('pdf') ? '.pdf' : '.jpg') ? outputFileName.trim() : `${outputFileName.trim()}.${activeTab.includes('pdf') ? 'pdf' : 'jpg'}`) : `processed-${Date.now()}.${activeTab.includes('pdf') ? 'pdf' : 'jpg'}`}
+                download={outputFileName.trim() ? (outputFileName.trim().toLowerCase().endsWith(activeTab.includes('pdf') ? '.pdf' : '.jpg') ? outputFileName.trim() : `${outputFileName.trim()}.${activeTab.includes('pdf') ? 'pdf' : 'jpg'}`) : `devpantry-${activeTab}.${activeTab.includes('pdf') ? 'pdf' : 'jpg'}`}
                 onClick={() => triggerFeedbackNudge('pdf-exam-kit-download')}
                 className="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg text-sm font-semibold flex items-center justify-center gap-2 transition-colors whitespace-nowrap"
               >

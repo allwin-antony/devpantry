@@ -33,18 +33,22 @@ export default function CollabPage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      <div className="flex flex-col w-full flex-1">
+      <div className="flex flex-col shrink-0 w-full h-[calc(100dvh-3rem)] sm:h-[calc(100vh-3rem)] min-h-[580px]">
         <h1 className="sr-only">P2P Collaborative Editor</h1>
         <Suspense
           fallback={
-            <div className="p-6 text-xs font-mono text-[var(--text-muted)] flex items-center gap-2">
-              <span className="w-2 h-2 rounded-full bg-rose-500 animate-ping" />
+            <div className="flex-1 flex items-center justify-center p-8 bg-[var(--bg-app)] text-[var(--text-muted)] font-mono text-xs">
+              <span className="w-2 h-2 rounded-full bg-rose-500 animate-ping mr-2" />
               Loading Collab Studio...
             </div>
           }
         >
           <CollabWrapper />
-          <article className="tool-seo-content prose prose-sm max-w-none dark:prose-invert mt-8 px-4 sm:px-6 md:px-8 pb-12 max-w-5xl mx-auto">
+        </Suspense>
+      </div>
+
+      {/* SEO Content Block */}
+      <article className="tool-seo-content prose prose-sm max-w-none dark:prose-invert mt-8 px-4 sm:px-6 md:px-8 pb-12 max-w-5xl mx-auto">
             <h2>Why We Built a Zero-Knowledge P2P Collaborative Editor Using WebRTC and Yjs</h2>
             <p>
               Real-time collaboration is the standard for modern web applications. Whether you're pair programming, taking shared notes, or brainstorming architectures, the ability to see someone else's cursor dancing across the screen is expected. 
@@ -68,6 +72,11 @@ export default function CollabPage() {
               While WebRTC connections are inherently encrypted (DTLS/SRTP), we wanted to guarantee absolute zero-knowledge security, even against our own signaling infrastructure. When you generate a room, you enter a Password. We use the standard browser <strong>Web Crypto API</strong> (PBKDF2) to derive a cryptographically strong 256-bit AES-GCM key purely in browser memory. Every packet is aggressively encrypted before transmission.
             </p>
 
+            <h3>Live Markdown Dual-Pane & Developer Workspace</h3>
+            <p>
+              DevPantry Collab features a split-pane GitHub Flavored Markdown (GFM) workspace. As you pair program or draft technical documentation, changes render in real time with styled tables, task checklists, and code snippets. With one-click starter templates (RFC specs, meeting notes, project READMEs) and instant 1-click zero-knowledge invite links, team onboarding takes seconds.
+            </p>
+
             <h3>Related Tools</h3>
             <ul>
               <li><a href="/tools/jwt-decoder" className="text-rose-500 hover:underline">JWT Decoder</a> — Validate auth tokens before setting up collab sessions.</li>
@@ -75,8 +84,6 @@ export default function CollabPage() {
               <li><a href="/tools/api-templates" className="text-rose-500 hover:underline">API Mocks</a> — View production WebRTC/Signaling JSON payloads.</li>
             </ul>
           </article>
-        </Suspense>
-      </div>
     </div>
   );
 }

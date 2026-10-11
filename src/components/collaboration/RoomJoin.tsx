@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { ArrowRight } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { ArrowRight, ShieldCheck } from 'lucide-react';
 import { isValidRoomId } from '@/lib/collaboration/room';
 import { triggerFeedbackNudge } from '@/lib/feedbackNudge';
 
@@ -13,6 +13,23 @@ interface RoomJoinProps {
 export function RoomJoin({ onJoin, onSwitchToCreate, error, initialRoomId = '' }: RoomJoinProps) {
   const [roomId, setRoomId] = useState(initialRoomId);
   const [password, setPassword] = useState('');
+  const [autoFilled, setAutoFilled] = useState(false);
+
+  useEffect(() => {
+    if (typeof window !== 'undefined' && window.location.hash) {
+      const match = window.location.hash.match(/#pwd=([^&]+)/);
+      if (match && match[1]) {
+        try {
+          const decoded = decodeURIComponent(match[1]);
+          setPassword(decoded);
+          setAutoFilled(true);
+        } catch {
+          setPassword(match[1]);
+          setAutoFilled(true);
+        }
+      }
+    }
+  }, []);
 
   const handleJoin = () => {
     const upperRoomId = roomId.toUpperCase();
@@ -63,9 +80,18 @@ export function RoomJoin({ onJoin, onSwitchToCreate, error, initialRoomId = '' }
             type="password" 
             placeholder="••••••••••" 
             value={password}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+              setPassword(e.target.value);
+              setAutoFilled(false);
+            }}
             className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
           />
+          {autoFilled && (
+            <p className="text-[11px] text-emerald-500 flex items-center gap-1 font-medium">
+              <ShieldCheck size={13} />
+              Password loaded securely from invite link
+            </p>
+          )}
         </div>
       </div>
       <div className="flex flex-col gap-3 p-6 pt-0">

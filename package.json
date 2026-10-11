@@ -9,11 +9,13 @@
     "build": "next build",
     "start": "next start",
     "lint": "oxlint",
+    "test": "npx -y tsx --test tests/*.test.ts",
     "postinstall": "node scripts/fetch-imgly-models.mjs",
     "sync-apis": "npx -y tsx scripts/sync-public-apis.ts",
     "sync-mcp": "npx -y tsx scripts/sync-mcp-tools.ts"
   },
   "dependencies": {
+    "@codemirror/lang-markdown": "^6.5.2",
     "@codemirror/state": "^6.7.4",
     "@codemirror/view": "^6.43.11",
     "@imgly/background-removal": "^1.7.0",
@@ -25,6 +27,7 @@
     "heic2any": "^0.0.4",
     "lib0": "^0.2.117",
     "lucide-react": "^1.39.0",
+    "marked": "^18.1.0",
     "next": "^16.3.4",
     "next-themes": "^0.4.6",
     "pdf-lib": "^1.17.1",

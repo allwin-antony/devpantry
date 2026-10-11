@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { UploadCloud, Image as ImageIcon, Download, Trash2, MapPin, Eye, FileJson, CheckCircle2, RefreshCw } from 'lucide-react';
 import { triggerFeedbackNudge } from '@/lib/feedbackNudge';
 import exifr from 'exifr';
@@ -11,10 +11,31 @@ export const ExifStripperUtility: React.FC = () => {
   const [strippedBlobUrl, setStrippedBlobUrl] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<'preview' | 'metadata'>('preview');
 
+  const previewRef = useRef<string | null>(null);
+  const strippedBlobUrlRef = useRef<string | null>(null);
+
+  useEffect(() => {
+    previewRef.current = preview;
+  }, [preview]);
+
+  useEffect(() => {
+    strippedBlobUrlRef.current = strippedBlobUrl;
+  }, [strippedBlobUrl]);
+
+  useEffect(() => {
+    return () => {
+      if (previewRef.current) URL.revokeObjectURL(previewRef.current);
+      if (strippedBlobUrlRef.current) URL.revokeObjectURL(strippedBlobUrlRef.current);
+    };
+  }, []);
+
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = e.target.files?.[0];
     if (!selectedFile) return;
     
+    if (preview) URL.revokeObjectURL(preview);
+    if (strippedBlobUrl) URL.revokeObjectURL(strippedBlobUrl);
+
     setFile(selectedFile);
     const objectUrl = URL.createObjectURL(selectedFile);
     setPreview(objectUrl);
@@ -56,10 +77,15 @@ export const ExifStripperUtility: React.FC = () => {
       canvas.toBlob((blob) => {
         if (blob) {
           const newUrl = URL.createObjectURL(blob);
-          setStrippedBlobUrl(newUrl);
+          setStrippedBlobUrl(prev => {
+            if (prev) URL.revokeObjectURL(prev);
+            return newUrl;
+          });
           triggerFeedbackNudge('exif-stripper-success');
         }
         setIsStripping(false);
+        canvas.width = 0;
+        canvas.height = 0;
       }, file.type, 1.0); // 1.0 keeps max quality for formats like JPEG/WebP
     } catch (error) {
       console.error('Failed to strip metadata:', error);
@@ -82,6 +108,15 @@ export const ExifStripperUtility: React.FC = () => {
     a.click();
     document.body.removeChild(a);
     triggerFeedbackNudge('exif-stripper-download');
+  };
+
+  const handleClear = () => {
+    if (preview) URL.revokeObjectURL(preview);
+    if (strippedBlobUrl) URL.revokeObjectURL(strippedBlobUrl);
+    setFile(null);
+    setPreview(null);
+    setMetadata(null);
+    setStrippedBlobUrl(null);
   };
 
   const hasGPS = metadata && (metadata.latitude !== undefined || metadata.GPSLatitude !== undefined);
@@ -156,12 +191,7 @@ export const ExifStripperUtility: React.FC = () => {
                   {file.name}
                 </span>
                 <button 
-                  onClick={() => {
-                    setFile(null);
-                    setPreview(null);
-                    setMetadata(null);
-                    setStrippedBlobUrl(null);
-                  }}
+                  onClick={handleClear}
                   className="px-3 py-1.5 text-sm font-medium text-red-500 hover:bg-red-500/10 rounded-md transition-colors flex items-center gap-2"
                 >
                   <Trash2 className="w-4 h-4" /> Clear

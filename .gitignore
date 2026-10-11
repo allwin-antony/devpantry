@@ -42,3 +42,9 @@ graphify-out/
 .wrangler/
 .dev.vars
 public/assets/
+public/models/
+*.tsbuildinfo
+
+# AI Agent runtime artifacts & scratch
+.agents/
+

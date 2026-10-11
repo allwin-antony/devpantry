@@ -1,7 +1,7 @@
 'use client';
 
-import React, { useState, useCallback, useRef } from 'react';
-import { Upload, Image as ImageIcon, Download, Trash, RefreshCw, CheckCircle } from 'lucide-react';
+import React, { useState, useCallback, useRef, useEffect } from 'react';
+import { Upload, Image as ImageIcon, Download, Trash, RefreshCw } from 'lucide-react';
 import { triggerFeedbackNudge } from '@/lib/feedbackNudge';
 // We import heic2any dynamically to avoid SSR issues
 // import heic2any from 'heic2any';
@@ -15,10 +15,24 @@ interface ConversionItem {
   error?: string;
 }
 
-export default function HeicConverter({ slug }: { slug?: string }) {
+export default function HeicConverter({ slug: _slug }: { slug?: string } = {}) {
   const [items, setItems] = useState<ConversionItem[]>([]);
   const [isDragging, setIsDragging] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const itemsRef = useRef<ConversionItem[]>(items);
+
+  useEffect(() => {
+    itemsRef.current = items;
+  }, [items]);
+
+  // Revoke all preview URLs on component unmount
+  useEffect(() => {
+    return () => {
+      itemsRef.current.forEach((item) => {
+        if (item.previewUrl) URL.revokeObjectURL(item.previewUrl);
+      });
+    };
+  }, []);
 
   const handleFiles = (newFiles: FileList | File[]) => {
     const newItems: ConversionItem[] = Array.from(newFiles)
@@ -58,7 +72,12 @@ export default function HeicConverter({ slug }: { slug?: string }) {
       setItems((prev) =>
         prev.map((i) =>
           i.id === id
-            ? { ...i, status: 'done', blob: convertedBlob, previewUrl }
+            ? {
+                ...i,
+                status: 'done',
+                blob: convertedBlob,
+                previewUrl: (i.previewUrl && URL.revokeObjectURL(i.previewUrl), previewUrl)
+              }
             : i
         )
       );
@@ -86,11 +105,13 @@ export default function HeicConverter({ slug }: { slug?: string }) {
 
     const newFilename = item.file.name.replace(/\.heic|\.heif$/i, '.jpg');
     const a = document.createElement('a');
-    a.href = URL.createObjectURL(item.blob);
+    const downloadUrl = URL.createObjectURL(item.blob);
+    a.href = downloadUrl;
     a.download = newFilename;
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
+    setTimeout(() => URL.revokeObjectURL(downloadUrl), 100);
     triggerFeedbackNudge('heic-download');
   };
 
@@ -102,6 +123,13 @@ export default function HeicConverter({ slug }: { slug?: string }) {
       }
       return prev.filter((i) => i.id !== id);
     });
+  };
+
+  const clearAll = () => {
+    items.forEach((item) => {
+      if (item.previewUrl) URL.revokeObjectURL(item.previewUrl);
+    });
+    setItems([]);
   };
 
   const handleDragOver = useCallback((e: React.DragEvent) => {
@@ -120,7 +148,7 @@ export default function HeicConverter({ slug }: { slug?: string }) {
     if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
       handleFiles(e.dataTransfer.files);
     }
-  }, [items]);
+  }, []);
 
   const jsonLd = [
     {
@@ -197,7 +225,7 @@ export default function HeicConverter({ slug }: { slug?: string }) {
               </h2>
               <div className="flex items-center gap-2">
                 <button
-                  onClick={() => setItems([])}
+                  onClick={clearAll}
                   className="px-3 py-1.5 text-sm rounded-md border border-[var(--border-dev)] text-[var(--text-secondary)] hover:bg-[var(--bg-app)] transition-colors"
                 >
                   Clear All

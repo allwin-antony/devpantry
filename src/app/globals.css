@@ -41,6 +41,10 @@
   --table-th-bg: #090e18;
   --table-hover: rgba(255, 255, 255, 0.03);
   --pill-bg: rgba(255, 255, 255, 0.06);
+
+  /* Checkerboard Transparency Pattern Tokens */
+  --transparency-grid-bg: #080c14;
+  --transparency-grid-check: rgba(255, 255, 255, 0.08);
 }
 
 :root.light, html.light {
@@ -78,6 +82,10 @@
   --table-th-bg: #f8fafc;
   --table-hover: rgba(0, 0, 0, 0.02);
   --pill-bg: rgba(0, 0, 0, 0.05);
+
+  /* Checkerboard Transparency Pattern Tokens */
+  --transparency-grid-bg: #ffffff;
+  --transparency-grid-check: rgba(0, 0, 0, 0.08);
 }
 
 body {
@@ -262,12 +270,12 @@ body {
 
 /* Checkerboard transparency pattern for image matting & studio cutouts */
 .bg-transparency-grid {
-  background-color: var(--bg-panel-subtle);
+  background-color: var(--transparency-grid-bg);
   background-image: 
-    linear-gradient(45deg, var(--grid-line) 25%, transparent 25%),
-    linear-gradient(-45deg, var(--grid-line) 25%, transparent 25%),
-    linear-gradient(45deg, transparent 75%, var(--grid-line) 75%),
-    linear-gradient(-45deg, transparent 75%, var(--grid-line) 75%);
+    linear-gradient(45deg, var(--transparency-grid-check) 25%, transparent 25%),
+    linear-gradient(-45deg, var(--transparency-grid-check) 25%, transparent 25%),
+    linear-gradient(45deg, transparent 75%, var(--transparency-grid-check) 75%),
+    linear-gradient(-45deg, transparent 75%, var(--transparency-grid-check) 75%);
   background-size: 16px 16px;
   background-position: 0 0, 0 8px, 8px -8px, -8px 0px;
 }

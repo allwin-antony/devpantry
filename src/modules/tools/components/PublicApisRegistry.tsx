@@ -1,7 +1,7 @@
 import React, { useState, useMemo, useRef, useEffect } from 'react';
 import Link from 'next/link';
 import publicApisData from '@/data/public-apis.json';
-import { Search, ExternalLink, ShieldCheck, ShieldAlert, Globe, Lock, ChevronLeft, ChevronRight, ChevronDown, ArrowRight, Blocks } from 'lucide-react';
+import { Search, ExternalLink, ShieldCheck, ShieldAlert, Globe, Lock, ChevronLeft, ChevronRight, ChevronDown, ArrowRight } from 'lucide-react';
 import { triggerFeedbackNudge } from '@/lib/feedbackNudge';
 
 interface PublicApiEntry {
@@ -84,6 +84,31 @@ export default function PublicApisRegistry() {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 50;
 
+  const handleSearchChange = (val: string) => {
+    setSearchTerm(val);
+    setCurrentPage(1);
+  };
+
+  const handleCategoryChange = (val: string) => {
+    setSelectedCategory(val);
+    setCurrentPage(1);
+  };
+
+  const handleAuthFilterChange = (val: string) => {
+    setAuthFilter(val);
+    setCurrentPage(1);
+  };
+
+  const handleCorsFilterChange = (val: string) => {
+    setCorsFilter(val);
+    setCurrentPage(1);
+  };
+
+  const handleHttpsToggle = () => {
+    setHttpsFilter(prev => !prev);
+    setCurrentPage(1);
+  };
+
   // Extract unique categories
   const categories = useMemo(() => {
     const cats = new Set(typedPublicApisData.map(api => api.Category));
@@ -94,7 +119,6 @@ export default function PublicApisRegistry() {
 
   // Filter data
   const filteredData = useMemo(() => {
-    setCurrentPage(1); // Reset to page 1 when filters change
     return typedPublicApisData.filter(api => {
       const matchesSearch = 
         api.API.toLowerCase().includes(searchTerm.toLowerCase()) || 
@@ -170,13 +194,13 @@ export default function PublicApisRegistry() {
               type="text"
               placeholder="Search 3,000+ APIs by name or description..."
               value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
+              onChange={(e) => handleSearchChange(e.target.value)}
               className="w-full pl-10 pr-4 py-2 bg-[var(--bg-panel)] border border-[var(--border-dev)] rounded-lg text-[var(--text-primary)] focus:outline-none focus:ring-2 focus:ring-blue-500 transition-shadow"
             />
           </div>
           <CustomSelect
             value={selectedCategory}
-            onChange={setSelectedCategory}
+            onChange={handleCategoryChange}
             options={categoryOptions}
             minWidth="200px"
           />
@@ -185,7 +209,7 @@ export default function PublicApisRegistry() {
         <div className="flex flex-wrap items-center gap-3 p-3 bg-[var(--bg-sidebar)] border border-[var(--border-dev)] rounded-xl shadow-sm">
           <CustomSelect
             value={authFilter}
-            onChange={setAuthFilter}
+            onChange={handleAuthFilterChange}
             icon={Lock}
             options={[
               { value: 'All', label: 'Any Auth' },
@@ -197,7 +221,7 @@ export default function PublicApisRegistry() {
 
           <CustomSelect
             value={corsFilter}
-            onChange={setCorsFilter}
+            onChange={handleCorsFilterChange}
             icon={Globe}
             options={[
               { value: 'All', label: 'CORS: Any' },
@@ -208,7 +232,7 @@ export default function PublicApisRegistry() {
           />
 
           <button
-            onClick={() => setHttpsFilter(!httpsFilter)}
+            onClick={handleHttpsToggle}
             className={`ml-auto flex items-center gap-2 px-4 py-1.5 rounded-lg text-sm font-medium border transition-all duration-200 ${
               httpsFilter 
                 ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-700 dark:text-emerald-400 shadow-sm' 
