@@ -128,10 +128,11 @@ function JwtInspectorSkeleton() {
 export const JwtInspectorClient: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
   // Client mount check to safely eliminate hydration mismatches
   const mounted = useIsClient();
+  const [currentTime, setCurrentTime] = useState<number>(DEFAULT_PRESET_TIMESTAMP);
 
   const presets = useMemo(() => {
-    return getJwtPresets(mounted ? Math.floor(Date.now() / 1000) : DEFAULT_PRESET_TIMESTAMP);
-  }, [mounted]);
+    return getJwtPresets(currentTime);
+  }, [currentTime]);
   
   // 100% in-memory state — never stored in localStorage (safe for production tokens)
   const [rawToken, setRawToken] = useState<string>(() => presets[0].token);
@@ -140,14 +141,19 @@ export const JwtInspectorClient: React.FC<{ children?: React.ReactNode }> = ({ c
 
   // When client mounts, ensure the default initial preset token is active with current time
   useEffect(() => {
-    const livePresets = getJwtPresets(Math.floor(Date.now() / 1000));
-    setRawToken(prev => {
-      const defaultToken = getJwtPresets(DEFAULT_PRESET_TIMESTAMP)[0].token;
-      if (prev === defaultToken) {
-        return livePresets[0].token;
-      }
-      return prev;
-    });
+    const timer = setTimeout(() => {
+      const now = Math.floor(Date.now() / 1000);
+      setCurrentTime(now);
+      const livePresets = getJwtPresets(now);
+      setRawToken(prev => {
+        const defaultToken = getJwtPresets(DEFAULT_PRESET_TIMESTAMP)[0].token;
+        if (prev === defaultToken) {
+          return livePresets[0].token;
+        }
+        return prev;
+      });
+    }, 0);
+    return () => clearTimeout(timer);
   }, []);
 
   // Expanded claims tracking for in-place accordion hints (default 'exp' open)
@@ -234,7 +240,7 @@ export const JwtInspectorClient: React.FC<{ children?: React.ReactNode }> = ({ c
   };
 
   // Load a preset
-  const handleSelectPreset = (presetId: string) => {
+  const handleSelectPreset = useCallback((presetId: string) => {
     const livePresets = getJwtPresets(Math.floor(Date.now() / 1000));
     const p = livePresets.find(item => item.id === presetId);
     if (p) {
@@ -247,7 +253,7 @@ export const JwtInspectorClient: React.FC<{ children?: React.ReactNode }> = ({ c
       setActiveChaosHint(null);
       setExpandedClaimKeys({ exp: true });
     }
-  };
+  }, []);
 
   // Chaos Mutations with auto-activated Hint
   const runChaosMutation = (action: () => string, label: string, hintId?: string) => {

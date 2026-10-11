@@ -336,7 +336,7 @@ DevPantry runs the machine learning model (\`@imgly/background-removal\`) **enti
 export async function processImage(imageFile: File): Promise<Blob> {
   // Configured to load quantized ONNX weights from local public assets
   const blob = await removeBackground(imageFile, {
-    publicPath: '/models/',
+    publicPath: \`\${window.location.origin}/models/\`,
     device: 'gpu', // Attempts WebGPU first, falls back to WASM
     progress: (key: string, current: number, total: number) => {
       console.log(\`Model execution: \${key} (\${Math.round((current / total) * 100)}%)\`);

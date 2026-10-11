@@ -1,7 +1,7 @@
 import React, { useState, useMemo, useRef, useEffect } from 'react';
 import Link from 'next/link';
 import mcpToolsData from '@/data/mcp-tools.json';
-import { Search, ExternalLink, ShieldCheck, Code, Globe, ChevronLeft, ChevronRight, ChevronDown, ArrowRight, Blocks } from 'lucide-react';
+import { Search, ExternalLink, Code, ChevronLeft, ChevronRight, ChevronDown, ArrowRight } from 'lucide-react';
 import { triggerFeedbackNudge } from '@/lib/feedbackNudge';
 
 interface McpToolEntry {
@@ -80,6 +80,21 @@ export default function McpToolsRegistry() {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 50;
 
+  const handleSearchChange = (val: string) => {
+    setSearchTerm(val);
+    setCurrentPage(1);
+  };
+
+  const handleCategoryChange = (val: string) => {
+    setSelectedCategory(val);
+    setCurrentPage(1);
+  };
+
+  const handleLanguageChange = (val: string) => {
+    setLanguageFilter(val);
+    setCurrentPage(1);
+  };
+
   // Extract unique categories
   const categories = useMemo(() => {
     const cats = new Set(typedMcpToolsData.map(api => api.Category));
@@ -98,7 +113,6 @@ export default function McpToolsRegistry() {
 
   // Filter data
   const filteredData = useMemo(() => {
-    setCurrentPage(1); // Reset to page 1 when filters change
     return typedMcpToolsData.filter(api => {
       const matchesSearch = 
         api.API.toLowerCase().includes(searchTerm.toLowerCase()) || 
@@ -170,13 +184,13 @@ export default function McpToolsRegistry() {
               type="text"
               placeholder={`Search ${typedMcpToolsData.length}+ MCP servers by name or description...`}
               value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
+              onChange={(e) => handleSearchChange(e.target.value)}
               className="w-full pl-10 pr-4 py-2 bg-[var(--bg-panel)] border border-[var(--border-dev)] rounded-lg text-[var(--text-primary)] focus:outline-none focus:ring-2 focus:ring-blue-500 transition-shadow"
             />
           </div>
           <CustomSelect
             value={selectedCategory}
-            onChange={setSelectedCategory}
+            onChange={handleCategoryChange}
             options={categoryOptions}
             minWidth="200px"
           />
@@ -185,7 +199,7 @@ export default function McpToolsRegistry() {
         <div className="flex flex-wrap items-center gap-3 p-3 bg-[var(--bg-sidebar)] border border-[var(--border-dev)] rounded-xl shadow-sm">
           <CustomSelect
             value={languageFilter}
-            onChange={setLanguageFilter}
+            onChange={handleLanguageChange}
             icon={Code}
             options={languageOptions}
           />

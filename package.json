@@ -9,6 +9,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "oxlint",
+    "test": "npx -y tsx --test tests/*.test.ts",
     "postinstall": "node scripts/fetch-imgly-models.mjs",
     "sync-apis": "npx -y tsx scripts/sync-public-apis.ts",
     "sync-mcp": "npx -y tsx scripts/sync-mcp-tools.ts"

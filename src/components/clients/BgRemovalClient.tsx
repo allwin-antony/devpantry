@@ -42,12 +42,6 @@ import {
   MoveHorizontal
 } from 'lucide-react';
 
-interface MattePreset {
-  id: string;
-  name: string;
-  color: string; // CSS color or gradient
-  icon?: React.ReactNode;
-}
 
 interface Point {
   x: number;
@@ -294,16 +288,14 @@ export function BgRemovalClient({ initialMode = 'bg-removal' }: BgRemovalClientP
   const [processedBlob, setProcessedBlob] = useState<Blob | null>(null);
 
   // Random sample state
-  const [displaySamples, setDisplaySamples] = useState<SampleImage[]>(() => SAMPLE_IMAGES.slice(0, 4));
+  const [displaySamples, setDisplaySamples] = useState<SampleImage[]>(() =>
+    [...SAMPLE_IMAGES].sort(() => 0.5 - Math.random()).slice(0, 4)
+  );
 
-  useEffect(() => {
-    shuffleSamples();
-  }, []);
-
-  const shuffleSamples = () => {
+  const shuffleSamples = useCallback(() => {
     const shuffled = [...SAMPLE_IMAGES].sort(() => 0.5 - Math.random());
     setDisplaySamples(shuffled.slice(0, 4));
-  };
+  }, []);
 
   const [resultImageUrl, setResultImageUrl] = useState<string | null>(null);
 
@@ -393,7 +385,6 @@ export function BgRemovalClient({ initialMode = 'bg-removal' }: BgRemovalClientP
   const [targetFileSize, setTargetFileSize] = useState<TargetFileSizePreset>('full');
   const [customTargetKb, setCustomTargetKb] = useState<number>(500);
   const [exportDimensions, setExportDimensions] = useState<{ width: number; height: number } | null>(null);
-  const [exportQualityUsed, setExportQualityUsed] = useState<number | null>(null);
   const [originalExportSize, setOriginalExportSize] = useState<number | null>(null);
 
   // UI state
@@ -405,6 +396,9 @@ export function BgRemovalClient({ initialMode = 'bg-removal' }: BgRemovalClientP
   const isSlidingRef = useRef(false);
   const resultUrlRef = useRef<string | null>(null);
   const exportUrlRef = useRef<string | null>(null);
+  const customBgUrlRef = useRef<string | null>(null);
+  const croppedSourceUrlRef = useRef<string | null>(null);
+  const copiedTimerRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
     resultUrlRef.current = resultImageUrl;
@@ -413,6 +407,10 @@ export function BgRemovalClient({ initialMode = 'bg-removal' }: BgRemovalClientP
   useEffect(() => {
     exportUrlRef.current = finalExportUrl;
   }, [finalExportUrl]);
+
+  useEffect(() => {
+    customBgUrlRef.current = customBgImageUrl;
+  }, [customBgImageUrl]);
 
   const chromaPreviewUrlRef = useRef<string | null>(null);
   useEffect(() => {
@@ -430,17 +428,25 @@ export function BgRemovalClient({ initialMode = 'bg-removal' }: BgRemovalClientP
       if (exportUrlRef.current) URL.revokeObjectURL(exportUrlRef.current);
       if (chromaPreviewUrlRef.current) URL.revokeObjectURL(chromaPreviewUrlRef.current);
       if (brushPreviewUrlRef.current) URL.revokeObjectURL(brushPreviewUrlRef.current);
+      if (customBgUrlRef.current) URL.revokeObjectURL(customBgUrlRef.current);
+      if (croppedSourceUrlRef.current) URL.revokeObjectURL(croppedSourceUrlRef.current);
+      if (copiedTimerRef.current) clearTimeout(copiedTimerRef.current);
     };
   }, []);
 
   // Live preview generation for Chroma Key (Runs AFTER Brush Mode)
   useEffect(() => {
     if (!isChromaKeyActive || !chromaKeyColor) {
-      if (chromaPreviewUrl) {
-        URL.revokeObjectURL(chromaPreviewUrl);
-        setChromaPreviewUrl(null);
-      }
-      return;
+      const timer = setTimeout(() => {
+        setChromaPreviewUrl(prev => {
+          if (prev) {
+            URL.revokeObjectURL(prev);
+            return null;
+          }
+          return prev;
+        });
+      }, 0);
+      return () => clearTimeout(timer);
     }
     
     let isCancelled = false;
@@ -513,11 +519,16 @@ export function BgRemovalClient({ initialMode = 'bg-removal' }: BgRemovalClientP
   // Live preview generation for Brush Mode (Runs BEFORE Chroma Key)
   useEffect(() => {
     if (brushPaths.length === 0) {
-      if (brushPreviewUrl) {
-        URL.revokeObjectURL(brushPreviewUrl);
-        setBrushPreviewUrl(null);
-      }
-      return;
+      const timer = setTimeout(() => {
+        setBrushPreviewUrl(prev => {
+          if (prev) {
+            URL.revokeObjectURL(prev);
+            return null;
+          }
+          return prev;
+        });
+      }, 0);
+      return () => clearTimeout(timer);
     }
     
     let isCancelled = false;
@@ -622,6 +633,7 @@ export function BgRemovalClient({ initialMode = 'bg-removal' }: BgRemovalClientP
       try {
         const { preload } = await import('@imgly/background-removal');
         await preload({
+          publicPath: `${window.location.origin}/models/`,
           device: 'gpu',
           proxyToWorker: true,
           model: modelQuality,
@@ -642,7 +654,7 @@ export function BgRemovalClient({ initialMode = 'bg-removal' }: BgRemovalClientP
   }, [modelQuality]);
 
   // Main processing pipeline
-  const processImage = useCallback(async (imageInput: string | Blob, fileName: string, fileSize: number) => {
+  const processImage = useCallback(async (imageInput: string | Blob, _fileName?: string, _fileSize?: number) => {
     setIsProcessing(true);
     setErrorMessage(null);
     setProgressPercent(5);
@@ -654,7 +666,7 @@ export function BgRemovalClient({ initialMode = 'bg-removal' }: BgRemovalClientP
       const { removeBackground } = await import('@imgly/background-removal');
 
       const blobResult = await removeBackground(imageInput, {
-        publicPath: `${window.location.origin}/assets/imgly-v1.7.0/`,
+        publicPath: `${window.location.origin}/models/`,
         device: 'gpu',
         proxyToWorker: true,
         model: modelQuality,
@@ -689,9 +701,11 @@ export function BgRemovalClient({ initialMode = 'bg-removal' }: BgRemovalClientP
       setSliderPosition(50); // Guarantee center slider
 
       setProcessedBlob(blobResult);
-      if (resultImageUrl) URL.revokeObjectURL(resultImageUrl);
       const url = URL.createObjectURL(blobResult);
-      setResultImageUrl(url);
+      setResultImageUrl(prev => {
+        if (prev) URL.revokeObjectURL(prev);
+        return url;
+      });
       setViewMode('slider');
       setActiveTab('matte');
     } catch (err: unknown) {
@@ -701,7 +715,7 @@ export function BgRemovalClient({ initialMode = 'bg-removal' }: BgRemovalClientP
     } finally {
       setIsProcessing(false);
     }
-  }, [modelQuality, outputType, resultImageUrl]);
+  }, [modelQuality, outputType]);
 
   // On-demand AI Background Removal Trigger
   const handleTriggerBgRemoval = useCallback(() => {
@@ -757,6 +771,11 @@ export function BgRemovalClient({ initialMode = 'bg-removal' }: BgRemovalClientP
       return;
     }
 
+    if (croppedSourceUrlRef.current) {
+      URL.revokeObjectURL(croppedSourceUrlRef.current);
+      croppedSourceUrlRef.current = null;
+    }
+
     const reader = new FileReader();
     reader.onload = (e) => {
       const dataUrl = e.target?.result as string;
@@ -797,6 +816,10 @@ export function BgRemovalClient({ initialMode = 'bg-removal' }: BgRemovalClientP
 
   // Load from Pre-loaded Samples - Instant Studio preview without auto-running model
   const handleSelectSample = async (sample: SampleImage) => {
+    if (croppedSourceUrlRef.current) {
+      URL.revokeObjectURL(croppedSourceUrlRef.current);
+      croppedSourceUrlRef.current = null;
+    }
     setErrorMessage(null);
     setSourceImage(sample.url);
     setOriginalSourceImage(sample.url);
@@ -949,63 +972,66 @@ export function BgRemovalClient({ initialMode = 'bg-removal' }: BgRemovalClientP
     if (!blobToUse && !urlToUse) return null;
 
     // Load cutout bitmap or source image safely from memory buffer without CORS/COEP decode issues
-    let img: ImageBitmap | HTMLImageElement;
-    if (processedBlob && typeof createImageBitmap === 'function') {
-      try {
-        img = await createImageBitmap(processedBlob);
-      } catch {
-        img = await safeLoadImage(resultImageUrl || '');
-      }
-    } else if (sourceBlob && !processedBlob && typeof createImageBitmap === 'function') {
-      try {
-        img = await createImageBitmap(sourceBlob);
-      } catch {
-        img = await safeLoadImage(sourceImage || '');
-      }
-    } else if (urlToUse) {
-      img = await safeLoadImage(urlToUse);
-    } else {
-      return null;
-    }
+    let img: ImageBitmap | HTMLImageElement | null = null;
+    let srcImg: ImageBitmap | HTMLImageElement | null = null;
+    let bgImg: ImageBitmap | HTMLImageElement | null = null;
 
-    const currentMatte = MATTE_OPTIONS.find(m => m.id === selectedMatte);
-    // For custom-color, build an ephemeral matte
-    const activeMatte: MatteOption | undefined = selectedMatte === 'custom-color'
-      ? { id: 'custom-color', name: 'Custom', type: 'color', value: customColor }
-      : selectedMatte === 'custom-image'
-        ? { id: 'custom-image', name: 'Custom Image', type: 'custom-image', value: '' }
-        : currentMatte;
-
-    const naturalW = 'naturalWidth' in img ? img.naturalWidth : img.width;
-    const naturalH = 'naturalHeight' in img ? img.naturalHeight : img.height;
-
-    // Final output dimensions
-    const baseW = targetWidth > 0 ? targetWidth : (naturalW || 800);
-    const baseH = targetHeight > 0 ? targetHeight : (naturalH || 800);
-
-    // Additional canvas dimensions accounting for padding
-    const outW = Math.max(16, baseW + paddingPx * 2);
-    const outH = Math.max(16, baseH + paddingPx * 2);
-
-    const canvas = document.createElement('canvas');
-    canvas.width = outW;
-    canvas.height = outH;
-    const ctx = canvas.getContext('2d');
-    if (!ctx) return null;
-
-    // 1. Draw Backdrop / Matte
-    if (activeMatte && activeMatte.type !== 'transparent') {
-      if ((activeMatte.type === 'original' || activeMatte.type === 'blurred-original') && (sourceBlob || sourceImage)) {
-        let srcImg: ImageBitmap | HTMLImageElement | null = null;
+    try {
+      if (processedBlob && typeof createImageBitmap === 'function') {
         try {
-          if (sourceBlob && typeof createImageBitmap === 'function') {
-            srcImg = await createImageBitmap(sourceBlob);
-          } else if (sourceImage) {
-            srcImg = await safeLoadImage(sourceImage);
-          }
-        } catch (e) {
-          console.warn('Could not load backdrop image, proceeding with clean canvas:', e);
+          img = await createImageBitmap(processedBlob);
+        } catch {
+          img = await safeLoadImage(resultImageUrl || '');
         }
+      } else if (sourceBlob && !processedBlob && typeof createImageBitmap === 'function') {
+        try {
+          img = await createImageBitmap(sourceBlob);
+        } catch {
+          img = await safeLoadImage(sourceImage || '');
+        }
+      } else if (urlToUse) {
+        img = await safeLoadImage(urlToUse);
+      } else {
+        return null;
+      }
+
+      const currentMatte = MATTE_OPTIONS.find(m => m.id === selectedMatte);
+      // For custom-color, build an ephemeral matte
+      const activeMatte: MatteOption | undefined = selectedMatte === 'custom-color'
+        ? { id: 'custom-color', name: 'Custom', type: 'color', value: customColor }
+        : selectedMatte === 'custom-image'
+          ? { id: 'custom-image', name: 'Custom Image', type: 'custom-image', value: '' }
+          : currentMatte;
+
+      const naturalW = 'naturalWidth' in img ? img.naturalWidth : img.width;
+      const naturalH = 'naturalHeight' in img ? img.naturalHeight : img.height;
+
+      // Final output dimensions
+      const baseW = targetWidth > 0 ? targetWidth : (naturalW || 800);
+      const baseH = targetHeight > 0 ? targetHeight : (naturalH || 800);
+
+      // Additional canvas dimensions accounting for padding
+      const outW = Math.max(16, baseW + paddingPx * 2);
+      const outH = Math.max(16, baseH + paddingPx * 2);
+
+      const canvas = document.createElement('canvas');
+      canvas.width = outW;
+      canvas.height = outH;
+      const ctx = canvas.getContext('2d');
+      if (!ctx) return null;
+
+      // 1. Draw Backdrop / Matte
+      if (activeMatte && activeMatte.type !== 'transparent') {
+        if ((activeMatte.type === 'original' || activeMatte.type === 'blurred-original') && (sourceBlob || sourceImage)) {
+          try {
+            if (sourceBlob && typeof createImageBitmap === 'function') {
+              srcImg = await createImageBitmap(sourceBlob);
+            } else if (sourceImage) {
+              srcImg = await safeLoadImage(sourceImage);
+            }
+          } catch {
+            console.warn('Could not load backdrop image, proceeding with clean canvas');
+          }
 
         if (srcImg) {
           const sw = 'naturalWidth' in srcImg ? srcImg.naturalWidth : srcImg.width;
@@ -1049,7 +1075,6 @@ export function BgRemovalClient({ initialMode = 'bg-removal' }: BgRemovalClientP
         ctx.fillRect(0, 0, outW, outH);
       } else if (activeMatte.type === 'custom-image' && customBgImage) {
         try {
-          let bgImg: ImageBitmap | HTMLImageElement;
           if (typeof createImageBitmap === 'function') {
             bgImg = await createImageBitmap(customBgImage);
           } else {
@@ -1068,8 +1093,8 @@ export function BgRemovalClient({ initialMode = 'bg-removal' }: BgRemovalClientP
             bsy = (bh - bsH) / 2;
           }
           ctx.drawImage(bgImg, bsx, bsy, bsW, bsH, 0, 0, outW, outH);
-        } catch (e) {
-          console.warn('Custom backdrop image failed:', e);
+        } catch {
+          console.warn('Custom backdrop image failed');
         }
       }
     }
@@ -1111,7 +1136,7 @@ export function BgRemovalClient({ initialMode = 'bg-removal' }: BgRemovalClientP
         if (sourceImage) {
           try {
              origImg = await safeLoadImage(sourceImage);
-          } catch(e) {}
+          } catch {}
         }
         
         const strokeCanvas = document.createElement('canvas');
@@ -1276,7 +1301,18 @@ export function BgRemovalClient({ initialMode = 'bg-removal' }: BgRemovalClientP
 
     ctx.restore();
     return canvas;
-  };
+  } finally {
+    if (img && 'close' in img && typeof img.close === 'function') {
+      img.close();
+    }
+    if (srcImg && 'close' in srcImg && typeof srcImg.close === 'function') {
+      srcImg.close();
+    }
+    if (bgImg && 'close' in bgImg && typeof bgImg.close === 'function') {
+      bgImg.close();
+    }
+  }
+};
 
   // Generate optimized output blob according to format and target size budget
   const generateExportBlob = async (
@@ -1317,7 +1353,6 @@ export function BgRemovalClient({ initialMode = 'bg-removal' }: BgRemovalClientP
       setFinalExportBlob(result.blob);
       setFinalExportUrl(url);
       setExportDimensions({ width: result.width, height: result.height });
-      setExportQualityUsed(result.qualityUsed);
       setPreviewModalOpen(true);
     } catch (err) {
       console.error('Render preview error:', err);
@@ -1378,7 +1413,8 @@ export function BgRemovalClient({ initialMode = 'bg-removal' }: BgRemovalClientP
         await navigator.clipboard.write([new ClipboardItem({ 'image/png': blobToCopy })]);
         triggerFeedbackNudge('bg-removal-copy');
         setIsCopied(true);
-        setTimeout(() => setIsCopied(false), 2000);
+        if (copiedTimerRef.current) clearTimeout(copiedTimerRef.current);
+        copiedTimerRef.current = setTimeout(() => setIsCopied(false), 2000);
       }
     } catch (err) {
       console.warn('Clipboard image write failed:', err);
@@ -1507,6 +1543,15 @@ export function BgRemovalClient({ initialMode = 'bg-removal' }: BgRemovalClientP
     setChromaPreviewUrl(null);
     if (brushPreviewUrl) URL.revokeObjectURL(brushPreviewUrl);
     setBrushPreviewUrl(null);
+    if (croppedSourceUrlRef.current) {
+      URL.revokeObjectURL(croppedSourceUrlRef.current);
+      croppedSourceUrlRef.current = null;
+    }
+    if (customBgImageUrl) {
+      URL.revokeObjectURL(customBgImageUrl);
+    }
+    setCustomBgImage(null);
+    setCustomBgImageUrl(null);
     
     setFinalExportBlob(null);
     setPreviewModalOpen(false);
@@ -1555,7 +1600,12 @@ export function BgRemovalClient({ initialMode = 'bg-removal' }: BgRemovalClientP
 
     const croppedBlob = await new Promise<Blob | null>(resolve => canvas.toBlob(resolve, 'image/png', 1));
     if (!croppedBlob) return;
+
+    if (croppedSourceUrlRef.current) {
+      URL.revokeObjectURL(croppedSourceUrlRef.current);
+    }
     const croppedUrl = URL.createObjectURL(croppedBlob);
+    croppedSourceUrlRef.current = croppedUrl;
 
     setSourceBlob(croppedBlob);
     setSourceImage(croppedUrl);
@@ -1578,6 +1628,10 @@ export function BgRemovalClient({ initialMode = 'bg-removal' }: BgRemovalClientP
 
   const handleUndoCrop = () => {
     if (originalSourceImage && originalSourceBlob && originalSourceFile) {
+      if (croppedSourceUrlRef.current) {
+        URL.revokeObjectURL(croppedSourceUrlRef.current);
+        croppedSourceUrlRef.current = null;
+      }
       setSourceImage(originalSourceImage);
       setSourceBlob(originalSourceBlob);
       setSourceFile(originalSourceFile);
@@ -2532,7 +2586,7 @@ export function BgRemovalClient({ initialMode = 'bg-removal' }: BgRemovalClientP
                                   const eyeDropper = new window.EyeDropper();
                                   const result = await eyeDropper.open();
                                   setChromaKeyColor(result.sRGBHex);
-                                } catch (e) {
+                                } catch {
                                   // User canceled or error
                                 }
                               }}

@@ -42,3 +42,6 @@ graphify-out/
 .wrangler/
 .dev.vars
 public/assets/
+public/models/
+*.tsbuildinfo
+
