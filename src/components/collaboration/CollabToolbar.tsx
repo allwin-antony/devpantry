@@ -213,7 +213,7 @@ export function CollabToolbar({
   };
 
   return (
-    <div className="flex flex-wrap items-center justify-between gap-2 p-2 border-b border-[var(--border-dev)] bg-[var(--bg-panel)] select-none">
+    <div className="shrink-0 flex flex-wrap items-center justify-between gap-2 p-2 border-b border-[var(--border-dev)] bg-[var(--bg-panel)] select-none">
       {/* Left: History & Markdown formatting buttons */}
       <div className="flex items-center gap-0.5 flex-wrap">
         {/* Undo & Redo */}
@@ -329,7 +329,7 @@ export function CollabToolbar({
 
         {/* Inserts: Link, Code block, Table, Divider */}
         <button
-          onClick={() => onInsertFormatting('[', '](https://example.com)', 'link text')}
+          onClick={() => onInsertFormatting('[', '](https://devpantry.com)', 'link text')}
           className="p-1.5 rounded-md text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-sidebar)] transition-colors"
           title="Insert Link"
         >

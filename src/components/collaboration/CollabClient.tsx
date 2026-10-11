@@ -14,11 +14,16 @@ import { YjsStateManager } from '@/lib/collaboration/yjs';
 import { EncryptedWebRTCProvider } from '@/lib/collaboration/webrtc';
 import { deriveKey } from '@/lib/collaboration/crypto';
 import { useSearchParams } from 'next/navigation';
-import { Share2, RefreshCw, LogOut, ShieldCheck, FileText } from 'lucide-react';
+import { Share2, RefreshCw, LogOut, ShieldCheck, FileText, CheckCircle2, X } from 'lucide-react';
 import { triggerFeedbackNudge } from '@/lib/feedbackNudge';
 import { marked } from 'marked';
 
 type ViewState = 'SETUP' | 'EDITOR';
+
+interface ExportToast {
+  title: string;
+  description?: string;
+}
 
 export function CollabClient() {
   const searchParams = useSearchParams();
@@ -44,6 +49,20 @@ export function CollabClient() {
   // Editor imperative ref
   const editorRef = useRef<CollabEditorHandle>(null);
 
+  // Toast notification state for exports
+  const [exportToast, setExportToast] = useState<ExportToast | null>(null);
+  const toastTimerRef = useRef<NodeJS.Timeout | null>(null);
+
+  const showToast = (title: string, description?: string) => {
+    if (toastTimerRef.current) {
+      clearTimeout(toastTimerRef.current);
+    }
+    setExportToast({ title, description });
+    toastTimerRef.current = setTimeout(() => {
+      setExportToast(null);
+    }, 3500);
+  };
+
   // Use refs so cleanup callbacks don't capture stale closure values
   const providerRef = useRef<EncryptedWebRTCProvider | null>(null);
   const managerRef = useRef<YjsStateManager | null>(null);
@@ -51,6 +70,9 @@ export function CollabClient() {
   // Clean up on unmount
   useEffect(() => {
     return () => {
+      if (toastTimerRef.current) {
+        clearTimeout(toastTimerRef.current);
+      }
       providerRef.current?.disconnect();
       managerRef.current?.destroy();
     };
@@ -202,26 +224,30 @@ export function CollabClient() {
 
   const handleExport = (type: 'download-md' | 'copy-md' | 'copy-html') => {
     const text = docContent || yjsManager?.text.toString() || '';
+    const filename = `${activeRoomId || 'collab'}-document.md`;
 
     if (type === 'download-md') {
       const blob = new Blob([text], { type: 'text/markdown;charset=utf-8' });
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
-      a.download = `${activeRoomId || 'collab'}-document.md`;
+      a.download = filename;
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
       URL.revokeObjectURL(url);
       triggerFeedbackNudge('collab-download-markdown');
+      showToast('Markdown Downloaded', `Saved as ${filename}`);
     } else if (type === 'copy-md') {
       navigator.clipboard.writeText(text);
       triggerFeedbackNudge('collab-copy-markdown');
+      showToast('Raw Markdown Copied', `${text.length} characters copied to clipboard`);
     } else if (type === 'copy-html') {
       try {
         const html = marked.parse(text, { gfm: true, breaks: true, async: false }) as string;
         navigator.clipboard.writeText(html);
         triggerFeedbackNudge('collab-copy-html');
+        showToast('Rendered HTML Copied', 'Formatted HTML copied to clipboard');
       } catch (e) {
         console.error('Failed to parse html:', e);
       }
@@ -237,7 +263,7 @@ export function CollabClient() {
 
   if (view === 'SETUP') {
     return (
-      <div className="flex flex-col items-center justify-center min-h-[60vh] p-4 bg-[var(--bg-app)]">
+      <div className="flex flex-col items-center justify-center w-full h-full min-h-[580px] p-4 bg-[var(--bg-app)]">
         {setupMode === 'CREATE' ? (
           <RoomCreate
             onJoin={handleCreateRoom}
@@ -272,9 +298,9 @@ export function CollabClient() {
   const readingTime = Math.max(1, Math.ceil(wordCount / 200));
 
   return (
-    <div className="flex flex-col h-[calc(100vh-64px)] max-h-screen bg-[var(--bg-app)]">
+    <div className="flex flex-col w-full h-full bg-[var(--bg-app)] overflow-hidden">
       {/* Top Header */}
-      <header className="flex flex-wrap items-center justify-between p-3 sm:px-6 border-b border-[var(--border-dev)] bg-[var(--bg-panel)] shadow-xs gap-3">
+      <header className="shrink-0 flex flex-wrap items-center justify-between p-3 sm:px-6 border-b border-[var(--border-dev)] bg-[var(--bg-panel)] shadow-xs gap-3">
         <div className="flex items-center gap-3">
           <div className="flex flex-col">
             <h1 className="font-bold text-base sm:text-lg text-[var(--text-primary)] font-sans flex items-center gap-2">
@@ -354,7 +380,7 @@ export function CollabClient() {
       />
 
       {/* Main Workspace (Editor + Live Preview) */}
-      <main className="flex-1 overflow-hidden relative">
+      <main className="flex-1 min-h-0 overflow-hidden relative">
         <div className="w-full h-full">
           {yjsManager && webrtcProvider && (
             <div className="w-full h-full flex flex-col md:flex-row overflow-hidden">
@@ -394,19 +420,20 @@ export function CollabClient() {
       </main>
 
       {/* Document Stats & Security Status Footer */}
-      <footer className="flex flex-wrap items-center justify-between px-4 py-1.5 border-t border-[var(--border-dev)] bg-[var(--bg-panel)] text-[11px] text-[var(--text-secondary)] font-mono select-none">
-        <div className="flex items-center gap-2">
-          <ShieldCheck size={13} className="text-emerald-500" />
-          <span>Zero-Knowledge AES-GCM Encrypted · Pure P2P Sync</span>
+      <footer className="shrink-0 flex items-center justify-between px-3 sm:px-5 py-1.5 border-t border-[var(--border-dev)] bg-[var(--bg-panel)] text-[11px] text-[var(--text-secondary)] font-mono select-none z-10">
+        <div className="flex items-center gap-2 shrink-0">
+          <ShieldCheck size={13} className="text-emerald-500 shrink-0" />
+          <span className="hidden sm:inline">Zero-Knowledge AES-GCM Encrypted · Pure P2P Sync</span>
+          <span className="sm:hidden">Zero-Knowledge P2P</span>
         </div>
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2 sm:gap-3 shrink-0">
           <span>{wordCount} {wordCount === 1 ? 'word' : 'words'}</span>
           <span>·</span>
           <span>{charCount} chars</span>
           <span>·</span>
           <span>{lineCount} lines</span>
-          <span>·</span>
-          <span>~{readingTime} min read</span>
+          <span className="hidden sm:inline">·</span>
+          <span className="hidden sm:inline">~{readingTime} min read</span>
         </div>
       </footer>
 
@@ -417,6 +444,36 @@ export function CollabClient() {
         roomId={activeRoomId}
         password={activePassword}
       />
+
+      {/* Floating Export Toast Notification */}
+      {exportToast && (
+        <div
+          role="status"
+          aria-live="polite"
+          className="fixed bottom-6 right-6 z-50 flex items-center gap-3 px-4 py-3 rounded-xl border shadow-2xl backdrop-blur-md transition-all animate-in fade-in slide-in-from-bottom-3 duration-200 bg-[var(--bg-panel)] border-emerald-500/40 text-[var(--text-primary)]"
+        >
+          <div className="w-8 h-8 rounded-lg bg-emerald-500/15 border border-emerald-500/30 flex items-center justify-center text-emerald-500 shrink-0">
+            <CheckCircle2 size={18} />
+          </div>
+          <div className="flex flex-col pr-1">
+            <span className="text-xs font-semibold text-[var(--text-primary)] font-sans">
+              {exportToast.title}
+            </span>
+            {exportToast.description && (
+              <span className="text-[11px] text-[var(--text-secondary)] font-mono">
+                {exportToast.description}
+              </span>
+            )}
+          </div>
+          <button
+            onClick={() => setExportToast(null)}
+            className="p-1 rounded-md text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--bg-sidebar)] transition-colors ml-1 cursor-pointer"
+            aria-label="Dismiss notification"
+          >
+            <X size={14} />
+          </button>
+        </div>
+      )}
     </div>
   );
 }

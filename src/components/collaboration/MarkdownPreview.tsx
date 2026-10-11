@@ -3,6 +3,7 @@
 import React, { useMemo, useEffect, useRef } from 'react';
 import { marked } from 'marked';
 import { FileText } from 'lucide-react';
+import { triggerFeedbackNudge } from '@/lib/feedbackNudge';
 
 interface MarkdownPreviewProps {
   content: string;
@@ -49,6 +50,7 @@ export function MarkdownPreview({ content }: MarkdownPreviewProps) {
         const code = pre.querySelector('code');
         const textToCopy = code ? code.innerText : pre.innerText;
         navigator.clipboard.writeText(textToCopy);
+        triggerFeedbackNudge('collab-copy-code-block');
         btn.innerHTML = `<span class="text-emerald-500 font-semibold">Copied!</span>`;
         setTimeout(() => {
           btn.innerHTML = `<span>Copy</span>`;
