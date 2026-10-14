@@ -1,9 +1,9 @@
-name: Daily API & MCP Sync
+name: Scheduled API & MCP Sync
 
 on:
   schedule:
-    # Runs daily at 00:00 UTC (5:30 AM IST)
-    - cron: '0 0 * * *'
+    # Runs every 2 days at 00:00 UTC (5:30 AM IST)
+    - cron: '0 0 */2 * *'
   workflow_dispatch: # Allows manual triggering from the GitHub Actions UI
 
 permissions:
@@ -44,6 +44,7 @@ jobs:
           if git diff --staged --quiet; then
             echo "No data changes detected. Skipping commit."
           else
-            git commit -m "chore(data): automated daily sync of public APIs and MCP tools [skip ci]"
+            # Note: No [skip ci] so Cloudflare detects the push and rebuilds the static export
+            git commit -m "chore(data): automated sync of public APIs and MCP tools"
             git push origin HEAD:${{ github.ref_name }}
           fi
