@@ -8967,6 +8967,13 @@
     "Category": "Databases"
   },
   {
+    "API": "AIops-tools/Queue-AIops",
+    "Description": "Governed Redis + RabbitMQ operations — memory-pressure, latency, backlog, and churn RCA, plus guardrailed queue and key operations (28 tools) with unbypassable audit logging (MCP + CLI), budget/runaway guards, and undo/rollback.",
+    "Language": "Python",
+    "Link": "https://github.com/AIops-tools/Queue-AIops",
+    "Category": "Databases"
+  },
+  {
     "API": "Airtable",
     "Description": "Search, create and update Airtable bases, tables, fields, and records using Claude Desktop and MCP (Model Context Protocol) clients",
     "Language": "Unknown",
@@ -11232,6 +11239,13 @@
     "Description": "Delegates documentation and code analysis, including calls to other MCP servers, to a local or low-cost OpenAI-compatible LLM to save top-tier model tokens.",
     "Language": "Python",
     "Link": "https://github.com/FI-Mihej/codebase-agent-mcp",
+    "Category": "Developer Tools"
+  },
+  {
+    "API": "FidelisMM/shipstores",
+    "Description": "Ship iOS and Android apps end to end: App Store Connect, Google Play Console and Expo EAS builds, listings, screenshots, privacy labels, review submission and App Review replies.",
+    "Language": "Python",
+    "Link": "https://github.com/FidelisMM/shipstores",
     "Category": "Developer Tools"
   },
   {
@@ -15859,6 +15873,13 @@
     "Description": "BotIndex AI signal intelligence API and Agorion agent service discovery network, with x402 payments for premium endpoints.",
     "Language": "TypeScript",
     "Link": "https://github.com/Cyberweasel777/botindex-mcp-server",
+    "Category": "Finance & Fintech"
+  },
+  {
+    "API": "D-Asce/pandastocksdk",
+    "Description": "A-share realtime market data via MCP: NATS-pushed quotes, Level2, DDX, capital flow, news. 22 tools, free public test account. Install: `pip install pandastock-mcp`",
+    "Language": "Python",
+    "Link": "https://github.com/D-Asce/pandastocksdk",
     "Category": "Finance & Fintech"
   },
   {
@@ -34297,6 +34318,13 @@
     "Description": "Google Slides API: create and edit presentations, slides, shapes, tables and images, speaker notes and exports.",
     "Language": "TypeScript",
     "Link": "https://github.com/A1-x-Tech/mcp-google-slides",
+    "Category": "Workplace & Productivity"
+  },
+  {
+    "API": "A1-x-Tech/mcp-google-tasks",
+    "Description": "Google Tasks API: manage task lists, and create and organize tasks with due dates, notes and subtasks.",
+    "Language": "TypeScript",
+    "Link": "https://github.com/A1-x-Tech/mcp-google-tasks",
     "Category": "Workplace & Productivity"
   },
   {
