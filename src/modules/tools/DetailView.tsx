@@ -10,6 +10,7 @@ import dynamic from 'next/dynamic';
 const componentMap: Record<string, React.ComponentType<any>> = {
   'jwt-decoder': dynamic(() => import('./components/JwtDecoder')),
   'image-compressor': dynamic(() => import('./components/ImageCompressor')),
+  'png-to-webp': dynamic(() => import('./components/ImageCompressor')),
   'image-resizer': dynamic(() => import('./components/ImageResizer')),
   'image-to-pdf': dynamic(() => import('./components/PdfExamKit')),
   'merge-pdf': dynamic(() => import('./components/PdfExamKit')),
@@ -24,7 +25,9 @@ const componentMap: Record<string, React.ComponentType<any>> = {
   'mcp-registry': dynamic(() => import('./components/McpToolsRegistry')),
   'heic-converter': dynamic(() => import('./components/HeicConverter')),
   'json-to-ts-zod': dynamic(() => import('./components/JsonToTsZod')),
+  'json-to-zod': dynamic(() => import('./components/JsonToTsZod')),
   'exif-stripper': dynamic(() => import('./components/ExifStripper')),
+  'strip-gps-from-photo': dynamic(() => import('./components/ExifStripper')),
 };
 
 export default function ToolsDetailView({ item }: { item: ToolItem }) {

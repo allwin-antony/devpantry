@@ -245,7 +245,7 @@ function parseDimensions(bytes: Uint8Array): { width: number; height: number } |
 const MAX_RESPONSE_BYTES = 100_000; // 100 KB
 const MAX_REDIRECTS = 5;
 const FETCH_TIMEOUT_MS = 5000;
-const CACHE_TTL_SECONDS = 300; // 5 min
+const CACHE_TTL_SECONDS = 3600; // 1 hour
 
 export const handleOgFetch = async (request: Request, ctx: ExecutionContext) => {
 

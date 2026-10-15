@@ -95,6 +95,26 @@ const toolsData: ToolItem[] = [
     badge: 'Beta',
     featured: true,
   },
+  {
+    slug: 'png-to-webp',
+    name: 'PNG to WebP Converter',
+    heroTagline: 'Convert PNG and JPG images to high-compression WebP offline in your browser.',
+    description: 'Fast, private client-side PNG to WebP converter. Batch convert images, tune compression quality, and download without server uploads.',
+    category: 'Media',
+    icon: 'HardDrive',
+    badge: 'Offline WebP',
+    featured: false,
+  },
+  {
+    slug: 'strip-gps-from-photo',
+    name: 'Strip GPS & EXIF from Photo',
+    heroTagline: 'Remove location coordinates and camera metadata from your photos before sharing.',
+    description: 'Inspect and strip GPS latitude/longitude, camera device info, and private EXIF data from JPEG/PNG images completely offline.',
+    category: 'Media',
+    icon: 'ImageMinus',
+    badge: 'GPS Remover',
+    featured: false,
+  },
 
   // ── Developer ──────────────────────────────────────────────────────────────
   {
@@ -115,6 +135,16 @@ const toolsData: ToolItem[] = [
     category: 'Developer',
     icon: 'Braces',
     badge: 'AST Parser',
+    featured: false,
+  },
+  {
+    slug: 'json-to-zod',
+    name: 'JSON to Zod Schema Generator',
+    heroTagline: 'Generate TypeScript Zod validation schemas directly from JSON payloads.',
+    description: 'Instant JSON to Zod schema generator with strict type inference and AST parsing. 100% client-side with zero data leakage.',
+    category: 'Developer',
+    icon: 'Braces',
+    badge: 'Zod Generator',
     featured: false,
   },
   {

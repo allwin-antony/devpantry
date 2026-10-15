@@ -8,7 +8,7 @@ This document provides in-depth technical details about the architecture, perfor
 
 A high-performance visual image suite running entirely inside the browser using modern WebGPU, WebAssembly (WASM), and Canvas APIs.
 
-#### ✨ Free AI Background Remover (`/tools/background-removal`)
+#### ✨ Free AI Background Remover (`/tools/background-remover`)
 * **On-Demand Neural Inference**: Loads with **0ms latency** on upload. Neural model execution is deferred until the user clicks **`✨ Remove Background (AI)`**, preserving battery and GPU memory.
 * **Hardware Acceleration & Dedicated Web Worker**: Utilizes `proxyToWorker` to offload neural segmentation entirely to a background thread. Employs `SharedArrayBuffer` with COOP/COEP isolation for true multi-threaded WebAssembly execution.
 * **Eager Idle Preloading**: The AI model weights and WASM compiler are silently pre-fetched during idle browser time from a local cache so the segmentation engine is warm the moment a user acts.
@@ -196,13 +196,14 @@ Actual production API response payloads and edge-case schemas for 19 real-world 
 
 ---
 
-### 8. 🧩 JSON to TS & Zod Converter (`/tools/json-to-ts-zod`)
+### 8. 🧩 JSON to TS & Zod Converter (`/tools/json-to-ts-zod`, `/tools/json-to-zod`)
 
 Instantly convert JSON API responses into strict TypeScript interfaces and Zod validation schemas.
 
 * **100% Client-Side AST Parsing**: Paste your JSON payloads and get typed interfaces instantly without sending data to a server.
 * **Zod Schema Generation**: Automatically infers types and generates ready-to-use runtime Zod validation schemas (`z.object(...)`, `z.array(...)`, `z.string()`, etc.).
-* **Safe for Proprietary APIs**: Since parsing happens locally, it is completely safe for internal enterprise schemas and sensitive data structures.
+* **Zero-Backend `#state=` Sharing**: Serializes payloads into client-side URL fragments (`#state=...`). URL fragments are never sent across HTTP requests, guaranteeing zero external data leakage while letting developers paste shareable links directly into GitHub issues, PRs, and Slack.
+* **Safe for Proprietary APIs**: Since parsing and state sharing happen strictly on the client, it is completely safe for internal enterprise schemas and sensitive data structures.
 
 ---
 
@@ -214,6 +215,11 @@ A zero-knowledge, real-time collaborative text and code editor built on pure pee
   * Documents are **never** sent to a central database or server.
   * WebRTC signaling (SDP offer/answer exchange) is handled by a lightweight **Cloudflare Durable Object** (`SignalingRoom`). 
   * The signaling server utilizes the modern **WebSocket Hibernation API** to persist socket connections and track peers gracefully, even if the worker hibernates to save compute.
+* **Signaling Hardening & DoS Protection**:
+  * **Payload Limiting**: Strict 64 KB message size ceiling on all incoming WebSocket messages.
+  * **Peer Capacity**: Maximum of 25 concurrent peers per room (`HTTP 429` on overflow).
+  * **Rate Limiting**: Per-socket token burst limiter capping traffic to 60 messages/sec.
+  * **Bounded Storage**: Automatic pruning of SQLite update delta logs (capped at 500 rows).
 * **Client-Side AES-GCM Encryption**:
   * Uses `PBKDF2` to derive a strong 256-bit AES-GCM key from the room password entirely in the browser.
   * Every Yjs update is securely encrypted before being transmitted over the WebRTC `RTCDataChannel`.
@@ -283,11 +289,30 @@ To ensure minimal client bundle sizes and sub-second page loads:
 ## 🔍 SEO & Discovery Architecture
 
 DevPantry is built from the ground up for search engine indexing:
-* **2,450+ Pre-Rendered Static Pages**: Generated via Next.js SSG (`generateStaticParams`) for instantaneous First Contentful Paint.
-* **Dedicated Targeted URLs**: Independent routes (`/tools/background-removal`, `/tools/image-resizer`, `/tools/image-compressor`, `/fonts/[slug]`, `/icons/[prefix]`, `/tools/api-templates/[id]`) targeting specific high-volume developer search intents.
-* **No Signup / Unlimited Keywords**: Explicit search intent keyword placement across titles, meta tags, and structured data.
-* **Dynamic XML Sitemap**: Automatic `sitemap.xml` listing all pages with daily change frequencies.
+* **2,460+ Pre-Rendered Static Pages**: Generated via Next.js SSG (`generateStaticParams`) for instantaneous First Contentful Paint.
+* **Dedicated High-Intent Preset URLs**: Independent routes targeting high-volume developer search intents:
+  * `/tools/background-remover` — AI neural background segmentation
+  * `/tools/image-resizer` — Canvas framing & aspect ratio studio
+  * `/tools/image-compressor` — Budget-targeted lossless & WebP compression
+  * `/tools/png-to-webp` — Instant browser-side WebP converter
+  * `/tools/json-to-zod` — Zod schema generation from raw JSON
+  * `/tools/strip-gps-from-photo` — Browser-local EXIF & GPS coordinate removal
+  * `/fonts/[slug]` — Individual typeface playgrounds (2,180+ typefaces)
+  * `/icons/[prefix]` — Individual vector icon library catalogs
+* **Root Sitemap Index (`sitemap.xml`)**: Built post-export to provide a clean `<sitemapindex>` linking partitioned sub-sitemaps (`core`, `tools`, `fonts`, `icons`, `templates`, `guides`) directly to Google Search Console and Bing Webmaster Tools.
+* **Canonical 301 Redirects (`_redirects`)**: Cloudflare edge rules that seamlessly alias legacy root-level paths to canonical `/tools/*` destinations.
 * **Structured Data (JSON-LD)**: Rich snippet markup for `WebApplication` and `DeveloperApplication`.
+
+---
+
+## 🛡️ Edge Security & Cloudflare Architecture
+
+DevPantry is deployed using Cloudflare's unified **Workers + Static Assets** (`wrangler.jsonc`):
+* **Static Assets Engine**: All pre-rendered HTML, client JS, CSS, and font files from `./out` are served directly by Cloudflare's edge cache with zero serverless cold-start latency.
+* **Edge Compute & Durable Objects**: Dynamic WebRTC signaling (`/api/collab/*`) and OpenGraph metadata relay (`/api/og-fetch`) run in the same Worker without requiring a separate backend domain.
+* **Defense-in-Depth Headers (`_headers`)**:
+  * Cross-Origin Opener Policy (`COOP: same-origin`) and Embedder Policy (`COEP: require-corp`) for multithreaded WASM tools.
+  * Content Security Policy (CSP) blocking rogue data exfiltration while explicitly allowing Google Fonts, Fontshare (`api.fontshare.com`, `cdn.fontshare.com`), and jsDelivr.
 
 ---
 

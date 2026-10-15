@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { triggerFeedbackNudge } from '@/lib/feedbackNudge';
-import { Play, Copy, Check, AlertCircle, FileJson, FileCode, Braces } from 'lucide-react';
+import { Play, Copy, Check, AlertCircle, FileJson, FileCode, Braces, Share2 } from 'lucide-react';
 
 type TsType = 
   | { type: 'string' }
@@ -85,6 +85,22 @@ export function JsonToTsZodClient({ children }: { children?: React.ReactNode }) 
   const [error, setError] = useState<string | null>(null);
   const [copiedTs, setCopiedTs] = useState(false);
   const [copiedZod, setCopiedZod] = useState(false);
+  const [copiedShare, setCopiedShare] = useState(false);
+
+  // Restore state from URL fragment (#state=...) on initial mount (100% client-side zero-leak)
+  useEffect(() => {
+    if (typeof window !== 'undefined' && window.location.hash.startsWith('#state=')) {
+      try {
+        const raw = window.location.hash.slice(7);
+        const decoded = decodeURIComponent(raw);
+        if (decoded.trim()) {
+          setJsonInput(decoded);
+        }
+      } catch (e) {
+        console.error('Failed to parse #state from URL hash', e);
+      }
+    }
+  }, []);
 
   useEffect(() => {
     try {
@@ -120,6 +136,19 @@ export function JsonToTsZodClient({ children }: { children?: React.ReactNode }) 
     }
   };
 
+  const handleShare = () => {
+    try {
+      const encoded = encodeURIComponent(jsonInput);
+      const shareUrl = `${window.location.origin}${window.location.pathname}#state=${encoded}`;
+      navigator.clipboard.writeText(shareUrl);
+      setCopiedShare(true);
+      triggerFeedbackNudge('json-payload-share');
+      setTimeout(() => setCopiedShare(false), 2000);
+    } catch (e) {
+      console.error('Failed to generate share URL', e);
+    }
+  };
+
   return (
     <div className="flex flex-col flex-1 h-full max-w-[1600px] mx-auto w-full p-4 lg:p-8 gap-6 relative">
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
@@ -132,6 +161,14 @@ export function JsonToTsZodClient({ children }: { children?: React.ReactNode }) 
             Instantly convert JSON API responses into strict TypeScript interfaces and Zod schemas. Runs 100% in your browser for total privacy—paste your proprietary payloads without fear.
           </p>
         </div>
+        <button
+          onClick={handleShare}
+          className="flex items-center gap-2 px-3.5 py-1.5 rounded-lg bg-[var(--bg-panel)] border border-[var(--border-dev)] hover:border-rose-500/50 text-[var(--text-primary)] text-sm font-medium transition-all shadow-sm hover:shadow shrink-0"
+          title="Share zero-backend link with payload in URL hash"
+        >
+          {copiedShare ? <Check className="w-4 h-4 text-green-500" /> : <Share2 className="w-4 h-4 text-rose-500" />}
+          {copiedShare ? 'Link Copied!' : 'Share (#state)'}
+        </button>
       </div>
 
       {error && (
@@ -149,17 +186,27 @@ export function JsonToTsZodClient({ children }: { children?: React.ReactNode }) 
               <FileJson className="w-4 h-4 text-emerald-500" />
               JSON Input
             </div>
-            <button
-              onClick={() => {
-                try {
-                  const parsed = JSON.parse(jsonInput);
-                  setJsonInput(JSON.stringify(parsed, null, 2));
-                } catch (e) {}
-              }}
-              className="text-xs text-[var(--text-secondary)] hover:text-[var(--text-primary)] px-2 py-1 bg-[var(--bg-panel)] border border-[var(--border-dev)] rounded hover:border-emerald-500/50 transition-colors"
-            >
-              Format JSON
-            </button>
+            <div className="flex items-center gap-2">
+              <button
+                onClick={handleShare}
+                className="flex items-center gap-1.5 text-xs text-[var(--text-secondary)] hover:text-rose-500 px-2 py-1 bg-[var(--bg-panel)] border border-[var(--border-dev)] rounded hover:border-rose-500/50 transition-colors"
+                title="Copy shareable zero-backend link"
+              >
+                {copiedShare ? <Check className="w-3.5 h-3.5 text-green-500" /> : <Share2 className="w-3.5 h-3.5" />}
+                {copiedShare ? 'Copied' : 'Share'}
+              </button>
+              <button
+                onClick={() => {
+                  try {
+                    const parsed = JSON.parse(jsonInput);
+                    setJsonInput(JSON.stringify(parsed, null, 2));
+                  } catch (e) {}
+                }}
+                className="text-xs text-[var(--text-secondary)] hover:text-[var(--text-primary)] px-2 py-1 bg-[var(--bg-panel)] border border-[var(--border-dev)] rounded hover:border-emerald-500/50 transition-colors"
+              >
+                Format JSON
+              </button>
+            </div>
           </div>
           <textarea
             value={jsonInput}

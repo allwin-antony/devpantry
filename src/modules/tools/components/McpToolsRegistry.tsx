@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useRef, useEffect } from 'react';
+import React, { useState, useMemo, useRef, useEffect, useDeferredValue } from 'react';
 import Link from 'next/link';
 import mcpToolsData from '@/data/mcp-tools.json';
 import { Search, ExternalLink, Code, ChevronLeft, ChevronRight, ChevronDown, ArrowRight } from 'lucide-react';
@@ -74,6 +74,7 @@ function CustomSelect({ value, onChange, options, icon: Icon, minWidth = '140px'
 
 export default function McpToolsRegistry() {
   const [searchTerm, setSearchTerm] = useState('');
+  const deferredSearchTerm = useDeferredValue(searchTerm);
   const [selectedCategory, setSelectedCategory] = useState<string>('All');
   const [languageFilter, setLanguageFilter] = useState<string>('All');
   
@@ -111,18 +112,20 @@ export default function McpToolsRegistry() {
 
   const languageOptions = useMemo(() => languages.map(lang => ({ value: lang, label: lang === 'All' ? 'All Languages' : lang })), [languages]);
 
-  // Filter data
+  // Filter data using deferred search term
   const filteredData = useMemo(() => {
+    const query = deferredSearchTerm.trim().toLowerCase();
     return typedMcpToolsData.filter(api => {
       const matchesSearch = 
-        api.API.toLowerCase().includes(searchTerm.toLowerCase()) || 
-        api.Description.toLowerCase().includes(searchTerm.toLowerCase());
+        !query ||
+        api.API.toLowerCase().includes(query) || 
+        api.Description.toLowerCase().includes(query);
       const matchesCategory = selectedCategory === 'All' || api.Category === selectedCategory;
       const matchesLanguage = languageFilter === 'All' || api.Language === languageFilter;
 
       return matchesSearch && matchesCategory && matchesLanguage;
     });
-  }, [searchTerm, selectedCategory, languageFilter]);
+  }, [deferredSearchTerm, selectedCategory, languageFilter]);
 
   // Paginate data
   const totalPages = Math.ceil(filteredData.length / itemsPerPage);

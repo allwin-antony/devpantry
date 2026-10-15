@@ -67,6 +67,23 @@ describe('Tool Loader Registry Suite', () => {
       }
     });
 
+    it('retrieves newly added high-intent micro-tool presets', () => {
+      const pngWebp = getToolBySlug('png-to-webp');
+      assert.ok(pngWebp !== null);
+      assert.equal(pngWebp.name, 'PNG to WebP Converter');
+      assert.equal(pngWebp.category, 'Media');
+
+      const jsonZod = getToolBySlug('json-to-zod');
+      assert.ok(jsonZod !== null);
+      assert.equal(jsonZod.name, 'JSON to Zod Schema Generator');
+      assert.equal(jsonZod.category, 'Developer');
+
+      const stripGps = getToolBySlug('strip-gps-from-photo');
+      assert.ok(stripGps !== null);
+      assert.equal(stripGps.name, 'Strip GPS & EXIF from Photo');
+      assert.equal(stripGps.category, 'Media');
+    });
+
     it('categorizes all tools into valid categories in TOOL_CATEGORIES', () => {
       for (const category of TOOL_CATEGORIES) {
         const tools = getToolsByCategory(category);

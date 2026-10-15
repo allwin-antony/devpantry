@@ -58,14 +58,17 @@ Inspect how the tools work and contribute improvements.
 * **[Background Remover](/tools/background-remover)**: 100% local AI neural inference via WebGPU.
 * **[Image Resizer](/tools/image-resizer)**: Aspect ratio framing and smart padding.
 * **[Image Compressor](/tools/image-compressor)**: Target KB budgeting.
+* **[PNG to WebP Converter](/tools/png-to-webp)**: Fast, private client-side WebP conversion.
 * **[PDF Tools](/tools/image-to-pdf)**: Client-side merge, compress, and photo kit.
 * **[EXIF Stripper](/tools/exif-stripper)**: Canvas stripping technique to remove metadata.
+* **[Strip GPS from Photo](/tools/strip-gps-from-photo)**: Remove location coordinates and EXIF before sharing.
 * **[HEIC Converter](/tools/heic-converter)**: Fast & private WebAssembly decoding.
 
 ### 🧪 Test & Debug
 * **[JWT Inspector](/tools/jwt-decoder)**: Decode, validate, and chaos-tamper JWTs in-memory.
 * **[Chaos Data Studio](/tools/mock-data)**: Synthesize high-entropy mock datasets.
-* **[JSON to TS & Zod](/tools/json-to-ts-zod)**: Client-side AST parsing for schemas.
+* **[JSON to TS & Zod](/tools/json-to-ts-zod)**: Client-side AST parsing with `#state=` link sharing.
+* **[JSON to Zod Generator](/tools/json-to-zod)**: Generate runtime Zod validation schemas from JSON payloads.
 * **[API Templates](/tools/api-templates)**: Real-world response fixtures for Stripe, Supabase, etc.
 * **[Social Share Preview](/tools/social-preview)**: Multi-platform mockups and OG checker.
 * **Media Card Tester** *(Beta)*: Stress-test media cards with realistic and broken content (missing images, extremely long descriptions, error states) before shipping them.
@@ -114,7 +117,7 @@ npm install
 npm run dev
 ```
 
-Open **http://localhost:3000** (or http://localhost:5173) in your browser.
+Open **http://localhost:3000** in your browser.
 
 ---
 
