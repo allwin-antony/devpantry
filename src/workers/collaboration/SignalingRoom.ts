@@ -33,11 +33,16 @@ export class SignalingRoom extends DurableObject {
     const url = new URL(request.url);
     const peerId = url.searchParams.get('peerId') || crypto.randomUUID();
 
-    this.ctx.acceptWebSocket(server);
-    server.serializeAttachment({ id: peerId });
-
     // 1. Get all currently active peers (excluding the joining socket)
+    const MAX_ROOM_PEERS = 25;
     const activeSockets = this.ctx.getWebSockets().filter(ws => ws.readyState === 1 && ws !== server);
+    if (activeSockets.length >= MAX_ROOM_PEERS) {
+      return new Response('Room capacity reached (max 25 peers)', { status: 429 });
+    }
+
+    this.ctx.acceptWebSocket(server);
+    server.serializeAttachment({ id: peerId, msgCount: 0, windowStart: Date.now() });
+
     const existingPeerIds: string[] = [];
     for (const ws of activeSockets) {
       try {
@@ -90,6 +95,34 @@ export class SignalingRoom extends DurableObject {
   webSocketMessage(ws: WebSocket, message: string | ArrayBuffer) {
     if (typeof message !== 'string') return;
 
+    // Hard payload limit: max 64 KB per message to protect memory and storage
+    const MAX_MESSAGE_BYTES = 64 * 1024;
+    if (message.length > MAX_MESSAGE_BYTES) {
+      return;
+    }
+
+    // Rate limiting: max 60 messages per second per peer
+    const now = Date.now();
+    try {
+      const attachment = ws.deserializeAttachment() as { id: string; msgCount?: number; windowStart?: number } | null;
+      let msgCount = attachment?.msgCount ?? 0;
+      let windowStart = attachment?.windowStart ?? now;
+
+      if (now - windowStart > 1000) {
+        msgCount = 1;
+        windowStart = now;
+      } else {
+        msgCount++;
+        if (msgCount > 60) {
+          // Drop message if burst exceeds rate limit
+          return;
+        }
+      }
+      ws.serializeAttachment({ id: attachment?.id ?? '', msgCount, windowStart });
+    } catch {
+      // Ignore attachment errors
+    }
+
     try {
       const data = JSON.parse(message);
       
@@ -106,12 +139,24 @@ export class SignalingRoom extends DurableObject {
       // Live delta sync update (encrypted Yjs update from a typing user)
       if (data.type === 'sync-update') {
         if (typeof data.payload === 'string') {
+          // Check payload size individually as well
+          if (data.payload.length > MAX_MESSAGE_BYTES) return;
           try {
             this.ctx.storage.sql.exec(
               "INSERT INTO updates (payload, created_at) VALUES (?, ?)",
               data.payload,
               Date.now()
             );
+
+            // Bound SQLite update log to max 500 rows if snapshots aren't generated
+            const countCursor = this.ctx.storage.sql.exec<{ count: number }>("SELECT COUNT(*) as count FROM updates");
+            const totalRows = countCursor.toArray()[0]?.count ?? 0;
+            if (totalRows > 500) {
+              this.ctx.storage.sql.exec(
+                "DELETE FROM updates WHERE id IN (SELECT id FROM updates ORDER BY id ASC LIMIT ?)",
+                totalRows - 250
+              );
+            }
           } catch (e) {
             console.error('Failed to persist sync update to SQLite:', e);
           }
@@ -125,6 +170,7 @@ export class SignalingRoom extends DurableObject {
       // Clears older deltas to keep SQLite storage minimal and fast.
       if (data.type === 'snapshot') {
         if (typeof data.payload === 'string') {
+          if (data.payload.length > MAX_MESSAGE_BYTES * 4) return; // Snapshots capped at 256 KB
           try {
             this.ctx.storage.sql.exec("DELETE FROM updates;");
             this.ctx.storage.sql.exec(

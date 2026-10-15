@@ -13,6 +13,7 @@ export default function robots(): MetadataRoute.Robots {
       disallow: ['/api/'],
     },
     sitemap: [
+      'https://devpantry.com/sitemap.xml',
       'https://devpantry.com/sitemap/core.xml',
       'https://devpantry.com/sitemap/templates.xml',
       'https://devpantry.com/sitemap/guides.xml',

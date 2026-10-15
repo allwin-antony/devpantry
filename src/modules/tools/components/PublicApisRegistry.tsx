@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useRef, useEffect } from 'react';
+import React, { useState, useMemo, useRef, useEffect, useDeferredValue } from 'react';
 import Link from 'next/link';
 import publicApisData from '@/data/public-apis.json';
 import { Search, ExternalLink, ShieldCheck, ShieldAlert, Globe, Lock, ChevronLeft, ChevronRight, ChevronDown, ArrowRight } from 'lucide-react';
@@ -76,6 +76,7 @@ function CustomSelect({ value, onChange, options, icon: Icon, minWidth = '140px'
 
 export default function PublicApisRegistry() {
   const [searchTerm, setSearchTerm] = useState('');
+  const deferredSearchTerm = useDeferredValue(searchTerm);
   const [selectedCategory, setSelectedCategory] = useState<string>('All');
   const [authFilter, setAuthFilter] = useState<string>('All');
   const [corsFilter, setCorsFilter] = useState<string>('All');
@@ -117,12 +118,14 @@ export default function PublicApisRegistry() {
 
   const categoryOptions = useMemo(() => categories.map(cat => ({ value: cat, label: cat === 'All' ? 'All Categories' : cat })), [categories]);
 
-  // Filter data
+  // Filter data using deferred search query
   const filteredData = useMemo(() => {
+    const query = deferredSearchTerm.trim().toLowerCase();
     return typedPublicApisData.filter(api => {
       const matchesSearch = 
-        api.API.toLowerCase().includes(searchTerm.toLowerCase()) || 
-        api.Description.toLowerCase().includes(searchTerm.toLowerCase());
+        !query ||
+        api.API.toLowerCase().includes(query) || 
+        api.Description.toLowerCase().includes(query);
       const matchesCategory = selectedCategory === 'All' || api.Category === selectedCategory;
       
       const authVal = api.Auth ? api.Auth.toLowerCase().replace(/`/g, '') : 'none';
@@ -137,7 +140,7 @@ export default function PublicApisRegistry() {
 
       return matchesSearch && matchesCategory && matchesAuth && matchesCors && matchesHttps;
     });
-  }, [searchTerm, selectedCategory, authFilter, corsFilter, httpsFilter]);
+  }, [deferredSearchTerm, selectedCategory, authFilter, corsFilter, httpsFilter]);
 
   // Paginate data
   const totalPages = Math.ceil(filteredData.length / itemsPerPage);
