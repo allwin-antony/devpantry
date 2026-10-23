@@ -45,6 +45,15 @@
     "Category": "AI"
   },
   {
+    "API": "APIModels",
+    "Description": "OpenAI-compatible API for 150+ image, video, audio and LLM models: automatic channel failover, failed calls not billed, most prices below official rates",
+    "Auth": "`apiKey`",
+    "HTTPS": true,
+    "CORS": "Yes",
+    "Link": "https://apimodels.app",
+    "Category": "AI"
+  },
+  {
     "API": "Azurade",
     "Description": "Image and video generation with 30+ models (Veo, Seedance, Nano Banana) over one REST API, paid per generation from credits that never expire",
     "Auth": "`apiKey`",
@@ -222,6 +231,15 @@
     "HTTPS": true,
     "CORS": "Yes",
     "Link": "https://www.requesty.ai",
+    "Category": "AI"
+  },
+  {
+    "API": "RouterBase API",
+    "Description": "One OpenAI-compatible API for accessing 200+ AI models from OpenAI, Anthropic, Google, Meta, xAI, DeepSeek, and more",
+    "Auth": "`apiKey`",
+    "HTTPS": true,
+    "CORS": "Unknown",
+    "Link": "https://routerbase.com",
     "Category": "AI"
   },
   {
@@ -807,6 +825,15 @@
     "HTTPS": true,
     "CORS": "Yes",
     "Link": "https://ghibliapi.vercel.app",
+    "Category": "Anime"
+  },
+  {
+    "API": "Tenrai",
+    "Description": "Tenrai is a free Unofficial public REST API for the full MyAnimeList public catalogue. Anime, manga, characters, people, producers, seasons, and more",
+    "Auth": "",
+    "HTTPS": true,
+    "CORS": "Yes",
+    "Link": "https://tenrai.org",
     "Category": "Anime"
   },
   {
@@ -1449,6 +1476,15 @@
     "Category": "Art & Design"
   },
   {
+    "API": "Sticker Shop",
+    "Description": "Pop art on demand: comic bursts, speech balloons, rubber stamps and retro error windows with your own text, as SVG or PNG",
+    "Auth": "",
+    "HTTPS": true,
+    "CORS": "Yes",
+    "Link": "https://api.tasta.space/stickers",
+    "Category": "Art & Design"
+  },
+  {
     "API": "svg.new",
     "Description": "AI-powered image to SVG vectorization",
     "Auth": "`apiKey`",
@@ -1581,6 +1617,15 @@
     "HTTPS": true,
     "CORS": "Yes",
     "Link": "https://mojoauth.com",
+    "Category": "Authentication & Authorization"
+  },
+  {
+    "API": "ReqKey",
+    "Description": "ReqKey validates API keys, meters credits, enforces rate limits, and logs every request — from a single SDK call inside your own middleware",
+    "Auth": "`apiKey`",
+    "HTTPS": true,
+    "CORS": "No",
+    "Link": "https://www.reqkey.com",
     "Category": "Authentication & Authorization"
   },
   {
@@ -2394,6 +2439,15 @@
     "Category": "Business"
   },
   {
+    "API": "Hexvan",
+    "Description": "Contacts, quotes, invoices and receipts of a small trade business (plumbers, electricians, roofers)",
+    "Auth": "`apiKey`",
+    "HTTPS": true,
+    "CORS": "No",
+    "Link": "https://hexvan.com",
+    "Category": "Business"
+  },
+  {
     "API": "Instatus",
     "Description": "Post to and update maintenance and incidents on your status page through an HTTP REST API",
     "Auth": "`apiKey`",
@@ -2799,6 +2853,15 @@
     "Category": "Business"
   },
   {
+    "API": "Trends API",
+    "Description": "Search, social and shopping trend data as JSON: Google Trends, TikTok, YouTube, Amazon, Reddit and more",
+    "Auth": "`apiKey`",
+    "HTTPS": true,
+    "CORS": "No",
+    "Link": "https://trendsapi.ai",
+    "Category": "Business"
+  },
+  {
     "API": "UGC VZ",
     "Description": "Directory of DACH user-generated-content creators with topics, cities, rates and contact requests",
     "Auth": "",
@@ -2826,12 +2889,30 @@
     "Category": "Business"
   },
   {
+    "API": "Verif Entreprise FR",
+    "Description": "French company checks by SIREN: status, insolvency (BODACC), VAT (VIES); free preview",
+    "Auth": "",
+    "HTTPS": true,
+    "CORS": "Yes",
+    "Link": "https://api-production-24833.up.railway.app",
+    "Category": "Business"
+  },
+  {
     "API": "Village",
     "Description": "Person and company enrichment plus warm introduction paths through your network",
     "Auth": "`apiKey`",
     "HTTPS": true,
     "CORS": "Yes",
     "Link": "https://docs.village.ai",
+    "Category": "Business"
+  },
+  {
+    "API": "VNCNT Labs Trademark Checker",
+    "Description": "Check product titles, tags and slogans against about 4.4M live USPTO trademarks by class, with risk level, owner and serial number",
+    "Auth": "`apiKey`",
+    "HTTPS": true,
+    "CORS": "Yes",
+    "Link": "https://vncntlabs.com/tools/trademark-checker/",
     "Category": "Business"
   },
   {
@@ -3870,6 +3951,15 @@
     "Category": "Cryptocurrency"
   },
   {
+    "API": "CabalSpy",
+    "Description": "Real-time KOL, smart money and whale wallet tracking across Solana, Ethereum, BNB Chain, Base and Robinhood Chain. 2,000+ labeled wallets, REST and WebSocket",
+    "Auth": "`apiKey`",
+    "HTTPS": true,
+    "CORS": "Unknown",
+    "Link": "https://www.cabalspy.xyz/",
+    "Category": "Cryptocurrency"
+  },
+  {
     "API": "Chord",
     "Description": "DEX aggregator API with best-route quotes split across DEXs and unsigned swap transactions on Base, Arbitrum, BNB Chain, Avalanche, Monad and more",
     "Auth": "",
@@ -4419,6 +4509,15 @@
     "Category": "Cryptocurrency"
   },
   {
+    "API": "MarginPad",
+    "Description": "Crypto futures prices, candles, funding, open interest, long/short and liquidations, 9 exchanges",
+    "Auth": "",
+    "HTTPS": true,
+    "CORS": "Yes",
+    "Link": "https://marginpad.io/free-crypto-api/",
+    "Category": "Cryptocurrency"
+  },
+  {
     "API": "Mempool",
     "Description": "Bitcoin API Service focusing on the transaction fee",
     "Auth": "",
@@ -4581,15 +4680,6 @@
     "Category": "Cryptocurrency"
   },
   {
-    "API": "Paribu",
-    "Description": "Turkish cryptocurrency exchange with real-time market data, order book, trading and account endpoints",
-    "Auth": "`apiKey`",
-    "HTTPS": true,
-    "CORS": "No",
-    "Link": "https://www.paribu.com",
-    "Category": "Cryptocurrency"
-  },
-  {
     "API": "Pharos API",
     "Description": "Stablecoin risk, peg, liquidity, safety score, blacklist, mint/burn, yield, and chain-health data",
     "Auth": "`apiKey`",
@@ -4641,6 +4731,15 @@
     "HTTPS": true,
     "CORS": "Yes",
     "Link": "https://mcp-x402.onrender.com",
+    "Category": "Cryptocurrency"
+  },
+  {
+    "API": "send21",
+    "Description": "Crypto pay links and API for people and AI agents: non-custodial BTC, Lightning, USDC, USDT, EURC, SOL and ETH payment requests",
+    "Auth": "`apiKey`",
+    "HTTPS": true,
+    "CORS": "No",
+    "Link": "https://send21.io",
     "Category": "Cryptocurrency"
   },
   {
@@ -4785,6 +4884,15 @@
     "HTTPS": true,
     "CORS": "Yes",
     "Link": "https://x402-list.com",
+    "Category": "Cryptocurrency"
+  },
+  {
+    "API": "XRPL.to",
+    "Description": "XRP Ledger token prices, holders, trades and NFT data",
+    "Auth": "",
+    "HTTPS": true,
+    "CORS": "Yes",
+    "Link": "https://xrpl.to/docs",
     "Category": "Cryptocurrency"
   },
   {
@@ -6405,6 +6513,15 @@
     "HTTPS": true,
     "CORS": "Yes",
     "Link": "https://bettip.co.za/fair-draw/api/",
+    "Category": "Development"
+  },
+  {
+    "API": "FireDash Fire Hydrant Public API",
+    "Description": "Live fire hydrant data: location, flow rate in GPM, and whether each hydrant is in or out of service. Sourced from the fire departments that maintain them",
+    "Auth": "`apiKey`",
+    "HTTPS": true,
+    "CORS": "Yes",
+    "Link": "https://developer.firedash.us/",
     "Category": "Development"
   },
   {
@@ -8856,6 +8973,15 @@
     "Category": "Documents & Productivity"
   },
   {
+    "API": "Hexloom File",
+    "Description": "Merge PDFs and strip or inspect photo metadata (EXIF, GPS) with one HTTP call; files processed in memory, not stored",
+    "Auth": "`apiKey`",
+    "HTTPS": true,
+    "CORS": "Yes",
+    "Link": "https://hexloomlabs.com/api/",
+    "Category": "Documents & Productivity"
+  },
+  {
     "API": "Html2PDF",
     "Description": "HTML/URL to PDF",
     "Auth": "`apiKey`",
@@ -9564,6 +9690,15 @@
     "HTTPS": true,
     "CORS": "Unknown",
     "Link": "https://www.guerrillamail.com/GuerrillaMailAPI.html",
+    "Category": "Email"
+  },
+  {
+    "API": "Hail",
+    "Description": "Add AI calls, SMS, and email to apps and AI agents through one API",
+    "Auth": "`apiKey`",
+    "HTTPS": true,
+    "CORS": "No",
+    "Link": "https://hail.so",
     "Category": "Email"
   },
   {
@@ -13482,6 +13617,15 @@
     "Category": "Games & Comics"
   },
   {
+    "API": "Online Sudoku - Sudokumax",
+    "Description": "Free Sudoku puzzles, printable Sudoku worksheets and online play: https://sudokumax.com",
+    "Auth": "`apiKey`",
+    "HTTPS": true,
+    "CORS": "Yes",
+    "Link": "https://sudokumax.com/developers",
+    "Category": "Games & Comics"
+  },
+  {
     "API": "Open Trivia",
     "Description": "Trivia Questions",
     "Auth": "",
@@ -13983,6 +14127,15 @@
     "HTTPS": true,
     "CORS": "No",
     "Link": "https://developers.wargaming.net/",
+    "Category": "Games & Comics"
+  },
+  {
+    "API": "weBump",
+    "Description": "Connect games to nearby players' profiles, small saves and recent visitors with consent",
+    "Auth": "`OAuth`",
+    "HTTPS": true,
+    "CORS": "Yes",
+    "Link": "https://developer.webump.app/",
     "Category": "Games & Comics"
   },
   {
@@ -15090,6 +15243,15 @@
     "HTTPS": true,
     "CORS": "Yes",
     "Link": "https://opencagedata.com",
+    "Category": "Geocoding"
+  },
+  {
+    "API": "OpenGeocoding",
+    "Description": "Forward and reverse geocoding and address autocomplete built on OpenStreetMap, Overture Maps and other open data",
+    "Auth": "`apiKey`",
+    "HTTPS": true,
+    "CORS": "Yes",
+    "Link": "https://opengeocoding.com",
     "Category": "Geocoding"
   },
   {
@@ -18244,7 +18406,7 @@
   },
   {
     "API": "GEN",
-    "Description": "Create and edit video projects, with credit-based AI media generation",
+    "Description": "Creative AI video engineer for ads, AI UGC and microdramas; free editor and social publishing",
     "Auth": "`apiKey`",
     "HTTPS": true,
     "CORS": "Yes",
@@ -18711,6 +18873,15 @@
     "Category": "Music"
   },
   {
+    "API": "Cucutime",
+    "Description": "Kids-song ideas for any name and search over the CucuTime YouTube catalog; a free key adds AI songs for adult-facing apps",
+    "Auth": "",
+    "HTTPS": true,
+    "CORS": "Yes",
+    "Link": "https://cucutime.org",
+    "Category": "Music"
+  },
+  {
     "API": "Deezer",
     "Description": "Music",
     "Auth": "`OAuth`",
@@ -19062,6 +19233,15 @@
     "Category": "Music"
   },
   {
+    "API": "Words into Music",
+    "Description": "Generate songs from ideas or lyrics in five languages, track jobs and read your own song library",
+    "Auth": "`apiKey`",
+    "HTTPS": true,
+    "CORS": "No",
+    "Link": "https://wordsintomusic.com/",
+    "Category": "Music"
+  },
+  {
     "API": "APITube News API",
     "Description": "Real-time and historical news from 300,000+ sources in 177 countries and 59 languages, enriched with sentiment, entities and topics, with 65+ search filters",
     "Auth": "`apiKey`",
@@ -19395,6 +19575,15 @@
     "Category": "News"
   },
   {
+    "API": "The Deploy Log",
+    "Description": "AI deployments, each sourced to the publisher's own page: query by words, company or ISO week over MCP, or fetch every row as JSON or CSV",
+    "Auth": "",
+    "HTTPS": true,
+    "CORS": "Yes",
+    "Link": "https://deployedbyai.com/log/",
+    "Category": "News"
+  },
+  {
     "API": "The Guardian",
     "Description": "Access all the content the Guardian creates, categorised by tags and section",
     "Auth": "`apiKey`",
@@ -19456,6 +19645,15 @@
     "CORS": "Yes",
     "Link": "https://worldnewsapi.com",
     "Category": "News"
+  },
+  {
+    "API": "10ML Fragrance Index",
+    "Description": "Perfume knowledge from the 10ML Fragrance Index: notes, accords, fragrance families, similar scents, houses and expert guides",
+    "Auth": "",
+    "HTTPS": true,
+    "CORS": "Yes",
+    "Link": "https://mcp.10ml.com",
+    "Category": "Open Data"
   },
   {
     "API": "221",
@@ -19872,6 +20070,15 @@
     "Category": "Open Data"
   },
   {
+    "API": "Lottizen",
+    "Description": "Lottery draw results and number statistics for Canada, US and Europe, plus Canadian scratch-ticket remaining prizes",
+    "Auth": "`X-Mashape-Key`",
+    "HTTPS": true,
+    "CORS": "Yes",
+    "Link": "https://lottizen.com",
+    "Category": "Open Data"
+  },
+  {
     "API": "LottoLens PH",
     "Description": "Fixed Philippine PCSO historical results and normal draw schedules",
     "Auth": "",
@@ -20106,6 +20313,15 @@
     "Category": "Open Data"
   },
   {
+    "API": "Scento Perfume API",
+    "Description": "Perfume notes, families, houses and raw materials, each tied to a page on scento.com",
+    "Auth": "",
+    "HTTPS": true,
+    "CORS": "Yes",
+    "Link": "https://www.scento.com/developers/perfume-api",
+    "Category": "Open Data"
+  },
+  {
     "API": "Scoop.it",
     "Description": "Content Curation Service",
     "Auth": "`apiKey`",
@@ -20130,6 +20346,15 @@
     "HTTPS": true,
     "CORS": "Yes",
     "Link": "https://slashyear.com/api",
+    "Category": "Open Data"
+  },
+  {
+    "API": "SlashYear",
+    "Description": "History by year, date and country, plus world leaders, historical prices and No. 1 songs, each line cited to a Wikipedia revision",
+    "Auth": "",
+    "HTTPS": true,
+    "CORS": "Yes",
+    "Link": "https://slashyear.com",
     "Category": "Open Data"
   },
   {
@@ -20310,6 +20535,15 @@
     "HTTPS": true,
     "CORS": "Yes",
     "Link": "https://vuntum.com/en/api-mcp",
+    "Category": "Open Data"
+  },
+  {
+    "API": "w14n",
+    "Description": "Brazilian company profiles by CNPJ, CNAE establishment counts and municipality coordinates",
+    "Auth": "",
+    "HTTPS": true,
+    "CORS": "Yes",
+    "Link": "https://api.w14n.dev/v1",
     "Category": "Open Data"
   },
   {
@@ -20790,6 +21024,15 @@
     "Category": "Personality"
   },
   {
+    "API": "Perle Românești",
+    "Description": "Real slips of the tongue said in public by famous Romanians, quoted word for word with context, date and source, at random or filtered",
+    "Auth": "",
+    "HTTPS": true,
+    "CORS": "Yes",
+    "Link": "https://api.tasta.space/perle-romanesti",
+    "Category": "Personality"
+  },
+  {
     "API": "Personality.fyi",
     "Description": "Free MBTI personality types and OEJTS test scoring",
     "Auth": "",
@@ -21012,6 +21255,15 @@
     "HTTPS": true,
     "CORS": "No",
     "Link": "https://api.voygr.tech/docs",
+    "Category": "Phone"
+  },
+  {
+    "API": "PlaceCall",
+    "Description": "Voice AI agent that phones US businesses for bookings, appointments and quotes, gets through IVR menus and holds, and returns the outcome and transcript",
+    "Auth": "`apiKey`",
+    "HTTPS": true,
+    "CORS": "No",
+    "Link": "https://voygr.tech/placecall/",
     "Category": "Phone"
   },
   {
@@ -23013,6 +23265,15 @@
     "Category": "Security"
   },
   {
+    "API": "Tanod",
+    "Description": "Pay-per-call scans of smart contracts, addresses and MCP/skill packages; small free daily tier",
+    "Auth": "",
+    "HTTPS": true,
+    "CORS": "No",
+    "Link": "https://tanod.dev/",
+    "Category": "Security"
+  },
+  {
     "API": "Threat Jammer",
     "Description": "Risk scoring service from curated threat intelligence data",
     "Auth": "`apiKey`",
@@ -23172,15 +23433,6 @@
     "HTTPS": true,
     "CORS": "No",
     "Link": "https://partners.clickwise.net/",
-    "Category": "Shopping"
-  },
-  {
-    "API": "CompareFairly",
-    "Description": "Neutral, sourced comparisons of products and services across any category, localized by language and country; per-criterion values, sub-scores and the source link behind each value",
-    "Auth": "",
-    "HTTPS": true,
-    "CORS": "Yes",
-    "Link": "https://comparefairly.com",
     "Category": "Shopping"
   },
   {
@@ -24288,6 +24540,15 @@
     "HTTPS": true,
     "CORS": "Yes",
     "Link": "https://developer.webex.com",
+    "Category": "Social"
+  },
+  {
+    "API": "Weir",
+    "Description": "Public Reddit and X (Twitter) data: search posts, read comment threads, profiles and followers, and run scheduled monitors with webhooks",
+    "Auth": "`apiKey`",
+    "HTTPS": true,
+    "CORS": "No",
+    "Link": "https://weirapp.io",
     "Category": "Social"
   },
   {
@@ -26496,6 +26757,15 @@
     "Category": "Transportation"
   },
   {
+    "API": "HaulierScope",
+    "Description": "Great Britain goods vehicle and PSV operator licences, change history and public inquiries",
+    "Auth": "",
+    "HTTPS": true,
+    "CORS": "Yes",
+    "Link": "https://haulierscope.co.uk",
+    "Category": "Transportation"
+  },
+  {
     "API": "Icelandic APIs",
     "Description": "Open APIs that deliver services in or regarding Iceland",
     "Auth": "",
@@ -27312,6 +27582,15 @@
     "HTTPS": true,
     "CORS": "No",
     "Link": "https://www.velib-metropole.fr/donnees-open-data-gbfs-du-service-velib-metropole",
+    "Category": "Transportation"
+  },
+  {
+    "API": "Vessel Class Finder",
+    "Description": "IACS class society, class status and survey dates for ships by IMO number",
+    "Auth": "`apiKey`",
+    "HTTPS": true,
+    "CORS": "Yes",
+    "Link": "https://vesselclassfinder.com/blog/vessel-classification-api.html",
     "Category": "Transportation"
   },
   {
@@ -29139,6 +29418,15 @@
     "HTTPS": true,
     "CORS": "Yes",
     "Link": "https://www.weather.gov/documentation/services-web-api",
+    "Category": "Weather"
+  },
+  {
+    "API": "Veabird",
+    "Description": "Beach (sargassum, waves, hurricanes) and ski snow forecasts for 1,900+ resorts, no key",
+    "Auth": "",
+    "HTTPS": true,
+    "CORS": "Yes",
+    "Link": "https://veabird.com/api/v1",
     "Category": "Weather"
   },
   {

@@ -2737,6 +2737,13 @@
     "Category": "Biology, Medicine and Bioinformatics"
   },
   {
+    "API": "nickjlamb/pubcrawl",
+    "Description": "PubMed, Europe PMC (including preprints), FDA/DailyMed and UK eMC drug labelling, and ClinicalTrials.gov for AI assistants, including side-by-side US vs UK label comparison. Every result cites its PMID, NCT ID or DOI; no API key required.",
+    "Language": "TypeScript",
+    "Link": "https://github.com/nickjlamb/pubcrawl",
+    "Category": "Biology, Medicine and Bioinformatics"
+  },
+  {
     "API": "NyxToolsDev/dicom-hl7-mcp-server",
     "Description": "Bridge DICOM, HL7v2 and FHIR: cross-standard mapping, Mirth Connect channel generation, vendor private tag decoding and integration patterns.",
     "Language": "Python",
@@ -3462,6 +3469,13 @@
     "Description": "Visual, multimodal web scraping without CSS selectors, plus phishing and crypto drainer detection.",
     "Language": "Python",
     "Link": "https://github.com/parastejpal987-cmyk/opticparse-public",
+    "Category": "Browser Automation"
+  },
+  {
+    "API": "PGHQdev/OpenScreenShot",
+    "Description": "Website screenshots from a local headless Chrome, with selector, text-pattern and rectangle redaction before capture; also a CLI.",
+    "Language": "TypeScript",
+    "Link": "https://github.com/PGHQdev/OpenScreenShot/tree/main/mcp",
     "Category": "Browser Automation"
   },
   {
@@ -6304,6 +6318,13 @@
     "Description": "Convert Markdown to WhatsApp formatting so agent output shows bold, lists and quotes instead of raw asterisks, with tables rendered as monospace boxes.",
     "Language": "TypeScript",
     "Link": "https://github.com/drsound/markdown-to-whatsapp",
+    "Category": "Communication"
+  },
+  {
+    "API": "edouard-claude/whatsapp-mcp",
+    "Description": "Full-featured personal WhatsApp: read and full-text search all chats, send, reply, react, edit and delete, polls, media as raw files, groups and communities, multi-account, live notifications on new messages. Rust server with a Go whatsmeow bridge, local SQLite.",
+    "Language": "Go",
+    "Link": "https://github.com/edouard-claude/whatsapp-mcp",
     "Category": "Communication"
   },
   {
@@ -24287,6 +24308,13 @@
     "Description": "Read-only Tautulli (Plex monitoring) access: activity, history, library and user stats, transcode analysis and resolution breakdowns.",
     "Language": "Python",
     "Link": "https://github.com/lodordev/mcp-tautulli",
+    "Category": "Monitoring"
+  },
+  {
+    "API": "log-10x/log10x-mcp",
+    "Description": "Rank log patterns by volume and cost, then compact (Splunk, self-managed Elasticsearch), tier down or offload the excess over each cap. Runs locally; no log data reaches log10x.",
+    "Language": "TypeScript",
+    "Link": "https://github.com/log-10x/log10x-mcp",
     "Category": "Monitoring"
   },
   {
