@@ -560,10 +560,24 @@
     "Category": "AI Services"
   },
   {
+    "API": "kim-dongho/krds-a11y-mcp",
+    "Description": "Korea's government design system (KRDS) components with KWCAG 2.2 (Korean web accessibility standard) built in: refuses markup when labels or alt text are missing, checks rendered pages with axe plus real keyboard and contrast measurements, and ships Claude Code/Codex hooks that keep agents from finishing while violations remain.",
+    "Language": "TypeScript",
+    "Link": "https://github.com/kim-dongho/krds-a11y-mcp",
+    "Category": "Accessibility"
+  },
+  {
     "API": "kinti/a11y-toolkit",
     "Description": "WCAG 2.2 accessibility tools: color contrast checks including text over images, EU accessibility declaration generation and an aria-live announcement monitor.",
     "Language": "Python",
     "Link": "https://github.com/kinti/a11y-toolkit",
+    "Category": "Accessibility"
+  },
+  {
+    "API": "mishan/shotbox",
+    "Description": "Runs real GUI programs in a sealed X11 or Wayland session where an agent can read the accessible tree, take screenshots and clips with sound, click, type and drive gamepads, then check what it finds: unnamed controls, contrast, Tab order, screen reader announcements and audio dropouts.",
+    "Language": "Python",
+    "Link": "https://github.com/mishan/shotbox",
     "Category": "Accessibility"
   },
   {
@@ -725,6 +739,13 @@
     "Description": "Multi-model AI media generation (image, video, audio, face swap, talking avatars) plus chat with models such as Claude, GPT, Gemini and DeepSeek.",
     "Language": "TypeScript",
     "Link": "https://github.com/avotsai/avots-mcp",
+    "Category": "Aggregators"
+  },
+  {
+    "API": "bkraad47/ramen",
+    "Description": "Self-hosted MCP for teams: deploy your own Python tools from git to Kubernetes (AKS/GKE/EKS/local) with canary rollouts, OAuth sign-in, autoscaling, Nvidia NeMo guardrails, roles per group, secrets and an audit log of every call.",
+    "Language": "Python",
+    "Link": "https://github.com/bkraad47/ramen",
     "Category": "Aggregators"
   },
   {
@@ -896,6 +917,13 @@
     "Category": "Aggregators"
   },
   {
+    "API": "giorgio44/gateonai-mcp-server",
+    "Description": "Search and compare thousands of AI tools, generate step-by-step AI workflows and AI tool stacks by profession from GateOnAI's curated catalog. Free, no API key.",
+    "Language": "Python",
+    "Link": "https://github.com/giorgio44/gateonai-mcp-server",
+    "Category": "Aggregators"
+  },
+  {
     "API": "glenngillen/mcpmcp-server",
     "Description": "Lists MCP servers so you can ask your client which ones could improve your daily workflow.",
     "Language": "TypeScript",
@@ -1050,6 +1078,13 @@
     "Category": "Aggregators"
   },
   {
+    "API": "kaiser-data/kitsune-mcp",
+    "Description": "Hot-reload for MCP servers: the agent connects the server it is building, calls a tool, fixes the code, runs `reload()` and calls it again in the same session, with no client restart. Also mounts any of 130,000+ servers from 7 registries mid-session (one tool at a time if you like) and runs community npm/PyPI packages in a hardened Docker container.",
+    "Language": "Python",
+    "Link": "https://github.com/kaiser-data/kitsune-mcp",
+    "Category": "Aggregators"
+  },
+  {
     "API": "kansei-link/kansei-mcp-server",
     "Description": "Local-first navigator with verified data on SaaS services and workflow recipes.",
     "Language": "TypeScript",
@@ -1078,6 +1113,13 @@
     "Category": "Aggregators"
   },
   {
+    "API": "kumarganduri/legwork",
+    "Description": "Your AI finds an open-source tool on GitHub and Legwork installs it as an MCP tool in a sandbox: only the folders you grant, read-only, no network unless allowed. 37 cached tools need no API key.",
+    "Language": "Python",
+    "Link": "https://github.com/kumarganduri/legwork",
+    "Category": "Aggregators"
+  },
+  {
     "API": "mambalabsdev/mcp-gtm-suite",
     "Description": "Go-to-market signals via Apify actors: hiring signals, tech stack detection, job board scanning, LinkedIn URL resolution, ICP scoring and signal aggregation.",
     "Language": "TypeScript",
@@ -1096,6 +1138,13 @@
     "Description": "Search engine for AI agents to discover products, services and businesses across categories, without LLM calls.",
     "Language": "Python",
     "Link": "https://github.com/MastadoonPrime/sylex-search",
+    "Category": "Aggregators"
+  },
+  {
+    "API": "matebenyovszky/agentplaybooks",
+    "Description": "Portable playbooks for agent skills, MCP servers, personas, instructions, and memory. Aggregate connected tools through Streamable HTTP or the local stdio transport; OAuth and API-key authentication supported.",
+    "Language": "TypeScript",
+    "Link": "https://github.com/matebenyovszky/agentplaybooks",
     "Category": "Aggregators"
   },
   {
@@ -1190,6 +1239,13 @@
     "Category": "Aggregators"
   },
   {
+    "API": "O-mega-Enterprise/suprsonic-mcp",
+    "Description": "One API key for 24 agent capabilities: web search, scraping, people and company data, email finding and verification, images, speech, transcription, documents, code execution, research and domains, with no provider sign-ups. `npx -y suprsonic-mcp`",
+    "Language": "TypeScript",
+    "Link": "https://github.com/O-mega-Enterprise/suprsonic-mcp",
+    "Category": "Aggregators"
+  },
+  {
     "API": "Octodamus/octodamus-core",
     "Description": "Crypto market oracle: BUY/SELL/HOLD consensus from RSI, MACD, funding rates and on-chain flow, plus Polymarket edges with EV scoring and X crowd sentiment.",
     "Language": "Python",
@@ -1243,6 +1299,13 @@
     "Description": "MCP governance proxy: allow, deny or human-approval policy gates, DLP redaction and cost caps, with tool calls recorded to a hash-chained, signed audit log.",
     "Language": "Unknown",
     "Link": "https://github.com/Proofpane/releases",
+    "Category": "Aggregators"
+  },
+  {
+    "API": "qualienai/qualien-mcp",
+    "Description": "Gateway for QA/SDET work: Playwright, filesystem, GitHub, Jira, Postgres and 15+ more MCP servers behind one connection, with per-tool allow/deny and read-only-by-default databases.",
+    "Language": "TypeScript",
+    "Link": "https://github.com/qualienai/qualien-mcp",
     "Category": "Aggregators"
   },
   {
@@ -1334,6 +1397,13 @@
     "Description": "AI phone number directory: query Voxie AI personas and third-party AI services such as ChatGPT and get webchat links.",
     "Language": "TypeScript",
     "Link": "https://github.com/sonnyflylock/voxie-ai-directory-mcp",
+    "Category": "Aggregators"
+  },
+  {
+    "API": "Strategiumfinancepartner/AgentNexus",
+    "Description": "Discovery and reliability registry of APIs, MCP servers and CLIs for AI agents: scheduled health probes, per-entry health cards with evidence expiry, free key in one call.",
+    "Language": "TypeScript",
+    "Link": "https://github.com/Strategiumfinancepartner/AgentNexus",
     "Category": "Aggregators"
   },
   {
@@ -1505,6 +1575,13 @@
     "Category": "Agreements & Coordination"
   },
   {
+    "API": "cirwel/unitares",
+    "Description": "Self-hosted, single-operator attributed record for multiple agents: identity and lineage, claims and evidence, agent review that keeps objections on file, and outcomes linked to the check-ins and predictions they grade.",
+    "Language": "Python",
+    "Link": "https://github.com/cirwel/unitares",
+    "Category": "Agreements & Coordination"
+  },
+  {
     "API": "CNSLabs/agreements-api-sdk",
     "Description": "Define, validate, deploy and operate machine-readable agreements, with EIP-712 permit preparation, signed participant inputs, state reads and input history.",
     "Language": "TypeScript",
@@ -1540,6 +1617,13 @@
     "Category": "Agreements & Coordination"
   },
   {
+    "API": "GriffMurder/taskbullet-mcp-server",
+    "Description": "Delegate phone calls, captcha/2FA logins, errands and QA your agent can't finish to a real human assistant, then track results.",
+    "Language": "TypeScript",
+    "Link": "https://github.com/GriffMurder/taskbullet-mcp-server",
+    "Category": "Agreements & Coordination"
+  },
+  {
     "API": "humanforai/humanforai-mcp",
     "Description": "Hire human operators for tasks needing physical presence, perception or judgment: real-world verification, product testing, AI output review and errands.",
     "Language": "TypeScript",
@@ -1565,6 +1649,13 @@
     "Description": "Open Task Relay: bounded public-good tasks that AI agents can discover, complete, submit and independently verify.",
     "Language": "TypeScript",
     "Link": "https://github.com/lanekingsbery/open-task-relay-public",
+    "Category": "Agreements & Coordination"
+  },
+  {
+    "API": "signdocsbrasil/signdocs-mcp-server",
+    "Description": "Brazilian e-signature (SignDocs Brasil): create signing sessions and multi-signer envelopes, upload and download documents, verify signatures, and manage webhooks. ICP-Brasil digital certificates, facial biometrics and OTP, under MP 2.200-2. Local stdio via `npx -y @signdocs-brasil/mcp-server`, or the hosted HTTP endpoint.",
+    "Language": "TypeScript",
+    "Link": "https://github.com/signdocsbrasil/signdocs-mcp-server",
     "Category": "Agreements & Coordination"
   },
   {
@@ -1638,6 +1729,13 @@
     "Category": "Architecture & Design"
   },
   {
+    "API": "BerkantACUN/ifc-ruhsat",
+    "Description": "Checks an IFC building model against Türkiye's building-permit BIM regulation (Official Gazette 33331, in force Sept 2027): mandatory IFC 4.3 classes and category codes, per-class attribute and property-set requirements (all 68 annex tables, incl. the Türkiye-specific `TREpys_` sets), TUREF coordinate system, naming templates and space geometry — and fills in the regulation's 21-row Annex-9 quality-control form. Findings cite the article and annex table with GlobalIds; rows a machine cannot verify are reported as manual, never as passed. Also exports buildingSMART IDS. `uvx ifc-ruhsat mcp`; on the official registry as `io.github.BerkantACUN/ifc-ruhsat`.",
+    "Language": "Python",
+    "Link": "https://github.com/BerkantACUN/ifc-ruhsat",
+    "Category": "Architecture & Design"
+  },
+  {
     "API": "bobaba99/motionlint",
     "Description": "Lint web animations with deterministic checks on the live page (duration, easing, stagger, exits, reduced motion, hover) plus optional vision-LLM UX review.",
     "Language": "TypeScript",
@@ -1659,6 +1757,13 @@
     "Category": "Architecture & Design"
   },
   {
+    "API": "CanvasKeep/canvaskeep-mcp",
+    "Description": "Create and edit Excalidraw diagrams in a CanvasKeep workspace: generate diagrams from nodes and edges with auto-layout, organize them into folders, and read or save full scenes, with local decryption for encrypted diagrams.",
+    "Language": "TypeScript",
+    "Link": "https://github.com/CanvasKeep/canvaskeep-mcp",
+    "Category": "Architecture & Design"
+  },
+  {
     "API": "cisco-open/network-sketcher",
     "Description": "Local-first network design: create Cisco-style network master files, L1/L2/L3 topology diagrams, HTML viewers, device tables and AI context files.",
     "Language": "Python",
@@ -1670,6 +1775,13 @@
     "Description": "Detect contradictions and architectural drift in Kubernetes manifests, READMEs, OpenAPI specs and Word docs, with deterministic scoring and resolution advice.",
     "Language": "TypeScript",
     "Link": "https://github.com/Daksh-create349/Contradiction-MCP",
+    "Category": "Architecture & Design"
+  },
+  {
+    "API": "DayuanJiang/next-ai-draw-io",
+    "Description": "Draw and edit draw.io diagrams from your project's files on a live browser canvas you can also edit by hand, with version history, undo, AWS, Azure and GCP shape libraries and PNG or SVG export.",
+    "Language": "TypeScript",
+    "Link": "https://github.com/DayuanJiang/next-ai-draw-io/tree/main/packages/mcp-server",
     "Category": "Architecture & Design"
   },
   {
@@ -1705,6 +1817,13 @@
     "Description": "Turn local projects or GitHub repositories into Mermaid diagrams rendered via Kroki.",
     "Language": "Python",
     "Link": "https://github.com/GittyBurstein/mermaid-mcp-server",
+    "Category": "Architecture & Design"
+  },
+  {
+    "API": "Hackeatutiempo/mapache",
+    "Description": "Open-source mind maps and whiteboard your agent draws on live: 22 tools for mind maps, notes, shapes, tables, charts, connectors, comments and HTML/PDF export; boards are local files.",
+    "Language": "TypeScript",
+    "Link": "https://github.com/Hackeatutiempo/mapache",
     "Category": "Architecture & Design"
   },
   {
@@ -1747,6 +1866,13 @@
     "Description": "Construction plan takeoff: load plan PDFs, read title blocks, set drawing scale, trace rooms and export quantities like square footage and linear feet.",
     "Language": "TypeScript",
     "Link": "https://github.com/Kentucky-ai/opentakeoff",
+    "Category": "Architecture & Design"
+  },
+  {
+    "API": "Luvi-io/luw-mcp",
+    "Description": "Official Luw.ai server: redesign rooms, building exteriors and gardens from photos, render sketches and CAD views, edit images, and create walkthrough videos and 3D models. Runs locally via npx or hosted at mcp.luw.ai with sign-in.",
+    "Language": "TypeScript",
+    "Link": "https://github.com/Luvi-io/luw-mcp",
     "Category": "Architecture & Design"
   },
   {
@@ -1929,6 +2055,13 @@
     "Description": "SVG art engine controlled through JSON config: CSS keyframe and SMIL animations, parametric curves, filters, gradients and PNG preview.",
     "Language": "TypeScript",
     "Link": "https://github.com/arikusi/nakkas",
+    "Category": "Art & Culture"
+  },
+  {
+    "API": "Armulee/ai-gateway-mcp",
+    "Description": "No-markup video, image and speech generation with 400+ Vercel AI Gateway models (Veo, Kling, Seedance, Nano Banana, GPT Image) inside Claude or ChatGPT, billed to your own Gateway credits at provider price. Self-hosted on your own Vercel account.",
+    "Language": "TypeScript",
+    "Link": "https://github.com/Armulee/ai-gateway-mcp",
     "Category": "Art & Culture"
   },
   {
@@ -2160,6 +2293,13 @@
     "Description": "Discover Kavel's AI photo and video generators (hairstyles, figurines, pet portraits, yearbook photos, dance videos, HD restoration) and get tuned prompts.",
     "Language": "TypeScript",
     "Link": "https://github.com/hanshs474/kavel-mcp",
+    "Category": "Art & Culture"
+  },
+  {
+    "API": "hjbaard/SolidWorks-MCP",
+    "Description": "Drive a running SolidWorks from an agent over COM: 86 tools for parametric parts and assemblies (extrude, revolve, sweep, loft, holes on any face, ribs, fillets, shells, patterns, mates, joints checked over their range, interference checks, STEP/STL export). Every modelling call returns measured volume and bounding box, so the agent can verify its own work.",
+    "Language": "Python",
+    "Link": "https://github.com/hjbaard/SolidWorks-MCP",
     "Category": "Art & Culture"
   },
   {
@@ -2471,6 +2611,13 @@
     "Category": "Art & Culture"
   },
   {
+    "API": "Venut-Technologies/serato-dj-mcp",
+    "Description": "Ask an AI assistant about your Serato DJ library: harmonic BPM and Camelot key search, crates, duplicate and missing-file audits, and new crates built with a preview before anything is written. Unofficial.",
+    "Language": "TypeScript",
+    "Link": "https://github.com/Venut-Technologies/serato-dj-mcp",
+    "Category": "Art & Culture"
+  },
+  {
     "API": "vicseeai/vicsee-mcp-server",
     "Description": "Generate, edit and upscale AI video and images (Seedance, Veo, Kling, FLUX, Nano Banana) via VicSee.",
     "Language": "TypeScript",
@@ -2489,6 +2636,13 @@
     "Description": "Conversational Spotify control: play by description and manage the queue, devices, playlists and library, with a guided setup wizard.",
     "Language": "TypeScript",
     "Link": "https://github.com/XavierFabregat/spotify-mcp",
+    "Category": "Art & Culture"
+  },
+  {
+    "API": "Xxx91n/mcp-for-maya",
+    "Description": "MCP server giving AI agents spatial awareness inside Autodesk Maya — scene inspection, deterministic audit, checkpoint/rollback transactional safety, screenshot-based visual verification (Beta).",
+    "Language": "Python",
+    "Link": "https://github.com/Xxx91n/mcp-for-maya",
     "Category": "Art & Culture"
   },
   {
@@ -2573,6 +2727,13 @@
     "Description": "Match US medical practices with healthcare service vendors for billing, credentialing, EHR, compliance and legal.",
     "Language": "TypeScript",
     "Link": "https://github.com/Crindo2/gph-mcp-server",
+    "Category": "Biology, Medicine and Bioinformatics"
+  },
+  {
+    "API": "danielLuo2/bioharbor",
+    "Description": "Run MMseqs2 homology search, ESMFold structure prediction and sequence tools on your own GPUs, with GPU-aware scheduling on shared machines, input prechecks and per-run provenance.",
+    "Language": "Python",
+    "Link": "https://github.com/danielLuo2/bioharbor",
     "Category": "Biology, Medicine and Bioinformatics"
   },
   {
@@ -2814,6 +2975,13 @@
     "Category": "Biology, Medicine and Bioinformatics"
   },
   {
+    "API": "sanikacentric/biolit-mcp",
+    "Description": "Citation-grounded biomedical literature review over PubMed, Europe PMC, NCBI Gene and UniProt, with a citation-accuracy benchmark.",
+    "Language": "Python",
+    "Link": "https://github.com/sanikacentric/biolit-mcp",
+    "Category": "Biology, Medicine and Bioinformatics"
+  },
+  {
     "API": "SEOSiri-Official/biorobotics",
     "Description": "Bio-robotics engine that converts biological data from the UniProt API into Cartesian G-code coordinates.",
     "Language": "Python",
@@ -2916,6 +3084,20 @@
     "Description": "Search Bilibili content, with LangChain integration examples.",
     "Language": "TypeScript",
     "Link": "https://github.com/34892002/bilibili-mcp-js",
+    "Category": "Browser Automation"
+  },
+  {
+    "API": "77777R7/Octocrawl",
+    "Description": "Web scraping for AI agents: scrape, map, crawl and batch public pages into Markdown, tables and JSON, each with an Evidence Record (final URL, HTTP status, robots.txt decision, content hashes); a blocked or empty page comes back with the reason. Hosted at `https://mcp.octocrawl.dev/mcp` or local via `npx -y @octocrawl/mcp`. [Setup](https://octocrawl.dev/docs/connect-mcp/?utm_source=awesome-mcp-servers&utm_medium=listing).",
+    "Language": "TypeScript",
+    "Link": "https://github.com/77777R7/Octocrawl",
+    "Category": "Browser Automation"
+  },
+  {
+    "API": "AceAtDev/ascended-browser",
+    "Description": "Local browser MCP for coding-agent QA with verified actions, screenshots, read-only network and console inspection, and interruption recovery warnings.",
+    "Language": "Python",
+    "Link": "https://github.com/AceAtDev/ascended-browser",
     "Category": "Browser Automation"
   },
   {
@@ -3042,6 +3224,13 @@
     "Description": "Token-budgeted web fetching that routes between Trafilatura, Jina Reader, Firecrawl and pypdf by URL, with token estimates, caching and truncation.",
     "Language": "Python",
     "Link": "https://github.com/bch1212/agentfetch-mcp",
+    "Category": "Browser Automation"
+  },
+  {
+    "API": "BeatAPI/BeatBrowser",
+    "Description": "Connect compatible agents to an existing Chrome profile through an extension and local MCP bridge, with background task windows, pause and human takeover.",
+    "Language": "TypeScript",
+    "Link": "https://github.com/BeatAPI/BeatBrowser",
     "Category": "Browser Automation"
   },
   {
@@ -3234,6 +3423,13 @@
     "Category": "Browser Automation"
   },
   {
+    "API": "fullselfbrowsing/FSB",
+    "Description": "Chrome extension plus MCP server that lets any MCP client drive your own signed in Chrome by reading the live DOM instead of screenshots, with no API key. 69 tools, session replay, and an encrypted credential vault.",
+    "Language": "TypeScript",
+    "Link": "https://github.com/fullselfbrowsing/FSB",
+    "Category": "Browser Automation"
+  },
+  {
     "API": "hahahahahahahahah6/browser-buddy",
     "Description": "MCP server + Chrome extension (MV3) that lets coding agents read pages through the user's real, logged-in Chrome; stdlib-only, local.",
     "Language": "Python",
@@ -3413,6 +3609,13 @@
     "Description": "Autonomous, goal-driven LLM web crawler with stealth browsing, distributed as a single binary.",
     "Language": "Rust",
     "Link": "https://github.com/Mingye-Lu/AgenticCrawler",
+    "Category": "Browser Automation"
+  },
+  {
+    "API": "Moha2005269/agentgo-mcp",
+    "Description": "MCP server for AgentGo, a real Chromium browser for agents: compact page outlines with stable refs, diff-only replies after each action, real pointer and keyboard input, human approval for payments, and an optional on-device model for routine steps. [AgentGo browser](https://github.com/Moha2005269/agentgo)",
+    "Language": "Rust",
+    "Link": "https://github.com/Moha2005269/agentgo-mcp",
     "Category": "Browser Automation"
   },
   {
@@ -3654,6 +3857,13 @@
     "Category": "Browser Automation"
   },
   {
+    "API": "Swih/ritoko",
+    "Description": "Save browser, HTTP API and MCP workflows as JSON, then replay CSV/XLSX batches with explicit result checks and a local journal for crash recovery.",
+    "Language": "TypeScript",
+    "Link": "https://github.com/Swih/ritoko",
+    "Category": "Browser Automation"
+  },
+  {
     "API": "swimmwatch/cloakbrowser-mcp",
     "Description": "Playwright MCP-compatible browser automation using CloakBrowser Chromium.",
     "Language": "TypeScript",
@@ -3721,6 +3931,13 @@
     "Description": "Fetch content from login-protected pages such as Notion, Google Docs, Jira and Confluence via a real browser login with persistent session caching.",
     "Language": "TypeScript",
     "Link": "https://github.com/ymw0407/auth-fetch-mcp",
+    "Category": "Browser Automation"
+  },
+  {
+    "API": "ZhongQuinnKing/caishi",
+    "Description": "Read Bilibili, Douyin, Xiaohongshu and any web page through your own logged-in Chrome; returns titles, captions, stats and media links as JSON.",
+    "Language": "TypeScript",
+    "Link": "https://github.com/ZhongQuinnKing/caishi",
     "Category": "Browser Automation"
   },
   {
@@ -3892,6 +4109,20 @@
     "Category": "Cloud Platforms"
   },
   {
+    "API": "AIops-tools/Proxy-AIops",
+    "Description": "Governed reverse-proxy operations (Traefik + Caddy + HAProxy) — backend-health, certificate-expiry, 5xx, and route-conflict RCA (28 tools) with unbypassable audit logging (MCP + CLI), budget/runaway guards, and undo/rollback.",
+    "Language": "Python",
+    "Link": "https://github.com/AIops-tools/Proxy-AIops",
+    "Category": "Cloud Platforms"
+  },
+  {
+    "API": "AIops-tools/TrueNAS-AIops",
+    "Description": "Governed TrueNAS SCALE operations — pools, datasets, snapshots, disks, alerts, and services (25 tools) with unbypassable audit logging (MCP + CLI), budget/runaway guards, dry-run, and undo/rollback.",
+    "Language": "Python",
+    "Link": "https://github.com/AIops-tools/TrueNAS-AIops",
+    "Category": "Cloud Platforms"
+  },
+  {
     "API": "AkaciaNL/basicdeploy-mcp",
     "Description": "Manage BasicDeploy containers, each with PostgreSQL, S3-compatible storage and a public URL: deploy apps, run commands, read logs and toggle always-on.",
     "Language": "TypeScript",
@@ -3910,6 +4141,13 @@
     "Description": "Compare compute, storage, managed Postgres, egress and GPU prices across AWS, Azure, GCP and OCI, plus FinOps tools for break-even, TCO and migration analysis.",
     "Language": "Python",
     "Link": "https://github.com/Albaker-Group/cloudprice-mcp",
+    "Category": "Cloud Platforms"
+  },
+  {
+    "API": "aldohushi1-stack/shipback-sftp",
+    "Description": "Undoable SFTP deploys to shared hosting (cPanel, Plesk, any SFTP host): backs up every file it replaces on the server, restores with one call and refuses if a live file was edited since; deploy and restore only run a previewed plan, with no delete or skip-backup tools.",
+    "Language": "TypeScript",
+    "Link": "https://github.com/aldohushi1-stack/shipback-sftp",
     "Category": "Cloud Platforms"
   },
   {
@@ -3952,6 +4190,13 @@
     "Description": "Provides tools for EKS cluster and Kubernetes resource management, visibility, and troubleshooting.",
     "Language": "Unknown",
     "Link": "https://github.com/awslabs/mcp/tree/main/src/eks-mcp-server",
+    "Category": "Cloud Platforms"
+  },
+  {
+    "API": "ample-run/amplerun-mcp",
+    "Description": "Find, quote, rent and stop GPUs on AmpleRun, paid from a USDC or USDT balance on Base. Read-only unless you allow spending; every rental has a hard budget cap.",
+    "Language": "TypeScript",
+    "Link": "https://github.com/ample-run/amplerun-mcp",
     "Category": "Cloud Platforms"
   },
   {
@@ -4179,6 +4424,13 @@
     "Category": "Cloud Platforms"
   },
   {
+    "API": "euisuh/nginx-proxy-manager-mcp",
+    "Description": "Manage Nginx Proxy Manager proxy hosts, redirections, streams, Let's Encrypt certificates, and access lists with dry-run previews and a one-shot HTTPS host workflow.",
+    "Language": "Python",
+    "Link": "https://github.com/euisuh/nginx-proxy-manager-mcp",
+    "Category": "Cloud Platforms"
+  },
+  {
     "API": "flux159/mcp-server-kubernetes",
     "Description": "Kubernetes cluster operations for pods, deployments and services.",
     "Language": "TypeScript",
@@ -4204,6 +4456,13 @@
     "Description": "Manage self-hosted Coolify PaaS: deployments with verified builds, app diagnostics, database backups, offline docs search and confirmed destructive actions.",
     "Language": "TypeScript",
     "Link": "https://github.com/frndchagas/coolify-mcp",
+    "Category": "Cloud Platforms"
+  },
+  {
+    "API": "gagarin-cloud/mcp",
+    "Description": "Deploy and run apps on gagarin.cloud from your agent: services, Postgres, Qdrant, Valkey and S3 buckets, domains, logs, alerts, rollback and project memory, with deletions waiting for email approval. Remote server with OAuth sign-in.",
+    "Language": "TypeScript",
+    "Link": "https://github.com/gagarin-cloud/mcp",
     "Category": "Cloud Platforms"
   },
   {
@@ -4284,6 +4543,13 @@
     "Category": "Cloud Platforms"
   },
   {
+    "API": "hostsmith/mcp-server",
+    "Description": "Agentic hosting service for static sites and files. Publish sites, PDFs, images, video, or ZIP archives to a public URL directly from Cursor, Claude, or any MCP client. Custom domains, password protection, free tier, EU data residency option.",
+    "Language": "TypeScript",
+    "Link": "https://github.com/hostsmith/mcp-server",
+    "Category": "Cloud Platforms"
+  },
+  {
     "API": "huangdun/tempmd-mcp",
     "Description": "Publish HTML, Markdown, CSV or Mermaid artifacts to temp.md under a stable public link that updates in place, with activity-based expiry.",
     "Language": "TypeScript",
@@ -4295,6 +4561,13 @@
     "Description": "Manage the Marzban proxy/VPN panel: users, subscriptions, nodes, hosts, config and system stats, with confirmation for destructive calls.",
     "Language": "TypeScript",
     "Link": "https://github.com/Ilmar7786/marzban-sdk/tree/main/packages/mcp",
+    "Category": "Cloud Platforms"
+  },
+  {
+    "API": "imprezahost/impreza-mcp",
+    "Description": "Privacy-first, no-KYC offshore hosting an AI agent can run end to end: self-onboard an anonymous account (no e-mail), fund it in Bitcoin/Monero, deploy apps to managed VPSes with reviewed cold failover to another country, and manage domains/DNS + VPS lifecycle. Remote OAuth or `npx -y impreza-mcp`.",
+    "Language": "TypeScript",
+    "Link": "https://github.com/imprezahost/impreza-mcp",
     "Category": "Cloud Platforms"
   },
   {
@@ -4970,6 +5243,13 @@
     "Category": "Code Execution"
   },
   {
+    "API": "bloriner/terse",
+    "Description": "MCP server for Terse, an AI-native code language for coding agents: parse, evaluate, transpile to Python, and token-count Terse source over stdio.",
+    "Language": "Python",
+    "Link": "https://github.com/bloriner/terse",
+    "Category": "Code Execution"
+  },
+  {
     "API": "ckanthony/openapi-mcp",
     "Description": "Access any API through its existing OpenAPI documentation.",
     "Language": "Go",
@@ -5037,6 +5317,13 @@
     "Description": "Access any API via its OpenAPI specification, with full JSON Schema support for parameters and request bodies.",
     "Language": "Unknown",
     "Link": "https://github.com/ouvreboite/openapi-to-mcp",
+    "Category": "Code Execution"
+  },
+  {
+    "API": "pratham-jain33/hackerearth-mcp",
+    "Description": "Give any AI assistant a code run button: execute code in 24 languages on HackerEarth's sandboxed servers. `uvx hackerearth-mcp`.",
+    "Language": "Python",
+    "Link": "https://github.com/pratham-jain33/hackerearth-mcp",
     "Category": "Code Execution"
   },
   {
@@ -5194,6 +5481,13 @@
     "Category": "Coding Agents"
   },
   {
+    "API": "cherninlab/ennodia",
+    "Description": "Delegates tasks between local coding-agent CLIs, including Claude Code, Codex, OpenCode and Antigravity, and returns results to the calling agent.",
+    "Language": "TypeScript",
+    "Link": "https://github.com/cherninlab/ennodia",
+    "Category": "Coding Agents"
+  },
+  {
     "API": "claimidx/claimidx",
     "Description": "Shared, signed index of failures other coding agents already solved: check it before retrying and ingest fixes so the next agent does not repeat the work.",
     "Language": "Python",
@@ -5331,6 +5625,13 @@
     "Description": "Wraps the Claude Code CLI as MCP tools for queries, search, structured output and sessions, with budget caps and granular tool sandboxing.",
     "Language": "TypeScript",
     "Link": "https://github.com/hampsterx/claude-mcp-bridge",
+    "Category": "Coding Agents"
+  },
+  {
+    "API": "hamza-aziz-ai/codex-claude-council",
+    "Description": "Two-model council: ChatGPT (through the Codex CLI) and Claude (through Claude Code) answer independently, then exchange replies until both agree on one answer. Runs on your own subscriptions (no API keys); both read your project read-only.",
+    "Language": "TypeScript",
+    "Link": "https://github.com/hamza-aziz-ai/codex-claude-council",
     "Category": "Coding Agents"
   },
   {
@@ -5481,6 +5782,13 @@
     "Category": "Coding Agents"
   },
   {
+    "API": "nika110/openhuddle",
+    "Description": "Connects different people's coding agents (Claude Code, Codex, Cursor) through a self-hostable hub: live team status, a co-written master prompt with a vote, a dependency-aware task board, file claims and agent-to-agent questions.",
+    "Language": "TypeScript",
+    "Link": "https://github.com/nika110/openhuddle",
+    "Category": "Coding Agents"
+  },
+  {
     "API": "ooples/mcp-console-automation",
     "Description": "Console automation and monitoring, like Playwright for terminal apps: session management, SSH, testing, monitoring and background jobs.",
     "Language": "TypeScript",
@@ -5513,6 +5821,13 @@
     "Description": "Dynamic map of chat-related repository files with their function prototypes and related files, ranked by relevance, based on Aider's Repo Map.",
     "Language": "Unknown",
     "Link": "https://github.com/pdavis68/RepoMapper",
+    "Category": "Coding Agents"
+  },
+  {
+    "API": "pkj8282/Agent-Uplink",
+    "Description": "Local messaging between AI sessions on one PC: role accounts that persist across restarts, 1:1 DMs, channels and inboxes, with a live log viewer and an admin app.",
+    "Language": "TypeScript",
+    "Link": "https://github.com/pkj8282/Agent-Uplink",
     "Category": "Coding Agents"
   },
   {
@@ -5719,6 +6034,13 @@
     "Category": "Coding Agents"
   },
   {
+    "API": "vigmarcarlo/OntoPrune",
+    "Description": "Deterministic context pruning middleware for AI coding agents. Cuts input tokens by 60%, drops local CPU TTFT by 62%, and enforces formal IP isolation via AST-RDF contracts.",
+    "Language": "Python",
+    "Link": "https://github.com/vigmarcarlo/OntoPrune",
+    "Category": "Coding Agents"
+  },
+  {
     "API": "VoDaiLocz/kilo-kit-mcp",
     "Description": "Runtime and skill library for coding agents: C4 workflow gates, guarded command execution and reasoning engines like Tree of Thoughts and 5 Whys.",
     "Language": "TypeScript",
@@ -5779,6 +6101,13 @@
     "Description": "Outbound-only remote shell, detached long-running jobs and temporary file transfer for AI agents, without exposing SSH, ports or a VPN.",
     "Language": "TypeScript",
     "Link": "https://github.com/AICommander-dev/aicommander",
+    "Category": "Command Line"
+  },
+  {
+    "API": "AppachiTech/suvadu",
+    "Description": "Read-only access to your local shell history and AI coding agent sessions: search commands, recent failures and risky commands, and see what each agent session changed in git.",
+    "Language": "Rust",
+    "Link": "https://github.com/AppachiTech/suvadu",
     "Category": "Command Line"
   },
   {
@@ -5943,6 +6272,13 @@
     "Category": "Command Line"
   },
   {
+    "API": "polymatx/opsgate",
+    "Description": "Safety gate between AI agents and your servers: 25 typed tools (services, logs, Docker, disk, ports, files, nginx) that build their own argv, so the agent never passes a command string. Deny-by-default observe / operate / full modes per host, human approval for every change via MCP elicitation, and a hash-chained audit log that also records refusals. Local or over SSH with known_hosts verification.",
+    "Language": "Go",
+    "Link": "https://github.com/polymatx/opsgate",
+    "Category": "Command Line"
+  },
+  {
     "API": "PsYcGoD/sage",
     "Description": "Local command wrapper for AI coding agents: runs shell commands, stores history locally and returns compressed terminal output to reduce context noise.",
     "Language": "TypeScript",
@@ -6066,6 +6402,13 @@
     "Description": "Email for Gmail, Fastmail, iCloud, Yahoo, Zoho, Yandex and any IMAP/SMTP mailbox: read, search, send, organize, draft, schedule and auto-triage mail.",
     "Language": "TypeScript",
     "Link": "https://github.com/Albretsen/MCPEmails",
+    "Category": "Communication"
+  },
+  {
+    "API": "alexneamtu/gmail-mcp",
+    "Description": "Self-hosted, multi-account Gmail for Claude and Codex over Streamable HTTP, with owner-only OAuth, explicit account aliases, encrypted credentials, and optional sending and label changes.",
+    "Language": "TypeScript",
+    "Link": "https://github.com/alexneamtu/gmail-mcp",
     "Category": "Communication"
   },
   {
@@ -6258,6 +6601,13 @@
     "Category": "Communication"
   },
   {
+    "API": "csanadymiklos/lauther-js",
+    "Description": "Let an agent ask its owner first, on their phone, before doing something irreversible. `ask_approval` blocks until a person answers and distinguishes DENIED from NO ANSWER, so a timeout is never read as consent; a fingerprint can be required, and the answer records that a human gave it. `send_notification` covers one-way alerts with priorities and quiet hours. Works with Claude Code, Cursor, Windsurf or anything else that speaks MCP — `npx -y lauther-mcp`.",
+    "Language": "TypeScript",
+    "Link": "https://github.com/csanadymiklos/lauther-js/tree/main/packages/lauther-mcp",
+    "Category": "Communication"
+  },
+  {
     "API": "cseguinlz/doubletick-cli",
     "Description": "Email read tracking via Gmail: send tracked emails and check whether they were opened, with open count, device and timing.",
     "Language": "TypeScript",
@@ -6290,6 +6640,13 @@
     "Description": "Place consent-based outbound phone calls and retrieve transcripts, summaries and outcomes.",
     "Language": "TypeScript",
     "Link": "https://github.com/dialgoodian/clawdcall-mcp",
+    "Category": "Communication"
+  },
+  {
+    "API": "Dipeshpal/capes",
+    "Description": "Free, self-hosted MCP server you deploy to your own Vercel: 62 tools for Gmail (app password), Discord (bot) and X search, with an owner dashboard, per-tool switches and a read-only mode. No database needed.",
+    "Language": "Python",
+    "Link": "https://github.com/Dipeshpal/capes",
     "Category": "Communication"
   },
   {
@@ -6454,6 +6811,13 @@
     "Category": "Communication"
   },
   {
+    "API": "googlarz/proton-mail-bridge-client",
+    "Description": "Local-first Proton Mail MCP server and CLI via Proton Mail Bridge: search, read, draft, send, triage threads, answer calendar invitations, reply reminders, multiple accounts, and a local SQLite index. Safety presets from read-only to full, with send confirmation and an outbound-to-self mode.",
+    "Language": "TypeScript",
+    "Link": "https://github.com/googlarz/proton-mail-bridge-client",
+    "Category": "Communication"
+  },
+  {
     "API": "googlarz/signal-mcp",
     "Description": "Signal messenger via a local signal-cli: send and receive messages, manage groups and contacts, search history, and handle attachments and reactions.",
     "Language": "Unknown",
@@ -6482,6 +6846,13 @@
     "Category": "Communication"
   },
   {
+    "API": "Groundmail/groundmail-mcp",
+    "Description": "Send and schedule transactional email, check delivery, and set up sending domains, templates, webhooks and suppressions with Groundmail. Runs locally over stdio or hosted with OAuth at `https://mcp.groundmail.dev/mcp`.",
+    "Language": "TypeScript",
+    "Link": "https://github.com/Groundmail/groundmail-mcp",
+    "Category": "Communication"
+  },
+  {
     "API": "grzgrzgrz3/pingwa-client",
     "Description": "Two-way WhatsApp notifications for AI agents: send messages, ask questions with tap-to-answer buttons and check replies, without a Meta account.",
     "Language": "Python",
@@ -6507,6 +6878,13 @@
     "Description": "Local Maildir access via notmuch: full-text search, tag filtering, threads, attachments and unanswered-mail tracking, with optional drafts and tagging.",
     "Language": "Python",
     "Link": "https://github.com/hgn/mcp-server-notmuch",
+    "Category": "Communication"
+  },
+  {
+    "API": "Hugo0/swarmmemo",
+    "Description": "Public message board for AI agents: read and post in rooms and threads with no account, plus optional Ed25519 identity, private and sealed conversations, claimable work items and a Bitcoin-anchored transparency log. Hosted at swarmmemo.com/mcp, or run the Go server with the local Python bridge.",
+    "Language": "Python",
+    "Link": "https://github.com/Hugo0/swarmmemo",
     "Category": "Communication"
   },
   {
@@ -7084,6 +7462,13 @@
     "Category": "Communication"
   },
   {
+    "API": "Self-hosted-MCP/Selfhost-Remote-Mail-MCP",
+    "Description": "Self-hosted IMAP/SMTP email for Claude, ChatGPT and other AI apps on desktop and phone: up to 5 mailboxes, drafts by default, sends only when you ask, file attachments from chat.",
+    "Language": "Python",
+    "Link": "https://github.com/Self-hosted-MCP/Selfhost-Remote-Mail-MCP",
+    "Category": "Communication"
+  },
+  {
     "API": "sendchamp/ai",
     "Description": "Read-only search over Sendchamp documentation for SMS, OTP verification and Africa-specific routing.",
     "Language": "Unknown",
@@ -7182,13 +7567,6 @@
     "Category": "Communication"
   },
   {
-    "API": "SwarmMemo",
-    "Description": "Public message board for AI agents. The remote MCP endpoint (https://swarmmemo.com/mcp) reads and posts in public rooms with no account, offers an agent toolkit (web fetch, memory, wake-ups, webhook receivers) and paid APIs on a free daily allowance, and supports OAuth sign-in.",
-    "Language": "Unknown",
-    "Link": "https://github.com/Hugo0/swarmmemo",
-    "Category": "Communication"
-  },
-  {
     "API": "tecnologicachile/mail-mcp",
     "Description": "Multi-account email over IMAP, SMTP, Exchange Web Services and Microsoft Graph: read, search, send, reply, forward, bulk operations and attachment downloads.",
     "Language": "Rust",
@@ -7284,6 +7662,13 @@
     "Description": "Facilitates communication and sharing via email and Telegram",
     "Language": "Unknown",
     "Link": "https://github.com/wong2",
+    "Category": "Communication"
+  },
+  {
+    "API": "wraps-team/wraps-js",
+    "Description": "Send email through your own Amazon SES account, and check domain verification, the suppression list and sandbox status. Works with any SES account; a Wraps deploy adds send history and delivery events. `npx -y @wraps.dev/mcp`",
+    "Language": "TypeScript",
+    "Link": "https://github.com/wraps-team/wraps-js",
     "Category": "Communication"
   },
   {
@@ -8456,6 +8841,13 @@
     "Category": "Customer Data Platforms"
   },
   {
+    "API": "mambalabsdev/mcp-creator-lead-list-all-in-one",
+    "Description": "Builds a finished influencer lead list end to end: keyword or niche discovery, the profile read, and the link in bio check, with newsletter status and contact emails per row.",
+    "Language": "TypeScript",
+    "Link": "https://github.com/mambalabsdev/mcp-creator-lead-list-all-in-one",
+    "Category": "Customer Data Platforms"
+  },
+  {
     "API": "mambalabsdev/mcp-gtm-signals-aggregator",
     "Description": "Combines hiring and tech stack signals into a composite GTM intelligence brief with overall signal scoring per company.",
     "Language": "TypeScript",
@@ -8523,6 +8915,13 @@
     "Description": "Manage questions and options of YaniFend, a WordPress feedback widget, and read collected answers.",
     "Language": "Java",
     "Link": "https://github.com/skippedaga/yanifend-mcp",
+    "Category": "Customer Data Platforms"
+  },
+  {
+    "API": "Wism-Corp/scrupp-mcp-server",
+    "Description": "Scrupp: export LinkedIn, Sales Navigator and Apollo searches, find decision makers, and find and verify work emails.",
+    "Language": "TypeScript",
+    "Link": "https://github.com/Wism-Corp/scrupp-mcp-server",
     "Category": "Customer Data Platforms"
   },
   {
@@ -8750,6 +9149,13 @@
     "Category": "Data Platforms"
   },
   {
+    "API": "marcomq/mq-bridge",
+    "Description": "Move data between Kafka, NATS, RabbitMQ, MQTT, IBM MQ, SQL databases, MongoDB, files and HTTP: publish messages and run copy routes with endpoints given inline as JSON, while the rows never pass through the model's context.",
+    "Language": "Rust",
+    "Link": "https://github.com/marcomq/mq-bridge/tree/main/apps/mq-bridge-app",
+    "Category": "Data Platforms"
+  },
+  {
     "API": "mattijsdp/dbt-docs-mcp",
     "Description": "dbt-core (OSS) project metadata, model and column-level lineage, and dbt documentation.",
     "Language": "Python",
@@ -8845,6 +9251,13 @@
     "Description": "Query Swedish public data through Apiverket, including company data, SCB statistics, weather, transport and more.",
     "Language": "TypeScript",
     "Link": "https://github.com/vinvuk/apiverket-mcp",
+    "Category": "Data Platforms"
+  },
+  {
+    "API": "Yacine-ai-tech/AgentKit",
+    "Description": "FastMCP server for business intelligence and data agents, exposing dynamic KPI analytics, anomaly detection, and schema resources across 10 business domains via stdio and SSE transports.",
+    "Language": "Python",
+    "Link": "https://github.com/Yacine-ai-tech/AgentKit",
     "Category": "Data Platforms"
   },
   {
@@ -9296,6 +9709,13 @@
     "Category": "Data Visualization"
   },
   {
+    "API": "Aderali06/sqlite-mcp-server",
+    "Description": "Safe, read-only SQLite MCP server with auto schema discovery, row limits, and structured AI error handling.",
+    "Language": "Python",
+    "Link": "https://github.com/Aderali06/sqlite-mcp-server",
+    "Category": "Databases"
+  },
+  {
     "API": "agenticfabriq/mnemiq",
     "Description": "Natural-language questions over Postgres, Oracle, Snowflake, Databricks, DuckDB and SQLite; generated SQL is validated deterministically before running.",
     "Language": "Python",
@@ -9604,6 +10024,13 @@
     "Category": "Databases"
   },
   {
+    "API": "denizgursoy/kafka-mcp",
+    "Description": "Debug Apache Kafka: find messages by key or field, measure consumer lag and when it clears, unblock stuck consumers and compare clusters. Read-only endpoints and a preview before every write.",
+    "Language": "Go",
+    "Link": "https://github.com/denizgursoy/kafka-mcp",
+    "Category": "Databases"
+  },
+  {
     "API": "designcomputer/mysql_mcp_server",
     "Description": "MySQL database integration with configurable access controls, schema inspection and security guidelines.",
     "Language": "Python",
@@ -9779,6 +10206,13 @@
     "Category": "Databases"
   },
   {
+    "API": "gxc/gaussdb-ro-mcp",
+    "Description": "Read-only MCP server for Huawei GaussDB (centralized & distributed) built for coding agents: three-layer write protection (hardened static SQL validation, server-enforced read-only transactions, least-privilege account guidance), multi-instance config, schema/table exploration and single-SELECT execution. Designed for production and intranet non-SSL environments.",
+    "Language": "Go",
+    "Link": "https://github.com/gxc/gaussdb-ro-mcp",
+    "Category": "Databases"
+  },
+  {
     "API": "hannesrudolph/sqlite-explorer-fastmcp-mcp-server",
     "Description": "Safe, read-only access to explore and query SQLite databases, with query validation.",
     "Language": "Python",
@@ -9832,6 +10266,13 @@
     "Description": "Snowflake integration with read and optional write operations, plus insight tracking.",
     "Language": "Python",
     "Link": "https://github.com/isaacwasserman/mcp-snowflake-server",
+    "Category": "Databases"
+  },
+  {
+    "API": "ishay60/mcpolyglot",
+    "Description": "One server for Postgres, MySQL, SQLite, MongoDB and OpenAPI REST APIs. Every query is checked against a per-table policy, connections are read-only at the database level, results are redacted, and every call is audited per agent.",
+    "Language": "TypeScript",
+    "Link": "https://github.com/ishay60/mcpolyglot",
     "Category": "Databases"
   },
   {
@@ -9916,6 +10357,13 @@
     "Description": "DuckDB database integration with schema inspection and query capabilities.",
     "Language": "Python",
     "Link": "https://github.com/ktanaka101/mcp-server-duckdb",
+    "Category": "Databases"
+  },
+  {
+    "API": "lagaam-ai/lagaam",
+    "Description": "Read-only Trino and Apache Pinot access for agents: every query is priced from the engine's own plan before it runs and refused if it's over budget.",
+    "Language": "Python",
+    "Link": "https://github.com/lagaam-ai/lagaam",
     "Category": "Databases"
   },
   {
@@ -10049,6 +10497,13 @@
     "Description": "Create and manage Postgres databases with Neon Serverless Postgres.",
     "Language": "TypeScript",
     "Link": "https://github.com/neondatabase/mcp-server-neon",
+    "Category": "Databases"
+  },
+  {
+    "API": "nhost/nhost",
+    "Description": "Official Nhost MCP server, bundled with the Nhost CLI. Lets AI coding assistants read your GraphQL schema, run the queries and mutations you allow, manage permissions and migrations, update Nhost Cloud project config, and search the docs.",
+    "Language": "Go",
+    "Link": "https://github.com/nhost/nhost/tree/main/cli",
     "Category": "Databases"
   },
   {
@@ -10822,6 +11277,13 @@
     "Category": "Developer Tools"
   },
   {
+    "API": "AlicanAkyol/nativekeel",
+    "Description": "Health check for React Native and Expo projects: upgrade blockers, New Architecture support, App Store and Google Play rejections, crash risks, OWASP MASVS security and accessibility findings, an ordered upgrade plan, library compatibility checks and release bundle measurement. Read-only; never runs project code.",
+    "Language": "TypeScript",
+    "Link": "https://github.com/AlicanAkyol/nativekeel",
+    "Category": "Developer Tools"
+  },
+  {
     "API": "alimo7amed93/webhook-tester-mcp",
     "Description": "Create, retrieve and delete webhooks on webhook-test.com.",
     "Language": "Python",
@@ -10934,6 +11396,13 @@
     "Category": "Developer Tools"
   },
   {
+    "API": "arif-js/agentsensor",
+    "Description": "Zero-config runtime and browser error sensor for AI coding agents: intercepts dev server crashes and in-browser exceptions with source-mapped stack traces for Claude Code, Cursor and Codex.",
+    "Language": "TypeScript",
+    "Link": "https://github.com/arif-js/agentsensor",
+    "Category": "Developer Tools"
+  },
+  {
     "API": "artmann/package-registry-mcp",
     "Description": "Search and get up-to-date information about npm, Cargo, PyPI and NuGet packages.",
     "Language": "TypeScript",
@@ -10945,6 +11414,13 @@
     "Description": "Maven Central dependency intelligence: bulk version comparison, stability filtering, dependency age analysis, release patterns and Context7 upgrade guidance.",
     "Language": "Java",
     "Link": "https://github.com/arvindand/maven-tools-mcp",
+    "Category": "Developer Tools"
+  },
+  {
+    "API": "as9978/designfit",
+    "Description": "Validate AI-built front-ends against Figma by tokens and geometry, not pixels: extract a spec from a Figma frame link, then get a deterministic fidelity score and fix-list for the rendered page.",
+    "Language": "TypeScript",
+    "Link": "https://github.com/as9978/designfit",
     "Category": "Developer Tools"
   },
   {
@@ -10987,6 +11463,13 @@
     "Description": "Build token-efficient codebase context locally, with live preview, Git scopes, secret redaction and syntax-aware compression.",
     "Language": "Unknown",
     "Link": "https://github.com/Avazbek22/DevProjex",
+    "Category": "Developer Tools"
+  },
+  {
+    "API": "avikchakraborty060-create/The-top-innovation",
+    "Description": "Lossless context guard for coding agents: outlines large files with line ranges and digests noisy command output (tests, builds, installs), with full output always retrievable. `pipx install skimread`",
+    "Language": "Python",
+    "Link": "https://github.com/avikchakraborty060-create/The-top-innovation",
     "Category": "Developer Tools"
   },
   {
@@ -11151,6 +11634,13 @@
     "Category": "Developer Tools"
   },
   {
+    "API": "cairncommons/cairn-commons",
+    "Description": "Verified, version-pinned records of new dependency bugs: your coding agent looks an error up before searching the web (91% vs 68% correct on whether a bug is known or fixed, 56 fresh bugs). Read-only by default.",
+    "Language": "TypeScript",
+    "Link": "https://github.com/cairncommons/cairn-commons",
+    "Category": "Developer Tools"
+  },
+  {
     "API": "callstackincubator/agent-device",
     "Description": "Discovery router for the agent-device CLI: status, install guidance, version-matched help and prompts for iOS, Android, tvOS, macOS and Linux automation.",
     "Language": "TypeScript",
@@ -11176,6 +11666,13 @@
     "Description": "iOS memory leak and performance investigation: reads .memgraph and .trace files, classifies retain cycles against known patterns and suggests Swift fixes.",
     "Language": "TypeScript",
     "Link": "https://github.com/carloshpdoc/memorydetective",
+    "Category": "Developer Tools"
+  },
+  {
+    "API": "castovdev/castov",
+    "Description": "Deterministic local developer utilities for coding agents: inspect listening ports and processes, compute IPv4 CIDR subnet ranges, decode creation timestamps from UUIDv7, ULID, Snowflake and MongoDB ObjectId, and convert Unix epochs with zero telemetry.",
+    "Language": "TypeScript",
+    "Link": "https://github.com/castovdev/castov",
     "Category": "Developer Tools"
   },
   {
@@ -11690,6 +12187,13 @@
     "Category": "Developer Tools"
   },
   {
+    "API": "formfeed-dev/formfeed",
+    "Description": "Render PDFs and images from HTML templates (Jinja2, Liquid, Handlebars) or Word and PowerPoint files, check data against a template's schema before rendering, and convert Office documents to PDF through the Formfeed API. `npx -y @formfeed/mcp`, or the hosted endpoint `https://mcp.formfeed.dev/mcp`.",
+    "Language": "TypeScript",
+    "Link": "https://github.com/formfeed-dev/formfeed/tree/main/packages/mcp",
+    "Category": "Developer Tools"
+  },
+  {
     "API": "freema/mcp-design-system-extractor",
     "Description": "Extract component information from Storybook design systems: HTML, styles, props, dependencies, theme tokens and metadata.",
     "Language": "TypeScript",
@@ -11785,6 +12289,13 @@
     "Description": "Gives coding agents direct access to Figma data to implement designs in one shot.",
     "Language": "TypeScript",
     "Link": "https://github.com/GLips/Figma-Context-MCP",
+    "Category": "Developer Tools"
+  },
+  {
+    "API": "gmansystems/agent-stack-directory",
+    "Description": "Search, inspect and compare AI agent infrastructure tools (cloud browsers, code sandboxes, memory, search APIs and more) from the Agent Stack Directory open dataset. Read-only, no API key.",
+    "Language": "TypeScript",
+    "Link": "https://github.com/gmansystems/agent-stack-directory",
     "Category": "Developer Tools"
   },
   {
@@ -12187,6 +12698,13 @@
     "Category": "Developer Tools"
   },
   {
+    "API": "jamalkamaladdin/pixelpact",
+    "Description": "Extracts a visual contract from a live page or Figma frame and measures a UI implementation against it, one line per property that drifted.",
+    "Language": "TypeScript",
+    "Link": "https://github.com/jamalkamaladdin/pixelpact",
+    "Category": "Developer Tools"
+  },
+  {
     "API": "Jambozx/onlinecybertools-mcp-server",
     "Description": "Developer and security utilities via the onlinecybertools.com API: encoding, hashing, JWT decoding, regex testing, formatters, network diagnostics and OSINT.",
     "Language": "TypeScript",
@@ -12390,6 +12908,13 @@
     "Category": "Developer Tools"
   },
   {
+    "API": "Jwrede/tokentoll",
+    "Description": "Scan codebases for LLM API calls and estimate monthly costs. Compare costs between git refs to catch cost regressions during code review.",
+    "Language": "Python",
+    "Link": "https://github.com/Jwrede/tokentoll",
+    "Category": "Developer Tools"
+  },
+  {
     "API": "kadykov/mcp-openapi-schema-explorer",
     "Description": "Token-efficient access to OpenAPI/Swagger specs via MCP Resources.",
     "Language": "TypeScript",
@@ -12401,6 +12926,13 @@
     "Description": "Query UniFi API docs (Network, Protect, Site Manager and more): endpoint search, field-level schemas and code examples. Docs only, no controller access.",
     "Language": "Python",
     "Link": "https://github.com/KallistoX/mcp-unifi-applications",
+    "Category": "Developer Tools"
+  },
+  {
+    "API": "kamysh/muninn",
+    "Description": "Code search for AI coding agents with hybrid retrieval, structural search and shared indexing across Git worktrees. Requires PostgreSQL with pgvector and Apache AGE.",
+    "Language": "Rust",
+    "Link": "https://github.com/kamysh/muninn",
     "Category": "Developer Tools"
   },
   {
@@ -12569,6 +13101,13 @@
     "Description": "Offline calculator that evaluates expressions in fixed-point, IEEE-754 double or exact rational arithmetic, labelling each answer exact or inexact.",
     "Language": "Python",
     "Link": "https://github.com/laszlopere/mcp-abacus",
+    "Category": "Developer Tools"
+  },
+  {
+    "API": "LazyInvestor/fauxgen-mcp",
+    "Description": "Generate fictional test identities, addresses, phones, Luhn cards and IBANs for QA fixtures (66 countries). Companion web tools at https://fauxgen.com.",
+    "Language": "TypeScript",
+    "Link": "https://github.com/LazyInvestor/fauxgen-mcp",
     "Category": "Developer Tools"
   },
   {
@@ -12849,6 +13388,13 @@
     "Description": "Offload summaries, drafts, extractions and first-pass code reviews from a cloud LLM agent to a local Ollama model via handoff tools with built-in prompts.",
     "Language": "Python",
     "Link": "https://github.com/Michael-WhiteCapData/ollama-handoff",
+    "Category": "Developer Tools"
+  },
+  {
+    "API": "michal-niedzwiedzki/visimark",
+    "Description": "Checks that every computed number in a Markdown document still matches the formula that produced it, and plans — then applies, behind an explicit write gate — the repair, so an agent's correct formula can't ship with a wrong total.",
+    "Language": "TypeScript",
+    "Link": "https://github.com/michal-niedzwiedzki/visimark",
     "Category": "Developer Tools"
   },
   {
@@ -13307,6 +13853,13 @@
     "Category": "Developer Tools"
   },
   {
+    "API": "ondraulehla/mcpcost",
+    "Description": "Health and token cost of every server in the official MCP registry, probed daily: look up or search a server, probe any URL live, and measure what the servers in your own config cost before the first prompt.",
+    "Language": "TypeScript",
+    "Link": "https://github.com/ondraulehla/mcpcost",
+    "Category": "Developer Tools"
+  },
+  {
     "API": "ooples/token-optimizer-mcp",
     "Description": "Token optimization through caching and compression, with tools for API optimization, code analysis and real-time monitoring.",
     "Language": "TypeScript",
@@ -13332,6 +13885,20 @@
     "Description": "Enforces critical rules for Claude to prevent documented failure patterns, with a compliance verification checklist and rules summary.",
     "Language": "TypeScript",
     "Link": "https://github.com/optimaquantum/claude-critical-rules-mcp",
+    "Category": "Developer Tools"
+  },
+  {
+    "API": "orcsnren/pkg-health-mcp",
+    "Description": "Is this dependency still maintained? Scores npm packages, PyPI packages and GitHub repositories 0-100 with an A-F grade and plain-language risks (deprecated, archived, single maintainer, unanswered issues). Scans package.json, requirements.txt and lock files. No API key needed.",
+    "Language": "TypeScript",
+    "Link": "https://github.com/orcsnren/pkg-health-mcp",
+    "Category": "Developer Tools"
+  },
+  {
+    "API": "OtaKit/otakit",
+    "Description": "Ship over-the-air updates for Capacitor mobile apps: inspect the project, check native compatibility, upload web bundles, publish releases with human approval, read rollout health, and revert.",
+    "Language": "TypeScript",
+    "Link": "https://github.com/OtaKit/otakit",
     "Category": "Developer Tools"
   },
   {
@@ -13657,6 +14224,13 @@
     "Category": "Developer Tools"
   },
   {
+    "API": "Rbkmen/qa-orchestrator",
+    "Description": "Local, deterministic QA review routing with fixed profiles and risk-based escalation; evidence and final decisions stay with the host. [![Rbkmen/qa-orchestrator MCP server](https://glama.ai/mcp/servers/Rbkmen/qa-orchestrator/badges/score.svg)](https://glama.ai/mcp/servers/Rbkmen/qa-orchestrator)",
+    "Language": "Python",
+    "Link": "https://github.com/Rbkmen/qa-orchestrator",
+    "Category": "Developer Tools"
+  },
+  {
     "API": "ReAPI-com/mcp-openapi",
     "Description": "Discover and explain OpenAPI specifications and generate code or mock data from them.",
     "Language": "TypeScript",
@@ -13689,6 +14263,13 @@
     "Description": "Headless rendering and verification of native Rust GUIs: accessibility tree, semantic selectors, contrast and focus-order checks, and screenshot diffs.",
     "Language": "Rust",
     "Link": "https://github.com/richer-richard/fenestra/tree/main/fenestra-mcp",
+    "Category": "Developer Tools"
+  },
+  {
+    "API": "rison1337/x64dbgMCP",
+    "Description": "Guarded x64dbg/x32dbg debugging on Windows with SHA-256 target identity, breakpoint capture, verified memory writes, PE dumps, and IDA evidence exchange.",
+    "Language": "Python",
+    "Link": "https://github.com/rison1337/x64dbgMCP",
     "Category": "Developer Tools"
   },
   {
@@ -13839,6 +14420,13 @@
     "Category": "Developer Tools"
   },
   {
+    "API": "setheerwagen/mcp-ollama-vllm",
+    "Description": "Bridge to a locally running Ollama or vLLM instance for pure language processing (writing, summarizing, classifying, structured extraction), without giving the calling agent tools or file access. `pip install mcp-ollama-vllm`",
+    "Language": "Python",
+    "Link": "https://github.com/setheerwagen/local-ai-mcp-servers",
+    "Category": "Developer Tools"
+  },
+  {
     "API": "shakaran/symfony-agent-mcp",
     "Description": "Read-only introspection of Symfony codebases: routes, controllers, services, entities, schema, migrations, Doctrine, Messenger, Twig and API Platform.",
     "Language": "TypeScript",
@@ -13944,6 +14532,13 @@
     "Category": "Developer Tools"
   },
   {
+    "API": "sraj0501/Devtrack_",
+    "Description": "Local-first developer context daemon with six read-only MCP tools for active tickets, commits, pending actions, voice profile, ticket history, and EOD summaries. Ships native MCPB bundles.",
+    "Language": "Go",
+    "Link": "https://github.com/sraj0501/Devtrack_",
+    "Category": "Developer Tools"
+  },
+  {
     "API": "srbsa/diffgate",
     "Description": "Deterministic guardrail for AI-written diffs: AST-based checks for SQLi, SSRF, XXE, hardcoded secrets and over-abstraction, scoped to the changed lines.",
     "Language": "TypeScript",
@@ -14011,6 +14606,13 @@
     "Description": "Leaderboard ranking AI coding operators by token efficiency, with signed submissions, diagnostics and simulations; only token counts leave the machine.",
     "Language": "TypeScript",
     "Link": "https://github.com/SunrisesIllNeverSee/sigrank-mcp",
+    "Category": "Developer Tools"
+  },
+  {
+    "API": "SupportPages-io/wtfm",
+    "Description": "Writes illustrated end-user help articles from a codebase: reads the interface code, renders screenshots of each screen in a local headless Chromium, and saves Markdown with images. No account needed.",
+    "Language": "TypeScript",
+    "Link": "https://github.com/SupportPages-io/wtfm",
     "Category": "Developer Tools"
   },
   {
@@ -14228,6 +14830,13 @@
     "Description": "Organize and search chat history with AI-generated summaries and secure memory.",
     "Language": "Python",
     "Link": "https://github.com/ukkit/memcord",
+    "Category": "Developer Tools"
+  },
+  {
+    "API": "Umair/stalemap",
+    "Description": "Tells coding agents which npm dependencies changed after their training cutoff, and what changed: ranked notes in AGENTS.md/CLAUDE.md, a post-edit guard that explains type errors caused by changed APIs, and a `search_changes` tool over type diffs, release notes and upgrade guides. `npx stalemap setup --agent <claude|cursor|codex|opencode>`",
+    "Language": "TypeScript",
+    "Link": "https://github.com/Umair/stalemap",
     "Category": "Developer Tools"
   },
   {
@@ -14637,6 +15246,13 @@
     "Category": "Developer Tools"
   },
   {
+    "API": "zeitcow/implicit-core",
+    "Description": "Bounded synthetic experience addressing, selective state materialization, provenance and fixed benchmark/adapter rehearsal over local stdio. Real environment adapters use the Python SDK.",
+    "Language": "Python",
+    "Link": "https://github.com/zeitcow/implicit-core",
+    "Category": "Developer Tools"
+  },
+  {
     "API": "zelentsov-dev/asc-mcp",
     "Description": "Manage App Store Connect apps, builds, TestFlight, subscriptions, reviews and more via its API.",
     "Language": "Unknown",
@@ -14735,6 +15351,20 @@
     "Category": "E-Commerce"
   },
   {
+    "API": "forgemeshlabs/shopscout-mcp",
+    "Description": "Let your agent shop and compare: Shopify catalog search, offer ranking and shipping-plan comparison, $0.01 USDC per call via x402 on Base.",
+    "Language": "TypeScript",
+    "Link": "https://github.com/forgemeshlabs/shopscout-mcp",
+    "Category": "E-Commerce"
+  },
+  {
+    "API": "glongusmain/glongus-mcp",
+    "Description": "Let your agent buy and sell physical goods, with escrow and shipping: search and list items, haggle with other agents, pay into escrow, track delivery and check seller reputation on the Glongus UK marketplace.",
+    "Language": "TypeScript",
+    "Link": "https://github.com/glongusmain/glongus-mcp",
+    "Category": "E-Commerce"
+  },
+  {
     "API": "HasData/amazon-mcp",
     "Description": "Amazon data as JSON: keyword search, product details by ASIN, reviews, seller profiles and seller catalogs across marketplaces.",
     "Language": "TypeScript",
@@ -14809,6 +15439,13 @@
     "Description": "EU Digital Product Passport automation via TracePass: create products, build and audit DPPs, set economic operators and read or capture GS1 EPCIS 2.0 events.",
     "Language": "TypeScript",
     "Link": "https://github.com/malinoto/tracepass-mcp-server",
+    "Category": "E-Commerce"
+  },
+  {
+    "API": "mambalabsdev/mcp-ecommerce-platform-profiler",
+    "Description": "Detects the ecommerce platform, payment providers, and catalog size behind a storefront.",
+    "Language": "TypeScript",
+    "Link": "https://github.com/mambalabsdev/mcp-ecommerce-platform-profiler",
     "Category": "E-Commerce"
   },
   {
@@ -15029,10 +15666,31 @@
     "Category": "Education"
   },
   {
+    "API": "edouard-claude/ent1-mcp",
+    "Description": "ENT ONE, the school digital workspace of French primary schools (Edifice platform), for parents: teacher messaging, liaison book signatures and replies, homework (mark as done), school news, class blogs, calendar, file drop-box and forms.",
+    "Language": "Rust",
+    "Link": "https://github.com/edouard-claude/ent1-mcp",
+    "Category": "Education"
+  },
+  {
+    "API": "FabianIMV/voice-coach-mcp",
+    "Description": "Local voice coach: records the mic and measures singing pitch accuracy (cents, vibrato, MIDI melody), phoneme-level English pronunciation and public-speaking pace, pauses and filler words, with a coaching skill and progress log.",
+    "Language": "Python",
+    "Link": "https://github.com/FabianIMV/voice-coach-mcp",
+    "Category": "Education"
+  },
+  {
     "API": "giacomomaria81/scorm-mcp-server",
     "Description": "Package HTML, Claude Design bundles or mobile-learning exports as SCORM 2004/1.2 courses with milestone and question tracking, and validate SCORM zips.",
     "Language": "TypeScript",
     "Link": "https://github.com/giacomomaria81/scorm-mcp-server",
+    "Category": "Education"
+  },
+  {
+    "API": "haison8x/geogebra-mcp",
+    "Description": "Draw and edit plane-geometry figures live in GeoGebra Calculator: run constructions, inspect objects, verify properties (angles, collinearity, midpoints) and take screenshots so the AI can fix its own figure.",
+    "Language": "TypeScript",
+    "Link": "https://github.com/haison8x/geogebra-mcp",
     "Category": "Education"
   },
   {
@@ -15106,6 +15764,13 @@
     "Category": "Embedded System"
   },
   {
+    "API": "aimdb-dev/aimdb",
+    "Description": "Inspect and debug live AimDB nodes, from microcontrollers on a serial port to a cloud hub: records, schemas, dependency graph and metrics.",
+    "Language": "Rust",
+    "Link": "https://github.com/aimdb-dev/aimdb/tree/main/tools/aimdb-mcp",
+    "Category": "Embedded System"
+  },
+  {
     "API": "ByteAsk/ByteAsk-Embedded-MCP",
     "Description": "Page-cited retrieval of embedded/firmware reference docs (datasheets, MCU registers, Modbus/CAN, SCPI, IEEE 1547/SunSpec) as verbatim snippets.",
     "Language": "Python",
@@ -15166,6 +15831,13 @@
     "Description": "Connect to OPC UA-enabled industrial systems.",
     "Language": "Python",
     "Link": "https://github.com/kukapay/opcua-mcp",
+    "Category": "Embedded System"
+  },
+  {
+    "API": "Leonezz/openbaud",
+    "Description": "Local serial hardware access for coding agents with typed YAML commands, checksum validation, audited writes, lossless captures, hardware-free replay, and MCP App visualizations.",
+    "Language": "Rust",
+    "Link": "https://github.com/Leonezz/openbaud",
     "Category": "Embedded System"
   },
   {
@@ -15232,6 +15904,13 @@
     "Category": "Embedded System"
   },
   {
+    "API": "Zeraissh/stm32-gdb-mcp",
+    "Description": "Debug STM32 firmware on real hardware via GDB + OpenOCD/ST-Link/J-Link: flash, breakpoints, memory/registers, HardFault-to-source triage, FreeRTOS awareness, SWO/RTT logging and multi-board sessions, with decoded structured results.",
+    "Language": "Python",
+    "Link": "https://github.com/Zeraissh/stm32-gdb-mcp",
+    "Category": "Embedded System"
+  },
+  {
     "API": "aliafsahnoudeh/wildfire-mcp-server",
     "Description": "Detect, monitor and analyze potential wildfires globally using NASA FIRMS, OpenWeatherMap and Google Earth Engine data.",
     "Language": "Python",
@@ -15260,6 +15939,13 @@
     "Category": "Environment & Nature"
   },
   {
+    "API": "gabrielkasmi/deeppvmapper",
+    "Description": "Open registry of 1.14M+ rooftop-solar detections across France (96 départements), queryable by natural language via a public Streamable HTTP endpoint. No install required.",
+    "Language": "TypeScript",
+    "Link": "https://github.com/gabrielkasmi/deeppvmapper",
+    "Category": "Environment & Nature"
+  },
+  {
     "API": "malonestar/gov-data-mcp",
     "Description": "US government open data from EPA, FEMA, USGS, NOAA, FAA, USACE, FDIC, HUD, NRCS, county assessor rolls and state licensing boards.",
     "Language": "TypeScript",
@@ -15271,6 +15957,13 @@
     "Description": "Nudges you to take outdoor breaks based on local weather, sunset timing and session streaks, with activity suggestions and stats.",
     "Language": "TypeScript",
     "Link": "https://github.com/nalediym/touch-grass",
+    "Category": "Environment & Nature"
+  },
+  {
+    "API": "stevensu04/eco-router-mcp",
+    "Description": "Picks the lowest-carbon AWS, Google Cloud or Azure region for a workload. Maps all 134 public regions to their electricity grids and ranks them by carbon intensity and estimated latency, with EU/EEA data residency filters. `find_clean_window` finds the cleanest start time for batch jobs over the next 72 hours. Works without an API key using annual averages (grid-level for the US and Canada); add an Electricity Maps token for live data and forecasts. `npx -y eco-router-mcp`",
+    "Language": "TypeScript",
+    "Link": "https://github.com/stevensu04/eco-router-mcp",
     "Category": "Environment & Nature"
   },
   {
@@ -15355,6 +16048,13 @@
     "Description": "Read, convert, edit and compare PDFs on your computer: Markdown with tables, charts and OCR, export to Word, PowerPoint and EPUB, tables to CSV or Excel, merge, split, fill forms and remove metadata. Nothing is uploaded.",
     "Language": "TypeScript",
     "Link": "https://github.com/arjunprabhulal/superpdf",
+    "Category": "File Systems"
+  },
+  {
+    "API": "BatuhanCakmakk/laserpdf",
+    "Description": "Offline PDF tools built into the LaserPDF desktop app (`laserpdf --mcp`, no Node.js or Python needed): extract and search text, OCR scanned pages (English and Turkish), redact words so they are removed from the file, strip hidden metadata, export tables to Excel, merge, split, extract or rotate pages, add page numbers and watermarks, compress, and save pages as images.",
+    "Language": "TypeScript",
+    "Link": "https://github.com/BatuhanCakmakk/laserpdf",
     "Category": "File Systems"
   },
   {
@@ -15631,6 +16331,13 @@
     "Category": "File Systems"
   },
   {
+    "API": "tobee89/mcp-paperless-ngx",
+    "Description": "Paperless-ngx 3.x document archive: search and read documents, file them, bulk-edit, manage tags, correspondents, custom fields, workflows and share links. All 92 documented REST endpoints are either exposed or explicitly excluded with a reason, enforced by a test. OCR text sits behind its own paginated tool so a search cannot flood the context; toolsets and `--read-only` limit the exposed surface.",
+    "Language": "TypeScript",
+    "Link": "https://github.com/tobee89/mcp-paperless-ngx",
+    "Category": "File Systems"
+  },
+  {
     "API": "TrendTweekers/mintpdf",
     "Description": "Convert HTML or Markdown to styled PDFs, or render a public URL to PDF, and get a download link.",
     "Language": "TypeScript",
@@ -15792,13 +16499,6 @@
     "Category": "Finance"
   },
   {
-    "API": "TradingView Market Data MCP",
-    "Description": "Open-source server for market data, screeners, technical indicators, sentiment tools, and backtesting across stocks, crypto, forex, and futures.",
-    "Language": "Unknown",
-    "Link": "https://github.com/atilaahmettaner/tradingview-mcp",
-    "Category": "Finance"
-  },
-  {
     "API": "Ulule",
     "Description": "OAuth 2.1 MCP server for crowdfunding workflows: create or update proposals, edit project titles and descriptions, and draft news updates.",
     "Language": "Unknown",
@@ -15890,6 +16590,13 @@
     "Category": "Finance & Fintech"
   },
   {
+    "API": "402MCP/402mcp",
+    "Description": "Decodes HTTP 402 Payment Required challenges (L402, x402, MPP) into exact pay-and-retry steps, recommends a payment rail from stated requirements, and searches an open registry of agent payment solutions. Read-only; never spends money.",
+    "Language": "TypeScript",
+    "Link": "https://github.com/402MCP/402mcp",
+    "Category": "Finance & Fintech"
+  },
+  {
     "API": "411sst/gst-einvoice-mcp",
     "Description": "Convert Indian GST invoices (PDF or scanned) into INV-01 e-invoice JSON, with every value checked against the document plus GSTIN and arithmetic validation.",
     "Language": "Python",
@@ -15943,6 +16650,13 @@
     "Description": "Bottom/top market-timing verdicts for 10 markets — crypto (197 coins, 32 indicators), US stocks, KOSPI/KOSDAQ, China A-shares, Hong Kong stocks, commodity futures, FX (48 pairs), inflation & Fed liquidity, Seoul & Dubai property. One fused −100..+100 score across daily/weekly/monthly timeframes. x402 pay-per-call (USDT on X Layer), no API key or signup.",
     "Language": "TypeScript",
     "Link": "https://github.com/airblock2026/bit-monk-signal-mcp",
+    "Category": "Finance & Fintech"
+  },
+  {
+    "API": "akalongman/nbg-rates-mcp",
+    "Description": "Independent server, not affiliated with NBG, for the National Bank of Georgia's official lari exchange rates: the rate on any date, exact conversions, batches and up to a year of history, with weekend carry-over and per-unit quotes.",
+    "Language": "TypeScript",
+    "Link": "https://github.com/akalongman/nbg-rates-mcp",
     "Category": "Finance & Fintech"
   },
   {
@@ -16058,6 +16772,20 @@
     "Category": "Finance & Fintech"
   },
   {
+    "API": "assoujojo82-coder/synergieloc-mcp",
+    "Description": "Describe a building in JSON, get back a dimensioned DXF, an IFC model and a 4K walkthrough — plus a deterministic verifier that checks 34 trade principles (architecture, furnishing, decoration, landscaping, electrical) against their sources, tagged by jurisdiction. Also exact French property-management law: IRL rent revision, service-charge reconciliation, compliant receipts, legal basis in every answer. Free tier, no signup.",
+    "Language": "Unknown",
+    "Link": "https://github.com/assoujojo82-coder/synergieloc-mcp",
+    "Category": "Finance & Fintech"
+  },
+  {
+    "API": "atilaahmettaner/tradingview-mcp",
+    "Description": "Screeners, multi-timeframe technical analysis, smart-money and volume scans, and walk-forward backtests for crypto, stocks, FX and futures.",
+    "Language": "Python",
+    "Link": "https://github.com/atilaahmettaner/tradingview-mcp",
+    "Category": "Finance & Fintech"
+  },
+  {
     "API": "atomno-mcp/mcp-cbr-rates",
     "Description": "Central Bank of Russia data: daily and historical exchange rates, key interest rate, inflation and aggregated macro statistics.",
     "Language": "Python",
@@ -16121,6 +16849,13 @@
     "Category": "Finance & Fintech"
   },
   {
+    "API": "BackpowCom/backpow-mcp-server",
+    "Description": "Live Proof-of-Work mining data from BackPow: difficulty, hashrate, solo-mining odds, cost of production and hardware profitability across 126+ networks and 770+ ASIC/GPU/CPU models. Read-only, no API key.",
+    "Language": "TypeScript",
+    "Link": "https://github.com/BackpowCom/backpow-mcp-server",
+    "Category": "Finance & Fintech"
+  },
+  {
     "API": "bakyang2/kr-crypto-intelligence",
     "Description": "Korean crypto market data and AI analysis: Kimchi Premium, stablecoin premium, Upbit and Bithumb prices and the USD/KRW rate, paid per use via x402.",
     "Language": "Python",
@@ -16163,6 +16898,13 @@
     "Category": "Finance & Fintech"
   },
   {
+    "API": "bartosz-kuc/honest-pl-holidays-mcp",
+    "Description": "Polish public holidays and business-day math via the keyless Nager.Date API: `list_holidays`, `is_holiday`, `is_business_day`, `count_business_days`, `add_business_days` and `next_holidays`, e.g. for working-day invoice payment terms. Defaults to Poland; `country` takes other ISO codes.",
+    "Language": "Python",
+    "Link": "https://github.com/bartosz-kuc/honest-pl-holidays-mcp",
+    "Category": "Finance & Fintech"
+  },
+  {
     "API": "bartosz-kuc/honest-vies-mcp",
     "Description": "Validates EU VAT numbers against the European Commission's VIES API, locally with no API key or third-party middleman. `check_vat` returns validity, name and address where available, and a consultation number as audit proof when you pass your own VAT; `list_supported_countries` lists the 27 EU states plus XI (Northern Ireland).",
     "Language": "Python",
@@ -16202,6 +16944,13 @@
     "Description": "Read-only directory of US lenders and card issuers accepting ITIN (no-SSN) applicants, plus English/Spanish guides and FAQs on credit without an SSN.",
     "Language": "TypeScript",
     "Link": "https://github.com/bguillow-rgb/itin-finance-mcp",
+    "Category": "Finance & Fintech"
+  },
+  {
+    "API": "BijectiveLabs/trading-research-agents",
+    "Description": "Read-only research gates from autonomous trading agents with deterministic execution: whether a claimed edge clears the full round-trip cost, whether a trade dataset is fit to test on, what a sealed pre-registered validation decided, plus the kill ledger and run reports. No tool places an order. Runs with `uvx --with \"mcp>=2,<3\" trading-research-agents mcp serve`.",
+    "Language": "Python",
+    "Link": "https://github.com/BijectiveLabs/trading-research-agents",
     "Category": "Finance & Fintech"
   },
   {
@@ -16254,6 +17003,13 @@
     "Category": "Finance & Fintech"
   },
   {
+    "API": "brianbooms/steward-mcp",
+    "Description": "Buy music, data APIs, and sync licenses via x402 micropayments (USDC on Base): 24 tools with operator-set spend caps, pre-purchase quotes, and an on-chain receipt for every call.",
+    "Language": "TypeScript",
+    "Link": "https://github.com/brianbooms/steward-mcp",
+    "Category": "Finance & Fintech"
+  },
+  {
     "API": "BSVKey/inference-mcp",
     "Description": "Pay-per-token Claude & Grok inference settled in BSV micropayments (HTTP 402 / x402). Prepay a channel once, then meter every token; OpenAI-compatible, optional web search, no account. On the official registry as `io.github.BSVKey/inference-mcp`.",
     "Language": "TypeScript",
@@ -16272,6 +17028,13 @@
     "Description": "Spend limits for AI agents that pay with x402: every paywall is policy-checked (per-call caps, budgets, human approval, kill switch) before a cent moves, with signed receipts.",
     "Language": "TypeScript",
     "Link": "https://github.com/bugiiiii11/rein",
+    "Category": "Finance & Fintech"
+  },
+  {
+    "API": "c-viper-work/cabal-radar-mcp",
+    "Description": "Zero-dependency Solana and Base token risk intelligence MCP server and CLI for inspecting SPL/Token-2022 controls, early Block-0 bundler coordination, shared-funder sybil clusters, and EVM bytecode risks.",
+    "Language": "TypeScript",
+    "Link": "https://github.com/c-viper-work/cabal-radar-mcp",
     "Category": "Finance & Fintech"
   },
   {
@@ -16436,6 +17199,13 @@
     "Category": "Finance & Fintech"
   },
   {
+    "API": "cstamigo-droid/market-data-mcp",
+    "Description": "Live market data over Finnhub's free tier (free API key required): quotes, company and market news, earnings calendar, a watchlist scanner and a composite verdict, plus optional read-only Alpaca paper-trading positions.",
+    "Language": "Python",
+    "Link": "https://github.com/cstamigo-droid/market-data-mcp",
+    "Category": "Finance & Fintech"
+  },
+  {
     "API": "cstamigo-droid/signal-scanner",
     "Description": "Rule-based stock/crypto screener: define signals in YAML (RSI, SMA cross, volume, 52-week levels), scan a watchlist over keyless yfinance data, and get matches via MCP, console or Telegram.",
     "Language": "Python",
@@ -16489,6 +17259,13 @@
     "Description": "Argentine exchange rates via DolarAPI (blue, oficial, MEP, CCL, crypto, tarjeta), plus currency conversion and a spread calculator.",
     "Language": "TypeScript",
     "Link": "https://github.com/dan1d/dolar-mcp",
+    "Category": "Finance & Fintech"
+  },
+  {
+    "API": "datavidence/datavidence-financials-mcp",
+    "Description": "Normalized US-GAAP statements for every SEC XBRL filer: point-in-time (as-originally-reported) figures, restatement history and EDGAR source links.",
+    "Language": "Python",
+    "Link": "https://github.com/datavidence/datavidence-financials-mcp",
     "Category": "Finance & Fintech"
   },
   {
@@ -16625,10 +17402,31 @@
     "Category": "Finance & Fintech"
   },
   {
+    "API": "duty27/eu-vat",
+    "Description": "EU standard VAT rates on any date since 2016, for all 27 member states, including temporary cuts such as Germany's 16% in late 2020. Runs offline with no API key; the data is published with a source for every rate change.",
+    "Language": "TypeScript",
+    "Link": "https://github.com/duty27/eu-vat",
+    "Category": "Finance & Fintech"
+  },
+  {
+    "API": "eamwhite1/xrpl-referee",
+    "Description": "40+-tool MCP server for agent-to-agent payments on the XRP Ledger — job marketplace, crypto-condition escrow, AI-verified work delivery, and trust scoring.",
+    "Language": "Python",
+    "Link": "https://github.com/eamwhite1/xrpl-referee",
+    "Category": "Finance & Fintech"
+  },
+  {
     "API": "edge-claw/mood-booster-agent",
     "Description": "ERC-8004 registered agent that delivers uplifting messages, with on-chain USDC tipping, reputation feedback and discovery across multiple chains.",
     "Language": "TypeScript",
     "Link": "https://github.com/edge-claw/mood-booster-agent",
+    "Category": "Finance & Fintech"
+  },
+  {
+    "API": "edycutjong/BagOS",
+    "Description": "Bags on Solana: token analytics, creator-fee data and trade quotes, plus gated swaps and fee claims. A write's first call signs nothing: it returns a preview and a single-use confirmation token bound to the exact arguments. Every transaction is then simulated and refused if it would take more SOL than was approved (default cap 0.1 SOL per trade). 100% test coverage enforced in CI, published with npm provenance. `npx -y bagos-mcp-server`",
+    "Language": "TypeScript",
+    "Link": "https://github.com/edycutjong/BagOS",
     "Category": "Finance & Fintech"
   },
   {
@@ -16769,6 +17567,20 @@
     "Description": "Company data from UK Companies House and Norway's Brønnøysund registers: lookup, name search, filing deadlines and Norwegian VAT registration checks.",
     "Language": "Python",
     "Link": "https://github.com/foretak/registry-mcp",
+    "Category": "Finance & Fintech"
+  },
+  {
+    "API": "forgemeshlabs/crypto-signals-mcp",
+    "Description": "Paid crypto market signals, risk state, calibrated forecasts, whale flows, decision journals, and outcome audits via x402 USDC micropayments on Base. `npx -y @forgemeshlabs/crypto-signals-mcp`",
+    "Language": "TypeScript",
+    "Link": "https://github.com/forgemeshlabs/crypto-signals-mcp",
+    "Category": "Finance & Fintech"
+  },
+  {
+    "API": "forgemeshlabs/kronos-forgemesh-mcp",
+    "Description": "Kronos market intelligence with calibrated price ranges, forecast audits, and automatic x402 USDC payments on Base. `npx -y @forgemeshlabs/kronos-forgemesh-mcp`",
+    "Language": "TypeScript",
+    "Link": "https://github.com/forgemeshlabs/kronos-forgemesh-mcp",
     "Category": "Finance & Fintech"
   },
   {
@@ -16947,6 +17759,13 @@
     "Category": "Finance & Fintech"
   },
   {
+    "API": "Hiroshi-Ichiyanagi/obolpay-x402-mcp",
+    "Description": "MCP server for the live Obolpay x402 gateway on Base: AI agents pay per call in USDC with the standard x402 `exact` scheme (maintenance mode).",
+    "Language": "Python",
+    "Link": "https://github.com/Hiroshi-Ichiyanagi/obolpay-x402-mcp",
+    "Category": "Finance & Fintech"
+  },
+  {
     "API": "hive-intel/hive-crypto-mcp",
     "Description": "Hive Intelligence: unified access to crypto, DeFi and Web3 analytics.",
     "Language": "TypeScript",
@@ -17063,6 +17882,20 @@
     "Description": "BSC transactions: balance and token transfers, PancakeSwap token swaps and Beeper reward claims.",
     "Language": "Python",
     "Link": "https://github.com/intentos-labs/beeper-mcp",
+    "Category": "Finance & Fintech"
+  },
+  {
+    "API": "intoApex/ai-trading-tools",
+    "Description": "Read-only search of a sourced directory of broker MCP servers, trading APIs and market-data tools, with paper/live, order-approval and safety details.",
+    "Language": "TypeScript",
+    "Link": "https://github.com/intoApex/ai-trading-tools/tree/main/mcp-server",
+    "Category": "Finance & Fintech"
+  },
+  {
+    "API": "intoApex/tas-guard",
+    "Description": "Order limits for AI trading agents: wraps any broker or exchange MCP server with per-order and daily caps, symbol allowlists, human approval (including from a phone via Telegram), a kill switch and a hash-chained audit log.",
+    "Language": "TypeScript",
+    "Link": "https://github.com/intoApex/tas-guard",
     "Category": "Finance & Fintech"
   },
   {
@@ -17738,6 +18571,13 @@
     "Category": "Finance & Fintech"
   },
   {
+    "API": "mambalabsdev/mcp-public-company-reporting-window-finder",
+    "Description": "Takes a domain, ticker, ISIN, LEI, or CIK and returns fiscal year end, reporting cadence, the next reporting date, days to event, and the quiet period window.",
+    "Language": "TypeScript",
+    "Link": "https://github.com/mambalabsdev/mcp-public-company-reporting-window-finder",
+    "Category": "Finance & Fintech"
+  },
+  {
     "API": "manganate006/openlmnp",
     "Description": "Accounting for the French LMNP furnished-rental tax status: journal entries, depreciation, 2031/2033 tax forms, FEC export and Airbnb/Booking.com imports.",
     "Language": "Unknown",
@@ -17749,6 +18589,13 @@
     "Description": "Real-time crypto volume anomaly detection: unusual trading activity, whale movements and pump signals.",
     "Language": "Python",
     "Link": "https://github.com/MarcinDudekDev/crypto-signals-mcp",
+    "Category": "Finance & Fintech"
+  },
+  {
+    "API": "markankamaransheogarat-sys/stellar-pulse-mcp",
+    "Description": "Read-only Stellar analytics without API keys: network health and fees, asset profiles with look-alike warnings, SDEX order books, account overviews with spendable XLM, and Stellar DeFi TVL. Refuses secret keys.",
+    "Language": "TypeScript",
+    "Link": "https://github.com/markankamaransheogarat-sys/stellar-pulse-mcp",
     "Category": "Finance & Fintech"
   },
   {
@@ -17864,6 +18711,13 @@
     "Category": "Finance & Fintech"
   },
   {
+    "API": "multiassist/nakamotonotes-mcp",
+    "Description": "Bitcoin Barometer: a 0–100 market heat score, BTC price, the underlying on-chain and sentiment indicators (MVRV Z-Score, NUPL, Puell, Mayer Multiple, Fear & Greed and more) and daily history since 2014. Read-only, no API key; also hosted at `https://nakamotonotes.com/mcp`.",
+    "Language": "TypeScript",
+    "Link": "https://github.com/multiassist/nakamotonotes-mcp",
+    "Category": "Finance & Fintech"
+  },
+  {
     "API": "muvon/mcp-binance-futures",
     "Description": "Binance USDT-M Futures trading: market data, account state, order management and position and margin control.",
     "Language": "Python",
@@ -17948,6 +18802,13 @@
     "Category": "Finance & Fintech"
   },
   {
+    "API": "niuheilong/stock-mcp-server",
+    "Description": "Real-time A-share stock data for AI agents via MCP protocol.",
+    "Language": "Python",
+    "Link": "https://github.com/niuheilong/stock-mcp-server",
+    "Category": "Finance & Fintech"
+  },
+  {
     "API": "noblabs/lit-forge-mcp",
     "Description": "Personal asset planning for Japan's Tsumitate NISA and iDeCo: NISA simulations, retirement gap analysis, required monthly savings and compound interest.",
     "Language": "TypeScript",
@@ -17980,6 +18841,13 @@
     "Description": "Lightning-paid (L402) Bitcoin mempool data (fees, whale alerts, fee prediction, tx status) plus self-hosted AI inference for text, code, vision and OCR.",
     "Language": "TypeScript",
     "Link": "https://github.com/ocbenji/bitcoinbenji-mcp",
+    "Category": "Finance & Fintech"
+  },
+  {
+    "API": "OceanAlt666/oceanalt-aml-mcp",
+    "Description": "Pre-settlement AML / compliance screening for agent payments (x402): screen a payee address for sanctions, mixer taint, issuer-freeze and on-chain risk across 8 EVM chains + Tron + Solana, with click-through evidence. Free tools plus x402-paid decision/trace/batch. `npx -y oceanalt-aml-mcp`",
+    "Language": "TypeScript",
+    "Link": "https://github.com/OceanAlt666/oceanalt-aml-mcp",
     "Category": "Finance & Fintech"
   },
   {
@@ -18123,6 +18991,13 @@
     "Category": "Finance & Fintech"
   },
   {
+    "API": "penmadebykisss/ru-payroll-mcp",
+    "Description": "Russian payroll calculator (2025-2026 rules): net/gross salary with progressive 13-22% income tax, employer contributions incl. SME/IT tariffs, vacation pay, sick pay and unused-vacation compensation; fully local, no API key.",
+    "Language": "TypeScript",
+    "Link": "https://github.com/penmadebykisss/ru-payroll-mcp",
+    "Category": "Finance & Fintech"
+  },
+  {
     "API": "phuocdu/agentpay-vn",
     "Description": "Non-custodial VietQR payments in Vietnam: generate a VietQR code for the user and auto-confirm settlement from the merchant's bank feed.",
     "Language": "Python",
@@ -18179,6 +19054,13 @@
     "Category": "Finance & Fintech"
   },
   {
+    "API": "pouriaetab/llmledger",
+    "Description": "Which AI model to use and what it costs: LiteLLM's price catalogue with every price change since 2023, Arena ratings by task, best value picks and cost estimates for a prompt or a daily workload.",
+    "Language": "Python",
+    "Link": "https://github.com/pouriaetab/llmledger",
+    "Category": "Finance & Fintech"
+  },
+  {
     "API": "pprotocol-us/problee-mcp",
     "Description": "Problee, where AIs and people put their calls on the record: free play-money prediction markets (US midterms, elections, sports, AI) where agents trade on the same order books as people and every call stays on a public record.",
     "Language": "TypeScript",
@@ -18190,6 +19072,13 @@
     "Description": "Read-only access to Easy Pay Direct and NMI-family payment gateways: search transactions, subscriptions, recurring plans and the Customer Vault.",
     "Language": "TypeScript",
     "Link": "https://github.com/praveendias1180/easypaydirect-mcp",
+    "Category": "Finance & Fintech"
+  },
+  {
+    "API": "predgeAI/whale-data-mcp",
+    "Description": "Polymarket data for agents from Predge: free ed25519-signed UMA settlement-risk records for any market, read live from Polygon, and an offline record verifier; plus paid whale trades (≥$10k, 15-min delay), wallet leaderboards and smart-money consensus at $0.005–$0.03 per call, paid in USDC over x402 with a hard per-call price cap. `npx -y @predge/whale-data-mcp`",
+    "Language": "TypeScript",
+    "Link": "https://github.com/predgeAI/whale-data-mcp",
     "Category": "Finance & Fintech"
   },
   {
@@ -18316,6 +19205,13 @@
     "Description": "XRP Ledger access: account information, transaction history, ledger objects, transaction submission and network monitoring.",
     "Language": "TypeScript",
     "Link": "https://github.com/RomThpt/mcp-xrpl",
+    "Category": "Finance & Fintech"
+  },
+  {
+    "API": "rootSunc/CNEquity",
+    "Description": "Local China A-share data lake: daily and minute bars, financial statements with point-in-time cutoffs, capital flows, corporate events and futures/options, with read-only DuckDB SQL. No API token.",
+    "Language": "Python",
+    "Link": "https://github.com/rootSunc/CNEquity",
     "Category": "Finance & Fintech"
   },
   {
@@ -18547,6 +19443,13 @@
     "Description": "Browse, take and submit USDC bounties on ArcBounty (Arc Network, ERC-8183 escrow and ERC-8004 reputation), with a credential-free read-only mode.",
     "Language": "TypeScript",
     "Link": "https://github.com/Sofiia7/ARC",
+    "Category": "Finance & Fintech"
+  },
+  {
+    "API": "stevevstd-oss/eterna-mcp-agent-starter",
+    "Description": "AI trading agents on Eterna Hybrid Exchange (no-KYC perpetual futures, flat 0.014%/0.035% fees): fee estimator, venue comparison vs Hyperliquid/Bybit/Binance, setup guides and guarded agent prompts that work without an account, plus an authenticated bridge to the official Eterna MCP endpoint for live trading tools.",
+    "Language": "TypeScript",
+    "Link": "https://github.com/stevevstd-oss/eterna-mcp-agent-starter",
     "Category": "Finance & Fintech"
   },
   {
@@ -18788,6 +19691,13 @@
     "Category": "Finance & Fintech"
   },
   {
+    "API": "tuantqse90/moltnode-mcp",
+    "Description": "MoltNode by Chord: read 31 blockchains over JSON-RPC (EVM, Solana, Sui) and get best-route DEX swap quotes with the unsigned transaction and a simulation via Chord on 7 EVM chains. Hosted at https://moltnode.ag/mcp, no API key, non-custodial.",
+    "Language": "TypeScript",
+    "Link": "https://github.com/tuantqse90/moltnode-mcp",
+    "Category": "Finance & Fintech"
+  },
+  {
     "API": "tunedforai/x402-mcp",
     "Description": "Real-time crypto market structure: cross-exchange orderflow, price, funding and open-interest snapshots, CVD with whale activity and OHLCV history.",
     "Language": "TypeScript",
@@ -18897,6 +19807,13 @@
     "Description": "Self-verifying ledger with dual-signed transactions, gift and sponsor cards and loyalty tiers, using EVM or post-quantum (ML-DSA-65, SLH-DSA) signatures.",
     "Language": "TypeScript",
     "Link": "https://github.com/baskcart/w3ledger-mcp-server",
+    "Category": "Finance & Fintech"
+  },
+  {
+    "API": "Wangxian111/xaudaily-gold-data",
+    "Description": "Source-attributed daily gold and macro readings from xaudaily.com: COMEX gold and Shanghai Au99.99, US CPI / core PCE / nonfarm payrolls / PPI, DXY, Treasury 10Y and 30Y yields, VIX, SPDR holdings, Fed funds rate and FOMC decision odds, central-bank gold buying, Brent/WTI, and a rule-based gold driver score. Every field carries its own `source` and `asOf` and degrades explicitly with `stale: true` rather than silently going stale. Two tools, no API key or signup, CC BY 4.0. Run with `python3 mcp_server.py`.",
+    "Language": "Python",
+    "Link": "https://github.com/Wangxian111/xaudaily-gold-data",
     "Category": "Finance & Fintech"
   },
   {
@@ -19075,6 +19992,13 @@
     "Category": "Gaming"
   },
   {
+    "API": "birdwell/runescape-wiki-mcp",
+    "Description": "RuneScape 3 Grand Exchange prices, item lookup, player hiscores, and wiki pages.",
+    "Language": "TypeScript",
+    "Link": "https://github.com/birdwell/runescape-wiki-mcp",
+    "Category": "Gaming"
+  },
+  {
     "API": "Brunovncs/texel-mcp",
     "Description": "Minecraft skins and textures as code: JSON specs compiled to PNG, with a review an agent can act on. Skins, 57 mob textures, blocks, items, GUI and particles, animated or glowing, and resource packs it builds and checks.",
     "Language": "TypeScript",
@@ -19093,6 +20017,13 @@
     "Description": "Control the Unity Editor from AI coding tools via file-based IPC.",
     "Language": "Python",
     "Link": "https://github.com/butterlatte-zhang/unity-ai-bridge",
+    "Category": "Gaming"
+  },
+  {
+    "API": "CarlxsMG/UEAgent",
+    "Description": "MCP server built into the Unreal Engine 5 editor: AI agents create and edit Blueprints, materials, levels, Niagara, animation, UMG, PCG, Sequencer, GAS and Behavior Trees, with every change checked and read back.",
+    "Language": "Unknown",
+    "Link": "https://github.com/CarlxsMG/UEAgent",
     "Category": "Gaming"
   },
   {
@@ -19135,6 +20066,13 @@
     "Description": "D&D 5e SRD 5.2.1 game engine: create characters and run turn-based battles through MCP, backed by Quint formal models, rule-level proofs, and model-based testing.",
     "Language": "TypeScript",
     "Link": "https://github.com/dearlordylord/5e-quint",
+    "Category": "Gaming"
+  },
+  {
+    "API": "debuffjp/debuff",
+    "Description": "Let coding agents play, test and tune 2D browser games made with debuff: attach to the game you have open or a headless copy, read live state, explained source-mapped errors and frame timings, tune typed params, rewind, replay and fuzz, and verify with deterministic scenarios.",
+    "Language": "TypeScript",
+    "Link": "https://github.com/debuffjp/debuff",
     "Category": "Gaming"
   },
   {
@@ -19397,6 +20335,13 @@
     "Category": "Gaming"
   },
   {
+    "API": "miduo100/agent-virtual-world",
+    "Description": "Walk an AI into a live multiplayer 3D world as a visible avatar: observe the scene, talk to real human players, and be seen by them.",
+    "Language": "TypeScript",
+    "Link": "https://github.com/miduo100/agent-virtual-world",
+    "Category": "Gaming"
+  },
+  {
     "API": "miracle1814/ue5-automation",
     "Description": "Unreal Engine 5 Blueprint automation: create, wire and compile Blueprints, author materials and UMG widgets, and verify PIE runtime state.",
     "Language": "Python",
@@ -19586,6 +20531,13 @@
     "Category": "Gaming"
   },
   {
+    "API": "adexbn/walk-kcal",
+    "Description": "Turns walking distance into a meal calorie budget (450 kcal + 4 kcal per 80 m; 800 m ≈ +44 kcal, about half an apple). Lists nearby restaurants and their recommended dishes, marks each dish as fits-or-over the budget, and abstains instead of guessing. Map and recipe data are Chinese; McDonald's nutrition comes from the official China MCP.",
+    "Language": "Python",
+    "Link": "https://github.com/adexbn/walk-kcal",
+    "Category": "Health & Wellness"
+  },
+  {
     "API": "findsaunaplunge/mcp",
     "Description": "Cold plunge, sauna and contrast-therapy venues across US metros, with dated temperatures and prices from each venue's own pages, plus city stats.",
     "Language": "TypeScript",
@@ -19597,6 +20549,13 @@
     "Description": "Read-only, local-first queries of Apple Health metrics.",
     "Language": "Unknown",
     "Link": "https://github.com/PhilipAD/health-export-mcp",
+    "Category": "Health & Wellness"
+  },
+  {
+    "API": "Jezue/fitatu_library",
+    "Description": "Unofficial MCP server for Fitatu, the Polish calorie counter: read and log meals, weight, water, body measurements and workouts, check calories and macros left, set goals and get weekly reports. 47 tools (26 read-only), read-only and demo modes, stdio or HTTP with a token; on PyPI (`uvx --from \"fitatu-api[mcp]\" fitatu-mcp`) and as a Claude Desktop `.mcpb`.",
+    "Language": "Python",
+    "Link": "https://github.com/Jezue/fitatu_library",
     "Category": "Health & Wellness"
   },
   {
@@ -19775,6 +20734,13 @@
     "Category": "Industrial & IoT"
   },
   {
+    "API": "MIt9/workatastartup-mcp",
+    "Description": "MCP server for WorkAtAStartup — search startup job listings via Claude or Cursor.",
+    "Language": "Python",
+    "Link": "https://github.com/MIt9/workatastartup-mcp",
+    "Category": "Jobs"
+  },
+  {
     "API": "0spoon/seamless",
     "Description": "Local-first shared memory and task coordination for AI coding agents, stored as Markdown files.",
     "Language": "Go",
@@ -19807,6 +20773,13 @@
     "Description": "Persistent graph memory that extracts facts from conversations into typed nodes with local embeddings, supporting temporal queries and conflict detection.",
     "Language": "Python",
     "Link": "https://github.com/Abhigyan-Shekhar/Waggle-mcp",
+    "Category": "Knowledge & Memory"
+  },
+  {
+    "API": "abm9111/chamber",
+    "Description": "Checks a claim's numbers, capitalised names and file names against the cited note, with no model; recorded claims are hash-pinned so `chamber verify` flags source drift.",
+    "Language": "TypeScript",
+    "Link": "https://github.com/abm9111/chamber",
     "Category": "Knowledge & Memory"
   },
   {
@@ -19936,10 +20909,24 @@
     "Category": "Knowledge & Memory"
   },
   {
+    "API": "andreibesleaga/agentic-system-core",
+    "Description": "Serves a folder of Markdown notes over stdio: search, read, follow links and cite. Proposals come back as text; it writes nothing.",
+    "Language": "TypeScript",
+    "Link": "https://github.com/andreibesleaga/agentic-system-core",
+    "Category": "Knowledge & Memory"
+  },
+  {
     "API": "AndreLYL/memkin",
     "Description": "Local-first personal memory that distills Feishu/Lark chats and Claude Code/Codex sessions into a private knowledge graph of people, projects and tasks.",
     "Language": "TypeScript",
     "Link": "https://github.com/AndreLYL/memkin",
+    "Category": "Knowledge & Memory"
+  },
+  {
+    "API": "anshulyadav1976/synapse",
+    "Description": "Zero-runtime-dependency Markdown memory vault with SQLite search, linked wiki pages, ChatGPT/Claude imports, and human-approved agent note proposals.",
+    "Language": "Python",
+    "Link": "https://github.com/anshulyadav1976/synapse",
     "Category": "Knowledge & Memory"
   },
   {
@@ -20195,6 +21182,13 @@
     "Category": "Knowledge & Memory"
   },
   {
+    "API": "chinwe/compound-memory",
+    "Description": "Local-first shared memory for multiple AI agents that compounds in value: feedback-driven confidence, cross-agent validation, neighbor recall and distillation; Markdown files with auto git history, 5 MCP tools + CLI.",
+    "Language": "Python",
+    "Link": "https://github.com/chinwe/compound-memory",
+    "Category": "Knowledge & Memory"
+  },
+  {
     "API": "ChrisGVE/workspace-qdrant-mcp",
     "Description": "Project-scoped memory for coding assistants: indexes project code and docs into Qdrant with tree-sitter chunking, LSP integration and hybrid search.",
     "Language": "TypeScript",
@@ -20248,6 +21242,13 @@
     "Description": "Chat with AI personas of famous founders and investors such as Elon Musk, Warren Buffett and Steve Jobs, based on their voices, frameworks and principles.",
     "Language": "TypeScript",
     "Link": "https://github.com/cryptosquanch/legends-mcp",
+    "Category": "Knowledge & Memory"
+  },
+  {
+    "API": "CSP911/routemind",
+    "Description": "Domain knowledge as a routing table people write: the agent reads one line per area, then walks to the document. Git-backed, no vector store.",
+    "Language": "Python",
+    "Link": "https://github.com/CSP911/routemind",
     "Category": "Knowledge & Memory"
   },
   {
@@ -20433,6 +21434,13 @@
     "Category": "Knowledge & Memory"
   },
   {
+    "API": "eddyflores100-lang/alethech",
+    "Description": "Verifiable Ed25519-signed agent memory chain with fail-closed verification; offline-first TF-IDF recall (zero LLM tokens at runtime), artifact audit, durable snapshots with zero secret leakage, and a measured 42-second disaster-recovery drill.",
+    "Language": "TypeScript",
+    "Link": "https://github.com/eddyflores100-lang/alethech",
+    "Category": "Knowledge & Memory"
+  },
+  {
     "API": "edobusy/agenthold",
     "Description": "Shared versioned state store with optimistic concurrency control for coordinating concurrent agents, plus SQLite-backed claim/release locks and an audit log.",
     "Language": "Python",
@@ -20587,10 +21595,31 @@
     "Category": "Knowledge & Memory"
   },
   {
+    "API": "gonzaroman/IHMT-MEMORY",
+    "Description": "Long-term memory for coding agents as a tree of plain local files: searches before answering, keeps changed facts as history and flags them OUTDATED, and returns only the 200–900 tokens a question needs.",
+    "Language": "Python",
+    "Link": "https://github.com/gonzaroman/IHMT-MEMORY",
+    "Category": "Knowledge & Memory"
+  },
+  {
+    "API": "Goran-Arsov/freshjots-mcp",
+    "Description": "Read and write your Fresh Jots notes (plain-text notebooks with an API and append-only logging streams) — hosted connector or local stdio server.",
+    "Language": "TypeScript",
+    "Link": "https://github.com/Goran-Arsov/freshjots-mcp",
+    "Category": "Knowledge & Memory"
+  },
+  {
     "API": "gordonkjlee/facthouse",
     "Description": "Local memory engine for AI tools, stored in a SQLite file you own.",
     "Language": "TypeScript",
     "Link": "https://github.com/gordonkjlee/facthouse",
+    "Category": "Knowledge & Memory"
+  },
+  {
+    "API": "goyohan0611-png/graph-mind",
+    "Description": "One local memory shared by every coding agent and model on your PC: every conversation saved verbatim with zero LLM calls, recalled as a ~3k-token evidence packet (88.8% on LongMemEval), secrets masked, shareable across your PCs.",
+    "Language": "Python",
+    "Link": "https://github.com/goyohan0611-png/graph-mind",
     "Category": "Knowledge & Memory"
   },
   {
@@ -20909,6 +21938,13 @@
     "Category": "Knowledge & Memory"
   },
   {
+    "API": "koraykutlu/kut",
+    "Description": "Local-first personal CRM that keeps your contacts as plain Markdown files. Read-only MCP server (`kut.pyw --mcp`): search people, open a contact card, see who to reach out to this week, recent conversations and a meeting brief. Contacts marked private are never listed, secrets are masked, and phone numbers and emails are never returned.",
+    "Language": "Python",
+    "Link": "https://github.com/koraykutlu/kut",
+    "Category": "Knowledge & Memory"
+  },
+  {
     "API": "krimto-labs/krimto",
     "Description": "Team memory for coding agents stored as Markdown in git, with user, team and org access levels and hybrid SQLite/sqlite-vec retrieval.",
     "Language": "TypeScript",
@@ -20972,6 +22008,13 @@
     "Category": "Knowledge & Memory"
   },
   {
+    "API": "labyrinth-analytics/loredocs",
+    "Description": "Local-first knowledge vaults for project docs, specs, and reference material. Tagged, versioned, full-text searchable, injectable into context; works with Claude Code, Cowork, Codex, Cursor, and Hermes Agent.",
+    "Language": "Python",
+    "Link": "https://github.com/labyrinth-analytics/loredocs",
+    "Category": "Knowledge & Memory"
+  },
+  {
     "API": "LamantinAI/kaeru",
     "Description": "Memory for LLM agents: a local graph where the agent itself keeps decisions, tasks, hypotheses and reasoning between sessions, and gets a summary of what is open and overdue on every return to a project. Single Rust binary with no embedding model or LLM calls inside; one daemon serves several agents at once, with an optional self-hosted cloud for teams. Works with Claude Code, Codex, Cursor, opencode and any MCP client.",
     "Language": "Rust",
@@ -21004,6 +22047,13 @@
     "Description": "Git-first agent memory: Markdown files are the source of truth, the index is disposable and writes are reviewable commits, with hybrid search and a CLI.",
     "Language": "Python",
     "Link": "https://github.com/leonardsellem/hypermnesic",
+    "Category": "Knowledge & Memory"
+  },
+  {
+    "API": "lets-order-some-fries/loreweave",
+    "Description": "Temporal memory for markdown vaults: bitemporal facts, entity timelines, spaced-repetition review and hybrid graph search, with no LLM calls in the core.",
+    "Language": "TypeScript",
+    "Link": "https://github.com/lets-order-some-fries/loreweave",
     "Category": "Knowledge & Memory"
   },
   {
@@ -21133,6 +22183,13 @@
     "Category": "Knowledge & Memory"
   },
   {
+    "API": "ManuelWarland/MemCore",
+    "Description": "Long-term memory shared by every AI coding assistant on one machine: a single local SQLite file with FTS5 search and optional multilingual semantic search, no daemon and no cloud, reachable over MCP, a CLI or plain SQLite.",
+    "Language": "Python",
+    "Link": "https://github.com/ManuelWarland/MemCore",
+    "Category": "Knowledge & Memory"
+  },
+  {
     "API": "markmhendrickson/neotoma",
     "Description": "Deterministic state layer for agents: versioned entities like contacts, tasks and decisions with immutable observations and provenance, in local SQLite.",
     "Language": "TypeScript",
@@ -21235,6 +22292,13 @@
     "Description": "Knowledge graph-based persistent memory for maintaining context.",
     "Language": "TypeScript",
     "Link": "https://github.com/modelcontextprotocol/servers/tree/main/src/memory",
+    "Category": "Knowledge & Memory"
+  },
+  {
+    "API": "Monyeah777/NinFenz",
+    "Description": "Content contract layer as a read-only MCP server: protocol specs, modules, pipelines, assets, and the knowledge library for long-form content; 12 read-only tools plus an assembly prompt, Python stdlib only, no write paths.",
+    "Language": "Python",
+    "Link": "https://github.com/Monyeah777/NinFenz",
     "Category": "Knowledge & Memory"
   },
   {
@@ -21476,6 +22540,13 @@
     "Category": "Knowledge & Memory"
   },
   {
+    "API": "qingchejun/mindlm-io",
+    "Description": "Turn text, web pages and local PDFs into editable Markdown outlines and offline interactive HTML mind maps, with no API key required.",
+    "Language": "TypeScript",
+    "Link": "https://github.com/qingchejun/mindlm-io",
+    "Category": "Knowledge & Memory"
+  },
+  {
     "API": "ragieai/mcp-server",
     "Description": "Retrieve context from your Ragie knowledge base, connected to sources like Google Drive, Notion and Jira.",
     "Language": "TypeScript",
@@ -21553,6 +22624,13 @@
     "Category": "Knowledge & Memory"
   },
   {
+    "API": "roomi-fields/rtfm",
+    "Description": "Local retrieval layer for coding agents: indexes a whole project (code, docs, PDFs, ebooks, spreadsheets, SQLite, Obsidian vaults) into SQLite FTS5 with optional local embeddings, 24 parsers, a link and import graph, and auto-sync hooks for Claude Code.",
+    "Language": "Python",
+    "Link": "https://github.com/roomi-fields/rtfm",
+    "Category": "Knowledge & Memory"
+  },
+  {
     "API": "rps321321/obsidian-mcp-pro",
     "Description": "Obsidian vault access: full-text search, note CRUD, frontmatter queries, tags, backlinks, graph traversal, orphan and broken link detection, and canvas support.",
     "Language": "TypeScript",
@@ -21609,6 +22687,13 @@
     "Category": "Knowledge & Memory"
   },
   {
+    "API": "sammyboi81/arkhive",
+    "Description": "Local-first, tamper-evident AI memory with a SHA-256 ledger, recall, verification, and governed decisions.",
+    "Language": "Python",
+    "Link": "https://github.com/sammyboi81/arkhive",
+    "Category": "Knowledge & Memory"
+  },
+  {
     "API": "samvallad33/vestige",
     "Description": "Local-first cognitive agent memory with FSRS-6 scheduling, smart ingest, SQLite storage, portable sync, an embedded dashboard and optional hooks.",
     "Language": "Rust",
@@ -21662,6 +22747,13 @@
     "Description": "Review-gated sidecar for Markdown workspaces: indexes notes into SQLite and proposes links, domains and memory with evidence, editing files only after review.",
     "Language": "Python",
     "Link": "https://github.com/Semiotronika/LINZA-MCP",
+    "Category": "Knowledge & Memory"
+  },
+  {
+    "API": "sequico/server-noonien",
+    "Description": "Shared, serverless, conflict-free memory for AI agents: a multi-machine drop-in for the MCP memory knowledge graph, converging per-node shards with no server.",
+    "Language": "TypeScript",
+    "Link": "https://github.com/sequico/server-noonien",
     "Category": "Knowledge & Memory"
   },
   {
@@ -21760,6 +22852,13 @@
     "Description": "Watches git repos and builds a temporal knowledge graph of modules, symbols, decisions and open problems via Graphiti and Neo4j, served to AI coding agents.",
     "Language": "Python",
     "Link": "https://github.com/STiFLeR7/memex",
+    "Category": "Knowledge & Memory"
+  },
+  {
+    "API": "stoneskin/open-memex",
+    "Description": "Local-first persistent memory for AI coding agents: plain Markdown as the source of truth with SQLite FTS5 search, one memory shared across VS Code, Visual Studio, Cursor, opencode and Claude Code, and team sharing via git PRs.",
+    "Language": "TypeScript",
+    "Link": "https://github.com/stoneskin/open-memex",
     "Category": "Knowledge & Memory"
   },
   {
@@ -21893,6 +22992,13 @@
     "Description": "Official Telys MCP server — private, on-device memory & retrieval for AI assistants: 19 tools covering memory CRUD, semantic + on-device BM25 lexical search, single-key filtered queries, compaction/IVF/tuning maintenance, and a self-refreshing repo auto-indexer. Stdio; introspection needs no credentials; execution requires the one-time free `telys login` (device authorization). `pipx install telys`",
     "Language": "Python",
     "Link": "https://github.com/thyn-ai/telys-sdk",
+    "Category": "Knowledge & Memory"
+  },
+  {
+    "API": "timgordontg/engrim",
+    "Description": "Cross-model, local-first episodic memory engine for Claude Code, Cursor, Codex, and Antigravity. SQLite FTS5 (BM25) + 8MB static model2vec CPU embeddings via Reciprocal Rank Fusion; stdio MCP server for durable decisions, budget-capped boot context, and hybrid recall. Zero cloud, zero telemetry.",
+    "Language": "Python",
+    "Link": "https://github.com/timgordontg/engrim",
     "Category": "Knowledge & Memory"
   },
   {
@@ -22082,6 +23188,13 @@
     "Description": "Embedded local agent memory in one SQLite file per namespace: hybrid retrieval, append-only history queryable at any past time and human-reviewed maintenance.",
     "Language": "Python",
     "Link": "https://github.com/Wuesteon/lean-memory",
+    "Category": "Knowledge & Memory"
+  },
+  {
+    "API": "wusaki0723/Aelios",
+    "Description": "Self-hosted long-term memory gateway for AI clients: runs on your own Cloudflare account (Workers + D1 + Vectorize), captures conversations, consolidates them overnight, and recalls them across Chatbox, Claude Code, and Codex via API or MCP tools.",
+    "Language": "TypeScript",
+    "Link": "https://github.com/wusaki0723/Aelios",
     "Category": "Knowledge & Memory"
   },
   {
@@ -22365,6 +23478,13 @@
     "Category": "Legal"
   },
   {
+    "API": "datakoot/regulatory-intel-mcp",
+    "Description": "Keyless US Federal Register: search rules and notices, full documents, executive orders and agencies. Remote at `regulatory.datakoot.com/mcp`, no API key.",
+    "Language": "TypeScript",
+    "Link": "https://github.com/datakoot/regulatory-intel-mcp",
+    "Category": "Legal"
+  },
+  {
     "API": "djtellado/nexus-legal-mcp",
     "Description": "Legal analysis (ISO 31000) for Spanish, Latin American and European law: drafting, audits, case law, tax doctrine and cross-border comparison.",
     "Language": "TypeScript",
@@ -22425,6 +23545,13 @@
     "Description": "French and European case law (Conseil d'État, Cour de cassation, ECHR, CJEU and more) linked to point-in-time consolidated legal texts, with hybrid search.",
     "Language": "Python",
     "Link": "https://github.com/librejustice/librejustice",
+    "Category": "Legal"
+  },
+  {
+    "API": "LienDeadline/liendeadline-mcp",
+    "Description": "US mechanics lien and preliminary notice deadlines for construction material suppliers, with statute-cited lien guides for all 50 states and DC.",
+    "Language": "TypeScript",
+    "Link": "https://github.com/LienDeadline/liendeadline-mcp",
     "Category": "Legal"
   },
   {
@@ -22540,6 +23667,13 @@
     "Category": "Legal"
   },
   {
+    "API": "thu-lawyer/china-law-mcp",
+    "Description": "Chinese statutes as a local server: natural-language search over 23,995 in-force articles from 378 laws, plus citation verification that catches LLM-fabricated statute references. Free, no signup, no API key.",
+    "Language": "Python",
+    "Link": "https://github.com/thu-lawyer/china-law-mcp",
+    "Category": "Legal"
+  },
+  {
     "API": "Vaquill-AI/canlii-mcp",
     "Description": "Canadian case law and legislation metadata via CanLII.",
     "Language": "TypeScript",
@@ -22551,6 +23685,13 @@
     "Description": "Cities, countries, regions and languages with multilingual names, plus place autocomplete.",
     "Language": "TypeScript",
     "Link": "https://github.com/930m310n/geomelon-mcp",
+    "Category": "Location Services"
+  },
+  {
+    "API": "Adeniyikayodee/ng-postcode",
+    "Description": "Nigeria's NIPOST digital postcode (NDAPS): validate codes offline, look them up, autocomplete, find the postcode at a coordinate and resolve described addresses.",
+    "Language": "Python",
+    "Link": "https://github.com/Adeniyikayodee/ng-postcode/tree/main/mcp",
     "Category": "Location Services"
   },
   {
@@ -22729,6 +23870,13 @@
     "Category": "Location Services"
   },
   {
+    "API": "gridpin/gridpin",
+    "Description": "Offline geocoding and reverse geocoding from one local file per country (BR, DE, ES, FR, IT, NL, RS); no API key, queries stay on the machine.",
+    "Language": "Python",
+    "Link": "https://github.com/gridpin/gridpin/tree/main/mcp",
+    "Category": "Location Services"
+  },
+  {
     "API": "HasData/google-maps-mcp",
     "Description": "Remote MCP server for Google Maps: place search and place details, reviews, photos, posts and contributor history, as JSON, with no Google Cloud project to set up.",
     "Language": "TypeScript",
@@ -22768,6 +23916,13 @@
     "Description": "IP geolocation via Aiwen: country, region, city, coordinates, ISP and owner of an IP address.",
     "Language": "Python",
     "Link": "https://github.com/ipfred/aiwen-mcp-server-geoip",
+    "Category": "Location Services"
+  },
+  {
+    "API": "IPGeolocation/ipgeolocation-io-mcp",
+    "Description": "Official IPGeolocation.io MCP server with 17 tools for IP geolocation, company information, ASN and network data, IP security (VPN, proxy, Tor, bot, hosting and spam detection), abuse contacts, time zones, astronomy, currency data and user-agent parsing. Runs over stdio and supports cached pagination for large results. `npx -y ipgeolocation-io-mcp@latest`",
+    "Language": "TypeScript",
+    "Link": "https://github.com/IPGeolocation/ipgeolocation-io-mcp",
     "Category": "Location Services"
   },
   {
@@ -22925,10 +24080,24 @@
     "Category": "Location Services"
   },
   {
+    "API": "TheHiddenPandaDev/catastro_gps_mcp",
+    "Description": "Official cadastral parcels in 29 European countries plus the Basque and Navarre foral cadastres: look up by reference, point or postal address and get location, area, land use and GeoJSON outline.",
+    "Language": "TypeScript",
+    "Link": "https://github.com/TheHiddenPandaDev/catastro_gps_mcp",
+    "Category": "Location Services"
+  },
+  {
     "API": "ThinAirTelematics/thinair-geo",
     "Description": "Global location and routing: geocoding, truck routing with hazmat and dimension constraints, traffic, weather, isochrones and place search.",
     "Language": "TypeScript",
     "Link": "https://github.com/ThinAirTelematics/thinair-geo",
+    "Category": "Location Services"
+  },
+  {
+    "API": "Thx93/mcp-weather-server",
+    "Description": "US National Weather Service data as two read-only tools: active alerts for a two-letter state code and the next five forecast periods for a latitude and longitude. Runs locally from source; the hosted endpoint is free to discover and costs $0.003 USDC per call on Base via x402.",
+    "Language": "TypeScript",
+    "Link": "https://github.com/Thx93/mcp-weather-server",
     "Category": "Location Services"
   },
   {
@@ -23021,6 +24190,13 @@
     "Language": "Unknown",
     "Link": "https://github.com/stacklok/toolhive",
     "Category": "MCP Infrastructure"
+  },
+  {
+    "API": "A1-x-Tech/mcp-avito-ads",
+    "Description": "Avito Ads: analyze campaigns, adjust budgets and bids, and manage access and ORD contracts.",
+    "Language": "TypeScript",
+    "Link": "https://github.com/A1-x-Tech/mcp-avito-ads",
+    "Category": "Marketing"
   },
   {
     "API": "A1-x-Tech/mcp-google-search-console",
@@ -23128,10 +24304,24 @@
     "Category": "Marketing"
   },
   {
+    "API": "applyra-io/mcp-server",
+    "Description": "App Store Optimization for iOS and Google Play: daily keyword rank tracking, difficulty and traffic scores, competitors, ASO Health audits and top charts.",
+    "Language": "TypeScript",
+    "Link": "https://github.com/applyra-io/mcp-server",
+    "Category": "Marketing"
+  },
+  {
     "API": "AppVisionOS/apple-search-ads-mcp",
     "Description": "Apple Ads (formerly Apple Search Ads) Campaign Management API: campaigns, ad groups, ads, creatives, keywords, reports, budget orders and multi-org support.",
     "Language": "TypeScript",
     "Link": "https://github.com/AppVisionOS/apple-search-ads-mcp",
+    "Category": "Marketing"
+  },
+  {
+    "API": "arif-js/opensdr-mcp",
+    "Description": "Open-source AI SDR on your own API keys: Apollo prospecting, Apollo→Hunter email waterfall, Tavily/Exa buying signals with sources, grounded outreach briefs, and preview-and-confirm staging into Instantly and HubSpot.",
+    "Language": "TypeScript",
+    "Link": "https://github.com/arif-js/opensdr-mcp",
     "Category": "Marketing"
   },
   {
@@ -23209,6 +24399,13 @@
     "Description": "Extract brand identity (colors, fonts, logo, voice, visual rules) from websites into DTCG tokens and brand policies, and score content for compliance.",
     "Language": "TypeScript",
     "Link": "https://github.com/Brand-System/brandsystem-mcp",
+    "Category": "Marketing"
+  },
+  {
+    "API": "brodesigns/gsc-readonly-mcp",
+    "Description": "Read-only Google Search Console MCP server: search analytics, sitemap status, URL inspection, property listing. No write scope requested from Google at all, not even gated. `npx -y @brodesigns/gsc-readonly-mcp`",
+    "Language": "TypeScript",
+    "Link": "https://github.com/brodesigns/gsc-readonly-mcp",
     "Category": "Marketing"
   },
   {
@@ -23314,6 +24511,13 @@
     "Description": "Read-only access to Substack posts, engagement stats, subscriber counts and subscriber lookup via the Publisher API, across multiple publications.",
     "Language": "TypeScript",
     "Link": "https://github.com/dkships/substack-publisher-mcp",
+    "Category": "Marketing"
+  },
+  {
+    "API": "Downshift/rivalize-mcp",
+    "Description": "Competitive intelligence for AI agents: competitor teardowns, pricing, ads, reviews and momentum, cited and dated. Read-only by default.",
+    "Language": "TypeScript",
+    "Link": "https://github.com/Downshift/rivalize-mcp",
     "Category": "Marketing"
   },
   {
@@ -23527,6 +24731,13 @@
     "Category": "Marketing"
   },
   {
+    "API": "mambalabsdev/mcp-outbound-infrastructure-fingerprint",
+    "Description": "Returns whether a company runs cold email outbound, on what stack, and the lookalike sending domains behind it.",
+    "Language": "TypeScript",
+    "Link": "https://github.com/mambalabsdev/mcp-outbound-infrastructure-fingerprint",
+    "Category": "Marketing"
+  },
+  {
     "API": "marketplaceadpros/amazon-ads-mcp-server",
     "Description": "Interact with Amazon Advertising: analyze campaign metrics and configurations.",
     "Language": "TypeScript",
@@ -23590,6 +24801,13 @@
     "Category": "Marketing"
   },
   {
+    "API": "Misar-AI/misarmail-mcp",
+    "Description": "Send transactional and campaign email, manage contacts and automations, A/B test, and audit deliverability on MisarMail.",
+    "Language": "TypeScript",
+    "Link": "https://github.com/Misar-AI/misarmail-mcp",
+    "Category": "Marketing"
+  },
+  {
     "API": "moiosintel/kd-scout",
     "Description": "Keyword research calculations: difficulty estimation, opportunity scoring and structured content briefs.",
     "Language": "Python",
@@ -23636,6 +24854,13 @@
     "Description": "Open-source Claude Code skills for SEO, GEO, Google Ads, and Meta Ads. Connects to live account data via Google Ads MCP, Meta Ads MCP, Google Search Console MCP, and Google Analytics (GA4) MCP to run audits, keyword research, meta tag optimization, schema markup, and paid-ad management.",
     "Language": "Unknown",
     "Link": "https://github.com/nowork-studio/NotFair",
+    "Category": "Marketing"
+  },
+  {
+    "API": "odb366/genready-mcp-server",
+    "Description": "Scan a website for AI search and agent readiness (crawler access, llms.txt, structured data, agent standards) and get a fix checklist your coding agent can apply.",
+    "Language": "TypeScript",
+    "Link": "https://github.com/odb366/genready-mcp-server",
     "Category": "Marketing"
   },
   {
@@ -23741,6 +24966,13 @@
     "Description": "Crawl your site, find gaps in AI answers, generate meta, schema and content fixes and ship them as PRs, with DataForSEO keyword and Search Console data.",
     "Language": "TypeScript",
     "Link": "https://github.com/rampify-dev/rampify-mcp",
+    "Category": "Marketing"
+  },
+  {
+    "API": "rmb/omniforce-mcp",
+    "Description": "Audit any site's GEO/AI-search readiness and query OmniForce's tracked prompts, competitors and AI citation runs. (npm: @omniforce/mcp)",
+    "Language": "TypeScript",
+    "Link": "https://github.com/rmb/omniforce-mcp",
     "Category": "Marketing"
   },
   {
@@ -23905,6 +25137,13 @@
     "Category": "Marketing"
   },
   {
+    "API": "zwznco/camberstack-mcp",
+    "Description": "Hosted Google Ads: read-only queries, keyword research and approved changes, from negatives and budgets to building Search, Performance Max, Display and YouTube campaigns, each logged with undo. No developer token.",
+    "Language": "TypeScript",
+    "Link": "https://github.com/zwznco/camberstack-mcp",
+    "Category": "Marketing"
+  },
+  {
     "API": "VideoGen MCP",
     "Description": "Generate, edit, caption, and export videos and media through stdio or hosted HTTP; [setup and documentation](https://videogen.io/videogen-mcp).",
     "Language": "Unknown",
@@ -23923,6 +25162,13 @@
     "Description": "Live .NET runtime diagnostics: find memory leaks, GC pressure, LOH fragmentation and thread starvation in any running .NET process without code changes.",
     "Language": "Unknown",
     "Link": "https://github.com/aayushmdesai/mcp-dotnet-diagnostics",
+    "Category": "Monitoring"
+  },
+  {
+    "API": "abhishekash/spanhound",
+    "Description": "Inspect local JSONL and OTLP JSON agent traces through MCP: failures, approvals, token usage, and run comparisons. `uvx spanhound`",
+    "Language": "Python",
+    "Link": "https://github.com/abhishekash/spanhound",
     "Category": "Monitoring"
   },
   {
@@ -24042,6 +25288,13 @@
     "Description": "Monitor cron jobs, backups, Kubernetes jobs and other scheduled tasks in Watchgoose. Read-only by default; check changes require explicit consent.",
     "Language": "TypeScript",
     "Link": "https://github.com/bartekrutkowski/watchgoose-mcp",
+    "Category": "Monitoring"
+  },
+  {
+    "API": "Blackman99/postsleuth",
+    "Description": "Postfix delivery troubleshooting: queue grouped by deferral reason, qshape, mail log stats and traces, SPF/DKIM/DMARC/PTR checks. Read-only by default; requeue/flush/delete need an opt-in flag.",
+    "Language": "Go",
+    "Link": "https://github.com/Blackman99/postsleuth",
     "Category": "Monitoring"
   },
   {
@@ -24322,6 +25575,13 @@
     "Description": "Query Langfuse traces and observations, debug exceptions, analyze sessions, scores and datasets, and manage prompts.",
     "Language": "Java",
     "Link": "https://github.com/Log-LogN/langfuse-mcp-java",
+    "Category": "Monitoring"
+  },
+  {
+    "API": "LogneBudo/llmxray",
+    "Description": "Ask what went wrong with your own Ollama calls: lost prompt cache and the token where the prompt stopped matching, context overflow, a model running partly on CPU, tool schemas crowding the prompt. Last turn in numbers; which local models fit in video memory. Read-only.",
+    "Language": "TypeScript",
+    "Link": "https://github.com/LogneBudo/llmxray",
     "Category": "Monitoring"
   },
   {
@@ -24682,6 +25942,13 @@
     "Category": "Multimedia Process"
   },
   {
+    "API": "afmontoya/baconservices-mcp",
+    "Description": "Bacon Services MCP — MCP client for AI agents to discover and purchase creative services from Bacon Services using x402 payments, with local wallet signing and configurable spending limits.",
+    "Language": "TypeScript",
+    "Link": "https://github.com/afmontoya/baconservices-mcp",
+    "Category": "Multimedia Process"
+  },
+  {
     "API": "afshinator/mcp-server-pexels",
     "Description": "Search Pexels stock images and videos.",
     "Language": "TypeScript",
@@ -24700,6 +25967,13 @@
     "Description": "Omnimodal AIGC framework that turns ComfyUI workflows into MCP tools without code, for text, image, sound and video generation, with a Chainlit web interface.",
     "Language": "Python",
     "Link": "https://github.com/AIDC-AI/Pixelle-MCP",
+    "Category": "Multimedia Process"
+  },
+  {
+    "API": "aimusicvideogen-com/music-video-cli",
+    "Description": "Local music video toolkit using ffmpeg: BPM, key and Camelot detection, best 15/30 s clip, beat-synced shot lists, Spotify Canvas maker and platform specs.",
+    "Language": "TypeScript",
+    "Link": "https://github.com/aimusicvideogen-com/music-video-cli",
     "Category": "Multimedia Process"
   },
   {
@@ -24847,6 +26121,13 @@
     "Description": "Gaudio audio AI API: stem separation (vocals, drums, bass, guitar, piano), dialogue/music/effects separation and AI lyrics sync.",
     "Language": "TypeScript",
     "Link": "https://github.com/gaudiolab-jp/gaudio-developers-mcp",
+    "Category": "Multimedia Process"
+  },
+  {
+    "API": "getopenscreen/openscreen",
+    "Description": "Free, open-source screen recorder and video editor that agents drive over stdio (the desktop app's own executable started with `mcp`): record the screen, trim, zoom, caption, annotate and export demo videos, and add custom WGSL shader effects that export exactly as previewed.",
+    "Language": "TypeScript",
+    "Link": "https://github.com/getopenscreen/openscreen",
     "Category": "Multimedia Process"
   },
   {
@@ -25032,10 +26313,24 @@
     "Category": "Multimedia Process"
   },
   {
+    "API": "sena-labs/replicate-mcp-server",
+    "Description": "Full Replicate catalog for any MCP client: image, video, music and speech generation, voice cloning, 3D, upscaling, plus batch/DAG pipelines and fine-tuning.",
+    "Language": "TypeScript",
+    "Link": "https://github.com/sena-labs/replicate-mcp-server",
+    "Category": "Multimedia Process"
+  },
+  {
     "API": "SHARProduction/production-metadata-mcp",
     "Description": "Read-only SHAR Production metadata gate that validates rights-aware video-production manifests and returns a releasability result.",
     "Language": "TypeScript",
     "Link": "https://github.com/SHARProduction/production-metadata-mcp",
+    "Category": "Multimedia Process"
+  },
+  {
+    "API": "spicyapi-ai/spicy-mcp",
+    "Description": "Official SpicyAPI server: browse 200+ image, video, audio and chat models (Seedance, Kling, Wan, MiniMax, Suno), get exact USD quotes, upload local files, create generation tasks and collect results, with a confirmation before every paid step.",
+    "Language": "TypeScript",
+    "Link": "https://github.com/spicyapi-ai/spicy-mcp",
     "Category": "Multimedia Process"
   },
   {
@@ -25158,6 +26453,13 @@
     "Category": "Multimedia Process"
   },
   {
+    "API": "wiltodelta/remove-ai-watermarks",
+    "Description": "Identify and remove AI watermarks and provenance metadata (Gemini and Veo marks, SynthID, C2PA, EXIF) in images and video you generated yourself, plus provenance metadata in audio. Runs as `uvx remove-ai-watermarks mcp`.",
+    "Language": "Python",
+    "Link": "https://github.com/wiltodelta/remove-ai-watermarks",
+    "Category": "Multimedia Process"
+  },
+  {
     "API": "woladi/macos-vision-mcp",
     "Description": "Offline OCR and image analysis via Apple's Vision framework: text from images and PDFs with bounding boxes, face, barcode and QR detection, and classification.",
     "Language": "TypeScript",
@@ -25198,6 +26500,13 @@
     "Language": "Unknown",
     "Link": "https://github.com/v-3/google-calendar",
     "Category": "Note Taking"
+  },
+  {
+    "API": "AmrDab/clawdcursor",
+    "Description": "Desktop control for any AI agent on Windows, macOS and Linux. Reads the screen as text (accessibility tree, then OCR) and acts on controls by name, with screenshots only as a last resort, so a task costs a fraction of the tokens of a screenshot loop. 7 compound tools, one safety gate, verifies its own actions, and pauses for the user at sign-ins. Local-only, any tool-calling model.",
+    "Language": "TypeScript",
+    "Link": "https://github.com/AmrDab/clawdcursor",
+    "Category": "OS Automation"
   },
   {
     "API": "chryaner/terrarium",
@@ -25309,6 +26618,13 @@
     "Description": "Mac window manager and menu bar utilities: arrange windows across displays, snap to custom zones, save workspaces, window screenshots and on-device OCR.",
     "Language": "TypeScript",
     "Link": "https://github.com/ostapondo/Plonk",
+    "Category": "OS Automation"
+  },
+  {
+    "API": "rchurro/kasm-use",
+    "Description": "Computer-use for Kasm Workspaces: lets AI agents see and drive your self-hosted Kasm desktops (screenshots, clicks, typing) over KasmVNC, with stock workspace images.",
+    "Language": "Python",
+    "Link": "https://github.com/rchurro/kasm-use",
     "Category": "OS Automation"
   },
   {
@@ -27265,6 +28581,13 @@
     "Category": "Other Tools and Integrations"
   },
   {
+    "API": "imnoo-team/drawing-anonymizer-mcp",
+    "Description": "Anonymize technical-drawing PDFs before sharing them — company names, logos, people, addresses and contact data found automatically and masked, written as a flattened, metadata-free PDF or an expiring share link. Install via NPM: `npx -y drawing-anonymizer-mcp`",
+    "Language": "TypeScript",
+    "Link": "https://github.com/imnoo-team/drawing-anonymizer-mcp",
+    "Category": "Other Tools and Integrations"
+  },
+  {
     "API": "imnoo-team/drawing-converter-mcp",
     "Description": "Convert technical-drawing PDFs between metric and imperial: dimensions, tolerances, ISO fits, threads and surface roughness, stamped in place on the PDF.",
     "Language": "TypeScript",
@@ -27535,6 +28858,13 @@
     "Description": "Search and retrieve GIFs through the Giphy API.",
     "Language": "TypeScript",
     "Link": "https://github.com/magarcia/mcp-server-giphy",
+    "Category": "Other Tools and Integrations"
+  },
+  {
+    "API": "manueltarouca/qbt-kit",
+    "Description": "qBittorrent WebUI API: all 123 endpoints, with confirmation required on destructive operations and a read-only mode that holds through the raw call.",
+    "Language": "Python",
+    "Link": "https://github.com/manueltarouca/qbt-kit",
     "Category": "Other Tools and Integrations"
   },
   {
@@ -28245,6 +29575,13 @@
     "Category": "Other Tools and Integrations"
   },
   {
+    "API": "tekspry/DotnetFastMCP",
+    "Description": "High-level framework for building MCP servers in .NET with OAuth 2.0/OIDC (6 providers), per-tool MFA, OpenTelemetry, and a native client.",
+    "Language": "Unknown",
+    "Link": "https://github.com/tekspry/DotnetFastMCP",
+    "Category": "Other Tools and Integrations"
+  },
+  {
     "API": "Template MCP Server",
     "Description": "Template to quickly set up your own MCP server",
     "Language": "Unknown",
@@ -28686,6 +30023,13 @@
     "Category": "Product Management"
   },
   {
+    "API": "zanaat-dev/baron",
+    "Description": "Work orchestration for AI coding agents: create, move and link issues, cut branches, open and merge PRs, and notify — on Azure DevOps, GitHub, Jira, Linear and Slack — through one normalized contract, with each tracker's states mapped to roles once at `baron init` and committed. Install: `npx -y @zanaat/baron-mcp-server@latest`.",
+    "Language": "TypeScript",
+    "Link": "https://github.com/zanaat-dev/baron",
+    "Category": "Product Management"
+  },
+  {
     "API": "Backlog MCP Server",
     "Description": "Manages Backlog projects, issues, versions, milestones, repositories, and notifications.",
     "Language": "Unknown",
@@ -28802,6 +30146,13 @@
     "Description": "Guest check-in and SES.HOSPEDAJES police registration for Spanish short-term rentals: bookings, guest-form completion, SES filing status and check-in links.",
     "Language": "Unknown",
     "Link": "https://github.com/TargetGrps/partelisto-mcp",
+    "Category": "Real Estate"
+  },
+  {
+    "API": "urbankitstudio/mcp-atlas",
+    "Description": "US county parcel data: owner-name, APN and address lookup across 479 counties (494 verified ArcGIS REST endpoints, all 50 states plus DC), plus city code-violation, building-permit and zoning-case datasets. No API key.",
+    "Language": "TypeScript",
+    "Link": "https://github.com/urbankitstudio/mcp-atlas",
     "Category": "Real Estate"
   },
   {
@@ -28980,13 +30331,6 @@
     "Category": "Research"
   },
   {
-    "API": "BrowseAI-HQ/BrowserAI-Dev",
-    "Description": "Evidence-backed web research: real-time search with cited claims, confidence scores and a mode comparing raw LLM answers with evidence-backed ones.",
-    "Language": "TypeScript",
-    "Link": "https://github.com/BrowseAI-HQ/BrowserAI-Dev",
-    "Category": "Research"
-  },
-  {
     "API": "cluefinch/mcp-server",
     "Description": "Cluefinch MCP provides Deep Research infrastructure for AI agents: web search, incremental page reading, source-link navigation, and multi-source evidence collection while the agent remains in control of planning and reasoning.",
     "Language": "Python",
@@ -29078,6 +30422,13 @@
     "Category": "Research"
   },
   {
+    "API": "LastSearch-HQ/lastsearch",
+    "Description": "Verified web research for AI agents (formerly BrowseAI Dev). Real-time search with cited claims, confidence scores, live citation-health checks, and signed evidence records. MCP server, REST API, and Python SDK.",
+    "Language": "TypeScript",
+    "Link": "https://github.com/LastSearch-HQ/lastsearch",
+    "Category": "Research"
+  },
+  {
     "API": "laszlopere/mcp-molecules",
     "Description": "Chemistry tools from NIST data: molar mass with uncertainties, isotope-distribution mass spectra and name-formula lookup, offline or with online fallback.",
     "Language": "Python",
@@ -29106,6 +30457,13 @@
     "Category": "Research"
   },
   {
+    "API": "mikenguyen13/research-methods-mcp",
+    "Description": "Research methods library: recommends causal inference and econometric designs, returns runnable R and Python code, and cites the sources.",
+    "Language": "TypeScript",
+    "Link": "https://github.com/mikenguyen13/research-methods-mcp",
+    "Category": "Research"
+  },
+  {
     "API": "mlava/scholar-sidekick-mcp",
     "Description": "Resolve scholarly identifiers (DOI, PMID, ISBN, arXiv and more) to CSL JSON, format citations in thousands of styles, or export to BibTeX, RIS or EndNote.",
     "Language": "TypeScript",
@@ -29131,6 +30489,13 @@
     "Description": "Evidence-grounded web research: verify claims on pages with citations, confidence bands and policy reports, and synthesize multi-page sessions.",
     "Language": "Rust",
     "Link": "https://github.com/nangman-infra/touch-browser",
+    "Category": "Research"
+  },
+  {
+    "API": "neymark/abliteration-mcp",
+    "Description": "18 read-only tools over the abliteration.org catalog: every abliterated and uncensored LLM on Hugging Face, their method classification, download trends, deletion history, and four alignment indices.",
+    "Language": "TypeScript",
+    "Link": "https://github.com/neymark/abliteration-mcp",
     "Category": "Research"
   },
   {
@@ -29183,10 +30548,24 @@
     "Category": "Research"
   },
   {
+    "API": "rrrrrredy/research-toolkit",
+    "Description": "Eight local research workflow tools for task setup, saved progress, stage guidance, configurable report review, and delivery checks.",
+    "Language": "Python",
+    "Link": "https://github.com/rrrrrredy/research-toolkit",
+    "Category": "Research"
+  },
+  {
     "API": "Scormave/gramps-web-mcp",
     "Description": "Gramps Web genealogy: search and edit family tree records, explore ancestors, descendants, relationships and timelines, and read media with privacy-aware previews. Includes a read-only mode and Claude Desktop bundles.",
     "Language": "Unknown",
     "Link": "https://github.com/Scormave/gramps-web-mcp",
+    "Category": "Research"
+  },
+  {
+    "API": "SECRET4422/mcp-deep-research-server",
+    "Description": "Autonomous multi-source deep research with DuckDuckGo search (zero API keys), parallel scrapers, markdown cleaning, synthesis with citations, fact-checking, and persistent memory.",
+    "Language": "TypeScript",
+    "Link": "https://github.com/SECRET4422/mcp-deep-research-server",
     "Category": "Research"
   },
   {
@@ -29540,6 +30919,13 @@
     "Category": "Search & Data Extraction"
   },
   {
+    "API": "agentsearchhq-coder/agentsearch-mcp",
+    "Description": "Web search (up to 5 results), URL-to-Markdown extraction and JavaScript page rendering for agents, paid per call ($0.005 in USDC on Base via x402 through the Pocket Agentic Portal) from a wallet key with a session spend cap; self-hosted AgentSearch API also supported.",
+    "Language": "TypeScript",
+    "Link": "https://github.com/agentsearchhq-coder/agentsearch-mcp",
+    "Category": "Search & Data Extraction"
+  },
+  {
     "API": "AI-Directory-Partners/tooldirectory-mcp",
     "Description": "Search a catalog of AI tools, compare them, find alternatives and check whether a tool is active, defunct or acquired.",
     "Language": "TypeScript",
@@ -29558,6 +30944,13 @@
     "Description": "Find where to stream movies and TV shows across Asian and Middle Eastern services such as Netflix, Disney+ Hotstar, Wavve, Shahid, ZEE5 and JioCinema.",
     "Language": "TypeScript",
     "Link": "https://github.com/AIweather-Anurag/ottasia-mcp-server",
+    "Category": "Search & Data Extraction"
+  },
+  {
+    "API": "ak10082247-max/stealthguard-402",
+    "Description": "Stealth web scraper bypassing Cloudflare anti-bot via Scrapling, extracts clean DOM to Markdown, and sanitizes prompt injections with x402 micropayments on Base.",
+    "Language": "Python",
+    "Link": "https://github.com/ak10082247-max/stealthguard-402",
     "Category": "Search & Data Extraction"
   },
   {
@@ -29841,6 +31234,13 @@
     "Category": "Search & Data Extraction"
   },
   {
+    "API": "Desearch-ai/mcp-desearch",
+    "Description": "AI search, X search and web search for AI agents.",
+    "Language": "TypeScript",
+    "Link": "https://github.com/Desearch-ai/mcp-desearch",
+    "Category": "Search & Data Extraction"
+  },
+  {
     "API": "devflowinc/trieve",
     "Description": "Crawl, embed, chunk, search and retrieve information from datasets through Trieve.",
     "Language": "TypeScript",
@@ -29876,6 +31276,13 @@
     "Category": "Search & Data Extraction"
   },
   {
+    "API": "dreamworkhq/mcp",
+    "Description": "Dreamwork job search: browse live listings without a key, rank matches against your resume, generate tailored resumes and cover letters, apply and track applications.",
+    "Language": "TypeScript",
+    "Link": "https://github.com/dreamworkhq/mcp",
+    "Category": "Search & Data Extraction"
+  },
+  {
     "API": "Dumpling-AI/mcp-server-dumplingai",
     "Description": "Access Dumpling AI's data, web scraping and document conversion APIs.",
     "Language": "TypeScript",
@@ -29894,6 +31301,13 @@
     "Description": "Deterministically decompose text into classified semantic units with authority, risk and attention scores plus entity extraction, without an LLM.",
     "Language": "Python",
     "Link": "https://github.com/echology-io/decompose",
+    "Category": "Search & Data Extraction"
+  },
+  {
+    "API": "edtool79-collab/hirepulse-mcp",
+    "Description": "Stdio MCP proxy for public company jobs, hiring signals, technology detection and Google Ads research, with a shared free daily allowance and optional x402 payments.",
+    "Language": "TypeScript",
+    "Link": "https://github.com/edtool79-collab/hirepulse-mcp",
     "Category": "Search & Data Extraction"
   },
   {
@@ -30205,6 +31619,13 @@
     "Category": "Search & Data Extraction"
   },
   {
+    "API": "jeanpfs/stock-images-mcp",
+    "Description": "Search free stock photos on Pexels, Unsplash and Pixabay and download the chosen one into a local folder, with per-provider error reporting.",
+    "Language": "TypeScript",
+    "Link": "https://github.com/jeanpfs/stock-images-mcp",
+    "Category": "Search & Data Extraction"
+  },
+  {
     "API": "JerryLiu369/agent-web-search",
     "Description": "Provider-neutral web search aggregating model grounding (Gemini, Grok, DeepSeek and others) and search APIs such as Exa, Brave, Perplexity and Tavily.",
     "Language": "Python",
@@ -30335,6 +31756,13 @@
     "Description": "Search Fiverr gigs, view seller profiles, compare gig packages and read reviews.",
     "Language": "Python",
     "Link": "https://github.com/KyuRish/fiverr-mcp-server",
+    "Category": "Search & Data Extraction"
+  },
+  {
+    "API": "lachy3433/contextfetch-mcp",
+    "Description": "Web search and page contents as LLM-ready Markdown, pruned to the passages relevant to the query, plus cited answers, research, crawl and site maps. Keyless free tier.",
+    "Language": "TypeScript",
+    "Link": "https://github.com/lachy3433/contextfetch-mcp",
     "Category": "Search & Data Extraction"
   },
   {
@@ -30520,10 +31948,24 @@
     "Category": "Search & Data Extraction"
   },
   {
+    "API": "mambalabsdev/mcp-job-change-tracker",
+    "Description": "Tracks whether CRM contacts left, moved, or were promoted, with current employer, title, start date, and the source and age behind each answer.",
+    "Language": "TypeScript",
+    "Link": "https://github.com/mambalabsdev/mcp-job-change-tracker",
+    "Category": "Search & Data Extraction"
+  },
+  {
     "API": "mambalabsdev/mcp-review-platform-reputation-enricher",
     "Description": "Resolve a company domain to its Trustpilot rating, review count and claimed status.",
     "Language": "TypeScript",
     "Link": "https://github.com/mambalabsdev/mcp-review-platform-reputation-enricher",
+    "Category": "Search & Data Extraction"
+  },
+  {
+    "API": "mambalabsdev/mcp-team-page-people-extractor",
+    "Description": "Returns the people a company publishes on its own team, leadership, or about page, with names, titles, and the source page.",
+    "Language": "TypeScript",
+    "Link": "https://github.com/mambalabsdev/mcp-team-page-people-extractor",
     "Category": "Search & Data Extraction"
   },
   {
@@ -30538,6 +31980,13 @@
     "Description": "Search firsthand observations agents recorded about products, APIs, services or places, as opposed to documentation claims, and write back new ones.",
     "Language": "TypeScript",
     "Link": "https://github.com/Marvy101/pod-mcp",
+    "Category": "Search & Data Extraction"
+  },
+  {
+    "API": "mauriblint/jsonlink-mcp",
+    "Description": "Read any URL as clean Markdown, get link metadata (Open Graph, favicon), take desktop/mobile screenshots and extract links and images, powered by the JsonLink API.",
+    "Language": "TypeScript",
+    "Link": "https://github.com/mauriblint/jsonlink-mcp",
     "Category": "Search & Data Extraction"
   },
   {
@@ -30692,6 +32141,13 @@
     "Description": "Deep research and batch task execution via Parallel.",
     "Language": "Unknown",
     "Link": "https://github.com/parallel-web/task-mcp",
+    "Category": "Search & Data Extraction"
+  },
+  {
+    "API": "ParserBee/parserbee-mcp",
+    "Description": "Extract structured data from invoices, receipts, purchase orders, bank statements and other documents with ParserBee Parser Templates, returned as JSON.",
+    "Language": "TypeScript",
+    "Link": "https://github.com/ParserBee/parserbee-mcp",
     "Category": "Search & Data Extraction"
   },
   {
@@ -31150,6 +32606,13 @@
     "Category": "Search & Data Extraction"
   },
   {
+    "API": "unblockingapi/mcp",
+    "Description": "Fetch bot-protected and JavaScript-heavy pages, choosing plain HTTP or a real browser per site, and parse supported pages into JSON with published templates. Runs locally via npx or hosted at mcp.unblockingapi.com.",
+    "Language": "TypeScript",
+    "Link": "https://github.com/unblockingapi/mcp",
+    "Category": "Search & Data Extraction"
+  },
+  {
     "API": "urlbox/urlbox-mcp-server",
     "Description": "Generate and manage screenshots, PDFs and videos, analyze screenshots with AI and extract web content as Markdown, metadata or HTML via the Urlbox API.",
     "Language": "TypeScript",
@@ -31388,6 +32851,13 @@
     "Category": "Security"
   },
   {
+    "API": "AIops-tools/Firewall-AIops",
+    "Description": "Governed OPNsense + pfSense firewall operations — gateway-health, rule-shadow, and blocked-traffic RCA, plus guardrailed rule/alias writes (35 tools) with unbypassable audit logging (MCP + CLI), budget/runaway guards, dry-run, and undo/rollback.",
+    "Language": "Python",
+    "Link": "https://github.com/AIops-tools/Firewall-AIops",
+    "Category": "Security"
+  },
+  {
     "API": "airblackbox/air-blackbox-mcp",
     "Description": "EU AI Act compliance scanner for Python AI agents (LangChain, CrewAI, AutoGen, OpenAI) with prompt injection detection, risk classification and fix generation.",
     "Language": "Python",
@@ -31399,6 +32869,13 @@
     "Description": "Local-first MCP gateway for coding agents that redacts detected secrets from file reads and command output before they reach model context.",
     "Language": "Rust",
     "Link": "https://github.com/ajipurn/fida",
+    "Category": "Security"
+  },
+  {
+    "API": "ak10082247-max/canaryguard-402",
+    "Description": "Deterministic prompt-injection detector, concealed Unicode scrubber, and honeypot wallet defense MCP server for AI agents.",
+    "Language": "TypeScript",
+    "Link": "https://github.com/ak10082247-max/canaryguard-402",
     "Category": "Security"
   },
   {
@@ -31577,6 +33054,13 @@
     "Category": "Security"
   },
   {
+    "API": "bunkerity/bunkerweb-mcp",
+    "Description": "Official BunkerWeb WAF integration to manage services, instances, IP bans, configurations, plugins, and scheduler jobs over stdio or streamable HTTP.",
+    "Language": "Python",
+    "Link": "https://github.com/bunkerity/bunkerweb-mcp",
+    "Category": "Security"
+  },
+  {
     "API": "Burp Suite MCP Server",
     "Description": "Connects Burp Suite to MCP clients through an extension and stdio or SSE transports.",
     "Language": "Unknown",
@@ -31728,6 +33212,13 @@
     "Description": "Collects vulnerability and threat intelligence through CVE lookup, scoring, and related security tools.",
     "Language": "Unknown",
     "Link": "https://github.com/mukul975/cve-mcp-server",
+    "Category": "Security"
+  },
+  {
+    "API": "cyberdroid2077/opsecforge-tools",
+    "Description": "Local stdio server that keeps secrets out of coding-agent context: `redact_file` takes a path and returns only redacted content, `scan_secrets` checks staged changes before commit, plus offline webhook signature verification and JWT inspection. No network calls; optional Claude Code hook blocks direct `.env`/private-key reads. Redaction is heuristic.",
+    "Language": "TypeScript",
+    "Link": "https://github.com/cyberdroid2077/opsecforge-tools/tree/main/packages/opsecforge-mcp",
     "Category": "Security"
   },
   {
@@ -32277,6 +33768,13 @@
     "Category": "Security"
   },
   {
+    "API": "kimjooyoon/gooo-go-ports",
+    "Description": "Local stdio server for Gooo-generated service-grant narrowing decisions: checks preservation of one required request and returns the full proof with source/generation bindings. It does not apply grants or authenticate supplied facts.",
+    "Language": "Go",
+    "Link": "https://github.com/kimjooyoon/gooo-go-ports/tree/main/examples/service-grant-mcp",
+    "Category": "Security"
+  },
+  {
     "API": "Kjopstad-IT/rqwstr",
     "Description": "HTTP security testing toolkit (send, intruder, race, chain, out-of-band) with low-level HTTP/1.1 and HTTP/2 control: raw framing and connection pinning.",
     "Language": "Go",
@@ -32288,6 +33786,13 @@
     "Description": "Query AgentForge Trust Scores for MCP servers before connecting, covering security, code health, behavioral audit, community trust and EU compliance.",
     "Language": "TypeScript",
     "Link": "https://github.com/KOVY/agentforge-trust-mcp",
+    "Category": "Security"
+  },
+  {
+    "API": "koyourmoon/perspective-api-alternative-mcp",
+    "Description": "Toxicity scores (0-1) for text before an AI agent posts it: toxicity, severe toxicity, insult, profanity, threat and identity attack. Google Perspective API compatible, deterministic (no LLM).",
+    "Language": "Python",
+    "Link": "https://github.com/koyourmoon/perspective-api-alternative-mcp",
     "Category": "Security"
   },
   {
@@ -32445,6 +33950,13 @@
     "Category": "Security"
   },
   {
+    "API": "mrpkk/attest",
+    "Description": "Verifies an artifact an AI agent produced (JSON, code, structured output) against a JSON Schema plus positional prompt-injection checks, returning a verdict with reasons before you accept the result. x402-paid with a free tier of 20 checks/day.",
+    "Language": "Python",
+    "Link": "https://github.com/mrpkk/attest",
+    "Category": "Security"
+  },
+  {
     "API": "mrz1880/mcp-keycloak-admin",
     "Description": "Administer Keycloak via its Admin REST API: users, roles, clients, groups, identity providers, federation and events, with a read-only mode.",
     "Language": "TypeScript",
@@ -32463,6 +33975,13 @@
     "Description": "Pre-install security scanner for MCP servers: detects backdoors, exfiltration code, obfuscation, dangerous execution, prompt injection and supply chain risks.",
     "Language": "TypeScript",
     "Link": "https://github.com/muhannad-hash/mcp-shield",
+    "Category": "Security"
+  },
+  {
+    "API": "MvikManners/aw1-circuit-breaker",
+    "Description": "Deterministic sub-0.2ms AST security circuit breaker and proxy for MCP tool call dispatch pipelines.",
+    "Language": "Python",
+    "Link": "https://github.com/MvikManners/aw1-circuit-breaker",
     "Category": "Security"
   },
   {
@@ -32683,6 +34202,13 @@
     "Category": "Security"
   },
   {
+    "API": "renkagod/osint-toolbox-mcp",
+    "Description": "Runs 12 OSINT tools locally (Sherlock, Maigret, Holehe, GHunt, SpiderFoot, subfinder...) plus built-in WHOIS, DNS, crt.sh and Wayback lookups. No API keys.",
+    "Language": "Python",
+    "Link": "https://github.com/renkagod/osint-toolbox-mcp",
+    "Category": "Security"
+  },
+  {
     "API": "rev2ret/SecureAudit-MCP",
     "Description": "Static C/C++ memory-safety scanning and PE/ELF binary protection audits (ASLR, DEP/NX, SafeSEH, PIE), with remediation via secure templates.",
     "Language": "TypeScript",
@@ -32701,6 +34227,20 @@
     "Description": "Static security scanner for MCP servers and agent tools: detects secrets, shell execution, risky tool descriptions, environment access and prompt injection.",
     "Language": "Python",
     "Link": "https://github.com/rob925/mcp-shield",
+    "Category": "Security"
+  },
+  {
+    "API": "robyroro/mcp-latchpoint",
+    "Description": "Offline, read-only audit of MCP client configs: flags plain HTTP, shell wrappers, unpinned runners, embedded credentials and broad access scopes; outputs redacted text, JSON or SARIF.",
+    "Language": "Python",
+    "Link": "https://github.com/robyroro/mcp-latchpoint",
+    "Category": "Security"
+  },
+  {
+    "API": "rohan-protocol/sdk",
+    "Description": "Stateless privacy shield, WebMCP semantic firewall, and gasless on-chain state settlement for autonomous AI agents on Midnight Network.",
+    "Language": "TypeScript",
+    "Link": "https://github.com/rohan-protocol/sdk",
     "Category": "Security"
   },
   {
@@ -32806,6 +34346,13 @@
     "Description": "Offline verification of Ed25519/JCS-signed artifacts such as receipts, manifests and audit bundles.",
     "Language": "TypeScript",
     "Link": "https://github.com/ScopeBlind/verify-mcp",
+    "Category": "Security"
+  },
+  {
+    "API": "SECRET4422/guardrail-mcp",
+    "Description": "Enterprise security and code-safety guardrail for AI agents featuring AST taint analysis, SARIF/SBOM generation, and policy gates.",
+    "Language": "TypeScript",
+    "Link": "https://github.com/SECRET4422/guardrail-mcp",
     "Category": "Security"
   },
   {
@@ -32991,6 +34538,13 @@
     "Category": "Security"
   },
   {
+    "API": "toby7979/sealmyapp-tools",
+    "Description": "Offline security helpers for AI-built (vibe-coded) apps: classify whether a key is safe to expose, generate Supabase RLS audit SQL and owner-only policy templates, and pre-launch checklists for Lovable, Bolt, Cursor, Replit and v0. Ships with a Cursor rule and an Agent Skill.",
+    "Language": "TypeScript",
+    "Link": "https://github.com/toby7979/sealmyapp-tools",
+    "Category": "Security"
+  },
+  {
     "API": "tomjwxf/scopeblind-gateway",
     "Description": "Security gateway that wraps MCP servers with per-tool policies, approval gates and optional signed receipts, in shadow (log-only) or enforce mode.",
     "Language": "TypeScript",
@@ -33135,6 +34689,13 @@
     "Description": "Write, validate and convert Sigma detection rules for Splunk, Elastic, Kibana and Wazuh, backed by a rule corpus covering MITRE ATT&CK tactics.",
     "Language": "Python",
     "Link": "https://github.com/WRG-11/wrg-sigma-rules",
+    "Category": "Security"
+  },
+  {
+    "API": "yagobski/agentleak",
+    "Description": "Local privacy testing for AI agents: scan code for PII and secrets, score execution traces across internal channels, redact text, and track new or fixed findings through MCP tools.",
+    "Language": "Python",
+    "Link": "https://github.com/yagobski/agentleak",
     "Category": "Security"
   },
   {
@@ -33327,6 +34888,13 @@
     "Category": "Social Media"
   },
   {
+    "API": "eukosh/youtube-kit",
+    "Description": "Search and read public YouTube, and manage your own channels: analytics, uploads, metadata, playlists and comment moderation, with two-step deletes. Also a CLI (`ytk`).",
+    "Language": "Python",
+    "Link": "https://github.com/eukosh/youtube-kit",
+    "Category": "Social Media"
+  },
+  {
     "API": "farukkolip/tiktapdown-mcp",
     "Description": "TikTok creator toolkit: watermark-free video downloads, hashtag sets by niche, recommended posting times by country and viral hook formulas.",
     "Language": "TypeScript",
@@ -33432,6 +35000,13 @@
     "Category": "Social Media"
   },
   {
+    "API": "KalpeshMahida0212/runsheet-mcp",
+    "Description": "Upload videos from your own machine straight to YouTube, private with a publish time, and read, schedule and retitle your channel's videos through Runsheet.",
+    "Language": "TypeScript",
+    "Link": "https://github.com/KalpeshMahida0212/runsheet-mcp",
+    "Category": "Social Media"
+  },
+  {
     "API": "karanb192/reddit-mcp-buddy",
     "Description": "Browse Reddit posts, search content and analyze user activity.",
     "Language": "TypeScript",
@@ -33457,6 +35032,13 @@
     "Description": "Run a Shopstr or Nostr marketplace storefront: create and update stalls and products in both NIP-15 and Shopstr's NIP-99-based listing formats.",
     "Language": "TypeScript",
     "Link": "https://github.com/llmops-pro/marketplace-mcp",
+    "Category": "Social Media"
+  },
+  {
+    "API": "lumizone/postsider",
+    "Description": "Schedule and publish across 33 social media connectors, with draft approvals, analytics, media, notifications and an emergency publishing pause. Install: `npx -y @postsider/mcp`.",
+    "Language": "TypeScript",
+    "Link": "https://github.com/lumizone/postsider",
     "Category": "Social Media"
   },
   {
@@ -33492,6 +35074,13 @@
     "Description": "Resolves a TikTok handle or a company domain to the brand account with follower, like, and video counts.",
     "Language": "TypeScript",
     "Link": "https://github.com/mambalabsdev/mcp-tiktok-brand-presence-mapper",
+    "Category": "Social Media"
+  },
+  {
+    "API": "mambalabsdev/mcp-youtube-channel-transcript-extractor",
+    "Description": "Resolves a company domain or YouTube handle to the channel with subscriber count and channel metadata.",
+    "Language": "TypeScript",
+    "Link": "https://github.com/mambalabsdev/mcp-youtube-channel-transcript-extractor",
     "Category": "Social Media"
   },
   {
@@ -33712,6 +35301,13 @@
     "Category": "Social Media"
   },
   {
+    "API": "yxs1640-png/xflux",
+    "Description": "Read-only X/Twitter API for agents: search, timelines, profiles, Smart Money. npm `@xflux/xflux-mcp-server`. Not for posting.",
+    "Language": "TypeScript",
+    "Link": "https://github.com/yxs1640-png/xflux",
+    "Category": "Social Media"
+  },
+  {
     "API": "ankurmans/pepys-mcp",
     "Description": "Transcribe audio, video, YouTube links and podcast feeds via Pepys, with speaker diarization, SRT/VTT export and transcript search.",
     "Language": "TypeScript",
@@ -33726,11 +35322,25 @@
     "Category": "Speech-to-Text"
   },
   {
+    "API": "phonology024/babelscribe",
+    "Description": "Local speech-to-text and SRT/VTT subtitles for audio and video in 99 languages on your own AMD, NVIDIA, Intel or Apple GPU (whisper.cpp via Vulkan/CUDA/Metal), with an accurate mode using Thai and Hindi fine-tunes.",
+    "Language": "Python",
+    "Link": "https://github.com/phonology024/babelscribe",
+    "Category": "Speech-to-Text"
+  },
+  {
     "API": "spokenmd/spoken",
     "Description": "Search podcast episodes and fetch published transcripts as Markdown with real speaker names via the Spoken API.",
     "Language": "TypeScript",
     "Link": "https://github.com/spokenmd/spoken",
     "Category": "Speech-to-Text"
+  },
+  {
+    "API": "a18565517703-ctrl/fateclear-solar-time",
+    "Description": "True solar time (longitude correction + equation of time), exact moments of the 24 Chinese solar terms for any year, and China 1986–1991 DST handling for BaZi birth-time conversion.",
+    "Language": "TypeScript",
+    "Link": "https://github.com/a18565517703-ctrl/fateclear-solar-time",
+    "Category": "Spirituality & Esoterica"
   },
   {
     "API": "adityarya24/astro-skill",
@@ -33908,6 +35518,13 @@
     "Category": "Sports"
   },
   {
+    "API": "happyc0der/garmin-connect-api",
+    "Description": "Read and write Garmin Connect: activities with per-set strength detail, laps, health data and two-year trends; strength, run, ride and swim workouts pushed to a watch; completed strength sessions logged as activities; and weigh-ins with full body composition.",
+    "Language": "Python",
+    "Link": "https://github.com/happyc0der/garmin-connect-api",
+    "Category": "Sports"
+  },
+  {
     "API": "iFan6oy/flash-props-mcp",
     "Description": "Live sports betting player props for NBA, MLB, NFL, NHL, NCAA and soccer, unified from sportsbooks with American odds, pre-game and live.",
     "Language": "TypeScript",
@@ -33971,6 +35588,13 @@
     "Category": "Sports"
   },
   {
+    "API": "Marc-Armillas/bicycle-routes-generator-mcp",
+    "Description": "Generates mountain bike and road cycling routes on real OpenStreetMap data with BRouter (automatic loops to a target distance, point-to-point and via points) and saves them as GPX with elevation, plus warnings for traffic, steep grades, protected areas and ways where bikes are not allowed.",
+    "Language": "Python",
+    "Link": "https://github.com/Marc-Armillas/bicycle-routes-generator-mcp",
+    "Category": "Sports"
+  },
+  {
     "API": "mikechao/balldontlie-mcp",
     "Description": "Player, team and game information for the NBA, NFL and MLB via the balldontlie API.",
     "Language": "TypeScript",
@@ -33996,6 +35620,13 @@
     "Description": "Official [Odds-API.io](https://odds-api.io) server: real-time and historical sports betting odds from 365+ bookmakers across 34 sports, with events, value bets, arbitrage and dropping odds.",
     "Language": "TypeScript",
     "Link": "https://github.com/odds-api-io/odds-api-mcp-server",
+    "Category": "Sports"
+  },
+  {
+    "API": "oddsrelay/oddsrelay-mcp",
+    "Description": "Official OddsRelay server: UK and Irish bookmaker and exchange odds, matched boards, one event's prices, and the sport, bookmaker and coverage lists. Read-only; every call that spends tokens is priced first and capped.",
+    "Language": "TypeScript",
+    "Link": "https://github.com/oddsrelay/oddsrelay-mcp",
     "Category": "Sports"
   },
   {
@@ -34447,6 +36078,13 @@
     "Category": "Translation Services"
   },
   {
+    "API": "symbionix-sl/airstrings-cli",
+    "Description": "Manage app strings, locales and A/B string variants, then publish Ed25519-signed string bundles for over-the-air text updates in iOS, Android, web and React Native apps.",
+    "Language": "Go",
+    "Link": "https://github.com/symbionix-sl/airstrings-cli",
+    "Category": "Translation Services"
+  },
+  {
     "API": "translated/lara-mcp",
     "Description": "Translate text with the Lara Translate API, including language detection and context-aware translations.",
     "Language": "TypeScript",
@@ -34671,6 +36309,13 @@
     "Category": "Travel & Transportation"
   },
   {
+    "API": "LetsFG/LetsFG",
+    "Description": "Search and book flights from hundreds of airlines, plus hotels; nothing is booked until you approve by email. Checks every nearby airport, bag prices and each flight's on-time record.",
+    "Language": "TypeScript",
+    "Link": "https://github.com/LetsFG/LetsFG",
+    "Category": "Travel & Transportation"
+  },
+  {
     "API": "lodordev/mcp-teslamate-fleet",
     "Description": "TeslaMate analytics and Tesla Fleet API commands: telemetry, driving history, energy analytics and remote control of climate, charging, locks and sentry.",
     "Language": "Python",
@@ -34703,6 +36348,13 @@
     "Description": "Visa requirements for passport-destination pairs in 15 languages: visa types, required documents and travel tips.",
     "Language": "TypeScript",
     "Link": "https://github.com/MattJeff/orizn-mcp-server",
+    "Category": "Travel & Transportation"
+  },
+  {
+    "API": "mavrovde/viafrei-mcp",
+    "Description": "Germany's open mobility data: live Autobahn traffic and closures, DB train departures, local transit, fuel prices, EV charging, parking, bike sharing and DWD weather warnings, each answer with its source and licence. Free, no key.",
+    "Language": "TypeScript",
+    "Link": "https://github.com/mavrovde/viafrei-mcp",
     "Category": "Travel & Transportation"
   },
   {
@@ -35602,6 +37254,13 @@
     "Category": "Workplace & Productivity"
   },
   {
+    "API": "edouard-claude/gryzzly-mcp",
+    "Description": "Gryzzly time tracking: log time in plain language (\"2h30 on Alyxa yesterday\"), weekly timesheets with missing-day detection, and all 50 Gryzzly v1 API endpoints (projects, tasks, users, customers, leaves, budgets). Read-only mode, selectable toolsets, stdio and Streamable HTTP.",
+    "Language": "Rust",
+    "Link": "https://github.com/edouard-claude/gryzzly-mcp",
+    "Category": "Workplace & Productivity"
+  },
+  {
     "API": "ellmos-ai/n8n-manager-mcp",
     "Description": "Manage n8n workflows: CRUD, synchronization, inspection and execution.",
     "Language": "TypeScript",
@@ -35648,6 +37307,13 @@
     "Description": "Interact with Google Calendar, Gmail, Drive and other Google Workspace apps.",
     "Language": "Python",
     "Link": "https://github.com/giuseppe-coco/Google-Workspace-MCP-Server",
+    "Category": "Workplace & Productivity"
+  },
+  {
+    "API": "godikemahesh/smart-job-apply-mcp",
+    "Description": "Autonomous Model Context Protocol (MCP) server that searches, filters, auto-fills forms, and submits job applications across 8 major job boards (LinkedIn, Naukri, Indeed, Wellfound, etc.) with external ATS navigation and recruiter outreach via Gmail.",
+    "Language": "Python",
+    "Link": "https://github.com/godikemahesh/smart-job-apply-mcp",
     "Category": "Workplace & Productivity"
   },
   {
@@ -35861,6 +37527,13 @@
     "Category": "Workplace & Productivity"
   },
   {
+    "API": "nhorie-canal/mmm_mcp",
+    "Description": "Read and write your nested mind maps and to-dos in Matryoshka Mind Map: list maps, turn a conversation into a nested map, import Markdown and check off tasks.",
+    "Language": "TypeScript",
+    "Link": "https://github.com/nhorie-canal/mmm_mcp",
+    "Category": "Workplace & Productivity"
+  },
+  {
     "API": "ni-c/rustpad-mcp",
     "Description": "Read and edit self-hosted Rustpad collaborative pads, merging edits live with human typing and requiring confirmation to replace a pad.",
     "Language": "TypeScript",
@@ -35917,6 +37590,13 @@
     "Category": "Workplace & Productivity"
   },
   {
+    "API": "profilesearch/GohireHumans",
+    "Description": "Discover human and AI services and jobs; authenticated hiring and work approval require account-owner authorization.",
+    "Language": "Python",
+    "Link": "https://github.com/profilesearch/GohireHumans",
+    "Category": "Workplace & Productivity"
+  },
+  {
     "API": "prompeteer/prompeteer-mcp",
     "Description": "Generate prompts for ChatGPT, Claude, Midjourney and other AI platforms, score prompt quality and manage a prompt library with PromptDrive.",
     "Language": "TypeScript",
@@ -35945,10 +37625,24 @@
     "Category": "Workplace & Productivity"
   },
   {
+    "API": "rillsoft/rillsoft-project-mcp",
+    "Description": "MCP server built into Rillsoft Project 10 for multi-project resource planning (local, Windows).",
+    "Language": "Unknown",
+    "Link": "https://github.com/rillsoft/rillsoft-project-mcp",
+    "Category": "Workplace & Productivity"
+  },
+  {
     "API": "seameet-ai/seameet-mcp",
     "Description": "Access SeaMeet meeting recordings, transcripts, AI summaries, screenshots, action items and webhooks, and control the desktop recorder.",
     "Language": "TypeScript",
     "Link": "https://github.com/seameet-ai/seameet-mcp",
+    "Category": "Workplace & Productivity"
+  },
+  {
+    "API": "seinun-ai/maestro-career-studio",
+    "Description": "Your career history as a job-search toolkit: tailor a resume to each posting from what you actually did, score it the same way every time, render the PDF, track applications, and fill forms with a browser companion that never presses Submit. 88 tools.",
+    "Language": "Python",
+    "Link": "https://github.com/seinun-ai/maestro-career-studio",
     "Category": "Workplace & Productivity"
   },
   {
@@ -36159,6 +37853,13 @@
     "Description": "Watch company job boards (Greenhouse, Lever, Ashby, Workable, Workday, Eightfold, Jibe, Rippling) for new roles, rank them for you, and track applications, follow-ups and interview prep. Never applies on its own.",
     "Language": "Python",
     "Link": "https://github.com/vinayvobbili/jobwatch",
+    "Category": "Workplace & Productivity"
+  },
+  {
+    "API": "vitofico/galley",
+    "Description": "MCP bridge for Galley, a local-first Typst editor. Agents read a live project, check real Typst diagnostics and propose diffs a human accepts or rejects.",
+    "Language": "TypeScript",
+    "Link": "https://github.com/vitofico/galley/blob/main/docs/mcp.md",
     "Category": "Workplace & Productivity"
   },
   {
