@@ -9,6 +9,15 @@
     "Category": "AI"
   },
   {
+    "API": "AI Benchmark Index",
+    "Description": "AI benchmarks with traceable data, licences and scores",
+    "Auth": "",
+    "HTTPS": true,
+    "CORS": "Yes",
+    "Link": "https://aibenchmarkindex.com",
+    "Category": "AI"
+  },
+  {
     "API": "AI Learning Engine",
     "Description": "Create, auto-grade, and analyze learning tasks with AI-based evaluations",
     "Auth": "`apiKey`",
@@ -168,6 +177,15 @@
     "HTTPS": true,
     "CORS": "Unknown",
     "Link": "https://harnessrouter.ai/docs",
+    "Category": "AI"
+  },
+  {
+    "API": "isGenAI",
+    "Description": "Check images, text and URLs for recorded evidence of AI use, such as C2PA Content Credentials, IPTC AI labels and saved prompts",
+    "Auth": "",
+    "HTTPS": true,
+    "CORS": "No",
+    "Link": "https://isgenai.com",
     "Category": "AI"
   },
   {
@@ -1827,6 +1845,15 @@
     "Category": "Blockchain"
   },
   {
+    "API": "HEY Research Lab",
+    "Description": "Whether a Robinhood Chain token's or project's team is still shipping, and what it shipped, each ship with its public source",
+    "Auth": "",
+    "HTTPS": true,
+    "CORS": "Yes",
+    "Link": "https://heyresearch.xyz",
+    "Category": "Blockchain"
+  },
+  {
     "API": "Layer4",
     "Description": "Layer4 is a blockchain integration platform that supports no-code and API use",
     "Auth": "`apiKey`",
@@ -2376,6 +2403,15 @@
     "Category": "Business"
   },
   {
+    "API": "ESA Vendors",
+    "Description": "Learning vendors that education funds reimburse",
+    "Auth": "",
+    "HTTPS": true,
+    "CORS": "Yes",
+    "Link": "https://esavendors.fyi",
+    "Category": "Business"
+  },
+  {
     "API": "EuroValidate",
     "Description": "EU VAT (VIES), IBAN and EORI validation with company name & address lookup",
     "Auth": "`apiKey`",
@@ -2418,6 +2454,15 @@
     "HTTPS": true,
     "CORS": "No",
     "Link": "https://fundingsignals.net/docs",
+    "Category": "Business"
+  },
+  {
+    "API": "FuneralCompare",
+    "Description": "Funeral homes and cremation providers, compared by the fees they publish",
+    "Auth": "",
+    "HTTPS": true,
+    "CORS": "Yes",
+    "Link": "https://funeralcompare.fyi",
     "Category": "Business"
   },
   {
@@ -2646,6 +2691,15 @@
     "Category": "Business"
   },
   {
+    "API": "Mydentify",
+    "Description": "Startup-directory research and weekly product leaderboard data",
+    "Auth": "",
+    "HTTPS": true,
+    "CORS": "Yes",
+    "Link": "https://mydentify.com",
+    "Category": "Business"
+  },
+  {
     "API": "NioLeads",
     "Description": "LinkedIn Email Finder and Email Verifier",
     "Auth": "`apiKey`",
@@ -2679,6 +2733,15 @@
     "HTTPS": true,
     "CORS": "Yes",
     "Link": "https://www.pickanagency.com/developers",
+    "Category": "Business"
+  },
+  {
+    "API": "Public Adjusters Directory",
+    "Description": "Public adjusters, so you can check a licence before you hire one",
+    "Auth": "",
+    "HTTPS": true,
+    "CORS": "Yes",
+    "Link": "https://publicadjusters.fyi",
     "Category": "Business"
   },
   {
@@ -2976,6 +3039,15 @@
     "HTTPS": true,
     "CORS": "Yes",
     "Link": "https://africacompliancedata.com/docs",
+    "Category": "Calendar"
+  },
+  {
+    "API": "Bankday",
+    "Description": "Business days, bank holidays and settlement dates for ACH, Fedwire, TARGET2, Bacs, Payments Canada, 28 stock exchanges and 247 countries",
+    "Auth": "`apiKey`",
+    "HTTPS": true,
+    "CORS": "Yes",
+    "Link": "https://bankday.dev",
     "Category": "Calendar"
   },
   {
@@ -5994,6 +6066,15 @@
     "Category": "Development"
   },
   {
+    "API": "AppGoat",
+    "Description": "App Store + Google Play data API and remote MCP server: apps, reviews, keywords, rankings, top charts and competitors for Claude, ChatGPT and Cursor.",
+    "Auth": "`apiKey`",
+    "HTTPS": true,
+    "CORS": "Yes",
+    "Link": "https://appgoat.ai",
+    "Category": "Development"
+  },
+  {
     "API": "ApyHub: A Complete API Catalog",
     "Description": "Build and ship applications that scale using certified APIs for every use case",
     "Auth": "`apiKey`",
@@ -6288,15 +6369,6 @@
     "HTTPS": true,
     "CORS": "Unknown",
     "Link": "https://github.com/Jaagrav/CodeX",
-    "Category": "Development"
-  },
-  {
-    "API": "Codex Reset",
-    "Description": "OpenAI Codex usage-limit reset history, verified announcements and 24h/48h reset probability",
-    "Auth": "",
-    "HTTPS": true,
-    "CORS": "Yes",
-    "Link": "https://codex-reset.com/llms.txt",
     "Category": "Development"
   },
   {
@@ -8046,6 +8118,15 @@
     "Category": "Development"
   },
   {
+    "API": "ScreenshotAPI",
+    "Description": "Website screenshots, PDFs, HTML rendering, caching, and webhooks",
+    "Auth": "`apiKey`",
+    "HTTPS": true,
+    "CORS": "Yes",
+    "Link": "https://screenshotapi.to",
+    "Category": "Development"
+  },
+  {
     "API": "ScreenshotAPI.net",
     "Description": "Create pixel-perfect website screenshots",
     "Auth": "`apiKey`",
@@ -9153,15 +9234,6 @@
     "Category": "Documents & Productivity"
   },
   {
-    "API": "Kiprio PDF Text",
-    "Description": "Extract plain text from PDF documents for LLM and RAG pipelines",
-    "Auth": "",
-    "HTTPS": true,
-    "CORS": "Yes",
-    "Link": "https://kiprio.com/v1/pdf-text/",
-    "Category": "Documents & Productivity"
-  },
-  {
     "API": "Mattermost",
     "Description": "An open source platform for developer collaboration",
     "Auth": "`OAuth`",
@@ -9663,6 +9735,15 @@
     "HTTPS": true,
     "CORS": "Yes",
     "Link": "https://guild.tradeuniquecapital.com/api",
+    "Category": "Email"
+  },
+  {
+    "API": "anon.li",
+    "Description": "Create and manage anonymous email aliases, forwarding recipients, custom domains and end-to-end encrypted file drops",
+    "Auth": "`apiKey`",
+    "HTTPS": true,
+    "CORS": "No",
+    "Link": "https://anon.li",
     "Category": "Email"
   },
   {
@@ -11588,7 +11669,7 @@
     "Auth": "`apiKey`",
     "HTTPS": true,
     "CORS": "No",
-    "Link": "https://rechner-hub.de/steuerrechner-api/",
+    "Link": "https://rechner-hub.de",
     "Category": "Finance"
   },
   {
@@ -12105,6 +12186,15 @@
     "Category": "Finance"
   },
   {
+    "API": "ReceiptEdit Sales Tax API",
+    "Description": "Free sales-tax lookup API covering all US states + zip-level city/county rates. No signup, no rate limit. Also supports Canadian GST/HST/PST and Indian GST slabs. Ideal for building expense-reimbursement flows, invoicing SaaS demos, receipt OCR pipelines, or seeding accounting tools. Full docs at https://receiptedit.com/developers",
+    "Auth": "",
+    "HTTPS": true,
+    "CORS": "Yes",
+    "Link": "https://receiptedit.com",
+    "Category": "Finance"
+  },
+  {
     "API": "RentCast",
     "Description": "Retrieve real-time property and rental data for real estate in the United States",
     "Auth": "`apiKey`",
@@ -12606,6 +12696,15 @@
     "HTTPS": true,
     "CORS": "Yes",
     "Link": "https://www.getdietly.com/api",
+    "Category": "Food & Drink"
+  },
+  {
+    "API": "Dish Directory",
+    "Description": "Restaurants with their dishes, prices and hours, by city",
+    "Auth": "",
+    "HTTPS": true,
+    "CORS": "Yes",
+    "Link": "https://dishdirectory.com",
     "Category": "Food & Drink"
   },
   {
@@ -15894,6 +15993,15 @@
     "Category": "Government"
   },
   {
+    "API": "Apostille Finder",
+    "Description": "Find the government office that issues your apostille",
+    "Auth": "",
+    "HTTPS": true,
+    "CORS": "Yes",
+    "Link": "https://apostilles.fyi",
+    "Category": "Government"
+  },
+  {
     "API": "Autobahn API",
     "Description": "Information about Germany's federal highways like construction sites and traffic jams",
     "Auth": "",
@@ -16461,6 +16569,15 @@
     "Category": "Government"
   },
   {
+    "API": "FIRMSapi",
+    "Description": "Look up, search and validate US CBP FIRMS facility codes for piers, container freight stations, bonded warehouses and FTZs",
+    "Auth": "`apiKey`",
+    "HTTPS": true,
+    "CORS": "Yes",
+    "Link": "https://firmsapi.com",
+    "Category": "Government"
+  },
+  {
     "API": "gankdat",
     "Description": "UK & EU tenders, UK planning, UK sanctions, US exclusions, UK insolvency and incorporations as JSON",
     "Auth": "`apiKey`",
@@ -16560,6 +16677,15 @@
     "Category": "Government"
   },
   {
+    "API": "ITINAgents",
+    "Description": "Directory of IRS ITIN acceptance agents",
+    "Auth": "",
+    "HTTPS": true,
+    "CORS": "Yes",
+    "Link": "https://itinagents.fyi",
+    "Category": "Government"
+  },
+  {
     "API": "Japan Neighborhoods",
     "Description": "Tokyo neighborhood crime statistics, safety scores, and station data (5,078 areas, 2018-2024)",
     "Auth": "",
@@ -16584,6 +16710,15 @@
     "HTTPS": true,
     "CORS": "Yes",
     "Link": "https://localgov.jp/",
+    "Category": "Government"
+  },
+  {
+    "API": "MarriageLicense",
+    "Description": "Where to give notice of marriage or get a marriage licence, by country",
+    "Auth": "",
+    "HTTPS": true,
+    "CORS": "Yes",
+    "Link": "https://marriagelicense.fyi",
     "Category": "Government"
   },
   {
@@ -17343,6 +17478,15 @@
     "Category": "Government"
   },
   {
+    "API": "ADHDEvaluations",
+    "Description": "Find an ADHD evaluation provider near you",
+    "Auth": "",
+    "HTTPS": true,
+    "CORS": "Yes",
+    "Link": "https://adhdevaluations.fyi",
+    "Category": "Health"
+  },
+  {
     "API": "CMS.gov",
     "Description": "Access to the data from the CMS - medicare.gov",
     "Auth": "`apiKey`",
@@ -17676,6 +17820,15 @@
     "Category": "Health"
   },
   {
+    "API": "MemoryCareHomes",
+    "Description": "Memory care homes, checkable against the public register",
+    "Auth": "",
+    "HTTPS": true,
+    "CORS": "Yes",
+    "Link": "https://memorycarehomes.fyi",
+    "Category": "Health"
+  },
+  {
     "API": "MyVaccination",
     "Description": "Vaccination data for Malaysia",
     "Auth": "",
@@ -17745,6 +17898,15 @@
     "HTTPS": true,
     "CORS": "Unknown",
     "Link": "https://open.fda.gov",
+    "Category": "Health"
+  },
+  {
+    "API": "Opioid Treatment Directory",
+    "Description": "Methadone and buprenorphine treatment providers",
+    "Auth": "",
+    "HTTPS": true,
+    "CORS": "Yes",
+    "Link": "https://opioidtreatment.fyi",
     "Category": "Health"
   },
   {
@@ -18203,7 +18365,7 @@
     "Auth": "`apiKey`",
     "HTTPS": true,
     "CORS": "Yes",
-    "Link": "https://www.jobvetta.com/api",
+    "Link": "https://jobvetta.com",
     "Category": "Jobs"
   },
   {
@@ -20148,6 +20310,15 @@
     "HTTPS": true,
     "CORS": "Yes",
     "Link": "https://www.edgechat.ai/edgepedia",
+    "Category": "Open Data"
+  },
+  {
+    "API": "ek litre",
+    "Description": "Pakistan's petrol, diesel and kerosene prices since 2006, with OGRA's line-by-line price build-up",
+    "Auth": "",
+    "HTTPS": true,
+    "CORS": "Yes",
+    "Link": "https://eklitre.pk/data/#h-api",
     "Category": "Open Data"
   },
   {
@@ -23985,6 +24156,15 @@
     "Category": "Shopping"
   },
   {
+    "API": "VantaSpec",
+    "Description": "UK PC hardware prices, price history and specs across UK retailers",
+    "Auth": "",
+    "HTTPS": true,
+    "CORS": "Yes",
+    "Link": "https://vantaspec.com",
+    "Category": "Shopping"
+  },
+  {
     "API": "WooCommerce",
     "Description": "WooCommerce REST APIS to create, read, update, and delete data on wordpress website in JSON format",
     "Auth": "`apiKey`",
@@ -24534,6 +24714,15 @@
     "Category": "Social"
   },
   {
+    "API": "ShortsIntel",
+    "Description": "Short-form video and ad intelligence API and MCP server: TikTok, Instagram Reels, YouTube Shorts and Meta ad library data with AI video analysis",
+    "Auth": "`apiKey`",
+    "HTTPS": true,
+    "CORS": "No",
+    "Link": "https://www.shortsintel.com",
+    "Category": "Social"
+  },
+  {
     "API": "Signals",
     "Description": "Marketplace API to quote, place, and track Reddit and Quora promotion orders, with catalog and wallet endpoints",
     "Auth": "`apiKey`",
@@ -24846,6 +25035,15 @@
     "HTTPS": true,
     "CORS": "Unknown",
     "Link": "https://docs.xquik.com/api-reference/overview",
+    "Category": "Social"
+  },
+  {
+    "API": "Xquik API",
+    "Description": "Search X posts, profiles, followers, trends, and communities through 128 REST operations, MCP, webhooks, SDKs, and exports. Not affiliated with X Corp",
+    "Auth": "`apiKey`",
+    "HTTPS": true,
+    "CORS": "Unknown",
+    "Link": "https://xquik.com",
     "Category": "Social"
   },
   {
@@ -25722,6 +25920,15 @@
     "Category": "Sports & Fitness"
   },
   {
+    "API": "TipsAudit",
+    "Description": "Football fair odds (bookmaker margin removed) and bookmaker margin index",
+    "Auth": "",
+    "HTTPS": true,
+    "CORS": "Yes",
+    "Link": "https://tipsaudit.com/api",
+    "Category": "Sports & Fitness"
+  },
+  {
     "API": "TourneyRadar",
     "Description": "Upcoming chess tournaments from 140+ national federations worldwide",
     "Auth": "",
@@ -26285,7 +26492,7 @@
     "Auth": "`apiKey`",
     "HTTPS": true,
     "CORS": "Yes",
-    "Link": "https://www.brainiall.com/en/apis/text-to-speech",
+    "Link": "https://brainiall.com",
     "Category": "Text Analysis"
   },
   {
@@ -28670,7 +28877,7 @@
     "Auth": "`apiKey`",
     "HTTPS": true,
     "CORS": "No",
-    "Link": "https://ilovevideoeditor.com/docs/api",
+    "Link": "https://ilovevideoeditor.com",
     "Category": "Video"
   },
   {
