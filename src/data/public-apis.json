@@ -162,6 +162,15 @@
     "Category": "AI"
   },
   {
+    "API": "GenRelay",
+    "Description": "Unified API for image and video generation models (Nano Banana, Seedance, GPT Image, Veo), pay-as-you-go in USD with free credits",
+    "Auth": "`apiKey`",
+    "HTTPS": true,
+    "CORS": "Yes",
+    "Link": "https://genrelay.ai",
+    "Category": "AI"
+  },
+  {
     "API": "Gladia",
     "Description": "Artificial intelligence API's",
     "Auth": "`apiKey`",
@@ -225,12 +234,30 @@
     "Category": "AI"
   },
   {
+    "API": "Obscurify AI",
+    "Description": "Anonymous OpenAI-compatible API for 200+ LLMs. Accounts are a random number, no email; pay with Monero, Bitcoin or card",
+    "Auth": "`apiKey`",
+    "HTTPS": true,
+    "CORS": "Yes",
+    "Link": "https://obscurify.ai",
+    "Category": "AI"
+  },
+  {
     "API": "OpenAI",
     "Description": "Use AI models such as ChatGPT or DALL-E to experience the capabilities of AI",
     "Auth": "`apiKey`",
     "HTTPS": true,
     "CORS": "Yes",
     "Link": "https://openai.com/index/openai-api",
+    "Category": "AI"
+  },
+  {
+    "API": "Pictograph",
+    "Description": "Label images with SAM3, train RF-DETR and YOLOX detectors, and run them on GPU endpoints that take live RTSP and WebRTC video",
+    "Auth": "`apiKey`",
+    "HTTPS": true,
+    "CORS": "No",
+    "Link": "https://pictograph.io",
     "Category": "AI"
   },
   {
@@ -1431,6 +1458,15 @@
     "Category": "Art & Design"
   },
   {
+    "API": "Pic2svg",
+    "Description": "Trace raster images into SVG filled paths with a keyless JSON HTTP API; daily usage limits apply",
+    "Auth": "",
+    "HTTPS": true,
+    "CORS": "No",
+    "Link": "https://pic2svg.com/",
+    "Category": "Art & Design"
+  },
+  {
     "API": "PickShade",
     "Description": "Convert colors, check WCAG and APCA contrast, build palettes, gradients and tokens",
     "Auth": "",
@@ -2592,6 +2628,15 @@
     "Category": "Business"
   },
   {
+    "API": "logoapi.sh",
+    "Description": "Company logo as SVG by domain, with name search and white, black, grey and dark variants. No key or signup. Free for 1M requests a month per site",
+    "Auth": "",
+    "HTTPS": true,
+    "CORS": "Yes",
+    "Link": "https://logoapi.sh",
+    "Category": "Business"
+  },
+  {
     "API": "LogoKit",
     "Description": "Logo API for brands, stocks, and cryptocurrencies",
     "Auth": "`apiKey`",
@@ -2733,6 +2778,15 @@
     "HTTPS": true,
     "CORS": "Yes",
     "Link": "https://www.pickanagency.com/developers",
+    "Category": "Business"
+  },
+  {
+    "API": "Privatus Analytics",
+    "Description": "Cookieless website analytics. Read visitors, pages, sources, goals and funnels for your sites",
+    "Auth": "`apiKey`",
+    "HTTPS": true,
+    "CORS": "Yes",
+    "Link": "https://privatusanalytics.com",
     "Category": "Business"
   },
   {
@@ -4308,6 +4362,15 @@
     "HTTPS": true,
     "CORS": "Yes",
     "Link": "https://coinstats.app/api-docs/",
+    "Category": "Cryptocurrency"
+  },
+  {
+    "API": "CoinXview",
+    "Description": "Crypto prices aggregated from 22 exchanges, OHLC history, Fear & Greed index and per-coin risk score",
+    "Auth": "",
+    "HTTPS": true,
+    "CORS": "Yes",
+    "Link": "https://coinxview.com",
     "Category": "Cryptocurrency"
   },
   {
@@ -6057,6 +6120,15 @@
     "Category": "Development"
   },
   {
+    "API": "APIVerve",
+    "Description": "About 380 APIs behind one key: email and phone validation, IP, DNS and SSL lookups, exchange and VAT rates, VIN decoding and more",
+    "Auth": "`apiKey`",
+    "HTTPS": true,
+    "CORS": "Yes",
+    "Link": "https://apiverve.com",
+    "Category": "Development"
+  },
+  {
     "API": "APIzone",
     "Description": "Independent uptime & status monitoring for 200+ popular APIs",
     "Auth": "",
@@ -6567,6 +6639,15 @@
     "HTTPS": true,
     "CORS": "Yes",
     "Link": "https://digmyname.com/api",
+    "Category": "Development"
+  },
+  {
+    "API": "Discord Timestamp Generator",
+    "Description": "Turns an ISO 8601 datetime or a Unix time into Discord timestamp codes in all 7 styles, with a format list endpoint and an OpenAPI 3.1 spec",
+    "Auth": "",
+    "HTTPS": true,
+    "CORS": "Yes",
+    "Link": "https://discordtimestampgen.com",
     "Category": "Development"
   },
   {
@@ -10062,6 +10143,15 @@
     "Category": "Email"
   },
   {
+    "API": "MailTester Ninja",
+    "Description": "Real-time email verification checked live against the mail server: valid, invalid or catch-all, disposable detection, free tier without signup",
+    "Auth": "`apiKey`",
+    "HTTPS": true,
+    "CORS": "Yes",
+    "Link": "https://mailtester.ninja",
+    "Category": "Email"
+  },
+  {
     "API": "Mailtrap",
     "Description": "Email API and SMTP for sending transactional and bulk emails, with email testing sandbox for safe development",
     "Auth": "`apiKey`",
@@ -10680,6 +10770,15 @@
     "HTTPS": true,
     "CORS": "Unknown",
     "Link": "https://www.eia.gov/opendata/",
+    "Category": "Environment"
+  },
+  {
+    "API": "El mapa del agua",
+    "Description": "Water hardness (°fH) of Spanish municipalities by INE code or postal code, with the source and date of each analysis",
+    "Auth": "",
+    "HTTPS": true,
+    "CORS": "Yes",
+    "Link": "https://elmapadelagua.com/api-dureza-agua",
     "Category": "Environment"
   },
   {
@@ -11934,6 +12033,15 @@
     "Category": "Finance"
   },
   {
+    "API": "Metals-API",
+    "Description": "Real-time and historical gold, silver, platinum, LBMA and LME base metals prices",
+    "Auth": "`apiKey`",
+    "HTTPS": true,
+    "CORS": "Yes",
+    "Link": "https://metals-api.com",
+    "Category": "Finance"
+  },
+  {
     "API": "Mono",
     "Description": "Connect with users’ bank accounts and access transaction data in Africa",
     "Auth": "`apiKey`",
@@ -12525,6 +12633,15 @@
     "HTTPS": true,
     "CORS": "Yes",
     "Link": "https://www.valueray.com/api",
+    "Category": "Finance"
+  },
+  {
+    "API": "Valyu",
+    "Description": "Search SEC filings, company earnings, stock prices and economic data with source citations",
+    "Auth": "`apiKey`",
+    "HTTPS": true,
+    "CORS": "No",
+    "Link": "https://www.valyu.ai",
     "Category": "Finance"
   },
   {
@@ -14415,6 +14532,15 @@
     "HTTPS": true,
     "CORS": "Unknown",
     "Link": "https://github.com/DiljotSG/MCU-Countdown/blob/develop/docs/API.md",
+    "Category": "Games & Comics"
+  },
+  {
+    "API": "Wordle Hints Today Api",
+    "Description": "Returns the most recent NYT Wordle answer in a single clean JSON object. Ideal for daily widgets and status bots",
+    "Auth": "",
+    "HTTPS": true,
+    "CORS": "Yes",
+    "Link": "https://wordlehintstoday.org/wordle-api",
     "Category": "Games & Comics"
   },
   {
@@ -17946,6 +18072,15 @@
     "Category": "Health"
   },
   {
+    "API": "RRM Academy Research Library",
+    "Description": "Physician-curated restorative reproductive medicine research: endometriosis, PCOS, NaProTechnology, fertility awareness",
+    "Auth": "`apiKey`",
+    "HTTPS": true,
+    "CORS": "No",
+    "Link": "https://rrmacademy.org/connect/",
+    "Category": "Health"
+  },
+  {
     "API": "RxNorm",
     "Description": "Normalized drug names, RxCUIs and NDC codes",
     "Auth": "",
@@ -19536,6 +19671,15 @@
     "HTTPS": true,
     "CORS": "Unknown",
     "Link": "https://developers.soundcloud.com/",
+    "Category": "Music"
+  },
+  {
+    "API": "Soundza",
+    "Description": "Free sound effects, music loops and ambience to search and download, plus sound effect generation from a prompt",
+    "Auth": "`apiKey`",
+    "HTTPS": true,
+    "CORS": "Yes",
+    "Link": "https://soundza.com",
     "Category": "Music"
   },
   {
@@ -24651,6 +24795,15 @@
     "Category": "Social"
   },
   {
+    "API": "Qovia",
+    "Description": "Public posts, comments and creator data from Douyin, Xiaohongshu, Weibo, Bilibili, TikTok, YouTube and more as one JSON API",
+    "Auth": "`apiKey`",
+    "HTTPS": true,
+    "CORS": "No",
+    "Link": "https://qovia.ai",
+    "Category": "Social"
+  },
+  {
     "API": "Reddit",
     "Description": "Homepage of the internet",
     "Auth": "`OAuth`",
@@ -25966,7 +26119,7 @@
   },
   {
     "API": "Your Move - Exercise API",
-    "Description": "The complete exercise library and fitness API for your app. 698+ professional HD exercise videos with workout generation and program builder.",
+    "Description": "Exercise library and fitness API for your app. 2,005+ professional HD exercise videos with instructions, workout generation and program builder.",
     "Auth": "`apiKey`",
     "HTTPS": true,
     "CORS": "Yes",
@@ -27180,6 +27333,15 @@
     "Category": "Transportation"
   },
   {
+    "API": "FlyItalyADSB",
+    "Description": "Live aircraft positions in ADS-B JSON for any point on Earth from a community receiver network, plus history and overflights",
+    "Auth": "`apiKey`",
+    "HTTPS": true,
+    "CORS": "Yes",
+    "Link": "https://flyitalyadsb.com/en/data/api/",
+    "Category": "Transportation"
+  },
+  {
     "API": "Fuel Prices at Spanish Gas Stations",
     "Description": "Provides information about fuel prices at gas stations in Spain",
     "Auth": "",
@@ -27528,6 +27690,15 @@
     "HTTPS": true,
     "CORS": "No",
     "Link": "https://stadiq.app/developers",
+    "Category": "Transportation"
+  },
+  {
+    "API": "StayingAPI",
+    "Description": "One REST API + native MCP server for live search, availability, price, cross-OTA price comparison and reviews across Airbnb, Booking.com, Vrbo & Google Hotels",
+    "Auth": "`apiKey`",
+    "HTTPS": true,
+    "CORS": "Yes",
+    "Link": "https://stayingapi.com",
     "Category": "Transportation"
   },
   {
