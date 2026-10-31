@@ -1,13 +1,17 @@
 export { SignalingRoom } from './SignalingRoom';
 import { handleOgFetch } from '../og-fetch';
+import { canonicalRedirect } from '../canonicalRedirect';
 
 interface Env {
   SIGNALING_ROOM: DurableObjectNamespace;
+  ASSETS: Fetcher;
 }
 
 export default {
   async fetch(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
     const url = new URL(request.url);
+    const canonical = canonicalRedirect(request.url);
+    if (canonical) return Response.redirect(canonical, 308);
     
     // We expect WebSocket connections at /api/collab/:roomId
     const match = url.pathname.match(/^\/api\/collab\/([^/]+)$/);
@@ -40,6 +44,7 @@ export default {
       return handleOgFetch(request, ctx);
     }
     
-    return new Response('Not found', { status: 404 });
+    if (url.pathname.startsWith('/api/')) return new Response('Not found', { status: 404 });
+    return env.ASSETS.fetch(request);
   }
 };

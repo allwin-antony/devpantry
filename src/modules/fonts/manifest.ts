@@ -10,17 +10,23 @@ export const fontsManifest: ModuleManifest = {
   route: '/fonts',
   navSection: 'core',
   metadata: {
-    title: '2,180+ Free Open Source Fonts — Preview, Test & Get Code',
-    description: 'Explore, test, and integrate 2,180+ open-source typefaces from Fontshare, Fontsource, and GitHub. Live interactive type tester with size, weight, and tracking sliders, plus one-click CSS and npm snippets.',
+    title: 'Free Fonts — Live Previews, CSS & Font Pairings',
+    description: 'Find a font for your next interface. Compare 2,100+ free typefaces, test supported weights, check licenses, and copy CSS or available npm installation code.',
   },
   generateMetadata: (font: any) => {
     const indexable = isFontIndexable(font);
     return {
-      title: `${font.name} Font — Free Open Source ${font.category} Typography`,
-      description: `Test, preview, and download ${font.name}, a free ${font.category} font by ${font.designers.join(', ')} (${font.publisher}). Includes CSS @import, HTML link, Tailwind config, and npm install snippet.`,
+      title: `${font.name} Font — Preview, CSS & ${font.category} Pairings`,
+      description: `Preview ${font.name} by ${font.designers.join(', ')}. Compare supported weights, check its ${font.license_type} license, and get CSS and Tailwind integration code.`,
       openGraph: {
-        title: `${font.name} Font — Free Open-Source Typography | DevPantry`,
+        title: `${font.name} Font — Preview & Integration | DevPantry`,
         description: `Live interactive tester, weight specimens, and copy-paste code snippets for ${font.name}.`,
+        url: `https://devpantry.com/fonts/${font.slug}`,
+      },
+      twitter: {
+        card: 'summary_large_image',
+        title: `${font.name} Font — Preview & Integration`,
+        description: `Test ${font.name}, compare weights, and copy CSS for your project.`,
       },
       alternates: {
         canonical: `https://devpantry.com/fonts/${font.slug}`,

@@ -1,19 +1,12 @@
-# DevPantry Privacy Policy & Zero-Tracking Guarantee
+# DevPantry data handling
 
-DevPantry is designed with a **client-first architecture**. We believe that developer tools should not require uploading your proprietary assets, sensitive API responses, or company tokens to remote servers.
+The public policy is maintained in `src/app/privacy/page.tsx`.
 
-## 100% Client-Side Tools (No Network Transmission)
+- Image/PDF processing, token inspection, JSON conversion, and data generation operate on the user's device.
+- Fonts, icons, and sample images are loaded from their providers. Local processing is not a claim that the entire site makes no network requests.
+- Social preview sends the requested URL to `/api/og-fetch`. The Worker retrieves and caches public metadata.
+- Collaboration encrypts document updates client-side, sends them through a WebSocket relay, and stores encrypted updates in a Cloudflare Durable Object. IndexedDB stores the local document state.
+- Google Analytics and Cloudflare Web Analytics measure usage. The custom `tool_complete` event contains a tool identifier and a coarse action, never input/output content or filenames. The GA integration strips query strings and fragments from page locations and sends only the referrer's origin. Google signals and advertising personalization are disabled. GA may use cookies.
+- Shared JSON links deliberately encode their payload in the fragment. Anyone receiving a share link can read that payload.
 
-The following tools process data entirely within your browser's sandbox. Data never leaves your machine.
-
-* **Image Processing**: AI Background Remover (WebGPU), Image Resizer, Image Compressor, PDF Tools, EXIF Stripper, HEIC Converter.
-* **Tokens & Data**: JWT Inspector, JSON to TS & Zod Converter.
-* **Generators**: Chaos Mock Data Synthesizer, Custom Schema Builder.
-* **Design**: Fonts Studio testing, Icons Studio customization.
-
-## Tools Requiring Network Access
-
-Certain features fundamentally require network access to operate. We guarantee these are built with privacy in mind.
-
-* **Social Share Preview & OG Checker**: Uses a stateless Cloudflare edge fetcher (`/api/og-fetch`) to retrieve metadata from public URLs. **Zero logs & zero storage.**
-* **P2P Collaborative Editor**: Uses a lightweight Cloudflare Durable Object for WebRTC signaling (exchanging connection details). Your actual document data and keystrokes are transmitted peer-to-peer and are encrypted end-to-end.
+See `docs/search-recovery.md` for the analytics stream settings and verification steps required after deployment.

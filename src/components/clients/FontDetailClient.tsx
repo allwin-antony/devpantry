@@ -3,7 +3,8 @@
 import React, { useState, useEffect } from 'react';
 import { triggerFeedbackNudge } from '@/lib/feedbackNudge';
 import Link from 'next/link';
-import { getFontCdnStylesheet, type FontItem, type FontPairing } from '@/lib/loaders/fontLoader';
+import type { FontItem, FontPairing } from '@/lib/loaders/fontLoader';
+import { getFontSnippets, getFontStylesheetUrls } from '@/lib/fontPresentation';
 import { 
   Type, 
   Copy, 
@@ -24,56 +25,38 @@ export function FontDetailClient({ font, pairings }: { font: FontItem; pairings?
     'The quick brown fox jumps over the lazy dog 1234567890 & $ # @ !'
   );
   const [fontSize, setFontSize] = useState<number>(36);
-  const [fontWeight, setFontWeight] = useState<number>(font.weights[0] || 400);
+  const [fontWeight, setFontWeight] = useState<number>(font.weights.includes(400) ? 400 : font.weights[0] || 400);
   const [letterSpacing, setLetterSpacing] = useState<number>(0);
   const [copiedCode, setCopiedCode] = useState<string | null>(null);
 
   // Dynamically inject stylesheet for this font
   useEffect(() => {
-    const url = font.cdn_stylesheet_url || getFontCdnStylesheet(font);
-    const existing = document.querySelector(`link[data-font-slug="${font.slug}"]`);
-    if (!existing) {
+    getFontStylesheetUrls(font).forEach(url => {
+      if (document.querySelector(`link[href="${url}"]`)) return;
       const link = document.createElement('link');
       link.rel = 'stylesheet';
       link.href = url;
       link.setAttribute('data-font-slug', font.slug);
       document.head.appendChild(link);
-    }
+    });
   }, [font]);
 
-  const copyToClipboard = (text: string, id: string) => {
-    navigator.clipboard.writeText(text);
-    triggerFeedbackNudge('copy-action');
-    setCopiedCode(id);
-    setTimeout(() => setCopiedCode(null), 1800);
+  const copyToClipboard = async (text: string, id: string) => {
+    try {
+      await navigator.clipboard.writeText(text);
+      triggerFeedbackNudge('copy-action');
+      setCopiedCode(id);
+      setTimeout(() => setCopiedCode(null), 1800);
+    } catch {
+      setCopiedCode('clipboard-unavailable');
+    }
   };
 
-  const cdnUrl = font.cdn_stylesheet_url || getFontCdnStylesheet(font);
-
-  const cssImportSnippet = `@import url('${cdnUrl}');
-
-body {
-  font-family: ${font.css_font_family};
-}`;
-
-  const htmlLinkSnippet = `<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="${cdnUrl}" rel="stylesheet">`;
-
-  const tailwindSnippet = `// tailwind.config.js
-module.exports = {
-  theme: {
-    extend: {
-      fontFamily: {
-        '${font.slug}': [${font.css_font_family}],
-      },
-    },
-  },
-};`;
-
-  const npmSnippet = font.npm_package 
-    ? `npm install ${font.npm_package}` 
-    : `npm install @fontsource/${font.slug}`;
+  const snippets = getFontSnippets(font);
+  const cssImportSnippet = snippets.css;
+  const htmlLinkSnippet = snippets.html;
+  const tailwindSnippet = snippets.tailwind;
+  const npmSnippet = snippets.npm;
 
   return (
     <div className="flex flex-col gap-6 max-w-6xl mx-auto w-full font-mono p-4 md:p-6">
@@ -84,7 +67,7 @@ module.exports = {
           className="inline-flex items-center gap-2 text-xs text-[var(--text-secondary)] hover:text-rose-500 transition-colors font-bold"
         >
           <ArrowLeft className="w-4 h-4" />
-          <span>Back to 2,100+ Open Fonts</span>
+          <span>Back to the font studio</span>
         </Link>
 
         <div className="flex items-center gap-2 text-[10px] text-[var(--text-muted)]">
@@ -116,7 +99,7 @@ module.exports = {
             By <strong className="text-[var(--text-primary)]">{font.designers.join(', ')}</strong> • Publisher: {font.publisher}
           </p>
 
-          <div className="flex flex-wrap items-center gap-3 mt-3 text-xs text-[var(--text-muted)]">
+          {font.weights.length > 0 && <div className="flex flex-wrap items-center gap-3 mt-3 text-xs text-[var(--text-muted)]">
             <span><strong>{font.styles_count}</strong> styles available</span>
             <span>•</span>
             <span>Weights: <strong>{font.weights.join(', ')}</strong></span>
@@ -126,7 +109,7 @@ module.exports = {
                 <span className="text-cyan-500 font-bold">Variable Font Support</span>
               </>
             )}
-          </div>
+          </div>}
         </div>
 
         {/* Quick Action Links */}
@@ -157,6 +140,11 @@ module.exports = {
         </div>
       </section>
 
+      {copiedCode === 'clipboard-unavailable' && <p role="status" className="text-sm text-[var(--text-secondary)]">Clipboard access was unavailable. Select and copy the installation code below.</p>}
+
+      {!snippets.css && <p className="text-sm text-[var(--text-secondary)]">This entry is a font repository or collection. Visit its official page to select a family and follow the publisher’s installation instructions.</p>}
+
+      {snippets.css && <>
       {/* Interactive Typography Canvas */}
       <section className="bg-[var(--bg-panel)] border border-[var(--border-dev)] rounded-xl p-5 shadow-sm transition-colors flex flex-col gap-4">
         <div className="flex flex-wrap items-center justify-between gap-4 pb-3 border-b border-[var(--border-dev)]">
@@ -169,8 +157,9 @@ module.exports = {
             {/* Size Slider */}
             <div className="flex items-center gap-1.5 bg-[var(--bg-sidebar)] px-2 py-1 rounded border border-[var(--border-dev)]">
               <span className="text-[10px] text-[var(--text-muted)]">SIZE:</span>
-              <input
-                type="range"
+                  <input
+                    type="range"
+                    aria-label="Font size"
                 min="16"
                 max="80"
                 value={fontSize}
@@ -181,7 +170,7 @@ module.exports = {
             </div>
 
             {/* Weights */}
-            <div className="flex items-center gap-1 bg-[var(--bg-sidebar)] p-0.5 rounded border border-[var(--border-dev)] text-xs">
+            <div className="flex flex-wrap max-w-full items-center gap-1 bg-[var(--bg-sidebar)] p-0.5 rounded border border-[var(--border-dev)] text-xs">
               <span className="text-[var(--text-muted)] px-1 text-[10px]">WEIGHT:</span>
               {font.weights.map(w => (
                 <button
@@ -201,8 +190,9 @@ module.exports = {
             {/* Tracking Slider */}
             <div className="flex items-center gap-1.5 bg-[var(--bg-sidebar)] px-2 py-1 rounded border border-[var(--border-dev)]">
               <span className="text-[10px] text-[var(--text-muted)]">TRACKING:</span>
-              <input
-                type="range"
+                  <input
+                    type="range"
+                    aria-label="Letter spacing"
                 min="-2"
                 max="10"
                 value={letterSpacing}
@@ -218,6 +208,7 @@ module.exports = {
         <div className="bg-[var(--bg-codebox)] border border-[var(--border-dev)] rounded-lg p-5 overflow-x-auto min-h-[120px] flex items-center">
           <input
             type="text"
+            aria-label={`Preview text for ${font.name}`}
             value={sampleText}
             onChange={e => setSampleText(e.target.value)}
             style={{
@@ -285,7 +276,7 @@ module.exports = {
           </div>
 
           {/* NPM Install */}
-          <div className="bg-[var(--bg-codebox)] border border-[var(--border-dev)] rounded-lg p-3 flex flex-col justify-between gap-2">
+          {npmSnippet && <div className="bg-[var(--bg-codebox)] border border-[var(--border-dev)] rounded-lg p-3 flex flex-col justify-between gap-2">
             <div className="flex items-center justify-between text-[11px] text-[var(--text-muted)] pb-2 border-b border-[var(--border-dev-subtle)]">
               <span>NPM Package</span>
               <button
@@ -299,7 +290,7 @@ module.exports = {
             <pre className="text-xs text-cyan-400 overflow-x-auto m-0">
               <code>{npmSnippet}</code>
             </pre>
-          </div>
+          </div>}
 
           {/* HTML Link */}
           <div className="bg-[var(--bg-codebox)] border border-[var(--border-dev)] rounded-lg p-3 flex flex-col justify-between gap-2">
@@ -321,7 +312,7 @@ module.exports = {
           {/* Tailwind Config */}
           <div className="bg-[var(--bg-codebox)] border border-[var(--border-dev)] rounded-lg p-3 flex flex-col justify-between gap-2">
             <div className="flex items-center justify-between text-[11px] text-[var(--text-muted)] pb-2 border-b border-[var(--border-dev-subtle)]">
-              <span>Tailwind CSS Config</span>
+              <span>Tailwind CSS v3 Config</span>
               <button
                 onClick={() => copyToClipboard(tailwindSnippet, 'tailwind')}
                 className="flex items-center gap-1 hover:text-white transition-colors cursor-pointer"
@@ -334,8 +325,18 @@ module.exports = {
               <code>{tailwindSnippet}</code>
             </pre>
           </div>
+          <div className="bg-[var(--bg-codebox)] border border-[var(--border-dev)] rounded-lg p-3 flex flex-col gap-2">
+            <div className="flex items-center justify-between text-[11px] text-[var(--text-muted)]">
+              <span>Tailwind CSS v4 Theme</span>
+              <button onClick={() => copyToClipboard(snippets.tailwindV4, 'tailwind-v4')} className="hover:text-white">
+                {copiedCode === 'tailwind-v4' ? 'Copied' : 'Copy'}
+              </button>
+            </div>
+            <pre className="text-xs text-emerald-400 overflow-x-auto"><code>{snippets.tailwindV4}</code></pre>
+          </div>
         </div>
       </section>
+      </>}
 
       {/* Recommended Typography Pairings */}
       {pairings && pairings.length > 0 && (

@@ -22,7 +22,7 @@ export default function BackgroundRemovalPage() {
       '@type': 'BreadcrumbList',
       itemListElement: [
         { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://devpantry.com' },
-        { '@type': 'ListItem', position: 2, name: 'Background Remover', item: 'https://devpantry.com/background-remover' }
+        { '@type': 'ListItem', position: 2, name: 'Background Remover', item: 'https://devpantry.com/tools/background-remover' }
       ]
     }
   ];

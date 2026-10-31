@@ -6,7 +6,7 @@ export default function FontsListView() {
       '@context': 'https://schema.org',
       '@type': 'WebApplication',
       name: 'DevPantry Fonts Studio',
-      description: 'Live typography playground to test and integrate 2,180+ open-source fonts for web projects.',
+       description: 'Live typography playground to test and integrate free fonts for web projects.',
       applicationCategory: 'DeveloperApplication',
       operatingSystem: 'Any',
       offers: {
@@ -31,7 +31,6 @@ export default function FontsListView() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      <h1 className="sr-only">Fonts Studio - 2,180+ Open Source Fonts</h1>
       <FontsClient />
     </>
   );

@@ -1,15 +1,17 @@
 import { getFontPairings } from '@/lib/loaders/fontLoader';
 import { FontDetailClient } from '@/components/clients/FontDetailClient';
+import { getFontSnippets } from '@/lib/fontPresentation';
 
 export default function FontsDetailView({ item }: { item: any }) {
   const font = item;
   const pairings = getFontPairings(font);
+  const snippets = getFontSnippets(font);
 
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'WebApplication',
     name: `${font.name} Font`,
-    description: `Free open source ${font.category} font by ${font.publisher}.`,
+    description: `${font.category} font by ${font.publisher}. Preview and integration resources.`,
     applicationCategory: 'DesignApplication',
     operatingSystem: 'Any',
     offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' }
@@ -23,32 +25,29 @@ export default function FontsDetailView({ item }: { item: any }) {
       />
       
       <div className="flex flex-col shrink-0 w-full">
-        <h1 className="sr-only">{font.name} Font</h1>
         <FontDetailClient font={font} pairings={pairings} />
       </div>
 
       <article className="tool-seo-content prose prose-sm max-w-none dark:prose-invert">
         <h2>About {font.name}</h2>
         <p>
-          {font.name} is a free, open-source {font.category.toLowerCase()} typeface published by {font.publisher}. 
-          It is distributed under the {font.license_type} license, making it completely free for commercial and personal use.
+          {font.name} is a {font.category.toLowerCase()} typeface published by {font.publisher}.
+          Its listed license is {font.license_type}. {font.is_sil_ofl ? 'It is distributed under the SIL Open Font License.' : 'Free availability does not necessarily mean the font is open source.'}{' '}
+          <a href={font.web_url} target="_blank" rel="noopener noreferrer">Check the publisher’s license and distribution details</a> before embedding or redistributing files.
         </p>
 
-        <h3>Font Weights & Styles</h3>
+        {font.weights.length > 0 && <><h3>Font Weights & Styles</h3>
         <p>
           This typeface includes {font.styles_count} styles. The available weights are: {font.weights.join(', ')}.
-        </p>
+        </p></>}
 
         <h3>Installation</h3>
-        <p>You can install {font.name} via npm:</p>
-        <pre><code>npm install {font.npm_package}</code></pre>
-
-        <p>Or import it via CSS:</p>
-        <pre><code>@import url('{font.cdn_stylesheet_url}');</code></pre>
+        {snippets.npm && <><p>Install the available font package for {font.name}:</p><pre><code>{snippets.npm}</code></pre></>}
+        {snippets.css ? <><p>Load the supported webfont styles and apply the family:</p><pre><code>{snippets.css}</code></pre></> : <p>Use the official repository for installation instructions for individual families.</p>}
 
         <h3>Recommended Font Pairings</h3>
         <p>
-          Creating typographic contrast is essential for high-impact web design. Here are battle-tested typeface pairings for {font.name}:
+          Try these contrasting families with {font.name}. Compare them at the sizes used in your interface, especially body text and code:
         </p>
         <ul>
           {pairings.map((pairing: any) => (

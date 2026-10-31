@@ -54,8 +54,8 @@ export const FAMOUS_ICON_PREFIXES = [
 ];
 
 export function isIconIndexable(collection: IconCollectionItem): boolean {
-  return FAMOUS_ICON_PREFIXES.includes(collection.prefix) ||
-         collection.total_icons >= 500;
+  return Boolean(collection.name && collection.prefix && collection.license &&
+    collection.total_icons > 0 && collection.samples?.length && collection.svg_endpoint);
 }
 
 export function getAllIconLibraries(): IconLibraryItem[] {

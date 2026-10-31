@@ -3,7 +3,8 @@
 import React, { useState, useMemo, useEffect, useRef } from 'react';
 import { triggerFeedbackNudge } from '@/lib/feedbackNudge';
 import Link from 'next/link';
-import { getAllFonts, getFontCdnStylesheet, type FontItem } from '@/lib/loaders/fontLoader';
+import { getAllFonts, isFontIndexable, type FontItem } from '@/lib/loaders/fontLoader';
+import { getFontSnippets, getFontStylesheetUrls } from '@/lib/fontPresentation';
 import { 
   Type, 
   Search, 
@@ -19,7 +20,7 @@ import {
 } from 'lucide-react';
 
 export function FontsClient() {
-  const allFonts = useMemo(() => getAllFonts(), []);
+  const allFonts = useMemo(() => getAllFonts().filter(isFontIndexable), []);
 
   // Filter state
   const [searchQuery, setSearchQuery] = useState('');
@@ -35,6 +36,7 @@ export function FontsClient() {
   );
   const [fontSize, setFontSize] = useState<number>(32);
   const [fontWeight, setFontWeight] = useState<number>(600);
+  const effectiveFontWeight = activeFont.weights.includes(fontWeight) ? fontWeight : activeFont.weights.includes(400) ? 400 : activeFont.weights[0];
   const [letterSpacing, setLetterSpacing] = useState<number>(0);
   const [lineHeight, setLineHeight] = useState<number>(1.3);
   const [textTransform, setTextTransform] = useState<'none' | 'uppercase' | 'lowercase' | 'capitalize'>('none');
@@ -46,15 +48,14 @@ export function FontsClient() {
   // Dynamically inject stylesheet for the active font
   useEffect(() => {
     if (!activeFont) return;
-    const url = activeFont.cdn_stylesheet_url || getFontCdnStylesheet(activeFont);
-    const existing = document.querySelector(`link[data-font-slug="${activeFont.slug}"]`);
-    if (!existing) {
+    getFontStylesheetUrls(activeFont).forEach(url => {
+      if (document.querySelector(`link[href="${url}"]`)) return;
       const link = document.createElement('link');
       link.rel = 'stylesheet';
       link.href = url;
       link.setAttribute('data-font-slug', activeFont.slug);
       document.head.appendChild(link);
-    }
+    });
   }, [activeFont]);
 
   // Filtered fonts list
@@ -114,7 +115,8 @@ export function FontsClient() {
   // Dynamically load stylesheets for newly visible cards in batches
   useEffect(() => {
     visibleFonts.slice(0, 32).forEach(f => {
-      const url = f.cdn_stylesheet_url || getFontCdnStylesheet(f);
+      const url = getFontStylesheetUrls(f)[0];
+      if (!url) return;
       if (!document.querySelector(`link[data-font-slug="${f.slug}"]`)) {
         const link = document.createElement('link');
         link.rel = 'stylesheet';
@@ -133,16 +135,16 @@ export function FontsClient() {
   };
 
   // Generate snippets for active font
-  const cssImportSnippet = `@import url('${activeFont.cdn_stylesheet_url || getFontCdnStylesheet(activeFont)}');
-
-font-family: '${activeFont.name}', ${activeFont.category === 'Serif' ? 'serif' : (activeFont.category === 'Monospace' ? 'monospace' : 'sans-serif')};`;
-
-  const npmSnippet = activeFont.npm_package 
-    ? `npm install ${activeFont.npm_package}` 
-    : `npm install @fontsource/${activeFont.slug}`;
+  const snippets = getFontSnippets(activeFont);
+  const cssImportSnippet = snippets.css;
+  const npmSnippet = snippets.npm;
 
   return (
     <div className="flex flex-col p-3 gap-3 font-mono">
+      <div className="flex flex-wrap items-center justify-between gap-3 py-3">
+        <h1 className="text-2xl font-bold font-sans">Free fonts for your next interface</h1>
+        <Link href="/fonts/catalog/1" className="text-sm text-[var(--accent-blue)] hover:underline">Browse the complete font directory →</Link>
+      </div>
       {/* Top Typography Interactive Tester */}
       <section className="bg-[var(--bg-panel)] border border-[var(--border-dev)] rounded-xl p-4 shrink-0 shadow-sm transition-colors flex flex-col gap-3">
         {/* Header & Controls Bar */}
@@ -182,12 +184,12 @@ font-family: '${activeFont.name}', ${activeFont.category === 'Serif' ? 'serif' :
             {/* Font Weight Selector */}
             <div className="flex items-center gap-1 bg-[var(--bg-sidebar)] p-0.5 rounded border border-[var(--border-dev)] text-xs">
               <span className="text-[var(--text-muted)] px-1 text-[10px]">WEIGHT:</span>
-              {[300, 400, 600, 700, 800].map(w => (
+              {activeFont.weights.map(w => (
                 <button
                   key={w}
                   onClick={() => setFontWeight(w)}
                   className={`px-1.5 py-0.5 rounded text-[10px] transition-colors cursor-pointer ${
-                    fontWeight === w
+                    effectiveFontWeight === w
                       ? 'bg-rose-500 text-white font-bold'
                       : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
                   }`}
@@ -239,14 +241,14 @@ font-family: '${activeFont.name}', ${activeFont.category === 'Serif' ? 'serif' :
                 <span>{copiedCode === 'css' ? 'Copied' : 'CSS'}</span>
               </button>
 
-              <button
+              {npmSnippet && <button
                 onClick={() => copyToClipboard(npmSnippet, 'npm')}
                 title="Copy npm install command"
                 className="px-2 py-1 text-xs font-semibold rounded bg-[var(--bg-sidebar)] border border-[var(--border-dev)] text-[var(--text-primary)] hover:border-rose-500/40 flex items-center gap-1 transition-colors cursor-pointer"
               >
                 {copiedCode === 'npm' ? <CheckCircle2 className="w-3 h-3 text-emerald-500" /> : <Terminal className="w-3 h-3 text-cyan-500" />}
                 <span>{copiedCode === 'npm' ? 'Copied' : 'NPM'}</span>
-              </button>
+              </button>}
 
               <Link
                 href={`/fonts/${activeFont.slug}`}
@@ -264,12 +266,13 @@ font-family: '${activeFont.name}', ${activeFont.category === 'Serif' ? 'serif' :
         <div className="bg-[var(--bg-codebox)] border border-[var(--border-dev)] rounded-lg p-4 overflow-x-auto min-h-[85px] flex items-center transition-colors">
           <input
             type="text"
+            aria-label="Font preview text"
             value={sampleText}
             onChange={e => setSampleText(e.target.value)}
             style={{
               fontFamily: activeFont.css_font_family || `'${activeFont.name}', sans-serif`,
               fontSize: `${fontSize}px`,
-              fontWeight: fontWeight,
+              fontWeight: effectiveFontWeight,
               letterSpacing: `${letterSpacing}px`,
               lineHeight: lineHeight,
               textTransform: textTransform,
@@ -287,6 +290,7 @@ font-family: '${activeFont.name}', ${activeFont.category === 'Serif' ? 'serif' :
           <Search className="w-3.5 h-3.5 text-[var(--text-muted)]" />
           <input
             type="text"
+            aria-label="Search fonts"
             value={searchQuery}
             onChange={e => setSearchQuery(e.target.value)}
             placeholder={`Search ${allFonts.length}+ fonts by name, designer, category...`}

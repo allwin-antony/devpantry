@@ -1,511 +1,151 @@
 'use client';
 
-import React, { useState, useEffect, useRef } from 'react';
-import { triggerFeedbackNudge } from '@/lib/feedbackNudge';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import Link from 'next/link';
-import {
-  Flame,
-  Type,
-  Box,
-  Radio,
-  ArrowRight,
-  Code2,
-  Search,
-  Zap,
-  Check,
-  ShieldCheck,
-  Sparkles,
-  Maximize2,
-  HardDrive,
-  Key,
-  Share2,
-  Users,
-  BookOpen,
-  Globe,
-  FileText,
-  Wrench,
-  Layers,
-  Settings,
-  Scissors,
-  Image,
-  Braces,
-  ImageMinus,
-  Blocks,
-} from 'lucide-react';
-import { IconRenderer, loadMultiPrefixIcons } from '@/lib/iconBatchLoader';
-import { getFeaturedTools } from '@/lib/loaders/toolLoader';
+import { ArrowRight, Braces, Check, Code2, FileText, Flame, Key, Search, ShieldCheck, Type, Wrench, X } from 'lucide-react';
+import { getAllToolsForDisplay } from '@/lib/loaders/toolLoader';
+import { triggerFeedbackNudge } from '@/lib/feedbackNudge';
+
+const tools = getAllToolsForDisplay();
+const featuredSlugs = ['jwt-decoder', 'mock-data', 'json-to-ts-zod'];
+const featuredIcons = { 'jwt-decoder': Key, 'mock-data': Flame, 'json-to-ts-zod': Braces };
+const previewFonts = [
+  { name: 'Inter', slug: 'inter', category: 'Sans serif', family: "'Inter', sans-serif", cdn: 'https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap' },
+  { name: 'JetBrains Mono', slug: 'jetbrains-mono', category: 'Monospace', family: "'JetBrains Mono', monospace", cdn: 'https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&display=swap' },
+  { name: 'Playfair Display', slug: 'playfair-display', category: 'Serif', family: "'Playfair Display', serif", cdn: 'https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&display=swap' },
+];
 
 export function HomeClient() {
-  const [activeTab, setActiveTab] = useState<'fonts' | 'icons'>('fonts');
-  const [fontSampleText, setFontSampleText] = useState('The quick brown fox jumps over the lazy dog.');
-  const [copiedId, setCopiedId] = useState<string | null>(null);
-  const [iconQuery, setIconQuery] = useState('arrow');
-  const [iconResults, setIconResults] = useState<{ fullKey: string; prefix: string; name: string }[]>([
-    { fullKey: 'lucide:arrow-right', prefix: 'lucide', name: 'arrow-right' },
-    { fullKey: 'tabler:arrow-up', prefix: 'tabler', name: 'arrow-up' },
-    { fullKey: 'ph:arrow-circle-down-bold', prefix: 'ph', name: 'arrow-circle-down-bold' },
-    { fullKey: 'ri:arrow-left-line', prefix: 'ri', name: 'arrow-left-line' },
-    { fullKey: 'material-symbols:arrow-forward', prefix: 'material-symbols', name: 'arrow-forward' },
-    { fullKey: 'heroicons:arrow-path', prefix: 'heroicons', name: 'arrow-path' },
-    { fullKey: 'bi:arrow-repeat', prefix: 'bi', name: 'arrow-repeat' },
-    { fullKey: 'solar:arrow-to-top-right-bold', prefix: 'solar', name: 'arrow-to-top-right-bold' }
-  ]);
-  const [isLoadingIcons, setIsLoadingIcons] = useState(false);
-
-  const heroFonts = [
-    { name: 'Inter', slug: 'inter', category: 'Sans Serif', cdn: 'https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap' },
-    { name: 'Playfair Display', slug: 'playfair-display', category: 'Serif', cdn: 'https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&display=swap' },
-    { name: 'JetBrains Mono', slug: 'jetbrains-mono', category: 'Monospace', cdn: 'https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap' },
-    { name: 'Clash Display', slug: 'clash-display', category: 'Display', cdn: 'https://api.fontshare.com/v2/css?f[]=clash-display@600,700&display=swap' },
-    { name: 'Syne', slug: 'syne', category: 'Display', cdn: 'https://fonts.googleapis.com/css2?family=Syne:wght@400;700&display=swap' },
-    { name: 'Orbitron', slug: 'orbitron', category: 'Display', cdn: 'https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap' }
-  ];
+  const [query, setQuery] = useState('');
+  const [sample, setSample] = useState('Build something reliable.');
+  const [copied, setCopied] = useState<string | null>(null);
+  const [copyError, setCopyError] = useState(false);
+  const fontPreview = useRef<HTMLElement>(null);
+  const matchingTools = useMemo(() => {
+    const words = query.trim().toLowerCase().split(/\s+/).filter(Boolean);
+    if (!words.length) return featuredSlugs.map(slug => tools.find(tool => tool.slug === slug)!);
+    const titleScore = (name: string) => words.filter(word => name.toLowerCase().includes(word)).length;
+    return tools
+      .filter(tool => words.every(word => `${tool.name} ${tool.slug} ${tool.description} ${tool.category}`.toLowerCase().includes(word)))
+      .sort((a, b) => titleScore(b.name) - titleScore(a.name));
+  }, [query]);
 
   useEffect(() => {
-    heroFonts.forEach(f => {
-      if (!document.querySelector(`link[data-font-slug="${f.slug}"]`)) {
+    const observer = new IntersectionObserver(entries => {
+      if (!entries.some(entry => entry.isIntersecting)) return;
+      previewFonts.forEach(font => {
+        if (document.querySelector(`link[href="${font.cdn}"]`)) return;
         const link = document.createElement('link');
         link.rel = 'stylesheet';
-        link.href = f.cdn;
-        link.setAttribute('data-font-slug', f.slug);
+        link.href = font.cdn;
         document.head.appendChild(link);
-      }
-    });
+      });
+      observer.disconnect();
+    }, { rootMargin: '100px' });
+    if (fontPreview.current) observer.observe(fontPreview.current);
+    return () => observer.disconnect();
   }, []);
 
   useEffect(() => {
-    if (!iconQuery.trim() || iconQuery.trim().length < 2) return;
-    setIsLoadingIcons(true);
-    const timer = setTimeout(() => {
-      fetch(`https://api.iconify.design/search?query=${encodeURIComponent(iconQuery.trim())}&limit=12`)
-        .then(res => res.json())
-        .then((data: any) => {
-          if (data && Array.isArray(data.icons) && data.icons.length > 0) {
-            const parsed = data.icons.slice(0, 8).map((item: string) => {
-              const parts = item.split(':');
-              return { fullKey: item, prefix: parts[0] || 'lucide', name: parts[1] || parts[0] };
-            });
-            setIconResults(parsed);
-            loadMultiPrefixIcons(parsed);
-          }
-        })
-        .catch(() => { })
-        .finally(() => setIsLoadingIcons(false));
-    }, 300);
+    if (!copied) return;
+    const timer = setTimeout(() => setCopied(null), 1800);
     return () => clearTimeout(timer);
-  }, [iconQuery]);
+  }, [copied]);
 
-  useEffect(() => {
-    if (iconResults.length > 0) {
-      loadMultiPrefixIcons(iconResults);
+  const copyFont = async (font: typeof previewFonts[number]) => {
+    try {
+      await navigator.clipboard.writeText(`@import url('${font.cdn}');\n\nfont-family: ${font.family};`);
+      setCopied(font.slug);
+      setCopyError(false);
+      triggerFeedbackNudge('font-css-copy');
+    } catch {
+      setCopyError(true);
     }
-  }, [iconResults]);
-
-  const copyText = (text: string, id: string) => {
-    navigator.clipboard.writeText(text);
-    triggerFeedbackNudge('copy-action');
-    setCopiedId(id);
-    setTimeout(() => setCopiedId(null), 1800);
   };
-
-  // Pull featured tools from the single source of truth (toolLoader.ts)
-  const ICON_MAP: Record<string, React.ComponentType<{ className?: string }>> = {
-    Sparkles, FileText, HardDrive, Maximize2, Key, Globe, Share2,
-    Flame, Layers, Radio, Users, Settings, Scissors, Wrench, Box, Type, Image, Braces, ImageMinus, Blocks,
-  };
-  const featuredToolsData = getFeaturedTools();
-  const featuredTools = featuredToolsData.slice(0, 2);
-  const remainingFeatured = featuredToolsData.slice(2);
-
-  // Ambient Mouse Spotlight & Precision Dot
-  const spotlightRef = useRef<HTMLDivElement>(null);
-  const cursorDotRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    // Only run on devices with a mouse / fine pointer
-    if (typeof window === 'undefined' || !window.matchMedia('(pointer: fine)').matches) {
-      return;
-    }
-
-    let mouseX = -100;
-    let mouseY = -100;
-    let spotX = -100;
-    let spotY = -100;
-    let isVisible = false;
-    let animId: number;
-
-    const handleMouseMove = (e: MouseEvent) => {
-      mouseX = e.clientX;
-      mouseY = e.clientY;
-
-      if (!isVisible) {
-        isVisible = true;
-        if (cursorDotRef.current) cursorDotRef.current.style.opacity = '1';
-        if (spotlightRef.current) spotlightRef.current.style.opacity = '1';
-      }
-
-      if (cursorDotRef.current) {
-        cursorDotRef.current.style.transform = `translate3d(${mouseX}px, ${mouseY}px, 0)`;
-      }
-    };
-
-    const handleMouseLeave = () => {
-      isVisible = false;
-      if (cursorDotRef.current) cursorDotRef.current.style.opacity = '0';
-      if (spotlightRef.current) spotlightRef.current.style.opacity = '0';
-    };
-
-    const animate = () => {
-      // Smooth fluid trailing lerp for ambient spotlight shadow
-      spotX += (mouseX - spotX) * 0.16;
-      spotY += (mouseY - spotY) * 0.16;
-
-      if (spotlightRef.current) {
-        spotlightRef.current.style.transform = `translate3d(${spotX - 130}px, ${spotY - 130}px, 0)`;
-      }
-
-      animId = requestAnimationFrame(animate);
-    };
-
-    window.addEventListener('mousemove', handleMouseMove, { passive: true });
-    document.addEventListener('mouseleave', handleMouseLeave);
-    animId = requestAnimationFrame(animate);
-
-    return () => {
-      window.removeEventListener('mousemove', handleMouseMove);
-      document.removeEventListener('mouseleave', handleMouseLeave);
-      cancelAnimationFrame(animId);
-    };
-  }, []);
 
   return (
-    <div className="w-full bg-[var(--bg-app)] relative">
-      {/* Ambient Mouse Spotlight / Shadow Glow */}
-      <div
-        ref={spotlightRef}
-        aria-hidden="true"
-        className="pointer-events-none fixed top-0 left-0 w-[260px] h-[260px] rounded-full z-0 opacity-0 transition-opacity duration-500 will-change-transform"
-        style={{
-          background: 'radial-gradient(circle, rgba(59, 130, 246, 0.22) 0%, rgba(59, 130, 246, 0.08) 40%, transparent 70%)'
-        }}
-      />
+    <div className="max-w-6xl mx-auto w-full px-4 sm:px-6 py-8 sm:py-12">
+      <section aria-labelledby="home-title" className="max-w-3xl mx-auto text-center">
+        <p className="text-sm font-semibold text-[var(--accent-blue)] mb-3">Made for frontend developers</p>
+        <h1 id="home-title" className="text-3xl sm:text-5xl font-bold tracking-tight leading-tight">Free browser tools for building and testing web apps.</h1>
+        <p className="mt-4 text-base sm:text-lg text-[var(--text-secondary)] leading-relaxed">Inspect JWTs, generate edge-case test data, and turn JSON into TypeScript and Zod. Your tool inputs are processed on your device.</p>
+        <div className="mt-4 flex flex-wrap justify-center gap-x-5 gap-y-2 text-sm text-[var(--text-secondary)]">
+          <span className="inline-flex items-center gap-1.5"><ShieldCheck className="w-4 h-4 text-emerald-500" /> No account required</span>
+          <a href="https://github.com/allwin-antony/devpantry" className="inline-flex items-center gap-1.5 hover:underline"><Code2 className="w-4 h-4" /> Open-source tools</a>
+        </div>
+      </section>
 
-      {/* Precision Cursor Dot */}
-      <div
-        ref={cursorDotRef}
-        aria-hidden="true"
-        className="pointer-events-none fixed top-0 left-0 w-2 h-2 -ml-1 -mt-1 rounded-full bg-blue-500 dark:bg-blue-400 shadow-[0_0_8px_rgba(59,130,246,0.9)] z-50 opacity-0 transition-opacity duration-300 will-change-transform"
-      />
-
-      <main className="flex-grow pt-12 pb-12 px-6 max-w-6xl mx-auto w-full">
-        {/* Hero Section */}
-        <section className="flex flex-col items-center justify-center text-center py-8 mb-8 animate-fade-in-up">
-          <h1 className="text-4xl sm:text-5xl md:text-[3.5rem] font-bold tracking-tight text-[var(--text-primary)] font-sans mb-4 max-w-3xl leading-[1.1]">
-            Developer assets &amp; chaos testing toolkit.
-          </h1>
-          <p className="text-base md:text-lg text-[var(--text-muted)] font-sans max-w-2xl">
-            Made for developers who build resilient. A serious, high-performance edge application.
-          </p>
-        </section>
-
-        {/* Featured Tools (Above the fold) */}
-        <section className="mb-6 animate-fade-in-up-delay-1">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {featuredTools.map(t => {
-              const Icon = ICON_MAP[t.icon] ?? Wrench;
-              const href = t.slug.includes('#') ? `/tools/${t.slug.split('#')[0]}` : `/tools/${t.slug}`;
-              return (
-                <Link
-                  key={t.slug}
-                  href={href}
-                  className="bg-[var(--bg-panel)] border border-[var(--border-dev)] rounded-xl p-8 hover:border-[var(--border-focus)] hover:-translate-y-1 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col h-full group relative overflow-hidden"
-                >
-                  <div className="absolute top-0 right-0 p-8 opacity-5 group-hover:opacity-10 transition-opacity duration-300 pointer-events-none">
-                    <Icon className="w-32 h-32 text-[var(--text-primary)]" />
-                  </div>
-                  <Icon className="w-8 h-8 text-[var(--accent-blue)] mb-6 group-hover:scale-110 transition-transform duration-300" />
-                  <h3 className="text-xl font-bold text-[var(--text-primary)] font-sans mb-3 group-hover:text-[var(--accent-blue)] transition-colors">{t.name}</h3>
-                  <p className="text-base text-[var(--text-muted)] font-sans mb-8 flex-grow pr-8 leading-relaxed">{t.description}</p>
-                  <div className="mt-auto flex justify-between items-center z-10">
-                    <span className="text-[11px] font-mono font-bold tracking-wider uppercase bg-[var(--bg-app)] border border-[var(--border-dev)] px-2 py-1 rounded-sm text-[var(--text-muted)]">
-                      {t.badge}
-                    </span>
-                    <ArrowRight className="w-5 h-5 text-[var(--text-muted)] group-hover:text-[var(--accent-blue)] group-hover:translate-x-2 transition-all duration-300" />
-                  </div>
-                </Link>
-              );
-            })}
-          </div>
-
-          {/* Browse All Tools CTA */}
-          <div className="mt-4 flex justify-end">
-            <Link
-              href="/tools"
-              className="flex items-center gap-1.5 text-xs font-semibold text-[var(--text-muted)] hover:text-[var(--accent-blue)] transition-colors group"
-            >
-              <Wrench className="w-3.5 h-3.5" />
-              <span>Browse all {/* total */} tools</span>
-              <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
-            </Link>
-          </div>
-        </section>
-
-        {/* Live Playground Section */}
-        <section className="mb-12 animate-fade-in-up-delay-2">
-          <div className="bg-[var(--bg-panel)] border border-[var(--border-dev)] rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-300">
-            {/* Playground Header / Tabs with Direct Navigation Link */}
-            <div className="border-b border-[var(--border-dev)] px-4 sm:px-6 pt-3 bg-[var(--bg-app)] flex flex-wrap items-center justify-between gap-3">
-              <div className="flex space-x-6">
-                <button
-                  onClick={() => setActiveTab('fonts')}
-                  className={`text-base sm:text-lg pb-2 font-semibold font-sans transition-colors cursor-pointer flex items-center gap-2 ${
-                    activeTab === 'fonts'
-                      ? 'text-cyan-600 dark:text-cyan-400 border-b-2 border-cyan-500 font-bold'
-                      : 'text-[var(--text-muted)] hover:text-[var(--text-primary)]'
-                  }`}
-                >
-                  <Type className="w-4 h-4" />
-                  <span>Try Fonts</span>
-                </button>
-                <button
-                  onClick={() => setActiveTab('icons')}
-                  className={`text-base sm:text-lg pb-2 font-semibold font-sans transition-colors cursor-pointer flex items-center gap-2 ${
-                    activeTab === 'icons'
-                      ? 'text-cyan-600 dark:text-cyan-400 border-b-2 border-cyan-500 font-bold'
-                      : 'text-[var(--text-muted)] hover:text-[var(--text-primary)]'
-                  }`}
-                >
-                  <Box className="w-4 h-4" />
-                  <span>Try Icons</span>
-                </button>
-              </div>
-
-              {/* Direct Full Page Link */}
-              <Link
-                href={activeTab === 'fonts' ? '/fonts' : '/icons'}
-                className="mb-2 px-3 py-1.5 rounded-lg bg-[var(--bg-sidebar)] border border-[var(--border-dev)] text-xs font-mono font-semibold text-[var(--text-primary)] hover:border-cyan-500 hover:text-cyan-600 dark:hover:text-cyan-400 flex items-center gap-1.5 transition-all shadow-xs group cursor-pointer"
-              >
-                <span>{activeTab === 'fonts' ? 'Explore Full Fonts Studio (2,180+)' : 'Open Vector Icons Studio (353K+)'}</span>
-                <ArrowRight className="w-3.5 h-3.5 text-cyan-500 group-hover:translate-x-0.5 transition-transform" />
+      <section aria-labelledby="find-tool-title" className="mt-7 sm:mt-9">
+        <h2 id="find-tool-title" className="sr-only">Find a developer tool</h2>
+        <div className="relative max-w-2xl mx-auto">
+          <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-[var(--text-muted)]" />
+          <input type="search" aria-label="Find a tool" aria-controls="tool-results" value={query} onChange={event => setQuery(event.target.value)} placeholder="Find a tool: JWT, JSON, mock data, PDF…" className="w-full rounded-xl border border-[var(--border-dev)] bg-[var(--bg-panel)] py-4 pl-12 pr-12 text-base outline-none focus:border-[var(--accent-blue)] focus:ring-2 focus:ring-blue-500/20" />
+          {query && <button onClick={() => setQuery('')} aria-label="Clear tool search" className="absolute right-2 top-1/2 -translate-y-1/2 p-3"><X className="w-4 h-4" /></button>}
+        </div>
+        <div className="flex items-center justify-between gap-3 mt-7 mb-3">
+          <h2 className="font-semibold" aria-live="polite">{query.trim() ? `${matchingTools.length} matching tools` : 'Start with a development task'}</h2>
+          <Link href="/tools" className="text-sm text-[var(--accent-blue)] hover:underline shrink-0">All tools →</Link>
+        </div>
+        <div id="tool-results" className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          {matchingTools.map(tool => {
+            const Icon = featuredIcons[tool.slug as keyof typeof featuredIcons] || Wrench;
+            return (
+              <Link key={tool.slug} href={`/tools/${tool.slug}`} className="group flex flex-col rounded-xl border border-[var(--border-dev)] bg-[var(--bg-panel)] p-5 hover:border-[var(--accent-blue)] transition-colors">
+                <Icon className="w-6 h-6 text-[var(--accent-blue)] mb-3" />
+                <h3 className="font-bold text-lg">{tool.name}</h3>
+                <p className="text-sm text-[var(--text-secondary)] mt-2 leading-relaxed flex-1">{tool.description}</p>
+                <span className="inline-flex items-center gap-2 text-sm font-semibold text-[var(--accent-blue)] mt-4">Open tool <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" /></span>
               </Link>
-            </div>
+            );
+          })}
+        </div>
+        {!matchingTools.length && <p className="p-6 text-center text-[var(--text-secondary)]">Try a task such as “compress image” or “convert JSON”, or <Link href="/tools" className="text-[var(--accent-blue)] underline">browse every tool</Link>.</p>}
+      </section>
 
-            {/* Playground Controls */}
-            {activeTab === 'fonts' && (
-              <div className="p-4 sm:p-6 border-b border-[var(--border-dev)] flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4">
-                <div className="relative flex-grow max-w-md">
-                  <input
-                    type="text"
-                    value={fontSampleText}
-                    onChange={(e) => setFontSampleText(e.target.value)}
-                    className="w-full bg-[var(--bg-app)] border border-[var(--border-dev)] text-[var(--text-primary)] rounded-lg py-2 px-4 focus:outline-none focus:border-cyan-500 text-sm font-mono placeholder:text-[var(--text-muted)] transition-colors"
-                    placeholder="Type to preview across fonts..."
-                  />
-                </div>
-                <Link
-                  href="/fonts"
-                  className="px-3.5 py-2 rounded-lg bg-cyan-500 hover:bg-cyan-600 text-white text-xs font-bold font-mono flex items-center justify-center gap-2 transition-colors shadow-xs shrink-0"
-                >
-                  <span>Open Fonts Library</span>
-                  <ArrowRight className="w-3.5 h-3.5" />
-                </Link>
-              </div>
-            )}
+      <section aria-labelledby="assets-title" className="mt-10">
+        <h2 id="assets-title" className="text-xl font-bold">Prepare the assets for your interface</h2>
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mt-4">
+          {[
+            { href: '/fonts', title: 'Find a font', text: 'Live previews, weights & CSS' },
+            { href: '/icons', title: 'Find an SVG icon', text: 'Search, customize & copy' },
+            { href: '/tools/image-compressor', title: 'Compress an image', text: 'Target a KB budget' },
+            { href: '/tools/background-remover', title: 'Remove a background', text: 'On-device AI processing' },
+          ].map(item => <Link key={item.href} href={item.href} className="rounded-xl border border-[var(--border-dev)] p-4 bg-[var(--bg-panel)] hover:border-[var(--accent-blue)]"><h3 className="font-semibold">{item.title}</h3><p className="text-sm text-[var(--text-secondary)] mt-2">{item.text}</p></Link>)}
+        </div>
+      </section>
 
-            {activeTab === 'icons' && (
-              <div className="p-4 sm:p-6 border-b border-[var(--border-dev)] flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4">
-                <div className="relative flex-grow max-w-md">
-                  <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--text-muted)]" />
-                  <input
-                    type="text"
-                    value={iconQuery}
-                    onChange={(e) => setIconQuery(e.target.value)}
-                    className="w-full bg-[var(--bg-app)] border border-[var(--border-dev)] text-[var(--text-primary)] rounded-lg py-2 pl-10 pr-4 focus:outline-none focus:border-cyan-500 text-sm font-mono placeholder:text-[var(--text-muted)] transition-colors"
-                    placeholder="Search 353,000+ icons..."
-                  />
-                </div>
-                <div className="flex items-center gap-3 justify-between sm:justify-end">
-                  {isLoadingIcons && <span className="text-xs text-cyan-500 animate-pulse shrink-0 font-mono">Searching...</span>}
-                  <Link
-                    href="/icons"
-                    className="px-3.5 py-2 rounded-lg bg-cyan-500 hover:bg-cyan-600 text-white text-xs font-bold font-mono flex items-center justify-center gap-2 transition-colors shadow-xs shrink-0"
-                  >
-                    <span>Open Icons Studio</span>
-                    <ArrowRight className="w-3.5 h-3.5" />
-                  </Link>
-                </div>
-              </div>
-            )}
+      <section ref={fontPreview} aria-labelledby="font-preview-title" className="mt-10 rounded-xl border border-[var(--border-dev)] bg-[var(--bg-panel)] p-4 sm:p-6">
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <h2 id="font-preview-title" className="text-xl font-bold flex items-center gap-2"><Type className="w-5 h-5" /> Try a font on your own text</h2>
+          <Link href="/fonts" className="text-sm text-[var(--accent-blue)] hover:underline">Open font studio →</Link>
+        </div>
+        <label htmlFor="font-preview-text" className="block text-sm mt-4 mb-2">Preview text</label>
+        <input id="font-preview-text" value={sample} onChange={event => setSample(event.target.value)} className="w-full rounded-lg p-3 border border-[var(--border-dev)] bg-[var(--bg-app)]" />
+        <div className="grid md:grid-cols-3 gap-4 mt-4">
+          {previewFonts.map(font => <div key={font.slug} className="rounded-lg border border-[var(--border-dev)] p-4 min-w-0">
+            <Link href={`/fonts/${font.slug}`} className="text-sm font-semibold hover:underline">{font.name}</Link>
+            <p className="text-xs text-[var(--text-muted)] mt-1">{font.category}</p>
+            <p className="text-2xl my-4 break-words" style={{ fontFamily: font.family }}>{sample || 'Aa'}</p>
+            <button onClick={() => copyFont(font)} className="text-sm text-[var(--accent-blue)] inline-flex items-center gap-1.5 py-2">{copied === font.slug ? <Check className="w-4 h-4" /> : <Code2 className="w-4 h-4" />}{copied === font.slug ? 'Copied' : 'Copy CSS'}</button>
+          </div>)}
+        </div>
+        {copyError && <p role="status" className="text-sm mt-3 text-[var(--text-secondary)]">Clipboard access was unavailable. Open the font page to select and copy its installation code.</p>}
+        <div className="flex flex-wrap gap-x-6 gap-y-3 mt-5 text-sm text-[var(--accent-blue)]"><Link href="/fonts/catalog/1" className="hover:underline">Browse all font families →</Link><Link href="/icons/catalog/1" className="hover:underline">Browse all icon libraries →</Link></div>
+      </section>
 
-            {/* Playground Grid */}
-            {activeTab === 'fonts' && (
-              <div className="p-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-                {heroFonts.map(f => (
-                  <div key={f.slug} className="border border-[var(--border-dev)] rounded-lg p-4 hover:bg-[var(--table-hover)] hover:-translate-y-0.5 transition-all duration-200 cursor-pointer bg-[var(--bg-app)] group">
-                    <div className="flex items-center justify-between mb-4">
-                      <Link href={`/fonts/${f.slug}`} className="text-xs font-bold text-[var(--text-primary)] font-sans hover:text-cyan-500 transition-colors">
-                        {f.name}
-                      </Link>
-                      <span className="text-[11px] font-mono text-[var(--text-muted)] bg-[var(--pill-bg)] px-1.5 py-0.5 rounded-sm">{f.category}</span>
-                    </div>
-                    <div
-                      style={{ fontFamily: `'${f.name}', sans-serif` }}
-                      className="text-3xl text-[var(--text-primary)] truncate font-semibold leading-snug min-h-[40px]"
-                    >
-                      {fontSampleText || 'Aa'}
-                    </div>
-                    <div className="mt-4 pt-2 border-t border-[var(--border-dev-subtle)] flex items-center justify-between text-[10px]">
-                      <button
-                        onClick={() => copyText(`@import url('${f.cdn}');\nfont-family: '${f.name}', sans-serif;`, `css-${f.slug}`)}
-                        className="text-cyan-600 dark:text-cyan-400 hover:underline flex items-center gap-1 cursor-pointer font-bold"
-                      >
-                        {copiedId === `css-${f.slug}` ? <Check className="w-3 h-3 text-[var(--accent-emerald)]" /> : <Code2 className="w-3 h-3" />}
-                        <span>{copiedId === `css-${f.slug}` ? 'Copied!' : 'Copy CSS'}</span>
-                      </button>
-                      <Link href={`/fonts/${f.slug}`} className="text-[var(--text-muted)] hover:text-[var(--text-primary)] flex items-center gap-1 transition-colors">
-                        Specs <ArrowRight className="w-3 h-3" />
-                      </Link>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
+      <section aria-labelledby="workflow-title" className="mt-10">
+        <h2 id="workflow-title" className="text-xl font-bold">Useful workflows, from input to output</h2>
+        <div className="grid md:grid-cols-3 gap-5 mt-4 text-sm leading-relaxed">
+          <div><h3 className="font-semibold">Test an API integration</h3><p className="text-[var(--text-secondary)] mt-2">Start with an <Link href="/tools/api-templates" className="text-[var(--accent-blue)] underline">API response fixture</Link>, generate a schema, then use messy mock records to exercise validation and error states.</p></div>
+          <div><h3 className="font-semibold">Prepare an image for the web</h3><p className="text-[var(--text-secondary)] mt-2">Resize to your layout, <Link href="/tools/png-to-webp" className="text-[var(--accent-blue)] underline">convert to WebP</Link>, and inspect the final file size before downloading.</p></div>
+          <div><h3 className="font-semibold">Share a document</h3><p className="text-[var(--text-secondary)] mt-2">Combine images with the <Link href="/tools/image-to-pdf" className="text-[var(--accent-blue)] underline">image-to-PDF converter</Link>, or merge existing PDFs locally.</p></div>
+        </div>
+      </section>
 
-            {activeTab === 'icons' && (
-              <div className="p-6 grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-4">
-                {iconResults.slice(0, 8).map(item => (
-                  <button
-                    key={item.fullKey}
-                    onClick={() => copyText(`<Icon icon="${item.fullKey}" />`, `icon-${item.fullKey}`)}
-                    title={`Copy <Icon icon="${item.fullKey}" />`}
-                    className="border border-[var(--border-dev)] rounded-lg p-4 flex flex-col items-center justify-center gap-3 hover:border-cyan-500 hover:-translate-y-1 hover:shadow-md transition-all duration-300 cursor-pointer bg-[var(--bg-app)] group"
-                  >
-                    <div className="w-8 h-8 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                      <IconRenderer
-                        prefix={item.prefix}
-                        name={item.name}
-                        size={28}
-                        className="pointer-events-none opacity-80 group-hover:opacity-100 transition-opacity duration-300 drop-shadow-sm"
-                      />
-                    </div>
-                    <span className={`text-[10px] font-mono truncate max-w-full text-center ${copiedId === `icon-${item.fullKey}` ? 'text-[var(--accent-emerald)] font-bold' : 'text-[var(--text-muted)] group-hover:text-[var(--text-primary)] transition-colors'}`}>
-                      {copiedId === `icon-${item.fullKey}` ? 'Copied!' : item.name}
-                    </span>
-                  </button>
-                ))}
-              </div>
-            )}
-
-            {/* Playground Footer Navigation Bar */}
-            <div className="p-3.5 bg-[var(--bg-app)] border-t border-[var(--border-dev)] flex flex-wrap items-center justify-between gap-2 text-xs font-mono">
-              <span className="text-[var(--text-muted)]">
-                {activeTab === 'fonts'
-                  ? 'Showing 6 featured developer fonts • 2,180+ total web typefaces available'
-                  : 'Showing 8 preview vector icons • 353,000+ icons across 238 open-source libraries'
-                }
-              </span>
-              <Link
-                href={activeTab === 'fonts' ? '/fonts' : '/icons'}
-                className="text-cyan-600 dark:text-cyan-400 hover:text-cyan-700 dark:hover:text-cyan-300 font-bold flex items-center gap-1.5 transition-colors group"
-              >
-                <span>{activeTab === 'fonts' ? 'Browse all 2,180+ Fonts' : 'Browse all 353,000+ Icons'}</span>
-                <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
-              </Link>
-            </div>
-          </div>
-        </section>
-
-        {/* Remaining Featured Tools Grid Section */}
-        <section className="animate-fade-in-up-delay-2">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {remainingFeatured.map(t => {
-              const Icon = ICON_MAP[t.icon] ?? Wrench;
-              const href = t.slug.includes('#') ? `/tools/${t.slug.split('#')[0]}` : `/tools/${t.slug}`;
-              return (
-                <Link
-                  key={t.slug}
-                  href={href}
-                  className="bg-[var(--bg-panel)] border border-[var(--border-dev)] rounded-xl p-6 hover:border-[var(--border-focus)] hover:-translate-y-1 hover:shadow-lg transition-all duration-300 flex flex-col h-full group"
-                >
-                  <Icon className="w-6 h-6 text-[var(--text-muted)] mb-4 group-hover:text-[var(--accent-blue)] group-hover:scale-110 transition-all duration-300" />
-                  <h3 className="text-lg font-semibold text-[var(--text-primary)] font-sans mb-2 group-hover:text-[var(--accent-blue)] transition-colors">{t.name}</h3>
-                  <p className="text-sm text-[var(--text-muted)] font-sans mb-6 flex-grow">{t.description}</p>
-                  <div className="mt-auto flex justify-between items-center">
-                    <span className="text-[11px] font-mono font-bold tracking-wider uppercase bg-[var(--bg-app)] border border-[var(--border-dev)] px-2 py-1 rounded-sm text-[var(--text-muted)]">
-                      {t.badge}
-                    </span>
-                    <ArrowRight className="w-4 h-4 text-[var(--text-muted)] group-hover:text-[var(--accent-blue)] group-hover:translate-x-1 transition-all duration-300" />
-                  </div>
-                </Link>
-              );
-            })}
-          </div>
-        </section>
-
-        {/* Engineering Guides & Architecture Section */}
-        <section className="mt-8 border-t border-[var(--border-dev)] pt-12 flex flex-col gap-6 animate-fade-in-up-delay-3 font-mono">
-          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-            <div className="flex flex-col gap-1">
-              <div className="flex items-center gap-2 text-xs font-semibold text-rose-500 uppercase tracking-widest">
-                <BookOpen className="w-4 h-4" />
-                <span>Knowledge &amp; Engineering Specs</span>
-              </div>
-              <h2 className="text-xl sm:text-2xl font-bold text-[var(--text-primary)]">
-                Engineering Guides &amp; Technical Deep Dives
-              </h2>
-              <p className="text-xs text-[var(--text-secondary)] font-sans">
-                Learn how DevPantry builds zero-latency WebRTC P2P collaboration, in-browser AI, and zero-leak cryptography.
-              </p>
-            </div>
-
-            <Link
-              href="/guides"
-              className="px-4 py-2 text-xs font-semibold text-rose-500 border border-rose-500/30 bg-rose-500/10 hover:bg-rose-500/20 rounded-lg transition-colors shrink-0 flex items-center gap-1.5"
-            >
-              <span>Browse All Guides</span>
-              <ArrowRight className="w-3.5 h-3.5" />
-            </Link>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <Link
-              href="/guides/p2p-webrtc-collaboration"
-              className="p-5 rounded-xl bg-[var(--bg-panel)] border border-[var(--border-dev)] hover:border-rose-500/50 transition-all flex flex-col gap-3 group"
-            >
-              <div className="flex items-center justify-between text-xs">
-                <span className="text-[10px] px-2 py-0.5 rounded bg-rose-500/10 text-rose-500 font-bold border border-rose-500/20">
-                  WebRTC &amp; P2P
-                </span>
-                <span className="text-[11px] text-[var(--text-muted)]">8 min read</span>
-              </div>
-              <h3 className="text-sm font-bold text-[var(--text-primary)] group-hover:text-rose-500 transition-colors">
-                Building a Real-Time Collaborative Code Editor with WebRTC, Yjs CRDTs &amp; Cloudflare Durable Objects
-              </h3>
-              <p className="text-xs text-[var(--text-secondary)] font-sans line-clamp-2 leading-relaxed">
-                Learn how to build a zero-server-database, zero-latency real-time collaborative text editor using WebRTC P2P DataChannels.
-              </p>
-            </Link>
-
-            <Link
-              href="/guides/browser-ai-background-removal"
-              className="p-5 rounded-xl bg-[var(--bg-panel)] border border-[var(--border-dev)] hover:border-rose-500/50 transition-all flex flex-col gap-3 group"
-            >
-              <div className="flex items-center justify-between text-xs">
-                <span className="text-[10px] px-2 py-0.5 rounded bg-rose-500/10 text-rose-500 font-bold border border-rose-500/20">
-                  AI &amp; WASM
-                </span>
-                <span className="text-[11px] text-[var(--text-muted)]">6 min read</span>
-              </div>
-              <h3 className="text-sm font-bold text-[var(--text-primary)] group-hover:text-rose-500 transition-colors">
-                Running AI Background Removal Client-Side using WebGPU, WASM &amp; ONNX Runtime
-              </h3>
-              <p className="text-xs text-[var(--text-secondary)] font-sans line-clamp-2 leading-relaxed">
-                Discover how DevPantry processes high-resolution image background removal 100% in the user browser using ONNX Runtime Web.
-              </p>
-            </Link>
-          </div>
-        </section>
-      </main>
+      <section className="mt-10 flex flex-col sm:flex-row gap-4 justify-between rounded-xl border border-[var(--border-dev)] p-5">
+        <div><h2 className="font-semibold flex items-center gap-2"><FileText className="w-5 h-5" /> Understand how the tools work</h2><p className="text-sm text-[var(--text-secondary)] mt-2">Read the implementation guides, inspect the source, and see which features use a network connection.</p></div>
+        <div className="flex items-center gap-5 text-sm shrink-0 text-[var(--accent-blue)]"><Link href="/guides" className="hover:underline">Read guides</Link><Link href="/privacy" className="hover:underline">Privacy details</Link></div>
+      </section>
     </div>
   );
 }

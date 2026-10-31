@@ -23,7 +23,7 @@ export default function SocialPreviewPage() {
       '@type': 'BreadcrumbList',
       itemListElement: [
         { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://devpantry.com' },
-        { '@type': 'ListItem', position: 2, name: 'Social Share Preview', item: 'https://devpantry.com/social-preview' }
+        { '@type': 'ListItem', position: 2, name: 'Social Share Preview', item: 'https://devpantry.com/tools/social-preview' }
       ]
     }
   ];

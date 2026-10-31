@@ -6,9 +6,11 @@
   "type": "module",
   "scripts": {
     "dev": "next dev",
-    "build": "next build && node scripts/generate-root-sitemap.mjs",
+    "build": "next build && node scripts/generate-root-sitemap.mjs && node scripts/check-seo.mjs",
     "start": "next start",
     "lint": "oxlint",
+    "check:seo": "node scripts/check-seo.mjs",
+    "typecheck": "next typegen && tsc --noEmit",
     "test": "npx -y tsx --test tests/*.test.ts",
     "postinstall": "node scripts/fetch-imgly-models.mjs",
     "sync-apis": "npx -y tsx scripts/sync-public-apis.ts",

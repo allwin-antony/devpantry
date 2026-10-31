@@ -13,6 +13,7 @@ export const Header: React.FC = () => {
   const { theme, toggleTheme } = useTheme();
   const [isPaletteOpen, setIsPaletteOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const mobileMenuButtonRef = useRef<HTMLButtonElement>(null);
 
   // Close mobile dropdown on route change
   useEffect(() => {
@@ -34,6 +35,19 @@ export const Header: React.FC = () => {
   const [isMoreMenuOpen, setIsMoreMenuOpen] = useState(false);
   const moreMenuRef = useRef<HTMLDivElement>(null);
 
+  useEffect(() => {
+    const closeMenus = (event: KeyboardEvent) => {
+      if (event.key !== 'Escape') return;
+      setIsMoreMenuOpen(false);
+      if (isMobileMenuOpen) {
+        setIsMobileMenuOpen(false);
+        mobileMenuButtonRef.current?.focus();
+      }
+    };
+    window.addEventListener('keydown', closeMenus);
+    return () => window.removeEventListener('keydown', closeMenus);
+  }, [isMobileMenuOpen]);
+
   // Close dropdown on click outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -46,10 +60,10 @@ export const Header: React.FC = () => {
   }, []);
 
   const mainNavItems = [
-    { href: '/', label: 'Overview', shortLabel: 'Home', icon: Terminal },
+    { href: '/', label: 'Home', shortLabel: 'Home', icon: Terminal },
     { href: '/tools', label: 'All Tools', shortLabel: 'Tools', icon: Wrench },
-    { href: '/tools/background-remover', label: 'AI Studio', shortLabel: 'AI', icon: Sparkles },
-    { href: '/tools/image-to-pdf', label: 'PDF Kit', shortLabel: 'PDF', icon: FileText },
+    { href: '/tools/jwt-decoder', label: 'JWT Decoder', shortLabel: 'JWT', icon: Key },
+    { href: '/tools/mock-data', label: 'Mock Data', shortLabel: 'Mock', icon: Database },
     { href: '/icons', label: 'Icons', shortLabel: 'Icons', icon: Box },
     { href: '/fonts', label: 'Fonts', shortLabel: 'Fonts', icon: Type },
   ];
@@ -61,7 +75,6 @@ export const Header: React.FC = () => {
       items: [
         { href: '/tools/public-apis', label: 'Public APIs Registry', shortLabel: 'APIs', icon: Globe },
         { href: '/tools/mcp-registry', label: 'AI MCP Registry', shortLabel: 'MCP', icon: Blocks },
-        { href: '/tools/jwt-decoder', label: 'JWT Inspector', shortLabel: 'JWT', icon: Key },
         { href: '/tools/json-to-ts-zod', label: 'JSON to TS & Zod', shortLabel: 'JSON', icon: Braces },
         { href: '/tools/social-preview', label: 'Social Preview', shortLabel: 'Social', icon: Share2 },
       ],
@@ -69,6 +82,8 @@ export const Header: React.FC = () => {
     {
       label: 'Media',
       items: [
+        { href: '/tools/background-remover', label: 'Remove Background', shortLabel: 'Background', icon: Sparkles },
+        { href: '/tools/image-to-pdf', label: 'Image to PDF', shortLabel: 'PDF', icon: FileText },
         { href: '/tools/heic-converter', label: 'HEIC Converter', shortLabel: 'HEIC', icon: ImageIcon },
         { href: '/tools/image-compressor', label: 'Image Compressor', shortLabel: 'Compress', icon: HardDrive },
         { href: '/tools/image-resizer', label: 'Image Resizer', shortLabel: 'Resize', icon: Maximize },
@@ -80,14 +95,13 @@ export const Header: React.FC = () => {
     {
       label: 'Mocking',
       items: [
-        { href: '/tools/mock-data', label: 'Chaos Data Studio', shortLabel: 'Mock', icon: Database },
         { href: '/tools/api-templates', label: 'API Templates', shortLabel: 'Mocks', icon: Radio },
       ],
     },
     {
       label: 'Collab & Guides',
       items: [
-        { href: '/tools/collab', label: 'P2P Collab Editor', shortLabel: 'Collab', icon: Users },
+        { href: '/tools/collab', label: 'Collaborative Editor', shortLabel: 'Collab', icon: Users },
         { href: '/guides', label: 'Engineering Guides', shortLabel: 'Guides', icon: BookOpen },
       ],
     },
@@ -103,6 +117,7 @@ export const Header: React.FC = () => {
 
   return (
     <>
+      <a href="#main-content" className="sr-only focus:not-sr-only focus:fixed focus:top-1 focus:left-2 focus:z-50 focus:bg-[var(--bg-panel)] focus:p-3 focus:rounded-lg">Skip to content</a>
       <header className="w-full h-12 bg-[var(--bg-panel)] border-b border-[var(--border-dev)] px-3 sm:px-4 flex items-center justify-between gap-3 select-none shrink-0 z-30 transition-colors shadow-xs font-mono relative">
         {/* Left: Brand */}
         <div className="flex items-center gap-3 shrink-0">
@@ -117,7 +132,7 @@ export const Header: React.FC = () => {
         </div>
 
         {/* Center: Top Navigation Tabs (Exact h-8 height, zero-scroll & clutter-free across laptops and desktops) */}
-        <nav className="hidden md:flex items-center h-8 bg-[var(--bg-sidebar)] p-0.5 rounded-lg border border-[var(--border-dev)] text-xs gap-0.5 shrink-0">
+        <nav aria-label="Main navigation" className="hidden xl:flex items-center h-8 bg-[var(--bg-sidebar)] p-0.5 rounded-lg border border-[var(--border-dev)] text-xs gap-0.5 shrink-0">
           {mainNavItems.map(item => {
             const Icon = item.icon;
             const isActive = item.href === '/'
@@ -149,6 +164,8 @@ export const Header: React.FC = () => {
           <div className="relative" ref={moreMenuRef}>
             <button
               onClick={() => setIsMoreMenuOpen(prev => !prev)}
+              aria-expanded={isMoreMenuOpen}
+              aria-controls="more-tools-menu"
               className={`h-7 px-2 lg:px-2.5 rounded-md flex items-center gap-1.5 transition-all cursor-pointer whitespace-nowrap shrink-0 text-xs ${moreNavItems.some(item => pathname === item.href || (item.href !== '/' && pathname.startsWith(item.href)))
                   ? 'text-rose-600 dark:text-rose-400 font-semibold'
                   : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--pill-bg)] border border-transparent'
@@ -160,7 +177,7 @@ export const Header: React.FC = () => {
             </button>
 
             {isMoreMenuOpen && (
-              <div className="absolute top-full right-0 mt-2 w-56 bg-[var(--bg-panel)] border border-[var(--border-dev)] rounded-xl shadow-xl flex flex-col p-2 z-50 animate-in fade-in zoom-in-95 duration-100 max-h-[80vh] overflow-y-auto">
+              <div id="more-tools-menu" className="absolute top-full right-0 mt-2 w-56 bg-[var(--bg-panel)] border border-[var(--border-dev)] rounded-xl shadow-xl flex flex-col p-2 z-50 animate-in fade-in zoom-in-95 duration-100 max-h-[80vh] overflow-y-auto">
                 {moreNavGroups.map((group, gi) => (
                   <div key={group.label}>
                     {/* Section header */}
@@ -199,11 +216,11 @@ export const Header: React.FC = () => {
             onClick={() => setIsPaletteOpen(true)}
             aria-label="Open Command Palette (Cmd + K)"
             title="Search tools, typefaces, icons, and API mocks (Cmd + K)"
-            className="h-8 flex items-center gap-2 px-2.5 rounded-lg bg-[var(--bg-sidebar)] border border-[var(--border-dev)] text-xs text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:border-rose-500/40 transition-all cursor-pointer"
+            className="h-11 min-w-11 flex items-center justify-center gap-2 px-2.5 rounded-lg bg-[var(--bg-sidebar)] border border-[var(--border-dev)] text-xs text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:border-rose-500/40 transition-all cursor-pointer"
           >
             <Search className="w-3.5 h-3.5 text-rose-500" />
             <span className="hidden sm:inline text-[11px] text-[var(--text-muted)]">Search...</span>
-            <kbd className="text-[10px] px-1.5 py-0.4 rounded bg-[var(--pill-bg)] border border-[var(--border-dev)] font-semibold text-[var(--text-muted)] tracking-widest">
+            <kbd className="hidden sm:inline text-[10px] px-1.5 py-0.4 rounded bg-[var(--pill-bg)] border border-[var(--border-dev)] font-semibold text-[var(--text-muted)] tracking-widest">
               ⌘K
             </kbd>
           </button>
@@ -227,16 +244,19 @@ export const Header: React.FC = () => {
             onClick={toggleTheme}
             aria-label={theme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
             title={theme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
-            className="h-8 w-8 flex items-center justify-center rounded-lg bg-[var(--bg-sidebar)] border border-[var(--border-dev)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:border-rose-500/40 transition-colors cursor-pointer"
+            className="h-11 w-11 flex items-center justify-center rounded-lg bg-[var(--bg-sidebar)] border border-[var(--border-dev)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:border-rose-500/40 transition-colors cursor-pointer"
           >
             {theme === 'dark' ? <Sun className="w-3.5 h-3.5 text-amber-400" /> : <Moon className="w-3.5 h-3.5 text-slate-700" />}
           </button>
 
           {/* Mobile Menu Toggle (Only on <md) */}
           <button
+            ref={mobileMenuButtonRef}
             onClick={() => setIsMobileMenuOpen(prev => !prev)}
             aria-label={isMobileMenuOpen ? 'Close Navigation Menu' : 'Open Navigation Menu'}
-            className="h-8 w-8 flex md:hidden items-center justify-center rounded-lg bg-[var(--bg-sidebar)] border border-[var(--border-dev)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:border-rose-500/40 transition-colors cursor-pointer"
+            aria-expanded={isMobileMenuOpen}
+            aria-controls="mobile-navigation"
+            className="h-11 w-11 flex xl:hidden items-center justify-center rounded-lg bg-[var(--bg-sidebar)] border border-[var(--border-dev)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:border-rose-500/40 transition-colors cursor-pointer"
           >
             {isMobileMenuOpen ? <X className="w-3.5 h-3.5" /> : <Menu className="w-3.5 h-3.5" />}
           </button>
@@ -245,7 +265,7 @@ export const Header: React.FC = () => {
 
       {/* Mobile Navigation Dropdown (<md) */}
       {isMobileMenuOpen && (
-        <div className="md:hidden fixed top-12 left-0 right-0 z-40 bg-[var(--bg-panel)] border-b border-[var(--border-dev)] shadow-xl p-3 flex flex-col gap-1 font-mono animate-in fade-in slide-in-from-top-2">
+        <nav id="mobile-navigation" aria-label="Mobile navigation" className="xl:hidden fixed top-12 left-0 right-0 z-40 max-h-[calc(100dvh-3rem)] overflow-y-auto overscroll-contain bg-[var(--bg-panel)] border-b border-[var(--border-dev)] shadow-xl p-3 flex flex-col gap-1 font-mono">
           {allNavItems.map(item => {
             const Icon = item.icon;
             const isActive = item.href === '/'
@@ -261,7 +281,8 @@ export const Header: React.FC = () => {
                 key={item.href}
                 href={item.href}
                 onClick={() => setIsMobileMenuOpen(false)}
-                className={`h-9 px-3 rounded-lg flex items-center gap-2.5 text-xs font-medium transition-colors ${isActive
+                aria-current={isActive ? 'page' : undefined}
+                className={`h-11 shrink-0 px-3 rounded-lg flex items-center gap-2.5 text-sm font-medium transition-colors ${isActive
                     ? 'bg-rose-500/10 text-rose-600 dark:text-rose-400 font-bold border border-rose-500/30'
                     : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--pill-bg)]'
                   }`}
@@ -271,7 +292,7 @@ export const Header: React.FC = () => {
               </Link>
             );
           })}
-        </div>
+        </nav>
       )}
 
       {/* Global Command Palette Modal */}

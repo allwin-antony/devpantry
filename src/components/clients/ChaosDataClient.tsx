@@ -20,12 +20,20 @@ export function ChaosDataClient() {
   useEffect(() => {
     if (!mounted) return;
     const tabParam = searchParams?.get('tab');
-    if (tabParam === 'custom') {
+    if (tabParam === 'custom' || window.location.hash === '#schema-builder') {
       setActiveTab('custom');
     } else if (tabParam === 'presets') {
       setActiveTab('presets');
     }
   }, [searchParams, mounted]);
+
+  useEffect(() => {
+    const followFragment = () => {
+      if (window.location.hash === '#schema-builder') setActiveTab('custom');
+    };
+    window.addEventListener('hashchange', followFragment);
+    return () => window.removeEventListener('hashchange', followFragment);
+  }, []);
 
   const handleTabChange = (newTab: 'presets' | 'custom') => {
     setActiveTab(newTab);
@@ -41,8 +49,8 @@ export function ChaosDataClient() {
   return (
     <div className="flex flex-col p-3 gap-2">
       {/* Subheader with Mode Switcher */}
-      <div className="bg-[var(--bg-panel)] border border-[var(--border-dev)] rounded-lg px-3 py-1.5 flex items-center justify-between gap-3 shrink-0 shadow-sm transition-colors font-mono">
-        <div className="flex items-center gap-2">
+      <div className="bg-[var(--bg-panel)] border border-[var(--border-dev)] rounded-lg px-3 py-1.5 flex flex-wrap items-center justify-between gap-3 shrink-0 shadow-sm transition-colors font-mono">
+        <div className="flex flex-wrap items-center gap-2">
           <div className="flex items-center gap-1.5 text-xs text-[var(--text-muted)]">
             <span className="text-[var(--text-primary)] font-bold uppercase tracking-wider">Chaos Studio:</span>
           </div>
@@ -70,7 +78,7 @@ export function ChaosDataClient() {
             >
               <Layers className="w-3.5 h-3.5" />
               <span>Custom Schema Builder</span>
-              <span className={`text-[9px] px-1 py-0.2 rounded font-bold ${
+              <span className={`hidden sm:inline text-[9px] px-1 py-0.2 rounded font-bold ${
                 activeTab === 'custom' ? 'bg-black/20 text-white' : 'bg-rose-500/20 text-rose-500 dark:text-rose-300'
               }`}>
                 Visual GUI

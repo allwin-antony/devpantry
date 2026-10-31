@@ -51,8 +51,8 @@ export default function SecurityPage() {
           <div className="rounded-2xl border border-[var(--border-dev)] bg-[var(--bg-panel)] p-6 sm:p-8">
             <div className="prose prose-sm max-w-none dark:prose-invert prose-headings:text-[var(--text-primary)] prose-p:text-[var(--text-secondary)] prose-li:text-[var(--text-secondary)]">
               <h2>How the tools are isolated</h2>
-              <p>Image tools use browser-side APIs, WebAssembly, and supported GPU capabilities to transform images locally. The JWT Decoder parses token data in browser memory and uses the Web Crypto API for supported cryptographic operations. Mock-data tools generate data in the active browser session. PDF modifications and WebRTC real-time connections occur entirely client-to-client or client-locally, ensuring no intermediate server stores the data.</p>
-              <p>DevPantry does not provide an API endpoint for uploading tool inputs. It also does not intentionally persist JWTs, images, custom schemas, or generated records in browser storage.</p>
+              <p>Image, PDF, JSON, and JWT tools process their inputs locally. The collaborative editor uses browser-side AES-GCM encryption for document updates, a WebSocket relay, and encrypted update storage in a Cloudflare Durable Object. It also keeps local document state in IndexedDB.</p>
+              <p>The server relay handles encrypted document updates rather than the plaintext document. File-processing tools do not upload source images or PDFs. Usage analytics and other network features are described in the <a href="/privacy">privacy policy</a>.</p>
               <h2>Security boundaries</h2>
               <p>Client-side processing protects data from being sent to DevPantry for tool execution. It cannot protect a compromised device, a malicious browser extension, copied output, or data shared with another website after export. Review sensitive output before saving or sharing it.</p>
             </div>

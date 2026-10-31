@@ -44,5 +44,5 @@ export default function ToolsDetailView({ item }: { item: ToolItem }) {
 
   // The DetailView for tools simply delegates completely to the standalone React Component.
   // This is because tools are interactive full-page experiences, unlike data catalogs.
-  return <Component slug={item.slug} />;
+  return <Component key={item.slug} slug={item.slug} />;
 }

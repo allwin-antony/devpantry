@@ -2,6 +2,7 @@ import React from 'react';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { Metadata } from 'next';
+import { marked } from 'marked';
 import { GUIDES_DATA, GuideArticle } from '@/lib/guidesData';
 import { BookOpen, Calendar, Clock, User, ArrowLeft, ArrowRight, CheckCircle2, Code, Terminal, Share2 } from 'lucide-react';
 
@@ -26,7 +27,7 @@ export async function generateMetadata(props: GuidePageProps): Promise<Metadata>
   }
 
   return {
-    title: `${guide.title} | DevPantry Engineering Guides`,
+    title: guide.title,
     description: guide.description,
     openGraph: {
       title: `${guide.title} | DevPantry`,
@@ -49,49 +50,8 @@ export async function generateMetadata(props: GuidePageProps): Promise<Metadata>
 }
 
 function renderFormattedContent(text: string) {
-  // Split paragraphs by double newline
-  const paragraphs = text.split('\n\n');
-
-  return paragraphs.map((para, pIdx) => {
-    // Split by ** for bold formatting
-    const boldParts = para.split('**');
-
-    return (
-      <p key={pIdx} className="leading-relaxed">
-        {boldParts.map((part, bIdx) => {
-          const isBold = bIdx % 2 === 1;
-
-          // Process inline `code` blocks within each part
-          const codeParts = part.split('`');
-
-          const renderedPart = codeParts.map((subPart, cIdx) => {
-            const isCode = cIdx % 2 === 1;
-            if (isCode) {
-              return (
-                <code
-                  key={cIdx}
-                  className="px-1.5 py-0.5 rounded bg-[var(--bg-panel)] font-mono text-xs text-rose-500 border border-[var(--border-dev)]"
-                >
-                  {subPart}
-                </code>
-              );
-            }
-            return subPart;
-          });
-
-          if (isBold) {
-            return (
-              <strong key={bIdx} className="font-bold text-[var(--text-primary)]">
-                {renderedPart}
-              </strong>
-            );
-          }
-
-          return <React.Fragment key={bIdx}>{renderedPart}</React.Fragment>;
-        })}
-      </p>
-    );
-  });
+  // Content is maintained in GUIDES_DATA, not submitted by site visitors.
+  return <div className="prose prose-sm max-w-none dark:prose-invert prose-a:text-[var(--accent-blue)] prose-headings:text-[var(--text-primary)]" dangerouslySetInnerHTML={{ __html: marked.parse(text, { async: false }) }} />;
 }
 
 export default async function GuideDetailPage(props: GuidePageProps) {

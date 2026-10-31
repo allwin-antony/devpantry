@@ -21,6 +21,12 @@ export const iconsManifest: ModuleManifest = {
       openGraph: {
         title: `${collection.name} (${collection.total_icons.toLocaleString()} Icons) | DevPantry`,
         description: `Live SVG customizer, React JSX generator, and searchable icon library for ${collection.name}.`,
+        url: `https://devpantry.com/icons/${collection.prefix}`,
+      },
+      twitter: {
+        card: 'summary_large_image',
+        title: `${collection.name} — SVG Icons & React Code`,
+        description: `Browse ${collection.total_icons.toLocaleString()} icons, customize their appearance, and copy SVG or React snippets.`,
       },
       alternates: {
         canonical: `https://devpantry.com/icons/${collection.prefix}`,

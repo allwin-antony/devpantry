@@ -48,7 +48,7 @@ Inspect how the tools work and contribute improvements.
 | Font testing             | ❌ No                                    |
 | Icon customization       | Browser/API dependent                   |
 | Social Preview URL fetch | ⚠️ Yes — metadata fetch                 |
-| P2P collaboration        | ⚠️ Signaling only; document data is P2P |
+| Collaboration            | ⚠️ Encrypted updates are relayed and stored by Cloudflare |
 
 ---
 
@@ -74,11 +74,11 @@ Inspect how the tools work and contribute improvements.
 * **Media Card Tester** *(Beta)*: Stress-test media cards with realistic and broken content (missing images, extremely long descriptions, error states) before shipping them.
 
 ### 🎨 Design Resources
-* **[Fonts Studio](/fonts)**: 2,180+ open-source typefaces with live testing.
+* **[Fonts Studio](/fonts)**: 2,100+ free font families with live testing and source-specific licenses.
 * **[Icons Studio](/icons)**: 350k+ vector icons across 238 open-source toolkits.
 
 ### 🤝 Collaboration
-* **[P2P Collaborative Editor](/tools/collab)**: Zero-knowledge, real-time code editor powered by WebRTC & Yjs CRDTs.
+* **[Encrypted Collaborative Editor](/tools/collab)**: Yjs editing with browser-side AES-GCM encryption, a WebSocket relay, and encrypted update storage.
 
 ### 📚 Developer Registries
 * **[Public APIs Registry](/tools/public-apis)**: Searchable registry of 3k+ free public APIs.
@@ -92,7 +92,8 @@ DevPantry is a static-first, client-heavy application. Most processing happens i
 
 Detailed documentation is available in the `docs/` directory:
 * **[Architecture](./docs/architecture.md)** — Detailed breakdown of performance optimizations, SEO routing, and tool implementations.
-* **[Privacy](./docs/privacy.md)** — Explaining our zero-tracking philosophy and network behavior.
+* **[Privacy](./docs/privacy.md)** — Local processing, network features, and usage analytics.
+* **[Search recovery](./docs/search-recovery.md)** — Deployment verification, Search Console follow-up, and completion measurement.
 * **[Contributing](./docs/contributing.md)** — Local development setup and contribution guidelines.
 
 ---

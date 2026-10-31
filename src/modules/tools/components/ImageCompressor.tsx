@@ -1,74 +1,44 @@
-import type { Metadata } from 'next';
-import { Suspense } from 'react';
 import { BgRemovalClient } from '@/components/clients/BgRemovalClient';
 
-export default function ImageCompressorPage() {
+export default function ImageCompressorPage({ slug = 'image-compressor' }: { slug?: string }) {
+  const webp = slug === 'png-to-webp';
+  const title = webp ? 'PNG to WebP Converter' : 'Image Compressor';
+  const description = webp
+    ? 'Convert a PNG or JPEG to WebP without uploading it. WebP output is selected for you; preview the result and download the converted image.'
+    : 'Reduce a JPEG, PNG, or WebP image toward a file-size budget. Preview the output format, dimensions, and actual size before downloading.';
+  const url = `https://devpantry.com/tools/${slug}`;
   const jsonLd = [
-    {
-      '@context': 'https://schema.org',
-      '@type': 'WebApplication',
-      name: 'DevPantry Image Compressor',
-      description: 'Client-side image compressor and WebP converter. Set exact file size limits and compress unlimited images privately in your browser.',
-      applicationCategory: 'MultimediaApplication',
-      operatingSystem: 'Any',
-      offers: {
-        '@type': 'Offer',
-        price: '0',
-        priceCurrency: 'USD',
-      },
-    },
-    {
-      '@context': 'https://schema.org',
-      '@type': 'BreadcrumbList',
-      itemListElement: [
-        { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://devpantry.com' },
-        { '@type': 'ListItem', position: 2, name: 'Image Compressor', item: 'https://devpantry.com/image-compressor' }
-      ]
-    }
+    { '@context': 'https://schema.org', '@type': 'WebApplication', name: title, description, url, applicationCategory: 'MultimediaApplication', operatingSystem: 'Any', offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' } },
+    { '@context': 'https://schema.org', '@type': 'BreadcrumbList', itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://devpantry.com' },
+      { '@type': 'ListItem', position: 2, name: 'Tools', item: 'https://devpantry.com/tools' },
+      { '@type': 'ListItem', position: 3, name: title, item: url },
+    ] },
   ];
-
-  return (
-    <div className="flex flex-col min-h-full">
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-      />
-      <div className="flex flex-col shrink-0 w-full h-[calc(100vh-3rem)] min-h-[580px]">
-        <h1 className="sr-only">Free Unlimited Image Compressor</h1>
-        <Suspense
-          fallback={
-            <div className="flex-1 flex items-center justify-center p-8 bg-[var(--bg-app)] text-[var(--text-muted)] font-mono text-xs">
-              Loading Image Compressor Studio...
-            </div>
-          }
-        >
-          <BgRemovalClient initialMode="compressor" />
-        </Suspense>
-      </div>
-      
-      {/* SEO Content Block */}
-      <article className="tool-seo-content prose prose-sm max-w-none dark:prose-invert">
-        <h2>Private & Unlimited Image Compressor</h2>
-        <p>
-          Compressing images shouldn't require giving up your privacy or dealing with daily upload limits. DevPantry's Image Compressor is built using WebAssembly (Wasm) to perform iterative quality reduction and format conversion <strong>entirely inside your browser</strong>. 
-        </p>
-        
-        <h3>Target Specific File Sizes</h3>
-        <p>
-          Need to get a banner under 500 KB? Or a thumbnail under 100 KB? Simply set your target file size, and the compressor will automatically test multiple quality settings (using binary search logic) to find the absolute highest visual quality that fits within your budget.
-        </p>
-        
-        <h3>Format Conversion (WebP, PNG, JPEG)</h3>
-        <p>
-          Modernize your web assets by converting heavy PNGs and JPEGs into highly optimized WebP files. WebP often provides a 30-50% reduction in file size at the same visual fidelity, drastically improving your website's load times and Core Web Vitals. All conversions happen instantly on your CPU.
-        </p>
-
-        <h3>Related Tools</h3>
-        <ul>
-          <li><a href="/tools/image-resizer" className="text-rose-400 hover:underline">Image Resizer</a> — Resize dimensions before compressing.</li>
-          <li><a href="/tools/background-remover" className="text-rose-400 hover:underline">Background Remover</a> — Isolate subjects with AI before optimizing.</li>
-        </ul>
-      </article>
-    </div>
-  );
+  return <div className="flex flex-col min-h-full">
+    <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+    <header className="max-w-6xl mx-auto w-full px-4 sm:px-6 pt-6 pb-4"><h1 className="text-2xl sm:text-3xl font-bold">{title}</h1><p className="text-[var(--text-secondary)] mt-2 max-w-3xl">{description}</p></header>
+    <div className="h-[calc(100dvh-9rem)] min-h-[580px]"><BgRemovalClient initialMode="compressor" initialExportFormat={webp ? 'image/webp' : 'image/jpeg'} /></div>
+    <article className="tool-seo-content prose prose-sm max-w-none dark:prose-invert">
+      <h2>{webp ? 'How to convert PNG to WebP' : 'How to compress an image to a KB budget'}</h2>
+      <ol>
+        <li>Choose an image from your device, or try a sample image.</li>
+        <li>{webp ? 'Open export preview. WebP is preselected; keep a transparent background if the source includes one.' : 'Choose an output format and a target file size. JPEG and WebP support quality adjustments; PNG may need smaller dimensions.'}</li>
+        <li>Inspect the preview, actual output size, and dimensions. Download the result when it fits your needs.</li>
+      </ol>
+      {webp ? <>
+        <h3>Transparency and file size</h3>
+        <p>WebP supports transparency, so a transparent PNG can remain transparent. File-size savings depend on the image and export settings; a conversion is not guaranteed to be smaller. Compare the output before replacing an asset in your website.</p>
+        <h3>Choosing an image format</h3>
+        <p>WebP is useful for browser-delivered photos and illustrations. Keep the original PNG when another application requires it. Use JPEG when compatibility matters more than transparency.</p>
+      </> : <>
+        <h3>Quality and dimensions are different controls</h3>
+        <p>The compressor tests export quality and can reduce dimensions when a smaller file is needed. A tight KB budget can reduce detail. The export preview shows the resulting dimensions so you can choose the right tradeoff for an avatar, banner, or form upload.</p>
+        <h3>Local processing</h3>
+        <p>Compression uses your browser’s canvas encoders. The source image is not uploaded, and image compression does not download an AI model.</p>
+      </>}
+      <h3>Related tools</h3>
+      <p><a href="/tools/image-resizer">Resize an image</a> before compression, <a href="/tools/strip-gps-from-photo">remove photo GPS metadata</a>, or <a href="/tools/background-remover">remove its background</a>.</p>
+    </article>
+  </div>;
 }
