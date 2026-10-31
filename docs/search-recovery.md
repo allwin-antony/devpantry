@@ -30,7 +30,7 @@ On October 31, the application source still matched that verified checkpoint. A 
 | `http://devpantry.com/fonts/abel?source=check` | HTTP 200 without a redirect |
 | `https://www.devpantry.com/fonts/abel?source=check` | HTTP 200 without a redirect |
 
-**The verified recovery changes still need to be deployed to production.** Publish the Worker and assets together, then repeat the production checks below before requesting Google to recrawl the corrected pages.
+**At this checkpoint, the verified recovery changes were not yet deployed to production.** Repeat the production checks below after publishing, before requesting Google to recrawl the corrected pages.
 
 ## Before deploying
 
@@ -44,6 +44,8 @@ npm run build
 The build runs `scripts/check-seo.mjs` against the actual exported HTML. It fails on missing pages, canonical mismatches, noindexed sitemap entries, malformed JSON-LD, broken internal links, or blocked analytics script origins.
 
 Deploy both the Worker and the new assets/configuration together using the project's Cloudflare deployment pipeline. Publishing only the HTML will not activate the Worker canonical redirects. A successful local build does not publish the site.
+
+The production-connected Git branch is `master`, confirmed against Cloudflare's active Worker version on October 31. Publishing through a normal Git push keeps the recovery source in the pipeline. The scheduled catalogue sync also rebuilds production every two days; a direct Wrangler deployment alone can be replaced by a later build of unchanged Git source.
 
 ## Verify production
 
