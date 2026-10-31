@@ -31,13 +31,86 @@ export interface GuideArticle {
 
 export const GUIDES_DATA: GuideArticle[] = [
   {
+    slug: 'json-to-zod-validation',
+    title: 'Generate a Zod Schema from JSON and Validate an API Response',
+    description: 'A practical JSON-to-Zod workflow: infer nested fields and optional properties, add your application rules, then test both valid and invalid API responses.',
+    category: 'Architecture',
+    readingTime: '4 min read',
+    publishedDate: 'October 30, 2026',
+    updatedDate: 'October 30, 2026',
+    author: { name: 'DevPantry', role: 'Developer tools & implementation guides' },
+    matchingToolUrl: '/tools/json-to-zod',
+    matchingToolName: 'JSON to Zod Generator',
+    tags: ['JSON', 'Zod', 'TypeScript', 'API', 'Validation'],
+    keyTakeaways: [
+      'TypeScript describes types at compile time; Zod checks values at runtime.',
+      'Inspect multiple array elements to discover mixed types and optional fields.',
+      'A sample cannot reveal every business rule. Add constraints from your API contract.',
+      'Test invalid payloads as well as successful responses before using the schema.',
+    ],
+    sections: [
+      {
+        id: 'sample', title: '1. Start with a representative response',
+        content: `Paste a response into the [JSON to Zod generator](/tools/json-to-zod). Include several records when a response contains an array. A single record cannot show whether a field is absent on other records.
+
+In this sample, both users have an id, but only one has a name. The generator makes name optional rather than discarding the second record. JSON is parsed on your device.`,
+        codeSnippet: { language: 'json', title: 'Example input', code: `{
+  "users": [
+    { "id": 1, "name": "Ada", "active": true },
+    { "id": 2, "active": false }
+  ],
+  "nextPage": null
+}` },
+      },
+      {
+        id: 'review', title: '2. Review the inferred schema',
+        content: `The generator reads every array element. It combines observed object properties and makes a property optional when it is missing from some objects. Mixed primitive values become unions; an empty array provides no evidence about its element type.
+
+An observed null does not tell us the type of a future non-null value. Here, nextPage is inferred as null. If the API contract says it can also be a string cursor, change it to \`z.string().nullable()\`.`,
+        codeSnippet: { language: 'typescript', title: 'Generated schema', code: `import { z } from "zod";
+
+export const rootSchema = z.object({
+  users: z.array(z.object({
+    id: z.number(),
+    name: z.string().optional(),
+    active: z.boolean(),
+  })),
+  nextPage: z.null(),
+});` },
+      },
+      {
+        id: 'rules', title: '3. Add the rules the sample cannot express',
+        content: `A number in JSON does not tell us whether negative values are allowed. A string does not tell us whether it is an email address or a fixed set of statuses. Apply the rules specified by your application rather than treating generated code as the complete contract.
+
+For example, replace an id’s \`z.number()\` with \`z.number().int().positive()\` when the API guarantees a positive integer. Decide whether extra object keys should be stripped, preserved, or rejected using the behavior supported by your installed Zod version.`,
+      },
+      {
+        id: 'validate', title: '4. Validate before rendering',
+        content: `Call safeParse after receiving the response and handle its failure result before rendering data. The inferred TypeScript type can then describe validated values.
+
+Try a missing users field, a string id, and a name set to null. Use the [mock data generator](/tools/mock-data) to explore awkward text and boundary values. These tests should reflect the contract you chose, not just whether the generated schema compiles.`,
+        codeSnippet: { language: 'typescript', title: 'Runtime validation', code: `const response = await fetch("/api/users");
+if (!response.ok) throw new Error("Could not load users");
+
+const result = rootSchema.safeParse(await response.json());
+if (!result.success) {
+  console.error(result.error.issues);
+} else {
+  console.log(result.data.users);
+}
+
+export type UsersResponse = z.infer<typeof rootSchema>;` },
+      },
+    ],
+  },
+  {
     slug: 'client-side-pdf-manipulation',
     title: 'Client-Side PDF Manipulation & Structural Compression in the Browser',
     description: 'Learn how to process, merge, and compress PDF documents securely in the browser using ArrayBuffers, PDF-lib, and structural optimization without server uploads.',
     category: 'Media & Graphics',
     readingTime: '5 min read',
     publishedDate: 'October 2, 2026',
-    updatedDate: 'October 2, 2026',
+    updatedDate: 'October 30, 2026',
     author: {
       name: 'DevPantry Engineering',
       role: 'Media & Graphics Architecture',
@@ -46,9 +119,9 @@ export const GUIDES_DATA: GuideArticle[] = [
     matchingToolName: 'PDF Exam & Photo Kit',
     tags: ['PDF', 'Compression', 'Client-Side', 'Privacy', 'PDF-lib', 'JavaScript'],
     keyTakeaways: [
-      'Client-side processing guarantees zero data leakage for highly sensitive documents like passports and IDs.',
+      'Client-side processing avoids uploading document contents for PDF conversion and merging.',
       'PDF-lib allows for deep structural manipulation by modifying cross-reference tables and stripping out hidden metadata.',
-      'True client-side structural compression focuses on lossless optimization (removing dead objects) rather than lossy image downsampling.',
+      'This optimizer rewrites object streams and clears common document-info fields; it does not downsample embedded images.',
       'Converting modern image formats (like WebP) into PDF structures requires careful rasterization and canvas handling.'
     ],
     sections: [
@@ -64,13 +137,9 @@ By moving PDF manipulation entirely to the client, we eliminate this attack surf
         title: '2. How Client-Side PDF Compression Works',
         content: `When compressing a PDF purely in the browser without WebAssembly image engines, we are inherently limited to **structural optimization**.
 
-Unlike server-side compressors (like Ghostscript) which deeply resample embedded JPEGs into lower qualities, our client-side structural compressor uses \`pdf-lib\` to:
-* Strip out unused embedded fonts.
-* Remove extraneous document metadata and XML objects.
-* Discard hidden interactive elements and dead reference objects.
-* Flatten cross-reference (xref) tables.
+Our implementation uses \`pdf-lib\` to clear common title, author, subject, producer, and creator fields, then saves the document with object streams enabled. It does not deliberately remove embedded fonts, XMP packets, form fields, or image pixels.
 
-If your PDF is primarily text-based or contains poorly structured object streams, this structural compression can yield huge file size savings. However, if your PDF is simply a wrapper around a massive 5MB scanned JPEG, structural compression will have minimal impact.
+The output may be smaller, unchanged, or larger, depending on the original structure. A PDF containing a large scanned JPEG will generally still contain that JPEG. Compare the measured input and output sizes instead of assuming a particular reduction.
 
 *Try it yourself using the [Compress PDF](/tools/compress-pdf) tool!*`
       },

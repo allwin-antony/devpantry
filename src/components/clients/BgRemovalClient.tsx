@@ -268,9 +268,10 @@ async function optimizeCanvasOutput(
 
 export interface BgRemovalClientProps {
   initialMode?: 'bg-removal' | 'resizer' | 'compressor';
+  initialExportFormat?: ExportFormat;
 }
 
-export function BgRemovalClient({ initialMode = 'bg-removal' }: BgRemovalClientProps) {
+export function BgRemovalClient({ initialMode = 'bg-removal', initialExportFormat = 'image/png' }: BgRemovalClientProps) {
   // Image State
   const [sourceImage, setSourceImage] = useState<string | null>(null);
   const [sourceBlob, setSourceBlob] = useState<Blob | null>(null);
@@ -289,7 +290,7 @@ export function BgRemovalClient({ initialMode = 'bg-removal' }: BgRemovalClientP
 
   // Random sample state
   const [displaySamples, setDisplaySamples] = useState<SampleImage[]>(() =>
-    [...SAMPLE_IMAGES].sort(() => 0.5 - Math.random()).slice(0, 4)
+    SAMPLE_IMAGES.slice(0, 4)
   );
 
   const shuffleSamples = useCallback(() => {
@@ -309,7 +310,7 @@ export function BgRemovalClient({ initialMode = 'bg-removal' }: BgRemovalClientP
   // Model and Engine Configuration
   const [modelQuality, setModelQuality] = useState<ModelQuality>('isnet_fp16');
   const [outputType, setOutputType] = useState<OutputType>('foreground');
-  const [exportFormat, setExportFormat] = useState<ExportFormat>('image/png');
+  const [exportFormat, setExportFormat] = useState<ExportFormat>(initialExportFormat);
   const [selectedMatte, setSelectedMatte] = useState<string>('transparent');
   const [customColor, setCustomColor] = useState<string>('#3b82f6');
   const [customBgImage, setCustomBgImage] = useState<Blob | null>(null);
@@ -626,32 +627,6 @@ export function BgRemovalClient({ initialMode = 'bg-removal' }: BgRemovalClientP
       clearTimeout(timer);
     };
   }, [brushPaths, resultImageUrl, sourceImage]);
-
-  // Eagerly preload AI model weights + compile WASM during browser idle time
-  useEffect(() => {
-    const doPreload = async () => {
-      try {
-        const { preload } = await import('@imgly/background-removal');
-        await preload({
-          publicPath: `${window.location.origin}/models/`,
-          device: 'gpu',
-          proxyToWorker: true,
-          model: modelQuality,
-        });
-      } catch {
-        // Silent — preload is best-effort; processImage will retry anyway
-      }
-    };
-
-    if (typeof requestIdleCallback !== 'undefined') {
-      const id = requestIdleCallback(() => doPreload());
-      return () => cancelIdleCallback(id);
-    } else {
-      // Fallback: delay 2s so initial paint isn't blocked
-      const timer = setTimeout(doPreload, 2000);
-      return () => clearTimeout(timer);
-    }
-  }, [modelQuality]);
 
   // Main processing pipeline
   const processImage = useCallback(async (imageInput: string | Blob, _fileName?: string, _fileSize?: number) => {
@@ -1804,6 +1779,8 @@ export function BgRemovalClient({ initialMode = 'bg-removal' }: BgRemovalClientP
                   <span className="px-2 py-0.5 rounded bg-[var(--bg-sidebar)] border border-[var(--border-dev)] text-rose-500 font-bold">Free &amp; Unlimited</span>
                 </div>
               </div>
+
+              {initialMode === 'bg-removal' && <p className="text-xs text-[var(--text-secondary)] max-w-xl mt-3 text-center">The AI model downloads when you first run background removal. Processing speed depends on your device; your image is processed locally.</p>}
 
               {/* Sample Quick-Picks Section */}
               <div className="w-full max-w-xl mt-8">

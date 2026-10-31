@@ -59,6 +59,8 @@ def sync_fontshare():
     # Filter SIL OFL fonts
     ofl_fonts = []
     for f in all_fonts:
+        styles = f.get("styles", [])
+        static_styles = [s for s in styles if not s.get("is_variable")]
         # We record all with license breakdown
         font_info = {
             "id": f.get("id"),
@@ -69,9 +71,13 @@ def sync_fontshare():
             "is_sil_ofl": (f.get("license_type") == "sil_ofl"),
             "category": f.get("category"),
             "styles_count": len(f.get("styles", [])),
+            "weights": sorted(set(s["weight"]["weight"] for s in static_styles if s.get("weight"))),
+            "styles": sorted(set("italic" if s.get("is_italic") else "normal" for s in static_styles)),
+            "cdn_style_ids": sorted(set(s["weight"]["number"] for s in static_styles if s.get("weight"))),
+            "variable": any(s.get("is_variable") for s in styles),
             "designers": [d.get("name") for d in f.get("designers", []) if d.get("name")],
             "publisher": f.get("publisher", {}).get("name") if f.get("publisher") else None,
-            "api_endpoint": f"https://api.fontshare.com/v2/fonts/{f.get('slug')}",
+            "api_endpoint": f"https://api.fontshare.com/v2/fonts/{f.get('id')}",
             "web_url": f"https://www.fontshare.com/fonts/{f.get('slug')}",
             "download_url": f"https://api.fontshare.com/v2/fonts/download/{f.get('slug')}"
         }
@@ -332,6 +338,10 @@ def sync_github_foundries():
 
 def main():
     os.makedirs(CATALOG_DIR, exist_ok=True)
+    if "--fontshare-only" in sys.argv:
+        if not sync_fontshare():
+            sys.exit(1)
+        return
     print("==================================================")
     print(" Open-Source Fonts Metadata Catalog Synchronizer  ")
     print("==================================================")

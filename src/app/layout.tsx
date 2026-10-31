@@ -1,10 +1,10 @@
 import type { Metadata, Viewport } from 'next';
-import Script from 'next/script';
 import './globals.css';
 import { ThemeProvider } from '../components/ThemeProvider';
 import { Header } from '../components/Header';
 import { Footer } from '../components/Footer';
 import { FeedbackNudge } from '../components/FeedbackNudge';
+import { Analytics } from '../components/Analytics';
 
 export const viewport: Viewport = {
   themeColor: [
@@ -18,11 +18,11 @@ export const viewport: Viewport = {
 export const metadata: Metadata = {
   metadataBase: new URL('https://devpantry.com'),
   title: {
-    default: 'DevPantry | Developer Asset Engine & Chaos Testing Studio',
+    default: 'DevPantry — Free Browser-Based Developer Tools',
     template: '%s | DevPantry'
   },
-  description: 'The ultimate developer pantry and utility suite: high-entropy mock data synthesis, custom schema builder, 2,180+ open-source typography studio, 353,000+ vector icons across 238 libraries, client-side zero-leak JWT inspector, and real-world API response vault.',
-  authors: [{ name: 'DevPantry Community' }],
+  description: 'Inspect JWTs, generate test data, convert JSON to TypeScript and Zod, and prepare images in your browser. Free tools, fonts, and icons. No account required.',
+  authors: [{ name: 'Allwin S Antony', url: 'https://github.com/allwin-antony' }],
   creator: 'DevPantry',
   publisher: 'DevPantry Studio',
   robots: {
@@ -41,8 +41,8 @@ export const metadata: Metadata = {
     locale: 'en_US',
     url: 'https://devpantry.com',
     siteName: 'DevPantry Studio',
-    title: 'DevPantry | Developer Asset Engine & Chaos Testing Studio',
-    description: 'High-entropy mock data, 2,180+ open-source typefaces, 353K+ vector icons, zero-leak JWT inspector, and 19 production API & SSO response schemas.',
+    title: 'DevPantry — Free Browser-Based Developer Tools',
+    description: 'Debug tokens, generate test data, and prepare web assets. Useful tools that process your inputs in your browser.',
     images: [
       {
         url: '/og-image.png',
@@ -54,8 +54,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'DevPantry | Developer Edge-Case & Open-Source Asset Studio',
-    description: 'High-entropy mock data, 2,180+ open-source typefaces, 353K+ vector icons, zero-leak JWT inspector, and real-world API & SSO response vault.',
+    title: 'DevPantry — Free Browser-Based Developer Tools',
+    description: 'Debug tokens, generate test data, and prepare web assets in your browser. No account required.',
     creator: '@devpantry',
   },
   icons: {
@@ -121,31 +121,13 @@ export default function RootLayout({
         />
       </head>
       <body className="h-screen w-full overflow-x-hidden flex flex-col bg-[var(--bg-app)] text-[var(--text-primary)] selection:bg-rose-500 selection:text-white bg-dev-grid transition-colors">
-        <Script
-          src="https://www.googletagmanager.com/gtag/js?id=G-WYTNMC3H2B"
-          strategy="afterInteractive"
-        />
-        <Script id="google-analytics" strategy="afterInteractive">
-          {`
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
-
-            gtag('config', 'G-WYTNMC3H2B');
-          `}
-        </Script>
-        <Script
-          async
-          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3716959628089219"
-          crossOrigin="anonymous"
-          strategy="afterInteractive"
-        />
+        <Analytics />
         <ThemeProvider>
           {/* Top Developer Navigation */}
           <Header />
 
           {/* Main Viewport Container */}
-          <main className="flex-1 min-h-0 overflow-y-auto min-w-0 flex flex-col relative overflow-x-hidden">
+          <main id="main-content" tabIndex={-1} className="flex-1 min-h-0 overflow-y-auto min-w-0 flex flex-col relative overflow-x-hidden">
             <div className="flex-1 shrink-0 flex flex-col min-w-0 w-full">
               {children}
             </div>

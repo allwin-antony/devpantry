@@ -21,7 +21,7 @@ export default function IconsDetailView({ item }: { item: any }) {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
       <div className="flex flex-col shrink-0 w-full">
-        <h1 className="sr-only">{collection.name} Icons</h1>
+        <h1 className="px-4 pt-6 text-2xl font-bold max-w-6xl mx-auto w-full">{collection.name} Icons</h1>
         <Suspense fallback={<div className="p-4 text-xs font-mono text-[var(--text-muted)]">Loading Icon Collection...</div>}>
           <IconDetailClient collection={collection} />
         </Suspense>
@@ -31,19 +31,27 @@ export default function IconsDetailView({ item }: { item: any }) {
         <h2>About {collection.name} Icons</h2>
         <p>
           {collection.name} is a comprehensive, open-source vector icon library designed by {collection.author}. 
-          It contains exactly {collection.total_icons.toLocaleString()} individual SVG icons, making it one of the most robust collections available for modern web and application design.
+          Our catalogue lists {collection.total_icons.toLocaleString()} SVG icons in the {collection.category || 'general-purpose'} category. Search by icon name, preview the result at your interface’s size, and copy SVG or framework code.
         </p>
 
         <h3>License & Usage</h3>
         <p>
-          This entire collection is distributed under the {collection.license} license. You are free to use these icons in commercial projects, personal websites, and open-source applications.
+          The catalogue lists the {collection.license} license.{' '}
+          {collection.license_url && <a href={collection.license_url} target="_blank" rel="noopener noreferrer">Read the collection’s license</a>}{' '}
+          for attribution, redistribution, and any other terms that apply to your use.
         </p>
 
         <h3>Installation & Integration</h3>
+        <pre><code>{`npm install @iconify/react\n\nimport { Icon } from '@iconify/react';\n\n<Icon icon="${collection.prefix}:${collection.samples[0]}" width={24} />`}</code></pre>
         <p>
           You can interactively search, customize stroke widths, adjust colors, and copy raw SVG code directly from the interface above. 
           Alternatively, you can copy React JSX snippets or Vue templates for immediate integration into your frontend frameworks.
         </p>
+
+        <h3>Try a sample icon</h3>
+        <ul>
+          {collection.samples.map((name: string) => <li key={name}><a href={`/icons/${collection.prefix}?icon=${encodeURIComponent(name)}`}>{name}</a></li>)}
+        </ul>
         
         <h3>Related Design Resources</h3>
         <ul>

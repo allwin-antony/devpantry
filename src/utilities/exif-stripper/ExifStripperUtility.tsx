@@ -3,13 +3,16 @@ import { UploadCloud, Image as ImageIcon, Download, Trash2, MapPin, Eye, FileJso
 import { triggerFeedbackNudge } from '@/lib/feedbackNudge';
 import exifr from 'exifr';
 
-export const ExifStripperUtility: React.FC = () => {
+export const ExifStripperUtility: React.FC<{ focus?: 'gps' | 'metadata' }> = ({ focus = 'metadata' }) => {
   const [file, setFile] = useState<File | null>(null);
   const [preview, setPreview] = useState<string | null>(null);
   const [metadata, setMetadata] = useState<any>(null);
   const [isStripping, setIsStripping] = useState(false);
   const [strippedBlobUrl, setStrippedBlobUrl] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<'preview' | 'metadata'>('preview');
+  const [error, setError] = useState('');
+  const [outputType, setOutputType] = useState('image/png');
+  const selectionVersion = useRef(0);
 
   const previewRef = useRef<string | null>(null);
   const strippedBlobUrlRef = useRef<string | null>(null);
@@ -32,6 +35,13 @@ export const ExifStripperUtility: React.FC = () => {
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = e.target.files?.[0];
     if (!selectedFile) return;
+    e.target.value = '';
+    if (!['image/jpeg', 'image/png', 'image/webp'].includes(selectedFile.type) || selectedFile.size > 50 * 1024 * 1024) {
+      setError('Choose a JPEG, PNG, or WebP image no larger than 50 MB.');
+      return;
+    }
+    const version = ++selectionVersion.current;
+    setError('');
     
     if (preview) URL.revokeObjectURL(preview);
     if (strippedBlobUrl) URL.revokeObjectURL(strippedBlobUrl);
@@ -41,28 +51,30 @@ export const ExifStripperUtility: React.FC = () => {
     setPreview(objectUrl);
     setStrippedBlobUrl(null);
     setMetadata(null);
-    setActiveTab('preview');
+    setActiveTab(focus === 'gps' ? 'metadata' : 'preview');
 
     try {
       // Parse basic EXIF data
       const parsed = await exifr.parse(selectedFile);
-      setMetadata(parsed || { info: 'No EXIF data found' });
+      if (version === selectionVersion.current) setMetadata(parsed || {});
     } catch (err) {
       console.error('Error parsing EXIF:', err);
-      setMetadata({ error: 'Failed to parse metadata or file contains none.' });
+      if (version === selectionVersion.current) { setMetadata({}); setError('The metadata could not be read. You can still re-encode a supported image.'); }
     }
   };
 
   const stripMetadata = async () => {
     if (!file || !preview) return;
     setIsStripping(true);
+    setError('');
+    const version = selectionVersion.current;
 
     try {
       const img = new Image();
-      img.src = preview;
       await new Promise((resolve, reject) => {
         img.onload = resolve;
         img.onerror = reject;
+        img.src = preview;
       });
 
       const canvas = document.createElement('canvas');
@@ -75,13 +87,17 @@ export const ExifStripperUtility: React.FC = () => {
       ctx.drawImage(img, 0, 0);
 
       canvas.toBlob((blob) => {
+        if (version !== selectionVersion.current) { setIsStripping(false); return; }
         if (blob) {
           const newUrl = URL.createObjectURL(blob);
           setStrippedBlobUrl(prev => {
             if (prev) URL.revokeObjectURL(prev);
             return newUrl;
           });
+          setOutputType(blob.type);
           triggerFeedbackNudge('exif-stripper-success');
+        } else {
+          setError('The image could not be exported. Try a smaller image.');
         }
         setIsStripping(false);
         canvas.width = 0;
@@ -89,6 +105,7 @@ export const ExifStripperUtility: React.FC = () => {
       }, file.type, 1.0); // 1.0 keeps max quality for formats like JPEG/WebP
     } catch (error) {
       console.error('Failed to strip metadata:', error);
+      setError('The image could not be processed. Try another JPEG, PNG, or WebP.');
       setIsStripping(false);
     }
   };
@@ -100,7 +117,8 @@ export const ExifStripperUtility: React.FC = () => {
     
     // Create new filename
     const parts = file.name.split('.');
-    const ext = parts.pop();
+    parts.pop();
+    const ext = outputType === 'image/jpeg' ? 'jpg' : outputType === 'image/webp' ? 'webp' : 'png';
     const base = parts.join('.');
     a.download = `${base}_stripped.${ext}`;
     
@@ -111,6 +129,7 @@ export const ExifStripperUtility: React.FC = () => {
   };
 
   const handleClear = () => {
+    selectionVersion.current++;
     if (preview) URL.revokeObjectURL(preview);
     if (strippedBlobUrl) URL.revokeObjectURL(strippedBlobUrl);
     setFile(null);
@@ -122,32 +141,33 @@ export const ExifStripperUtility: React.FC = () => {
   const hasGPS = metadata && (metadata.latitude !== undefined || metadata.GPSLatitude !== undefined);
 
   return (
-    <div className="h-full flex flex-col gap-4 font-sans animate-in fade-in duration-300">
+    <div className="flex flex-col gap-4 font-sans">
       
       {/* Top Banner */}
       <div className="bg-[var(--bg-panel)] border border-[var(--border-dev)] rounded-xl p-4 flex items-center justify-between shadow-sm">
         <div>
-          <h2 className="text-lg font-semibold flex items-center gap-2">
+          <h1 className="text-2xl font-semibold flex items-center gap-2">
             <ImageIcon className="w-5 h-5 text-indigo-500" />
-            Image Metadata Stripper
-          </h2>
+            {focus === 'gps' ? 'Remove GPS from a Photo' : 'Image Metadata & EXIF Stripper'}
+          </h1>
           <p className="text-sm text-[var(--text-secondary)]">
-            Analyze photos for hidden GPS and EXIF data, then strip it completely purely in your browser.
+            {focus === 'gps' ? 'Check a photo for embedded location coordinates, then remove its source EXIF metadata locally.' : 'Inspect camera, date, and location fields, then export a new image without the original EXIF metadata.'}
           </p>
         </div>
       </div>
 
-      <div className="flex gap-4 flex-1 min-h-0">
+      {error && <p role="alert" className="p-3 rounded-lg bg-amber-500/10 text-sm">{error}</p>}
+      <div className="grid md:grid-cols-2 gap-4">
         
         {/* Left Column: Upload & Preview */}
-        <div className="w-1/2 flex flex-col gap-4 min-h-0">
+        <div className="flex flex-col gap-4 min-h-[22rem] min-w-0">
           {!file ? (
             <label className="flex-1 flex flex-col items-center justify-center border-2 border-dashed border-[var(--border-dev)] rounded-xl bg-[var(--bg-panel)] hover:bg-[var(--bg-sidebar)] transition-colors cursor-pointer group">
               <input type="file" accept="image/jpeg, image/png, image/webp" className="hidden" onChange={handleFileChange} />
               <div className="w-16 h-16 rounded-full bg-indigo-500/10 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
                 <UploadCloud className="w-8 h-8 text-indigo-500" />
               </div>
-              <p className="font-medium text-lg">Click or drag image here</p>
+              <p className="font-medium text-lg">Choose an image</p>
               <p className="text-sm text-[var(--text-secondary)] mt-1">Supports JPEG, PNG, WebP (Max 50MB)</p>
             </label>
           ) : (
@@ -174,7 +194,7 @@ export const ExifStripperUtility: React.FC = () => {
                 {activeTab === 'preview' ? (
                   <div className="absolute inset-0 p-4 flex items-center justify-center">
                     {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img src={preview!} alt="Preview" className="max-w-full max-h-full object-contain rounded-lg shadow-lg border border-[var(--border-dev)] bg-[url('https://api.dicebear.com/7.x/shapes/svg?seed=checkers')] bg-repeat" />
+                    <img src={preview!} alt="Selected image preview" className="max-w-full max-h-full object-contain rounded-lg shadow-lg border border-[var(--border-dev)]" />
                   </div>
                 ) : (
                   <div className="p-4 font-mono text-sm overflow-auto absolute inset-0">
@@ -202,7 +222,7 @@ export const ExifStripperUtility: React.FC = () => {
         </div>
 
         {/* Right Column: Processing & Output */}
-        <div className="w-1/2 flex flex-col gap-4 min-h-0">
+        <div className="flex flex-col gap-4 min-h-[22rem] min-w-0">
           <div className="flex-1 bg-[var(--bg-panel)] border border-[var(--border-dev)] rounded-xl p-6 flex flex-col items-center justify-center text-center shadow-sm relative overflow-hidden">
             
             {/* Background Gradient */}
@@ -215,7 +235,7 @@ export const ExifStripperUtility: React.FC = () => {
                   <Eye className="w-10 h-10 text-[var(--text-secondary)] opacity-50" />
                 </div>
                 <h3 className="text-xl font-semibold mb-2">Waiting for image</h3>
-                <p className="text-[var(--text-secondary)]">Upload an image on the left to analyze its hidden metadata footprint.</p>
+                <p className="text-[var(--text-secondary)]">Choose an image to inspect its embedded metadata.</p>
               </div>
             ) : !strippedBlobUrl ? (
               <div className="relative z-10 flex flex-col items-center w-full max-w-sm">
@@ -272,4 +292,3 @@ export const ExifStripperUtility: React.FC = () => {
     </div>
   );
 };
-

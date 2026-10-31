@@ -423,8 +423,8 @@ export function CollabClient() {
       <footer className="shrink-0 flex items-center justify-between px-3 sm:px-5 py-1.5 border-t border-[var(--border-dev)] bg-[var(--bg-panel)] text-[11px] text-[var(--text-secondary)] font-mono select-none z-10">
         <div className="flex items-center gap-2 shrink-0">
           <ShieldCheck size={13} className="text-emerald-500 shrink-0" />
-          <span className="hidden sm:inline">Zero-Knowledge AES-GCM Encrypted · Pure P2P Sync</span>
-          <span className="sm:hidden">Zero-Knowledge P2P</span>
+          <span className="hidden sm:inline">AES-GCM encrypted document sync · WebSocket relay</span>
+          <span className="sm:hidden">Encrypted document sync</span>
         </div>
         <div className="flex items-center gap-2 sm:gap-3 shrink-0">
           <span>{wordCount} {wordCount === 1 ? 'word' : 'words'}</span>

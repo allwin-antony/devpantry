@@ -22,7 +22,7 @@ export default function JwtInspectorPage() {
       '@type': 'BreadcrumbList',
       itemListElement: [
         { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://devpantry.com' },
-        { '@type': 'ListItem', position: 2, name: 'JWT Decoder', item: 'https://devpantry.com/jwt-decoder' }
+        { '@type': 'ListItem', position: 2, name: 'JWT Decoder', item: 'https://devpantry.com/tools/jwt-decoder' }
       ]
     }
   ];

@@ -1,5 +1,6 @@
 import { Suspense } from 'react';
 import { IconsClient } from '@/components/clients/IconsClient';
+import Link from 'next/link';
 
 export default function IconsListView() {
   const jsonLd = [
@@ -32,7 +33,7 @@ export default function IconsListView() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      <h1 className="sr-only">Vector Icons Studio - 353,000+ SVG Icons</h1>
+      <div className="flex flex-wrap items-center justify-between gap-3 p-4"><h1 className="text-2xl font-bold">SVG icons for your interface</h1><Link href="/icons/catalog/1" className="text-sm text-[var(--accent-blue)] hover:underline">Browse the complete icon directory →</Link></div>
       <Suspense fallback={<div className="p-4 text-xs font-mono text-[var(--text-muted)]">Loading Icons Studio...</div>}>
         <IconsClient />
       </Suspense>

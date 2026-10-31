@@ -6,6 +6,37 @@ import { PDFDocument } from 'pdf-lib';
 import { triggerFeedbackNudge } from '@/lib/feedbackNudge';
 import { FileText, Image as ImageIcon, Scissors, Settings, Download, Trash2, ArrowRight, Merge, X, AlertTriangle } from 'lucide-react';
 
+const PDF_TOOL_COPY = {
+  'img-to-pdf': {
+    title: 'Image to PDF Converter',
+    summary: 'Combine JPEG and PNG images into one PDF in selection order. Processing happens on your device, with no upload or account.',
+    heading: 'Create a PDF from JPG and PNG images',
+    steps: ['Select one or more JPEG or PNG images.', 'Check the file order. Images are added in selection order, one per page.', 'Generate the PDF and download the resulting document.'],
+    detail: 'Each page uses the source image’s dimensions. This conversion embeds your images; it does not automatically reduce their file size. Compress or resize large source images first when the finished PDF must fit an upload limit.',
+  },
+  'pdf-merge': {
+    title: 'Merge PDF Files',
+    summary: 'Combine multiple PDFs into one document locally. Select files in the order you want their pages to appear.',
+    heading: 'Combine documents in the right order',
+    steps: ['Choose at least two PDF documents.', 'Check their selection order and remove any unwanted files.', 'Merge the pages and download the combined PDF.'],
+    detail: 'Pages are copied into a new document. Merging does not compress embedded images, so the result may remain close to the combined source sizes. Encrypted PDFs must be unlocked before this tool can read them.',
+  },
+  'passport-photo': {
+    title: 'Passport Photo Resizer & KB Compressor',
+    summary: 'Choose pixel dimensions and a target KB size for a photo. Preview the exported JPEG and its actual size before downloading.',
+    heading: 'Prepare a photo for an upload form',
+    steps: ['Select a photo and enter the form’s maximum size in KB.', 'Optionally set output width and height in pixels. Using both dimensions center-crops the image to that shape.', 'Compress, review the preview and actual dimensions, and download the JPEG.'],
+    detail: 'JPEG quality is reduced toward your requested file size. Some targets cannot be reached at the chosen dimensions; the result states whether the budget was met. This tool does not verify passport or visa requirements—use the dimensions and composition rules supplied by your application.',
+  },
+  'pdf-compress': {
+    title: 'PDF Compressor & Structural Optimizer',
+    summary: 'Rewrite PDF object streams and clear common document-info fields locally. Compare the before-and-after sizes; embedded images are not downsampled.',
+    heading: 'Understand what this PDF optimizer changes',
+    steps: ['Choose a PDF from your device.', 'Run structural optimization.', 'Compare the input and output sizes before downloading the result.'],
+    detail: 'The optimizer uses pdf-lib object streams and clears common title, author, subject, creator, and producer fields. It does not resample scans or guarantee a smaller file. Already optimized PDFs can remain the same size or grow. For image-heavy PDFs, compress the source images before making a new PDF.',
+  },
+};
+
 export const PdfExamKitClient: React.FC<{ initialTab?: 'img-to-pdf' | 'passport-photo' | 'pdf-compress' | 'pdf-merge' }> = ({ initialTab }) => {
   const [activeTab, setActiveTab] = useState<'img-to-pdf' | 'passport-photo' | 'pdf-compress' | 'pdf-merge'>(initialTab || 'img-to-pdf');
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
@@ -13,6 +44,11 @@ export const PdfExamKitClient: React.FC<{ initialTab?: 'img-to-pdf' | 'passport-
   const [outputUrl, setOutputUrl] = useState<string | null>(null);
   const [outputFileName, setOutputFileName] = useState('');
   const [targetKb, setTargetKb] = useState<number>(200);
+  const [targetWidth, setTargetWidth] = useState(0);
+  const [targetHeight, setTargetHeight] = useState(0);
+  const [error, setError] = useState('');
+  const [outputInfo, setOutputInfo] = useState<{ inputBytes: number; outputBytes: number; width?: number; height?: number; metTarget?: boolean } | null>(null);
+  const copy = PDF_TOOL_COPY[activeTab];
   const fileInputRef = useRef<HTMLInputElement>(null);
   const outputUrlRef = useRef<string | null>(null);
   const router = useRouter();
@@ -23,6 +59,12 @@ export const PdfExamKitClient: React.FC<{ initialTab?: 'img-to-pdf' | 'passport-
     }
     outputUrlRef.current = newUrl;
     setOutputUrl(newUrl);
+    if (!newUrl) setOutputInfo(null);
+  };
+
+  const setResult = (blob: Blob, info: Omit<NonNullable<typeof outputInfo>, 'outputBytes'>) => {
+    updateOutputUrl(URL.createObjectURL(blob));
+    setOutputInfo({ ...info, outputBytes: blob.size });
   };
 
   useEffect(() => {
@@ -32,6 +74,7 @@ export const PdfExamKitClient: React.FC<{ initialTab?: 'img-to-pdf' | 'passport-
   }, []);
 
   const handleTabClick = (newTab: 'img-to-pdf' | 'passport-photo' | 'pdf-compress' | 'pdf-merge') => {
+    if (isProcessing) return;
     setActiveTab(newTab);
     clearFiles();
     const urlMap = {
@@ -46,7 +89,10 @@ export const PdfExamKitClient: React.FC<{ initialTab?: 'img-to-pdf' | 'passport-
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
       const newFiles = Array.from(e.target.files);
-      setSelectedFiles(prev => [...prev, ...newFiles]);
+      const pdfMode = activeTab === 'pdf-merge' || activeTab === 'pdf-compress';
+      const accepted = newFiles.filter(file => pdfMode ? file.type === 'application/pdf' : ['image/jpeg', 'image/png', 'image/webp'].includes(file.type));
+      setError(accepted.length === newFiles.length ? '' : 'Some files were not a supported format. Choose PDFs or supported images for the selected tool.');
+      setSelectedFiles(prev => activeTab === 'passport-photo' || activeTab === 'pdf-compress' ? accepted.slice(0, 1) : [...prev, ...accepted]);
       updateOutputUrl(null);
       
       // Defer resetting the input so React has time to process the file objects
@@ -66,6 +112,7 @@ export const PdfExamKitClient: React.FC<{ initialTab?: 'img-to-pdf' | 'passport-
   const clearFiles = () => {
     setSelectedFiles([]);
     updateOutputUrl(null);
+    setError('');
     if (fileInputRef.current) {
       fileInputRef.current.value = '';
     }
@@ -74,6 +121,8 @@ export const PdfExamKitClient: React.FC<{ initialTab?: 'img-to-pdf' | 'passport-
   const handleImageToPdf = async () => {
     if (selectedFiles.length === 0) return;
     setIsProcessing(true);
+    setError('');
+    updateOutputUrl(null);
     try {
       const pdfDoc = await PDFDocument.create();
       
@@ -85,7 +134,7 @@ export const PdfExamKitClient: React.FC<{ initialTab?: 'img-to-pdf' | 'passport-
         } else if (file.type === 'image/png') {
           image = await pdfDoc.embedPng(arrayBuffer);
         } else {
-          continue; // Skip unsupported
+          throw new Error('Image to PDF supports JPEG and PNG. Convert other formats first.');
         }
 
         const page = pdfDoc.addPage([image.width, image.height]);
@@ -99,12 +148,11 @@ export const PdfExamKitClient: React.FC<{ initialTab?: 'img-to-pdf' | 'passport-
 
       const pdfBytes = await pdfDoc.save({ useObjectStreams: true });
       const blob = new Blob([pdfBytes as any], { type: 'application/pdf' });
-      const url = URL.createObjectURL(blob);
-      updateOutputUrl(url);
+      setResult(blob, { inputBytes: selectedFiles.reduce((total, file) => total + file.size, 0) });
       triggerFeedbackNudge('pdf-exam-kit-generate');
     } catch (err) {
       console.error(err);
-      alert('Error creating PDF');
+      setError(err instanceof Error ? err.message : 'The PDF could not be created.');
     } finally {
       setIsProcessing(false);
     }
@@ -112,10 +160,12 @@ export const PdfExamKitClient: React.FC<{ initialTab?: 'img-to-pdf' | 'passport-
 
   const handleMergePdf = async () => {
     if (selectedFiles.length < 2) {
-      alert('Please select at least 2 PDFs to merge.');
+      setError('Please select at least two PDFs to merge.');
       return;
     }
     setIsProcessing(true);
+    setError('');
+    updateOutputUrl(null);
     try {
       const mergedPdf = await PDFDocument.create();
       
@@ -129,12 +179,11 @@ export const PdfExamKitClient: React.FC<{ initialTab?: 'img-to-pdf' | 'passport-
 
       const pdfBytes = await mergedPdf.save({ useObjectStreams: true });
       const blob = new Blob([pdfBytes as any], { type: 'application/pdf' });
-      const url = URL.createObjectURL(blob);
-      updateOutputUrl(url);
+      setResult(blob, { inputBytes: selectedFiles.reduce((total, file) => total + file.size, 0) });
       triggerFeedbackNudge('pdf-exam-kit-merge');
     } catch (err) {
       console.error(err);
-      alert('Error merging PDFs');
+      setError('The PDFs could not be merged. Check that they are readable and not encrypted.');
     } finally {
       setIsProcessing(false);
     }
@@ -142,23 +191,32 @@ export const PdfExamKitClient: React.FC<{ initialTab?: 'img-to-pdf' | 'passport-
 
   const handleCompressImage = async () => {
     if (selectedFiles.length === 0) return;
+    if (!Number.isFinite(targetKb) || targetKb < 1 || targetKb > 10240 || ![targetWidth, targetHeight].every(value => Number.isInteger(value) && value >= 0 && value <= 8192)) {
+      setError('Use a target between 1 and 10,240 KB and pixel dimensions between 1 and 8,192, or leave dimensions empty.');
+      return;
+    }
     setIsProcessing(true);
+    setError('');
+    updateOutputUrl(null);
     try {
       const file = selectedFiles[0];
       const img = document.createElement('img');
       const tempImgUrl = URL.createObjectURL(file);
       try {
-        img.src = tempImgUrl;
         await new Promise((resolve, reject) => {
           img.onload = resolve;
           img.onerror = reject;
+          img.src = tempImgUrl;
         });
 
         const canvas = document.createElement('canvas');
-        canvas.width = img.width;
-        canvas.height = img.height;
+        canvas.width = targetWidth || (targetHeight ? Math.max(1, Math.round(img.width * targetHeight / img.height)) : img.width);
+        canvas.height = targetHeight || (targetWidth ? Math.max(1, Math.round(img.height * targetWidth / img.width)) : img.height);
         const ctx = canvas.getContext('2d')!;
-        ctx.drawImage(img, 0, 0);
+        ctx.fillStyle = '#ffffff';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        const scale = Math.max(canvas.width / img.width, canvas.height / img.height);
+        ctx.drawImage(img, (canvas.width - img.width * scale) / 2, (canvas.height - img.height * scale) / 2, img.width * scale, img.height * scale);
 
         let quality = 0.95;
         let blob: Blob | null = null;
@@ -171,21 +229,20 @@ export const PdfExamKitClient: React.FC<{ initialTab?: 'img-to-pdf' | 'passport-
           quality -= 0.05;
         }
 
-        canvas.width = 0;
-        canvas.height = 0;
-        
         if (blob) {
-          updateOutputUrl(URL.createObjectURL(blob));
+          setResult(blob, { inputBytes: file.size, width: canvas.width, height: canvas.height, metTarget: blob.size <= targetKb * 1024 });
           triggerFeedbackNudge('pdf-exam-kit-compress');
         } else {
-          alert('Could not compress to the target size.');
+          setError('The photo could not be exported.');
         }
+        canvas.width = 0;
+        canvas.height = 0;
       } finally {
         URL.revokeObjectURL(tempImgUrl);
       }
     } catch (err) {
       console.error(err);
-      alert('Error compressing photo');
+      setError('The photo could not be processed. Try a JPEG, PNG, or WebP image.');
     } finally {
       setIsProcessing(false);
     }
@@ -194,10 +251,12 @@ export const PdfExamKitClient: React.FC<{ initialTab?: 'img-to-pdf' | 'passport-
   const handleCompressPdf = async () => {
     if (selectedFiles.length === 0) return;
     setIsProcessing(true);
+    setError('');
+    updateOutputUrl(null);
     try {
       const file = selectedFiles[0];
       const arrayBuffer = await file.arrayBuffer();
-      const pdf = await PDFDocument.load(arrayBuffer);
+      const pdf = await PDFDocument.load(arrayBuffer, { updateMetadata: false });
       
       // Basic compression by stripping metadata and using object streams
       pdf.setTitle('');
@@ -208,11 +267,11 @@ export const PdfExamKitClient: React.FC<{ initialTab?: 'img-to-pdf' | 'passport-
       
       const pdfBytes = await pdf.save({ useObjectStreams: true });
       const blob = new Blob([pdfBytes as any], { type: 'application/pdf' });
-      updateOutputUrl(URL.createObjectURL(blob));
+      setResult(blob, { inputBytes: file.size });
       triggerFeedbackNudge('pdf-exam-kit-compress-pdf');
     } catch (err) {
       console.error(err);
-      alert('Error compressing PDF');
+      setError('The PDF could not be optimized. Check that it is readable and not encrypted.');
     } finally {
       setIsProcessing(false);
     }
@@ -260,13 +319,16 @@ export const PdfExamKitClient: React.FC<{ initialTab?: 'img-to-pdf' | 'passport-
         return (
           <div className="space-y-4">
             <p className="text-sm text-[var(--text-secondary)]">
-              Resize your photo and strictly compress it below a target KB size for portals.
+              Set a JPEG size budget and optional pixel dimensions. The result reports whether the budget was reached.
             </p>
             <div className="flex flex-col sm:flex-row sm:items-center gap-4">
               <div className="flex items-center gap-2">
-                <label className="text-sm font-semibold text-[var(--text-primary)] whitespace-nowrap">Max Size (KB):</label>
+                <label htmlFor="photo-target-kb" className="text-sm font-semibold text-[var(--text-primary)] whitespace-nowrap">Max Size (KB):</label>
                 <input 
+                  id="photo-target-kb"
                   type="number" 
+                  min={1}
+                  max={10240}
                   value={targetKb} 
                   onChange={(e) => setTargetKb(Number(e.target.value))}
                   className="w-24 px-2 py-1 text-sm bg-[var(--bg-body)] border border-[var(--border-dev)] rounded-lg text-[var(--text-primary)] outline-none focus:border-rose-500"
@@ -281,20 +343,24 @@ export const PdfExamKitClient: React.FC<{ initialTab?: 'img-to-pdf' | 'passport-
                 {!isProcessing && <Scissors className="w-4 h-4" />}
               </button>
             </div>
+            <div className="flex flex-wrap gap-4 text-sm">
+              <label>Width (px)<input aria-label="Photo width in pixels" type="number" min={1} max={8192} value={targetWidth || ''} onChange={event => setTargetWidth(Number(event.target.value))} placeholder="Original" className="block mt-1 w-32 p-2 rounded-lg border border-[var(--border-dev)] bg-[var(--bg-panel)]" /></label>
+              <label>Height (px)<input aria-label="Photo height in pixels" type="number" min={1} max={8192} value={targetHeight || ''} onChange={event => setTargetHeight(Number(event.target.value))} placeholder="Original" className="block mt-1 w-32 p-2 rounded-lg border border-[var(--border-dev)] bg-[var(--bg-panel)]" /></label>
+            </div>
           </div>
         );
       case 'pdf-compress':
         return (
            <div className="space-y-4">
             <p className="text-sm text-[var(--text-secondary)]">
-              Perform a basic, lossless optimization of your PDF to try hitting exam portal limits.
+              Rewrite object streams and clear common document-info fields. The actual size change is shown after processing.
             </p>
             <div className="p-3 bg-amber-500/10 border border-amber-500/30 rounded-lg flex items-start gap-3">
               <AlertTriangle className="w-5 h-5 text-amber-600 dark:text-amber-500 flex-shrink-0 mt-0.5" />
               <div className="text-xs text-amber-700 dark:text-amber-400 space-y-1">
-                <p className="font-semibold">Pure Client-Side Limitation</p>
-                <p>Because this tool runs 100% in your browser for privacy, it cannot deeply re-sample images embedded inside existing PDFs. It only performs structural compression (removing hidden metadata).</p>
-                <p>If your PDF is made of heavy scanned images, it will not shrink significantly. For best results, use the <strong>Image to PDF</strong> tab to compress your photos <em>before</em> turning them into a PDF.</p>
+                <p className="font-semibold">Structural optimization, without image downsampling</p>
+                <p>This implementation does not recompress images embedded in an existing PDF. A smaller file or a particular KB limit cannot be guaranteed.</p>
+                <p>For large scans, <a href="/tools/image-compressor" className="underline">compress the source images</a> first, then combine them with Image to PDF.</p>
               </div>
             </div>
             <div className="flex gap-2">
@@ -316,9 +382,9 @@ export const PdfExamKitClient: React.FC<{ initialTab?: 'img-to-pdf' | 'passport-
     <div className="max-w-4xl mx-auto space-y-6 pb-20 pt-8 sm:pt-12 px-4 sm:px-6">
       {/* Header */}
       <div className="mb-6">
-        <h1 className="text-2xl font-bold text-[var(--text-primary)]">PDF & Exam Form Kit</h1>
+        <h1 className="text-2xl font-bold text-[var(--text-primary)]">{copy.title}</h1>
         <p className="text-[var(--text-secondary)] mt-2">
-          Secure, 100% client-side tools for manipulating PDFs, resizing photos, and hitting strict KB limits for exam and job portals.
+          {copy.summary}
         </p>
       </div>
 
@@ -351,6 +417,7 @@ export const PdfExamKitClient: React.FC<{ initialTab?: 'img-to-pdf' | 'passport-
       </div>
 
       {/* File Uploader */}
+      {error && <p role="alert" className="p-3 bg-red-500/10 text-red-600 dark:text-red-400 rounded-lg text-sm">{error}</p>}
       <div className="bg-[var(--bg-panel)] rounded-xl border border-[var(--border-dev)] p-6">
         <div className="mb-6">
           <label className="block text-sm font-semibold text-[var(--text-primary)] mb-3">
@@ -360,8 +427,9 @@ export const PdfExamKitClient: React.FC<{ initialTab?: 'img-to-pdf' | 'passport-
             <input
               type="file"
               ref={fileInputRef}
-              multiple
-              accept={activeTab === 'img-to-pdf' ? 'image/jpeg,image/png' : activeTab === 'pdf-merge' || activeTab === 'pdf-compress' ? 'application/pdf' : 'image/*'}
+              multiple={activeTab === 'img-to-pdf' || activeTab === 'pdf-merge'}
+              disabled={isProcessing}
+              accept={activeTab === 'img-to-pdf' ? 'image/jpeg,image/png' : activeTab === 'pdf-merge' || activeTab === 'pdf-compress' ? 'application/pdf' : 'image/jpeg,image/png,image/webp'}
               onChange={handleFileChange}
               className="hidden"
               id="file-upload-input"
@@ -398,8 +466,15 @@ export const PdfExamKitClient: React.FC<{ initialTab?: 'img-to-pdf' | 'passport-
         {outputUrl && (
           <div className="mt-8 p-4 bg-green-500/10 border border-green-500/30 rounded-lg flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div>
-              <p className="text-sm font-semibold text-green-700 dark:text-green-400">Success!</p>
-              <p className="text-xs text-green-600 dark:text-green-500">Your processed file is ready.</p>
+              <p role="status" className="text-sm font-semibold text-green-700 dark:text-green-400">Processing complete</p>
+              {outputInfo && <div className="text-sm text-[var(--text-secondary)] mt-2 space-y-1">
+                <p>Input: {(outputInfo.inputBytes / 1024).toFixed(1)} KB · Output: {(outputInfo.outputBytes / 1024).toFixed(1)} KB</p>
+                {outputInfo.width && <p>{outputInfo.width} × {outputInfo.height} pixels</p>}
+                {outputInfo.metTarget === false && <p className="text-amber-700 dark:text-amber-400">The target KB size was not reached. Try smaller dimensions or a higher limit.</p>}
+                {outputInfo.metTarget === true && <p>The target KB size was reached.</p>}
+                {activeTab === 'pdf-compress' && outputInfo.outputBytes >= outputInfo.inputBytes && <p className="text-amber-700 dark:text-amber-400">Structural optimization did not reduce this PDF’s size.</p>}
+                {activeTab === 'passport-photo' && <img src={outputUrl} alt="Processed photo preview" className="max-h-48 max-w-full rounded border border-[var(--border-dev)] mt-3" />}
+              </div>}
             </div>
             
             <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
@@ -423,36 +498,14 @@ export const PdfExamKitClient: React.FC<{ initialTab?: 'img-to-pdf' | 'passport-
         )}
       </div>
 
-      {/* SEO & Educational Content */}
-      <div className="mt-12 space-y-8 text-[var(--text-secondary)] pb-8 border-t border-[var(--border-dev)] pt-8">
-        <section className="space-y-3">
-          <h2 className="text-xl font-bold text-[var(--text-primary)]">Why Use Our Client-Side PDF & Exam Tools?</h2>
-          <p className="text-sm leading-relaxed">
-            When applying for competitive exams, university admissions, or government jobs, portals often have strict file size and format requirements. Our suite of PDF and Image tools is designed to help you meet these exact specifications securely. Because all processing happens <strong>100% locally in your browser</strong>, your sensitive documents—such as passports, national IDs, and academic transcripts—are never uploaded to any external server.
-          </p>
-        </section>
-        
-        <section className="space-y-3">
-          <h2 className="text-xl font-bold text-[var(--text-primary)]">Key Features Tailored for Online Applications</h2>
-          <ul className="list-disc pl-5 space-y-2 text-sm">
-            <li><strong>Image to PDF Converter:</strong> Easily convert scanned assignment pages or test papers from JPEG or PNG into a single unified PDF document.</li>
-            <li><strong>Merge Multiple PDFs:</strong> Combine separate certificates, multi-page documents, or ID proofs into one seamless file for easy uploading.</li>
-            <li><strong>Passport Photo Resizer:</strong> Automatically compress your ID photos and signatures to exactly meet the strict KB limits (e.g., under 50KB or 200KB) required by online application portals.</li>
-            <li><strong>PDF Optimizer:</strong> Reduce the file size of your documents by stripping out unnecessary metadata and utilizing structural optimization, maximizing your chances of a successful upload.</li>
-          </ul>
-        </section>
-        
-        <section className="space-y-3">
-          <h2 className="text-xl font-bold text-[var(--text-primary)]">How to Compress Files for Exam Portals</h2>
-          <p className="text-sm leading-relaxed space-y-1">
-            <span className="block">1. Select the specific tool from the tabs above based on your current need.</span>
-            <span className="block">2. Upload your file(s) using the secure, in-browser uploader.</span>
-            <span className="block">3. For photos, specify your target maximum size in KB (e.g., 50KB for signatures, 200KB for photos).</span>
-            <span className="block">4. Click the action button to process the file instantly on your own device.</span>
-            <span className="block">5. Download the final output and rename it if necessary before submitting it to the portal.</span>
-          </p>
-        </section>
-      </div>
+      <article className="tool-seo-content prose prose-sm max-w-none dark:prose-invert">
+        <h2>{copy.heading}</h2>
+        <ol>{copy.steps.map(step => <li key={step}>{step}</li>)}</ol>
+        <h3>Output and file-size behavior</h3>
+        <p>{copy.detail}</p>
+        <h3>Related tools and implementation</h3>
+        <p><a href="/tools/image-compressor">Compress source images</a>, <a href="/tools/image-resizer">resize an image</a>, or read the <a href="/guides/client-side-pdf-manipulation">PDF processing guide</a>.</p>
+      </article>
 
     </div>
   );

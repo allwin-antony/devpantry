@@ -22,7 +22,7 @@ export default function ChaosDataPage() {
       '@type': 'BreadcrumbList',
       itemListElement: [
         { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://devpantry.com' },
-        { '@type': 'ListItem', position: 2, name: 'Mock Data Generator', item: 'https://devpantry.com/mock-data' }
+        { '@type': 'ListItem', position: 2, name: 'Mock Data Generator', item: 'https://devpantry.com/tools/mock-data' }
       ]
     }
   ];
@@ -34,7 +34,7 @@ export default function ChaosDataPage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
       <div className="flex flex-col shrink-0 w-full">
-        <h1 className="sr-only">Chaos Mock Data Generator</h1>
+        <header className="px-4 pt-6 pb-3"><h1 className="text-2xl font-bold">Mock Data & Edge-Case Generator</h1><p className="mt-2 text-[var(--text-secondary)]">Generate users, orders, and awkward inputs for your next UI test. Adjust the chaos level or define a custom schema.</p></header>
         <Suspense fallback={<div className="p-4 text-xs font-mono text-[var(--text-muted)]">Loading Chaos Studio...</div>}>
           <ChaosDataClient />
         </Suspense>

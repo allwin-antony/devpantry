@@ -11,7 +11,7 @@ A high-performance visual image suite running entirely inside the browser using 
 #### ✨ Free AI Background Remover (`/tools/background-remover`)
 * **On-Demand Neural Inference**: Loads with **0ms latency** on upload. Neural model execution is deferred until the user clicks **`✨ Remove Background (AI)`**, preserving battery and GPU memory.
 * **Hardware Acceleration & Dedicated Web Worker**: Utilizes `proxyToWorker` to offload neural segmentation entirely to a background thread. Employs `SharedArrayBuffer` with COOP/COEP isolation for true multi-threaded WebAssembly execution.
-* **Eager Idle Preloading**: The AI model weights and WASM compiler are silently pre-fetched during idle browser time from a local cache so the segmentation engine is warm the moment a user acts.
+* **On-demand model loading**: AI weights are downloaded when background removal is requested. Merely opening the resizer or compressor does not load the AI model.
 * **Studio Backdrops & Matting**:
   * Alpha transparency grid
   * Solid colors & modern gradient presets
@@ -39,10 +39,10 @@ A high-performance visual image suite running entirely inside the browser using 
 
 #### 📄 Free PDF Exam & Photo Kit (`/tools/image-to-pdf`, `/tools/merge-pdf`, `/tools/compress-pdf`, `/tools/passport-photo-maker`)
 * **100% Client-Side Privacy**: Perfect for sensitive documents like IDs, passports, and exam marksheets. Your files never leave your browser.
-* **Target Size Budgets (KB)**: Specifically built to hit strict file-size limits enforced by job portals and government exam forms (e.g. `< 200 KB`).
-* **Image to PDF Converter**: Combine multiple JPEGs/PNGs into a single PDF instantly with a reorder-able multi-file upload UI.
+* **Target Size Budgets (KB)**: Photo export attempts the requested limit and reports whether it was reached, alongside actual output dimensions and bytes.
+* **Image to PDF Converter**: Combine JPEGs/PNGs in selection order, one image per PDF page.
 * **Merge PDF**: Append and combine multiple existing PDF documents locally.
-* **Compress PDF**: Lossless structural optimization to shrink PDF footprints by stripping hidden metadata and optimizing streams.
+* **Compress PDF**: Rewrite object streams and clear common document-info fields. Embedded images are not downsampled, and a size reduction is not guaranteed.
 * **Passport Photo Maker**: Precise cropping for official visa and passport form requirements.
 
 #### 🕵️ Free Image Metadata Viewer & EXIF Stripper (`/tools/exif-stripper`)
@@ -202,19 +202,19 @@ Instantly convert JSON API responses into strict TypeScript interfaces and Zod v
 
 * **100% Client-Side AST Parsing**: Paste your JSON payloads and get typed interfaces instantly without sending data to a server.
 * **Zod Schema Generation**: Automatically infers types and generates ready-to-use runtime Zod validation schemas (`z.object(...)`, `z.array(...)`, `z.string()`, etc.).
-* **Zero-Backend `#state=` Sharing**: Serializes payloads into client-side URL fragments (`#state=...`). URL fragments are never sent across HTTP requests, guaranteeing zero external data leakage while letting developers paste shareable links directly into GitHub issues, PRs, and Slack.
-* **Safe for Proprietary APIs**: Since parsing and state sharing happen strictly on the client, it is completely safe for internal enterprise schemas and sensitive data structures.
+* **Client-Side `#state=` Sharing**: Serializes payloads into URL fragments (`#state=...`), which are not sent with the page's HTTP request. Anyone receiving the link can read its payload; do not share secrets this way.
+* **Local Parsing**: Conversion does not submit JSON to a processing API. Users should still use a trusted device and browser when working with sensitive data.
 
 ---
 
-### 9. 🤝 Real-Time P2P Collaborative Editor (`/tools/collab`)
+### 9. 🤝 Encrypted Collaborative Editor (`/tools/collab`)
 
-A zero-knowledge, real-time collaborative text and code editor built on pure peer-to-peer WebRTC and CRDTs (Conflict-free Replicated Data Types).
+A real-time collaborative text and code editor using Yjs CRDTs (Conflict-free Replicated Data Types), browser-side encryption, and a Cloudflare WebSocket relay. The current implementation does not use direct WebRTC data channels.
 
-* **Zero-Knowledge Architecture**: 
-  * Documents are **never** sent to a central database or server.
-  * WebRTC signaling (SDP offer/answer exchange) is handled by a lightweight **Cloudflare Durable Object** (`SignalingRoom`). 
-  * The signaling server utilizes the modern **WebSocket Hibernation API** to persist socket connections and track peers gracefully, even if the worker hibernates to save compute.
+* **Encrypted Relay Architecture**:
+  * Document updates are encrypted in the browser, then relayed and stored by a **Cloudflare Durable Object** (`SignalingRoom`) for later synchronization.
+  * Password-derived encryption keys stay in the client.
+  * The relay uses the **WebSocket Hibernation API** to retain socket connections while the Worker hibernates.
 * **Signaling Hardening & DoS Protection**:
   * **Payload Limiting**: Strict 64 KB message size ceiling on all incoming WebSocket messages.
   * **Peer Capacity**: Maximum of 25 concurrent peers per room (`HTTP 429` on overflow).
@@ -222,8 +222,8 @@ A zero-knowledge, real-time collaborative text and code editor built on pure pee
   * **Bounded Storage**: Automatic pruning of SQLite update delta logs (capped at 500 rows).
 * **Client-Side AES-GCM Encryption**:
   * Uses `PBKDF2` to derive a strong 256-bit AES-GCM key from the room password entirely in the browser.
-  * Every Yjs update is securely encrypted before being transmitted over the WebRTC `RTCDataChannel`.
-  * If a user enters the wrong password, symmetric decryption natively fails and drops the peer gracefully.
+  * Every Yjs document update is encrypted before transmission over the WebSocket relay.
+  * Updates encrypted with a different password cannot be decrypted with the local key.
 * **Resilient CRDT Sync (Yjs)**:
   * Powered by `Yjs` for robust, conflict-free syncing of document state across multiple peers.
   * Automatically handles offline editing via `IndexedDB` persistence and resyncs seamlessly when the network is restored.

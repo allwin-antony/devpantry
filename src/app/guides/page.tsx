@@ -5,7 +5,7 @@ import { GUIDES_DATA } from '@/lib/guidesData';
 import { BookOpen, Sparkles, ArrowRight, Code, ShieldCheck, Zap, Layers, Terminal } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'Engineering Guides & Architecture Deep Dives | DevPantry',
+  title: 'Developer Guides — Validation, Images & Browser Tools',
   description: 'In-depth engineering guides, technical breakdowns, and architecture deep dives on building real-time WebRTC tools, client-side AI, zero-leak security, and WebAssembly in browser.',
   openGraph: {
     title: 'Engineering Guides & Architecture Deep Dives | DevPantry',
@@ -32,7 +32,7 @@ export default function GuidesHubPage() {
         </h1>
 
         <p className="text-sm sm:text-base text-[var(--text-secondary)] max-w-3xl leading-relaxed font-sans">
-          Deep-dive technical articles, system architecture breakdowns, and implementation guides explaining how DevPantry builds zero-latency, client-side, and edge-first developer tools.
+          Practical workflows and implementation guides for API validation, browser-based image processing, and collaborative tools.
         </p>
 
         <div className="flex flex-wrap items-center gap-3 pt-2 text-xs">

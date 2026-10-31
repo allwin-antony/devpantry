@@ -3,11 +3,12 @@ import { HomeClient } from '@/components/clients/HomeClient';
 
 export const metadata: Metadata = {
   title: 'DevPantry — Free Browser-Based Developer Tools',
-  description: 'Free developer tools: 2,180+ open source fonts, 353,000+ vector icons, high-entropy mock data generator, image compressor no signup, and zero-leak JWT inspector.',
+  description: 'Free browser tools for frontend developers: decode JWTs, generate mock data, convert JSON to TypeScript and Zod, and prepare images, fonts, and SVG icons. No signup.',
 
   openGraph: {
-    title: 'DevPantry — Free Developer Tools: Icons, Fonts, Mock Data & Image Studio',
-    description: 'Free developer tools: 2,180+ open source fonts, 353,000+ vector icons, high-entropy mock data generator, image compressor no signup, and zero-leak JWT inspector.',
+    title: 'DevPantry — Free Tools for Building & Testing Web Apps',
+    description: 'Inspect JWTs, generate edge-case data, convert JSON to types, and prepare web assets. Browser-based tools with no account required.',
+    url: 'https://devpantry.com',
     type: 'website',
   },
   twitter: {

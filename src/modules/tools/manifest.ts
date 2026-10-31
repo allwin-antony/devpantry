@@ -1,5 +1,5 @@
 import type { ModuleManifest } from '@/lib/moduleRegistry';
-import { getAllToolsForDisplay, getToolBySlug } from '@/lib/loaders/toolLoader';
+import { getAllTools, getToolBySlug } from '@/lib/loaders/toolLoader';
 import ToolsListView from './ListView';
 import ToolsDetailView from './DetailView';
 
@@ -14,10 +14,16 @@ const toolsManifest: ModuleManifest = {
     description: 'A suite of free online developer utilities: JWT decoders, image compressors, mock data generators, and more.',
   },
   generateMetadata: (item: any) => ({
-    title: `${item.name} — DevPantry Tools`,
+    title: item.seoTitle || item.name,
     description: item.description,
     openGraph: {
       title: `${item.name} | DevPantry`,
+      description: item.description,
+      url: `https://devpantry.com/tools/${item.slug}`,
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: item.seoTitle || item.name,
       description: item.description,
     },
     alternates: {
@@ -25,7 +31,7 @@ const toolsManifest: ModuleManifest = {
     },
   }),
   loader: {
-    listAll: getAllToolsForDisplay,
+    listAll: getAllTools,
 
     getBySlug: getToolBySlug,
   },

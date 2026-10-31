@@ -1,275 +1,73 @@
-import React, { useState, useEffect } from 'react';
+'use client';
+
+import { useEffect, useMemo, useState, type ReactNode } from 'react';
+import { Braces, Check, Copy, Share2 } from 'lucide-react';
+import { generateJsonSchemas } from '@/lib/jsonSchema';
 import { triggerFeedbackNudge } from '@/lib/feedbackNudge';
-import { Play, Copy, Check, AlertCircle, FileJson, FileCode, Braces, Share2 } from 'lucide-react';
 
-type TsType = 
-  | { type: 'string' }
-  | { type: 'number' }
-  | { type: 'boolean' }
-  | { type: 'null' }
-  | { type: 'any' }
-  | { type: 'object'; properties: Record<string, TsType> }
-  | { type: 'array'; items: TsType };
+const EXAMPLE = JSON.stringify({ users: [{ id: 1, name: 'Ada', active: true }, { id: 2, active: false }], nextPage: null }, null, 2);
+type Output = 'typescript' | 'zod';
 
-function infer(json: any): TsType {
-  if (json === null) return { type: 'null' };
-  if (typeof json === 'string') return { type: 'string' };
-  if (typeof json === 'number') return { type: 'number' };
-  if (typeof json === 'boolean') return { type: 'boolean' };
-  if (Array.isArray(json)) {
-    if (json.length === 0) return { type: 'array', items: { type: 'any' } };
-    return { type: 'array', items: infer(json[0]) };
-  }
-  if (typeof json === 'object') {
-    const properties: Record<string, TsType> = {};
-    for (const key in json) {
-      properties[key] = infer(json[key]);
-    }
-    return { type: 'object', properties };
-  }
-  return { type: 'any' };
-}
+export function JsonToTsZodClient({ children, initialOutput = 'typescript' }: { children?: ReactNode; initialOutput?: Output }) {
+  const [input, setInput] = useState(EXAMPLE);
+  const [output, setOutput] = useState<Output>(initialOutput);
+  const [copied, setCopied] = useState('');
+  const [message, setMessage] = useState('');
+  const result = useMemo(() => {
+    if (!input.trim()) return { typescript: '', zod: '', error: '' };
+    try { return { ...generateJsonSchemas(input), error: '' }; }
+    catch (error) { return { typescript: '', zod: '', error: error instanceof Error ? error.message : 'Enter valid JSON.' }; }
+  }, [input]);
 
-function generateTs(ast: TsType, indent = ''): string {
-  if (ast.type === 'string') return 'string';
-  if (ast.type === 'number') return 'number';
-  if (ast.type === 'boolean') return 'boolean';
-  if (ast.type === 'null') return 'null';
-  if (ast.type === 'any') return 'any';
-  if (ast.type === 'array') {
-    const inner = generateTs(ast.items, indent);
-    return inner.includes(' ') || inner.includes('{') ? `Array<${inner}>` : `${inner}[]`;
-  }
-  if (ast.type === 'object') {
-    const entries = Object.entries(ast.properties);
-    if (entries.length === 0) return 'Record<string, any>';
-    let str = '{\n';
-    for (const [key, val] of entries) {
-       // quote key if it has special characters
-       const safeKey = /^[a-zA-Z_$][0-9a-zA-Z_$]*$/.test(key) ? key : JSON.stringify(key);
-       str += `${indent}  ${safeKey}: ${generateTs(val, indent + '  ')};\n`;
-    }
-    str += `${indent}}`;
-    return str;
-  }
-  return 'any';
-}
-
-function generateZod(ast: TsType, indent = ''): string {
-  if (ast.type === 'string') return 'z.string()';
-  if (ast.type === 'number') return 'z.number()';
-  if (ast.type === 'boolean') return 'z.boolean()';
-  if (ast.type === 'null') return 'z.null()';
-  if (ast.type === 'any') return 'z.any()';
-  if (ast.type === 'array') {
-    return `z.array(${generateZod(ast.items, indent)})`;
-  }
-  if (ast.type === 'object') {
-    const entries = Object.entries(ast.properties);
-    if (entries.length === 0) return 'z.record(z.string(), z.any())';
-    let str = 'z.object({\n';
-    for (const [key, val] of entries) {
-       const safeKey = /^[a-zA-Z_$][0-9a-zA-Z_$]*$/.test(key) ? key : JSON.stringify(key);
-       str += `${indent}  ${safeKey}: ${generateZod(val, indent + '  ')},\n`;
-    }
-    str += `${indent}})`;
-    return str;
-  }
-  return 'z.any()';
-}
-
-export function JsonToTsZodClient({ children }: { children?: React.ReactNode }) {
-  const [jsonInput, setJsonInput] = useState('{\n  "id": 1,\n  "name": "Leanne Graham",\n  "username": "Bret",\n  "email": "Sincere@april.biz",\n  "address": {\n    "street": "Kulas Light",\n    "suite": "Apt. 556",\n    "city": "Gwenborough",\n    "zipcode": "92998-3874",\n    "geo": {\n      "lat": "-37.3159",\n      "lng": "81.1496"\n    }\n  },\n  "phone": "1-770-736-8031 x56442",\n  "website": "hildegard.org",\n  "company": {\n    "name": "Romaguera-Crona",\n    "catchPhrase": "Multi-layered client-server neural-net",\n    "bs": "harness real-time e-markets"\n  }\n}');
-  const [tsOutput, setTsOutput] = useState('');
-  const [zodOutput, setZodOutput] = useState('');
-  const [error, setError] = useState<string | null>(null);
-  const [copiedTs, setCopiedTs] = useState(false);
-  const [copiedZod, setCopiedZod] = useState(false);
-  const [copiedShare, setCopiedShare] = useState(false);
-
-  // Restore state from URL fragment (#state=...) on initial mount (100% client-side zero-leak)
   useEffect(() => {
-    if (typeof window !== 'undefined' && window.location.hash.startsWith('#state=')) {
-      try {
-        const raw = window.location.hash.slice(7);
-        const decoded = decodeURIComponent(raw);
-        if (decoded.trim()) {
-          setJsonInput(decoded);
-        }
-      } catch (e) {
-        console.error('Failed to parse #state from URL hash', e);
-      }
-    }
+    if (!window.location.hash.startsWith('#state=')) return;
+    try { setInput(decodeURIComponent(window.location.hash.slice(7))); }
+    catch { setMessage('The shared link could not be decoded. Paste your JSON below.'); }
   }, []);
 
   useEffect(() => {
-    try {
-      if (!jsonInput.trim()) {
-        setTsOutput('');
-        setZodOutput('');
-        setError(null);
-        return;
-      }
-      const parsed = JSON.parse(jsonInput);
-      const ast = infer(parsed);
-      
-      const tsCode = `export interface Root ${generateTs(ast)}`;
-      setTsOutput(tsCode);
-      
-      const zodCode = `import { z } from "zod";\n\nexport const rootSchema = ${generateZod(ast)};\n\nexport type Root = z.infer<typeof rootSchema>;`;
-      setZodOutput(zodCode);
-      setError(null);
-    } catch (err: any) {
-      setError(err.message || 'Invalid JSON');
-    }
-  }, [jsonInput]);
+    if (!copied) return;
+    const timer = setTimeout(() => setCopied(''), 2000);
+    return () => clearTimeout(timer);
+  }, [copied]);
 
-  const copyToClipboard = (text: string, type: 'ts' | 'zod') => {
-    navigator.clipboard.writeText(text);
-    triggerFeedbackNudge(`schema-copy-${type}`);
-    if (type === 'ts') {
-      setCopiedTs(true);
-      setTimeout(() => setCopiedTs(false), 2000);
-    } else {
-      setCopiedZod(true);
-      setTimeout(() => setCopiedZod(false), 2000);
-    }
-  };
-
-  const handleShare = () => {
+  const copy = async (value: string, action: string) => {
     try {
-      const encoded = encodeURIComponent(jsonInput);
-      const shareUrl = `${window.location.origin}${window.location.pathname}#state=${encoded}`;
-      navigator.clipboard.writeText(shareUrl);
-      setCopiedShare(true);
-      triggerFeedbackNudge('json-payload-share');
-      setTimeout(() => setCopiedShare(false), 2000);
-    } catch (e) {
-      console.error('Failed to generate share URL', e);
-    }
+      await navigator.clipboard.writeText(value);
+      setCopied(action);
+      setMessage('');
+      triggerFeedbackNudge(action === 'share' ? 'json-payload-share' : `schema-copy-${action}`);
+    } catch { setMessage('Clipboard access was unavailable. Select and copy the code manually.'); }
   };
 
   return (
-    <div className="flex flex-col flex-1 h-full max-w-[1600px] mx-auto w-full p-4 lg:p-8 gap-6 relative">
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-        <div>
-          <h1 className="text-3xl font-bold text-[var(--text-primary)] flex items-center gap-3">
-            <Braces className="w-8 h-8 text-rose-500" />
-            JSON to TS & Zod
-          </h1>
-          <p className="text-[var(--text-secondary)] mt-2 max-w-2xl">
-            Instantly convert JSON API responses into strict TypeScript interfaces and Zod schemas. Runs 100% in your browser for total privacy—paste your proprietary payloads without fear.
-          </p>
-        </div>
-        <button
-          onClick={handleShare}
-          className="flex items-center gap-2 px-3.5 py-1.5 rounded-lg bg-[var(--bg-panel)] border border-[var(--border-dev)] hover:border-rose-500/50 text-[var(--text-primary)] text-sm font-medium transition-all shadow-sm hover:shadow shrink-0"
-          title="Share zero-backend link with payload in URL hash"
-        >
-          {copiedShare ? <Check className="w-4 h-4 text-green-500" /> : <Share2 className="w-4 h-4 text-rose-500" />}
-          {copiedShare ? 'Link Copied!' : 'Share (#state)'}
-        </button>
+    <div className="max-w-6xl mx-auto w-full px-4 sm:px-6 py-6 sm:py-8">
+      <h1 className="text-2xl sm:text-3xl font-bold flex items-center gap-3"><Braces className="w-7 h-7 text-[var(--accent-blue)] shrink-0" />{initialOutput === 'zod' ? 'JSON to Zod Schema Generator' : 'JSON to TypeScript & Zod'}</h1>
+      <p className="text-[var(--text-secondary)] mt-3 max-w-3xl">{initialOutput === 'zod' ? 'Generate a Zod validation schema from a JSON example. Nested objects, mixed arrays, and missing fields are inferred locally in your browser.' : 'Turn a JSON example into TypeScript types and a Zod schema. Compare both outputs and copy the code you need—your JSON is processed on your device.'}</p>
+      <div className="flex flex-wrap items-center gap-3 my-5">
+        <button onClick={() => setInput(EXAMPLE)} className="px-3 py-2 rounded-lg border border-[var(--border-dev)] bg-[var(--bg-panel)] text-sm">Load example</button>
+        <button onClick={() => setInput('')} className="px-3 py-2 rounded-lg border border-[var(--border-dev)] bg-[var(--bg-panel)] text-sm">Clear input</button>
+        <button disabled={!result[output]} onClick={() => copy(result[output], output)} className="px-3 py-2 rounded-lg bg-[var(--accent-blue)] text-white text-sm disabled:opacity-50 flex items-center gap-2">{copied === output ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}{copied === output ? 'Copied' : `Copy ${output === 'zod' ? 'Zod schema' : 'TypeScript'}`}</button>
+        <button onClick={() => copy(`${window.location.origin}${window.location.pathname}#state=${encodeURIComponent(input)}`, 'share')} className="px-3 py-2 rounded-lg border border-[var(--border-dev)] bg-[var(--bg-panel)] text-sm flex items-center gap-2"><Share2 className="w-4 h-4" />{copied === 'share' ? 'Link copied' : 'Copy share link'}</button>
       </div>
-
-      {error && (
-        <div className="bg-red-500/10 border border-red-500/20 text-red-500 px-4 py-3 rounded-lg flex items-center gap-3 animate-in fade-in slide-in-from-top-2">
-          <AlertCircle className="w-5 h-5 flex-shrink-0" />
-          <p className="text-sm font-medium">{error}</p>
-        </div>
-      )}
-
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 min-h-[600px] flex-1">
-        {/* Input Panel */}
-        <div className="flex flex-col bg-[var(--bg-panel)] border border-[var(--border-dev)] rounded-xl overflow-hidden shadow-sm">
-          <div className="flex items-center justify-between px-4 py-3 bg-[var(--bg-sidebar)] border-b border-[var(--border-dev)]">
-            <div className="flex items-center gap-2 text-sm font-medium text-[var(--text-primary)]">
-              <FileJson className="w-4 h-4 text-emerald-500" />
-              JSON Input
-            </div>
-            <div className="flex items-center gap-2">
-              <button
-                onClick={handleShare}
-                className="flex items-center gap-1.5 text-xs text-[var(--text-secondary)] hover:text-rose-500 px-2 py-1 bg-[var(--bg-panel)] border border-[var(--border-dev)] rounded hover:border-rose-500/50 transition-colors"
-                title="Copy shareable zero-backend link"
-              >
-                {copiedShare ? <Check className="w-3.5 h-3.5 text-green-500" /> : <Share2 className="w-3.5 h-3.5" />}
-                {copiedShare ? 'Copied' : 'Share'}
-              </button>
-              <button
-                onClick={() => {
-                  try {
-                    const parsed = JSON.parse(jsonInput);
-                    setJsonInput(JSON.stringify(parsed, null, 2));
-                  } catch (e) {}
-                }}
-                className="text-xs text-[var(--text-secondary)] hover:text-[var(--text-primary)] px-2 py-1 bg-[var(--bg-panel)] border border-[var(--border-dev)] rounded hover:border-emerald-500/50 transition-colors"
-              >
-                Format JSON
-              </button>
-            </div>
+      {message && <p role="status" className="text-sm mb-4 text-[var(--text-secondary)]">{message}</p>}
+      {result.error && <p role="alert" className="text-sm mb-4 p-3 rounded-lg bg-red-500/10 text-red-600 dark:text-red-400">Invalid JSON: {result.error}</p>}
+      <div className="grid lg:grid-cols-2 gap-4">
+        <section className="rounded-xl border border-[var(--border-dev)] bg-[var(--bg-panel)] overflow-hidden flex flex-col">
+          <div className="p-3 flex items-center justify-between gap-3 border-b border-[var(--border-dev)]">
+            <label htmlFor="json-input" className="font-semibold text-sm">JSON input</label>
+            <button disabled={!input.trim() || !!result.error} onClick={() => setInput(JSON.stringify(JSON.parse(input), null, 2))} className="text-sm text-[var(--accent-blue)] disabled:opacity-50 px-2 py-1">Format JSON</button>
           </div>
-          <textarea
-            value={jsonInput}
-            onChange={(e) => setJsonInput(e.target.value)}
-            className="flex-1 w-full bg-transparent resize-none p-4 font-mono text-sm text-[var(--text-primary)] focus:outline-none focus:ring-1 focus:ring-rose-500/50"
-            placeholder="Paste your JSON here..."
-            spellCheck={false}
-          />
-        </div>
-
-        {/* Output Panel */}
-        <div className="flex flex-col gap-6">
-          {/* TypeScript Output */}
-          <div className="flex flex-col flex-1 bg-[var(--bg-panel)] border border-[var(--border-dev)] rounded-xl overflow-hidden shadow-sm">
-            <div className="flex items-center justify-between px-4 py-3 bg-[var(--bg-sidebar)] border-b border-[var(--border-dev)]">
-              <div className="flex items-center gap-2 text-sm font-medium text-[var(--text-primary)]">
-                <FileCode className="w-4 h-4 text-blue-500" />
-                TypeScript Interfaces
-              </div>
-              <button
-                onClick={() => copyToClipboard(tsOutput, 'ts')}
-                className="flex items-center gap-1.5 text-xs text-[var(--text-secondary)] hover:text-[var(--text-primary)] px-2 py-1 bg-[var(--bg-panel)] border border-[var(--border-dev)] rounded hover:border-blue-500/50 transition-colors"
-              >
-                {copiedTs ? <Check className="w-3.5 h-3.5 text-green-500" /> : <Copy className="w-3.5 h-3.5" />}
-                {copiedTs ? 'Copied' : 'Copy'}
-              </button>
-            </div>
-            <div className="flex-1 overflow-auto p-4 bg-black/5 dark:bg-black/40">
-              <pre className="font-mono text-sm text-blue-600 dark:text-blue-300 whitespace-pre-wrap break-all">
-                {tsOutput || <span className="text-gray-500 italic">Waiting for valid JSON...</span>}
-              </pre>
-            </div>
+          <textarea id="json-input" spellCheck={false} value={input} onChange={event => setInput(event.target.value)} placeholder="Paste your JSON here…" className="w-full h-72 lg:h-[32rem] resize-y p-4 bg-transparent font-mono text-sm outline-none focus:ring-2 focus:ring-inset focus:ring-blue-500/40" />
+        </section>
+        <section className="rounded-xl border border-[var(--border-dev)] bg-[var(--bg-panel)] overflow-hidden flex flex-col">
+          <div role="tablist" aria-label="Generated code format" className="flex gap-2 p-3 border-b border-[var(--border-dev)]">
+            {(initialOutput === 'zod' ? ['zod', 'typescript'] as const : ['typescript', 'zod'] as const).map(format => <button key={format} id={`output-${format}-tab`} role="tab" aria-selected={format === output} aria-controls="generated-code" onClick={() => setOutput(format)} className={`px-3 py-1 rounded-md text-sm font-semibold ${format === output ? 'bg-blue-500/15 text-[var(--accent-blue)]' : 'text-[var(--text-secondary)]'}`}>{format === 'zod' ? 'Zod schema' : 'TypeScript'}</button>)}
           </div>
-
-          {/* Zod Output */}
-          <div className="flex flex-col flex-1 bg-[var(--bg-panel)] border border-[var(--border-dev)] rounded-xl overflow-hidden shadow-sm">
-            <div className="flex items-center justify-between px-4 py-3 bg-[var(--bg-sidebar)] border-b border-[var(--border-dev)]">
-              <div className="flex items-center gap-2 text-sm font-medium text-[var(--text-primary)]">
-                <FileCode className="w-4 h-4 text-amber-500" />
-                Zod Schema
-              </div>
-              <button
-                onClick={() => copyToClipboard(zodOutput, 'zod')}
-                className="flex items-center gap-1.5 text-xs text-[var(--text-secondary)] hover:text-[var(--text-primary)] px-2 py-1 bg-[var(--bg-panel)] border border-[var(--border-dev)] rounded hover:border-amber-500/50 transition-colors"
-              >
-                {copiedZod ? <Check className="w-3.5 h-3.5 text-green-500" /> : <Copy className="w-3.5 h-3.5" />}
-                {copiedZod ? 'Copied' : 'Copy'}
-              </button>
-            </div>
-            <div className="flex-1 overflow-auto p-4 bg-black/5 dark:bg-black/40">
-              <pre className="font-mono text-sm text-amber-600 dark:text-amber-200 whitespace-pre-wrap break-all">
-                {zodOutput || <span className="text-gray-500 italic">Waiting for valid JSON...</span>}
-              </pre>
-            </div>
-          </div>
-        </div>
+          <pre id="generated-code" role="tabpanel" aria-labelledby={`output-${output}-tab`} tabIndex={0} className="h-72 lg:h-[32rem] overflow-auto p-4 text-sm font-mono whitespace-pre bg-[var(--bg-codebox)] text-[var(--text-code)]"><code>{result[output] || 'Paste valid JSON to generate code.'}</code></pre>
+        </section>
       </div>
-      
-      {children && (
-        <div className="mt-12 pt-8 border-t border-[var(--border-dev)]">
-          {children}
-        </div>
-      )}
+      {children}
     </div>
   );
 }

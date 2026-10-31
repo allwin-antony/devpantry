@@ -50,9 +50,7 @@ const CATEGORY_COLOR: Record<string, { pill: string; icon: string; border: strin
 
 function HeroToolCard({ tool }: { tool: ToolItem }) {
   const colors = CATEGORY_COLOR[tool.category];
-  const href = tool.slug.includes('#')
-    ? `/tools/${tool.slug.split('#')[0]}`
-    : `/tools/${tool.slug}`;
+  const href = `/tools/${tool.slug}`;
 
   return (
     <Link
@@ -103,9 +101,7 @@ function HeroToolCard({ tool }: { tool: ToolItem }) {
 
 function ToolCard({ tool }: { tool: ToolItem }) {
   const colors = CATEGORY_COLOR[tool.category];
-  const href = tool.slug.includes('#')
-    ? `/tools/${tool.slug.split('#')[0]}`
-    : `/tools/${tool.slug}`;
+  const href = `/tools/${tool.slug}`;
 
   return (
     <Link
@@ -208,7 +204,7 @@ export default function ToolsListView({ items }: { items: ToolItem[] }) {
               Developer Tools & Utilities
             </h1>
             <p className="text-sm text-[var(--text-secondary)]">
-              {items.length} free tools — 100% client-side, zero uploads, zero tracking.
+              {items.length} free tools and workflows. Browser-based processing, no account required.
             </p>
           </div>
 
@@ -217,6 +213,7 @@ export default function ToolsListView({ items }: { items: ToolItem[] }) {
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--text-muted)]" />
             <input
               type="text"
+              aria-label="Search tools"
               placeholder="Search tools…"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
@@ -227,6 +224,7 @@ export default function ToolsListView({ items }: { items: ToolItem[] }) {
             {search && (
               <button
                 onClick={() => setSearch('')}
+                aria-label="Clear search"
                 className="absolute right-2.5 top-1/2 -translate-y-1/2 text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-colors"
               >
                 <X className="w-3.5 h-3.5" />

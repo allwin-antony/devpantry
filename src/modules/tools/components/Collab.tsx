@@ -1,89 +1,29 @@
-import { Metadata } from 'next';
 import { Suspense } from 'react';
 import { CollabWrapper } from '@/components/collaboration/CollabWrapper';
 
 export default function CollabPage() {
-  const jsonLd = [
-    {
-      '@context': 'https://schema.org',
-      '@type': 'WebApplication',
-      name: 'DevPantry P2P Collaborative Editor',
-      description: 'Zero-knowledge, real-time collaborative text and code editor powered by pure WebRTC and Yjs CRDTs.',
-      applicationCategory: 'DeveloperApplication',
-      operatingSystem: 'Any',
-      offers: {
-        '@type': 'Offer',
-        price: '0',
-        priceCurrency: 'USD',
-      },
-    },
-    {
-      '@context': 'https://schema.org',
-      '@type': 'BreadcrumbList',
-      itemListElement: [
-        { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://devpantry.com' },
-        { '@type': 'ListItem', position: 2, name: 'Collab Editor', item: 'https://devpantry.com/collab' }
-      ]
-    }
-  ];
-
-  return (
-    <div className="flex flex-col min-h-full bg-[var(--bg-app)]">
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-      />
-      <div className="flex flex-col shrink-0 w-full h-[calc(100dvh-3rem)] sm:h-[calc(100vh-3rem)] min-h-[580px]">
-        <h1 className="sr-only">P2P Collaborative Editor</h1>
-        <Suspense
-          fallback={
-            <div className="flex-1 flex items-center justify-center p-8 bg-[var(--bg-app)] text-[var(--text-muted)] font-mono text-xs">
-              <span className="w-2 h-2 rounded-full bg-rose-500 animate-ping mr-2" />
-              Loading Collab Studio...
-            </div>
-          }
-        >
-          <CollabWrapper />
-        </Suspense>
-      </div>
-
-      {/* SEO Content Block */}
-      <article className="tool-seo-content prose prose-sm max-w-none dark:prose-invert mt-8 px-4 sm:px-6 md:px-8 pb-12 max-w-5xl mx-auto">
-            <h2>Why We Built a Zero-Knowledge P2P Collaborative Editor Using WebRTC and Yjs</h2>
-            <p>
-              Real-time collaboration is the standard for modern web applications. Whether you're pair programming, taking shared notes, or brainstorming architectures, the ability to see someone else's cursor dancing across the screen is expected. 
-            </p>
-            <p>
-              But traditional collaborative editors come with a massive hidden cost: <strong>privacy</strong>. When you type into standard cloud editors, your keystrokes are transmitted to a central backend server, stored in a database, and then broadcasted to other clients. That’s why we built the DevPantry P2P Collaborative Editor — a 100% free, real-time, zero-knowledge collaborative coding environment that never sends your document to a central server.
-            </p>
-
-            <h3>The Architecture: Pure Peer-to-Peer with WebRTC</h3>
-            <p>
-              To achieve true privacy, we had to eliminate the central database. Instead of a classic client-server model, the DevPantry editor utilizes <strong>WebRTC DataChannels</strong> to establish direct, peer-to-peer (P2P) connections between browsers. The result? Lightning-fast sub-millisecond latency. No central server intercepts your data, meaning zero database costs and infinite horizontal scalability.
-            </p>
-
-            <h3>Conflict-Free Syncing with Yjs CRDTs</h3>
-            <p>
-              Because we are P2P, we utilize <strong><a href="https://yjs.dev/" target="_blank" rel="noopener noreferrer">Yjs</a></strong>, a blazing-fast Conflict-free Replicated Data Type (CRDT) implementation. Yjs ensures that no matter what order the network delivers packets in, and no matter how many users are typing concurrently, all clients mathematically converge on the exact same document state.
-            </p>
-
-            <h3>Zero-Knowledge: Client-Side AES-GCM Encryption</h3>
-            <p>
-              While WebRTC connections are inherently encrypted (DTLS/SRTP), we wanted to guarantee absolute zero-knowledge security, even against our own signaling infrastructure. When you generate a room, you enter a Password. We use the standard browser <strong>Web Crypto API</strong> (PBKDF2) to derive a cryptographically strong 256-bit AES-GCM key purely in browser memory. Every packet is aggressively encrypted before transmission.
-            </p>
-
-            <h3>Live Markdown Dual-Pane & Developer Workspace</h3>
-            <p>
-              DevPantry Collab features a split-pane GitHub Flavored Markdown (GFM) workspace. As you pair program or draft technical documentation, changes render in real time with styled tables, task checklists, and code snippets. With one-click starter templates (RFC specs, meeting notes, project READMEs) and instant 1-click zero-knowledge invite links, team onboarding takes seconds.
-            </p>
-
-            <h3>Related Tools</h3>
-            <ul>
-              <li><a href="/tools/jwt-decoder" className="text-rose-500 hover:underline">JWT Decoder</a> — Validate auth tokens before setting up collab sessions.</li>
-              <li><a href="/tools/mock-data" className="text-rose-500 hover:underline">Chaos Data</a> — Need data to paste into the editor? Synthesize mock data instantly.</li>
-              <li><a href="/tools/api-templates" className="text-rose-500 hover:underline">API Mocks</a> — View production WebRTC/Signaling JSON payloads.</li>
-            </ul>
-          </article>
+  const jsonLd = {
+    '@context': 'https://schema.org', '@type': 'WebApplication',
+    name: 'DevPantry Encrypted Collaborative Editor',
+    description: 'Collaborative text editing with Yjs, browser-side encryption, and a Cloudflare WebSocket relay.',
+    url: 'https://devpantry.com/tools/collab',
+    applicationCategory: 'DeveloperApplication', operatingSystem: 'Any',
+    offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+  };
+  return <div className="flex flex-col min-h-full bg-[var(--bg-app)]">
+    <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+    <h1 className="sr-only">Encrypted Collaborative Editor</h1>
+    <div className="h-[calc(100dvh-3rem)] min-h-[580px]">
+      <Suspense fallback={<p className="p-6">Loading collaborative editor…</p>}><CollabWrapper /></Suspense>
     </div>
-  );
+    <article className="tool-seo-content prose prose-sm max-w-none dark:prose-invert">
+      <h2>Edit a shared document with browser-side encryption</h2>
+      <p>Create or join a room to work on code, notes, or Markdown with other participants. Yjs merges concurrent edits, and the interface shows connected participants and a Markdown preview.</p>
+      <h3>How synchronization works</h3>
+      <p>Document updates are encrypted with AES-GCM in the browser. A Cloudflare Durable Object relays the encrypted updates over WebSockets and stores them for later synchronization. The password-derived key stays in the client. This implementation uses a server relay, rather than direct WebRTC data channels.</p>
+      <h3>Local document storage</h3>
+      <p>The editor stores local document state in IndexedDB. Clearing the site’s browser storage removes that local copy. Share room access only with the people you intend to collaborate with.</p>
+      <p>Read the <a href="/guides/p2p-webrtc-collaboration">collaboration implementation guide</a> and <a href="/privacy">privacy details</a>, or create example payloads with the <a href="/tools/mock-data">mock data generator</a>.</p>
+    </article>
+  </div>;
 }

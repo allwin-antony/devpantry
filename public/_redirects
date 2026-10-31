@@ -12,3 +12,8 @@
 /exif-stripper          /tools/exif-stripper            301
 /public-apis            /tools/public-apis              301
 /mcp-tools              /tools/mcp-registry             301
+/mock-data              /tools/mock-data                301
+/api-templates          /tools/api-templates            301
+/social-preview         /tools/social-preview           301
+/heic-converter         /tools/heic-converter           301
+/json-to-ts-zod          /tools/json-to-ts-zod            301

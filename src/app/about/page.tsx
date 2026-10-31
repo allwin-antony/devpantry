@@ -24,15 +24,15 @@ export default function AboutPage() {
         <h1 className="text-3xl font-bold mb-6 text-[var(--text-primary)]">About DevPantry</h1>
         <div className="prose dark:prose-invert max-w-none prose-headings:text-[var(--text-primary)] prose-p:text-[var(--text-secondary)] prose-strong:text-[var(--text-primary)] text-[var(--text-secondary)]">
           <p className="text-lg text-[var(--text-secondary)] mb-8">
-            DevPantry is a fast, high-density developer suite consolidating the essential image editing utilities, PDF form utilities, WebRTC collaboration tools, edge-case mock data generators, open-source typography catalogs, vector icons, and real-world API fixtures developers need every single day.
+            DevPantry helps frontend developers build and test web apps: inspect authentication tokens, generate edge-case test data, turn JSON into types, and prepare images, fonts, and icons for an interface.
           </p>
           <h2 className="text-2xl font-semibold mt-8 mb-4">Our Mission</h2>
           <p className="mb-4">
-            We believe developer tools should be fast, reliable, and respect your privacy. That's why every tool on DevPantry runs <strong>100% client-side in your browser</strong>. There are no server uploads, no accounts required, and no hidden tracking.
+            File editing, token inspection, and data generation run <strong>in your browser</strong>, with no account required. Network features such as social-preview fetching and collaboration are explained in our <a href="/privacy">privacy policy</a>, along with the usage analytics that help us improve the tools.
           </p>
           <h2 className="text-2xl font-semibold mt-8 mb-4">Open Source</h2>
           <p className="mb-4">
-            DevPantry is built with Next.js, React, TypeScript, and Tailwind CSS. We rely on incredible open-source projects like Lucide, Fontsource, Transformers.js, and many more.
+            DevPantry is built by <a href="https://github.com/allwin-antony" target="_blank" rel="noopener noreferrer">Allwin S Antony</a> using Next.js, React, TypeScript, and Tailwind CSS. It builds on projects including Lucide, Fontsource, pdf-lib, Yjs, and IMG.LY’s background-removal library.
           </p>
           <p className="mb-4">
             The entire DevPantry suite is completely open-source! You can view the source code, report issues, or contribute on our <a href="https://github.com/allwin-antony/devpantry" target="_blank" rel="noopener noreferrer" className="text-[var(--accent-blue)] hover:underline font-medium">GitHub Repository</a>.

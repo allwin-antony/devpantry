@@ -22,7 +22,7 @@ export default function ImageResizerPage() {
       '@type': 'BreadcrumbList',
       itemListElement: [
         { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://devpantry.com' },
-        { '@type': 'ListItem', position: 2, name: 'Image Resizer', item: 'https://devpantry.com/image-resizer' }
+        { '@type': 'ListItem', position: 2, name: 'Image Resizer', item: 'https://devpantry.com/tools/image-resizer' }
       ]
     }
   ];

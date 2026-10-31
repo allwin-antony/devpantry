@@ -22,7 +22,7 @@ export default function ChaosTemplatesPage() {
       '@type': 'BreadcrumbList',
       itemListElement: [
         { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://devpantry.com' },
-        { '@type': 'ListItem', position: 2, name: 'API Mocks', item: 'https://devpantry.com/api-templates' }
+        { '@type': 'ListItem', position: 2, name: 'API Mocks', item: 'https://devpantry.com/tools/api-templates' }
       ]
     }
   ];

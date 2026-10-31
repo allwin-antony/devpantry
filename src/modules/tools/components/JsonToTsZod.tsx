@@ -1,101 +1,42 @@
-import type { Metadata } from 'next';
-import { Suspense } from 'react';
 import { JsonToTsZodClient } from '@/components/clients/JsonToTsZodClient';
 
-export default function JsonToTsZodPage() {
+export default function JsonToTsZodPage({ slug = 'json-to-ts-zod' }: { slug?: string }) {
+  const zodFirst = slug === 'json-to-zod';
+  const name = zodFirst ? 'JSON to Zod Schema Generator' : 'JSON to TypeScript & Zod';
+  const url = `https://devpantry.com/tools/${slug}`;
   const jsonLd = [
-    {
-      '@context': 'https://schema.org',
-      '@type': 'WebApplication',
-      name: 'DevPantry JSON to TS & Zod',
-      description: '100% client-side zero-leak JSON to TypeScript and Zod schema generator.',
-      applicationCategory: 'DeveloperApplication',
-      operatingSystem: 'Any',
-      offers: {
-        '@type': 'Offer',
-        price: '0',
-        priceCurrency: 'USD',
-      },
-    },
-    {
-      '@context': 'https://schema.org',
-      '@type': 'BreadcrumbList',
-      itemListElement: [
-        { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://devpantry.com' },
-        { '@type': 'ListItem', position: 2, name: 'JSON to TS & Zod', item: 'https://devpantry.com/json-to-ts-zod' }
-      ]
-    },
-    {
-      '@context': 'https://schema.org',
-      '@type': 'FAQPage',
-      mainEntity: [
-        {
-          '@type': 'Question',
-          name: 'Is this JSON to TypeScript converter private?',
-          acceptedAnswer: {
-            '@type': 'Answer',
-            text: 'Yes! DevPantry uses 100% client-side AST parsing. Your JSON payloads never leave your browser, making it completely safe for proprietary API responses.'
-          }
-        },
-        {
-          '@type': 'Question',
-          name: 'Can this tool generate Zod schemas?',
-          acceptedAnswer: {
-            '@type': 'Answer',
-            text: 'Yes, it simultaneously generates strict TypeScript interfaces and Zod schemas for runtime validation based on your JSON input.'
-          }
-        }
-      ]
-    }
+    { '@context': 'https://schema.org', '@type': 'WebApplication', name, url, applicationCategory: 'DeveloperApplication', operatingSystem: 'Any', offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' } },
+    { '@context': 'https://schema.org', '@type': 'BreadcrumbList', itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://devpantry.com' },
+      { '@type': 'ListItem', position: 2, name: 'Tools', item: 'https://devpantry.com/tools' },
+      { '@type': 'ListItem', position: 3, name, item: url },
+    ] },
   ];
 
-  return (
-    <div className="flex flex-col min-h-full">
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-      />
-      <div className="flex flex-col w-full flex-1">
-        <h1 className="sr-only">JSON to TypeScript & Zod Schema Generator</h1>
-        <Suspense
-          fallback={
-            <div className="p-6 text-xs font-mono text-[var(--text-muted)] flex items-center gap-2">
-              <span className="w-2 h-2 rounded-full bg-rose-500 animate-ping" />
-              Loading Schema Generator Studio...
-            </div>
-          }
-        >
-          <JsonToTsZodClient>
-            <article className="tool-seo-content prose prose-sm max-w-none dark:prose-invert">
-              <h2>Zero-Leak Client-Side TypeScript & Zod Generator</h2>
-              <p>
-                Unlike traditional online converters that send your proprietary JSON payloads to a server for processing, DevPantry's <strong>JSON to TypeScript and Zod generator</strong> runs <strong>100% locally in your browser</strong>. Using Abstract Syntax Tree (AST) parsing, your sensitive data, private configurations, and internal API responses never leave your machine.
-              </p>
-              
-              <h3>Instantly Type Your APIs</h3>
-              <p>
-                Simply paste any valid JSON API response and immediately get strictly-typed TypeScript interfaces along with robust Zod validation schemas. We intelligently infer arrays, nested objects, and primitive types to produce clean, usable code ready to be dropped into your Next.js, React, or Node.js applications.
-              </p>
-
-              <h3>Why Use Zod with TypeScript?</h3>
-              <p>
-                While TypeScript interfaces provide excellent compile-time safety, they disappear at runtime. If you are fetching data from external APIs, you need <strong>runtime validation</strong> to ensure the incoming payload matches your expectations. By pairing TypeScript interfaces with Zod schemas, you guarantee end-to-end type safety.
-              </p>
-
-              <h3>Related Developer Tools</h3>
-              <p>
-                Supercharge your API development workflow with our other local-first tools:
-              </p>
-              <ul>
-                <li><a href="/tools/mock-data" className="text-emerald-500 hover:underline">Mock Data Generator</a> — Create dirty, high-entropy JSON datasets to test your newly generated Zod schemas.</li>
-                <li><a href="/tools/jwt-decoder" className="text-emerald-500 hover:underline">JWT Decoder & Chaos Tamperer</a> — Inspect authentication payloads 100% locally.</li>
-                <li><a href="/tools/api-templates" className="text-emerald-500 hover:underline">API Chaos Templates</a> — Use real-world JSON fixtures from Stripe, Supabase, and GitHub to generate your types.</li>
-                <li><a href="/tools/public-apis" className="text-emerald-500 hover:underline">Public APIs Registry</a> — Find free APIs to consume and type-check with this tool.</li>
-              </ul>
-            </article>
-          </JsonToTsZodClient>
-        </Suspense>
-      </div>
-    </div>
-  );
+  return <>
+    <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+    <JsonToTsZodClient initialOutput={zodFirst ? 'zod' : 'typescript'}>
+      <article className="tool-seo-content prose prose-sm max-w-none dark:prose-invert">
+        <h2>{zodFirst ? 'From an API payload to a Zod validation schema' : 'Create TypeScript types from real JSON examples'}</h2>
+        <ol>
+          <li>Paste a JSON object, array, or primitive value into the input.</li>
+          <li>{zodFirst ? 'Review the generated Zod schema. Add application-specific constraints such as email validation or minimum string lengths.' : 'Review the inferred TypeScript interface or type alias. Check optional properties and unions against your API contract.'}</li>
+          <li>Copy the output into your project. Switch format to compare compile-time types and runtime validation.</li>
+        </ol>
+        {zodFirst ? <>
+          <h3>Validate a response at runtime</h3>
+          <pre><code>{`const result = rootSchema.safeParse(apiResponse);\n\nif (result.success) {\n  console.log(result.data);\n} else {\n  console.log(result.error.issues);\n}`}</code></pre>
+          <p>Zod checks values when your application runs. Inferred schemas describe the examples you provide; they cannot discover business rules or field types missing from the sample.</p>
+        </> : <>
+          <h3>Interfaces, arrays, and primitive roots</h3>
+          <p>Object samples generate an interface. An array, string, number, boolean, or null at the root generates a type alias. Use the Zod tab when the response also needs validation at runtime.</p>
+          <pre><code>{`// JSON input: [1, "pending", null]\nexport type Root = Array<number | string | null>;`}</code></pre>
+        </>}
+        <h3>How arrays and optional fields are inferred</h3>
+        <p>Every array element is inspected. For <code>{'[{"id":1},{"id":2,"name":"Ada"}]'}</code>, <code>name</code> is optional. Mixed value types become unions. An empty array uses an unknown element type until an example supplies more information.</p>
+        <h3>Continue the workflow</h3>
+        <p>Use <a href="/tools/api-templates">API response fixtures</a> as examples, then exercise your schema with the <a href="/tools/mock-data">mock data generator</a>. Read the <a href="/guides/json-to-zod-validation">JSON-to-Zod validation guide</a> for a complete example.</p>
+      </article>
+    </JsonToTsZodClient>
+  </>;
 }

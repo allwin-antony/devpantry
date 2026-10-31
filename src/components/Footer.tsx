@@ -78,12 +78,12 @@ export const Footer: React.FC = () => {
               </li>
               <li>
                 <Link href="/tools/jwt-decoder" className="hover:text-[var(--text-primary)] hover:underline transition-colors">
-                  Zero-Leak JWT Decoder
+                  JWT Decoder & Inspector
                 </Link>
               </li>
               <li>
                 <Link href="/tools/collab" className="hover:text-[var(--text-primary)] hover:underline transition-colors">
-                  P2P Collab Editor
+                  Collaborative Editor
                 </Link>
               </li>
               <li>
@@ -108,7 +108,7 @@ export const Footer: React.FC = () => {
           <div className="flex flex-col gap-3">
             <div className="flex items-center gap-1.5 text-xs font-bold text-[var(--text-primary)] tracking-wide uppercase">
               <Type className="w-3.5 h-3.5 text-amber-500" />
-              <span>Open Fonts</span>
+              <span>Free Fonts</span>
             </div>
             <ul className="flex flex-col gap-2 text-[11px]">
               <li>
@@ -138,7 +138,7 @@ export const Footer: React.FC = () => {
               </li>
               <li>
                 <Link href="/fonts" className="text-rose-500 dark:text-rose-400 font-semibold hover:underline transition-colors">
-                  Browse 2,180+ Fonts →
+                  Browse Free Fonts →
                 </Link>
               </li>
             </ul>
@@ -279,7 +279,7 @@ export const Footer: React.FC = () => {
 
           <div className="flex items-center gap-1 text-[11px] text-[var(--text-secondary)]">
             <ShieldCheck className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
-            <span>100% Client-Side Sandbox · Zero Server Telemetry · Unlimited Free</span>
+            <span>Browser-based processing · Free tools · No account required</span>
           </div>
 
           <nav className="flex items-center gap-4 text-[11px]">
@@ -305,4 +305,3 @@ export const Footer: React.FC = () => {
     </footer>
   );
 };
-

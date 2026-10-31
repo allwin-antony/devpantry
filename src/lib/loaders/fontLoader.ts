@@ -2,6 +2,9 @@
 import fontshareCatalogRaw from '../../data/opensource/Fonts/catalogs/fontshare_catalog.json';
 import fontReposRaw from '../../data/opensource/Fonts/catalogs/github_repositories.json';
 import fontsourceCatalogRaw from '../../data/opensource/Fonts/catalogs/fontsource_catalog.json';
+import { getFontCdnStylesheet, getFontFallback, normalizeFontCategory } from '../fontPresentation';
+
+export { getFontCdnStylesheet } from '../fontPresentation';
 
 export interface FontItem {
   id: string;
@@ -26,6 +29,9 @@ export interface FontItem {
   cdn_stylesheet_url?: string;
   subsets?: string[];
   variable?: boolean;
+  cdn_provider?: 'google' | 'fontshare' | 'fontsource';
+  fontsource_id?: string;
+  cdn_style_ids?: number[];
 }
 
 export const FAMOUS_FONT_SLUGS = [
@@ -59,18 +65,10 @@ export const FAMOUS_FONT_SLUGS = [
 ];
 
 export function isFontIndexable(font: FontItem): boolean {
-  return FAMOUS_FONT_SLUGS.includes(font.slug) || 
-         font.provider === 'fontshare' || 
-         (font.provider === 'github' && (font.stars || 0) > 1000);
-}
-
-export function getFontCdnStylesheet(font: { name: string; slug: string; provider: string; weights?: number[] }): string {
-  if (font.provider === 'fontshare') {
-    return `https://api.fontshare.com/v2/css?f[]=${font.slug}@400,500,600,700&display=swap`;
-  }
-  const weightStr = (font.weights && font.weights.length > 0) ? font.weights.join(';') : '400;600;700';
-  const familyEscaped = encodeURIComponent(font.name);
-  return `https://fonts.googleapis.com/css2?family=${familyEscaped}:wght@${weightStr}&display=swap`;
+  // A working family preview and documented source determine eligibility,
+  // not popularity. Repository collections without a preview stay excluded.
+  return Boolean(font.name && font.web_url && font.license_type &&
+    font.weights.length && font.cdn_stylesheet_url);
 }
 
 // Memoized all fonts
@@ -90,7 +88,9 @@ export function getAllFonts(): FontItem[] {
 
     const isOfl = f.is_sil_ofl || f.license_type?.includes('ofl');
     const licenseType = f.license_type === 'itf_ffl' ? 'ITF Free Font' : (isOfl ? 'SIL OFL 1.1' : 'Free Commercial');
-    const cat = f.category || 'Sans';
+    const cat = normalizeFontCategory(f.category || 'Sans');
+    const source = fontsourceCatalogRaw.find(item => item.id === slug);
+    const weights = f.weights || source?.weights || [400];
 
     list.push({
       id: slug,
@@ -99,18 +99,20 @@ export function getAllFonts(): FontItem[] {
       version: f.version || '1.0',
       license_type: licenseType,
       is_sil_ofl: !!isOfl,
-      category: cat.charAt(0).toUpperCase() + cat.slice(1),
+      category: cat,
       styles_count: f.styles_count || 1,
-      weights: [400, 600, 700],
-      styles: ['normal'],
+      weights,
+      styles: f.styles || source?.styles || ['normal'],
       designers: f.designers || [f.publisher || 'Indian Type Foundry'],
       publisher: f.publisher || 'Fontshare / ITF',
       provider: 'fontshare',
       web_url: f.web_url || `https://www.fontshare.com/fonts/${slug}`,
       download_url: f.download_url,
-      npm_package: `@fontsource/${slug}`,
-      css_font_family: `'${f.name}', ${cat.toLowerCase() === 'serif' ? 'serif' : (cat.toLowerCase().includes('mono') ? 'monospace' : 'sans-serif')}`,
-      cdn_stylesheet_url: `https://api.fontshare.com/v2/css?f[]=${slug}@400,600,700&display=swap`
+      npm_package: source ? `@fontsource/${source.id}` : undefined,
+      css_font_family: `'${f.name}', ${getFontFallback(cat)}`,
+      cdn_style_ids: f.cdn_style_ids,
+      variable: f.variable || false,
+      cdn_stylesheet_url: getFontCdnStylesheet({ name: f.name, slug, provider: 'fontshare', weights, cdn_style_ids: f.cdn_style_ids }),
     });
   }
 
@@ -121,9 +123,12 @@ export function getAllFonts(): FontItem[] {
     if (seenSlugs.has(slug)) continue;
     seenSlugs.add(slug);
 
-    const isMono = (r.category || '').toLowerCase().includes('mono');
-    const isSerif = (r.category || '').toLowerCase().includes('serif') && !isMono;
-    const cat = isMono ? 'Monospace' : (isSerif ? 'Serif' : 'Sans');
+    const source = fontsourceCatalogRaw.find(item => item.id === slug);
+    const cat = normalizeFontCategory(source?.category || r.category || 'Sans');
+    const weights = source?.weights || (slug === 'hack' ? [400, 700] : []);
+    const styles = source?.styles || (slug === 'hack' ? ['normal', 'italic'] : []);
+    const repositoryStylesheet = slug === 'hack' ? 'https://cdn.jsdelivr.net/npm/hack-font@3.3.0/build/web/hack.css' : undefined;
+    const cdnProvider = source ? (source.type === 'google' ? 'google' : 'fontsource') : undefined;
 
     list.push({
       id: slug,
@@ -131,21 +136,24 @@ export function getAllFonts(): FontItem[] {
       slug,
       version: 'Latest',
       license_type: r.license || 'SIL OFL 1.1',
-      is_sil_ofl: true,
+      is_sil_ofl: /OFL/i.test(r.license || ''),
       category: cat,
-      styles_count: r.variable ? 9 : 4,
-      weights: [300, 400, 500, 600, 700, 800],
-      styles: ['normal'],
+      styles_count: styles.length * weights.length,
+      weights,
+      styles,
       designers: [r.owner || 'Community'],
       publisher: r.owner || 'Open Source',
       provider: 'github',
       web_url: r.repository || r.github_url,
       github_repo: r.repository || r.github_url,
       download_url: r.direct_zip_url,
-      npm_package: `@fontsource/${slug}`,
-      css_font_family: `'${fontName}', ${isMono ? 'monospace' : 'sans-serif'}`,
-      cdn_stylesheet_url: `https://fonts.googleapis.com/css2?family=${encodeURIComponent(fontName)}:wght@400;600;700&display=swap`,
-      variable: !!r.variable
+      npm_package: source ? `@fontsource/${source.id}` : slug === 'hack' ? 'hack-font' : undefined,
+      fontsource_id: source?.id,
+      cdn_provider: cdnProvider,
+      css_font_family: `'${fontName}', ${getFontFallback(cat)}`,
+      cdn_stylesheet_url: repositoryStylesheet || getFontCdnStylesheet({ name: fontName, slug, provider: 'github', cdn_provider: cdnProvider, weights, fontsource_id: source?.id }),
+      variable: source?.variable || false,
+      stars: r.stars,
     });
   }
 
@@ -156,11 +164,7 @@ export function getAllFonts(): FontItem[] {
     if (seenSlugs.has(slug)) continue;
     seenSlugs.add(slug);
 
-    let cat = 'Sans';
-    const rawCat = (fs.category || '').toLowerCase();
-    if (rawCat.includes('mono')) cat = 'Monospace';
-    else if (rawCat.includes('serif') && !rawCat.includes('sans')) cat = 'Serif';
-    else if (rawCat.includes('display') || rawCat.includes('handwriting')) cat = 'Display';
+    const cat = normalizeFontCategory(fs.category || 'Sans');
 
     const weights = Array.isArray(fs.weights) && fs.weights.length > 0 ? fs.weights : [400, 700];
 
@@ -170,7 +174,7 @@ export function getAllFonts(): FontItem[] {
       slug,
       version: fs.lastModified || '1.0',
       license_type: fs.license || 'SIL OFL 1.1',
-      is_sil_ofl: (fs.license || '').includes('OFL') || true,
+      is_sil_ofl: /OFL/i.test(fs.license || ''),
       category: cat,
       styles_count: (fs.styles?.length || 1) * weights.length,
       weights: weights,
@@ -181,7 +185,8 @@ export function getAllFonts(): FontItem[] {
       web_url: `https://fontsource.org/fonts/${slug}`,
       npm_package: `@fontsource/${slug}`,
       css_font_family: `'${fontName}', ${cat === 'Serif' ? 'serif' : (cat === 'Monospace' ? 'monospace' : 'sans-serif')}`,
-      cdn_stylesheet_url: `https://fonts.googleapis.com/css2?family=${encodeURIComponent(fontName)}:wght@${weights.filter((w: number) => [300, 400, 600, 700, 800].includes(w)).join(';') || '400;700'}&display=swap`,
+      fontsource_id: fs.id,
+      cdn_stylesheet_url: getFontCdnStylesheet({ name: fontName, slug, provider: fs.type === 'google' ? 'google' : 'fontsource', weights, fontsource_id: fs.id }),
       subsets: fs.subsets,
       variable: !!fs.variable
     });
@@ -286,4 +291,3 @@ export function getFontPairings(font: FontItem): FontPairing[] {
     { slug: 'fira-code', name: 'Fira Code', category: 'Monospace', role: 'UI Sans + Ligature Monospace', reason: 'Harmonious stroke weights between body prose and code snippets.' }
   ].filter(p => p.slug !== currentSlug);
 }
-

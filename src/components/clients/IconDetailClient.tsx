@@ -244,9 +244,9 @@ export function Example() {
       <section className="bg-[var(--bg-panel)] border border-[var(--border-dev)] rounded-xl p-6 relative shadow-sm transition-colors flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
         <div>
           <div className="flex flex-wrap items-center gap-3 mb-2 pt-1">
-            <h1 className="text-2xl md:text-3xl font-extrabold text-[var(--text-primary)] font-sans leading-normal">
+            <h2 className="text-2xl md:text-3xl font-extrabold text-[var(--text-primary)] font-sans leading-normal">
               {collection.name}
-            </h1>
+            </h2>
             <span className="text-xs px-2.5 py-0.5 rounded-full font-bold bg-cyan-500/15 text-cyan-600 dark:text-cyan-300 border border-cyan-500/30">
               {loadedIcons.length > collection.samples?.length ? loadedIcons.length.toLocaleString() : collection.total_icons.toLocaleString()} Vector Icons
             </span>
@@ -260,7 +260,7 @@ export function Example() {
           </p>
 
           <div className="flex flex-wrap items-center gap-3 mt-3 text-xs text-[var(--text-muted)]">
-            <span className="text-emerald-500 font-bold">100% Free for Commercial Use</span>
+            <span className="text-emerald-500 font-bold">License: {collection.license}</span>
             <span>•</span>
             <span>JSON & SVG APIs Ready</span>
           </div>

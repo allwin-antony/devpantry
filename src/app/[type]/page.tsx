@@ -2,6 +2,7 @@ import { notFound } from 'next/navigation';
 import { moduleRegistry } from '@/lib/moduleRegistry';
 import type { Metadata, ResolvingMetadata } from 'next';
 import React from 'react';
+import { getAllToolsForDisplay } from '@/lib/loaders/toolLoader';
 
 interface PageProps {
   params: Promise<{ type: string }>;
@@ -30,6 +31,7 @@ export async function generateMetadata(
     openGraph: {
       title: manifest.metadata.title,
       description: manifest.metadata.description,
+      url: `https://devpantry.com/${type}`,
     },
     twitter: {
       card: 'summary_large_image',
@@ -56,7 +58,7 @@ export default async function GenericModulePage({ params }: PageProps) {
     return <div className="p-4">This module does not have a list view.</div>;
   }
 
-  const items = await manifest.loader.listAll();
+  const items = type === 'tools' ? getAllToolsForDisplay() : await manifest.loader.listAll();
 
   return <ListView items={items} />;
 }
