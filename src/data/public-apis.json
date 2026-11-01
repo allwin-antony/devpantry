@@ -2403,6 +2403,15 @@
     "Category": "Business"
   },
   {
+    "API": "Comunicate.eu",
+    "Description": "Catalogue of 3,800+ news sites for press releases and advertorials: niches, authority, prices",
+    "Auth": "",
+    "HTTPS": true,
+    "CORS": "Yes",
+    "Link": "https://comunicate.eu",
+    "Category": "Business"
+  },
+  {
     "API": "Crustdata",
     "Description": "People and company data covering profiles, headcount, funding and contacts",
     "Auth": "`apiKey`",
@@ -3920,7 +3929,7 @@
     "Auth": "`apiKey`",
     "HTTPS": true,
     "CORS": "Yes",
-    "Link": "https://bitculator.com/en/crypto-api",
+    "Link": "https://bitculator.com",
     "Category": "Cryptocurrency"
   },
   {
@@ -9036,6 +9045,15 @@
     "Category": "Documents & Productivity"
   },
   {
+    "API": "Bookfolio Fixer",
+    "Description": "Validate and repair EPUB ebooks, returns JSON store-readiness verdicts",
+    "Auth": "`apiKey`",
+    "HTTPS": true,
+    "CORS": "Unknown",
+    "Link": "https://fixer.bookfolio.io",
+    "Category": "Documents & Productivity"
+  },
+  {
     "API": "BuildPDF",
     "Description": "Convert HTML, images, and text to PDF",
     "Auth": "`apiKey`",
@@ -9213,6 +9231,15 @@
     "HTTPS": true,
     "CORS": "Yes",
     "Link": "https://docforge-api.vercel.app",
+    "Category": "Documents & Productivity"
+  },
+  {
+    "API": "DocSpring",
+    "Description": "Fill PDF forms, generate PDFs and Word documents, and collect e-signatures with one API. Free plan, no credit card",
+    "Auth": "`apiKey`",
+    "HTTPS": true,
+    "CORS": "Yes",
+    "Link": "https://docspring.com",
     "Category": "Documents & Productivity"
   },
   {
@@ -10410,6 +10437,15 @@
     "HTTPS": true,
     "CORS": "Yes",
     "Link": "https://smtpfa.st/docs",
+    "Category": "Email"
+  },
+  {
+    "API": "StopMailing",
+    "Description": "Temporary email addresses with a free, no-signup REST API: create, read messages, live updates (SSE)",
+    "Auth": "",
+    "HTTPS": true,
+    "CORS": "Yes",
+    "Link": "https://stopmailing.net",
     "Category": "Email"
   },
   {
@@ -27666,6 +27702,15 @@
     "Category": "Transportation"
   },
   {
+    "API": "Carrier Ledger",
+    "Description": "FMCSA carrier records with authority, insurance and suspension notices, and daily change alerts for brokers",
+    "Auth": "`apiKey`",
+    "HTTPS": true,
+    "CORS": "Unknown",
+    "Link": "https://carrierledger.steellantern.com",
+    "Category": "Transportation"
+  },
+  {
     "API": "ChargeAlong",
     "Description": "EV charging sites in AU, NZ, US, UK and Canada, with nearby search and trip planning",
     "Auth": "",
@@ -29508,6 +29553,15 @@
     "HTTPS": true,
     "CORS": "No",
     "Link": "https://ilovevideoeditor.com",
+    "Category": "Video"
+  },
+  {
+    "API": "imageat",
+    "Description": "Run FFmpeg 8 commands in the cloud as async jobs with webhooks, billed per minute of run time",
+    "Auth": "`apiKey`",
+    "HTTPS": true,
+    "CORS": "No",
+    "Link": "https://imageat.com",
     "Category": "Video"
   },
   {
