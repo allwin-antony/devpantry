@@ -21784,6 +21784,13 @@
     "Category": "Knowledge & Memory"
   },
   {
+    "API": "jackjin1997/markindex",
+    "Description": "Vectorless, structure-first retrieval over large Markdown libraries: walk library, folder, document and section trees, read original text with line numbers for citations, and fall back to mixed Chinese/English BM25 search. Five read-only tools, no embeddings, no API key.",
+    "Language": "TypeScript",
+    "Link": "https://github.com/jackjin1997/markindex",
+    "Category": "Knowledge & Memory"
+  },
+  {
     "API": "jagoff/memo",
     "Description": "Local-first semantic memory: hybrid search, Markdown storage, MLX or CPU embeddings, contradiction detection, time-travel history and cross-machine git sync.",
     "Language": "Python",
