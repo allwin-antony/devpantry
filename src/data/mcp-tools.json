@@ -5432,6 +5432,13 @@
     "Category": "Coding Agents"
   },
   {
+    "API": "Arkz-Deepak/neurocode",
+    "Description": "In-memory Code Property Graph context slicer for local models (Ollama, Cursor, Claude Desktop): extracts sub-1,200 token reachability closures for autonomous repository bug repair on consumer edge hardware (4GB–8GB VRAM) without cloud API dependency.",
+    "Language": "Python",
+    "Link": "https://github.com/Arkz-Deepak/neurocode",
+    "Category": "Coding Agents"
+  },
+  {
     "API": "automateyournetwork/pyATS_MCP",
     "Description": "Structured, model-driven interaction with network devices via Cisco pyATS.",
     "Language": "Unknown",
