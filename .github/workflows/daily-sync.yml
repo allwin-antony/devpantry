@@ -2,8 +2,8 @@ name: Scheduled API & MCP Sync
 
 on:
   schedule:
-    # Runs every 2 days at 00:00 UTC (5:30 AM IST)
-    - cron: '0 0 */2 * *'
+    # Runs every 4 days at 00:00 UTC (5:30 AM IST)
+    - cron: '0 0 */4 * *'
   workflow_dispatch: # Allows manual triggering from the GitHub Actions UI
 
 permissions:
