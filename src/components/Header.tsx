@@ -216,7 +216,7 @@ export const Header: React.FC = () => {
             onClick={() => setIsPaletteOpen(true)}
             aria-label="Open Command Palette (Cmd + K)"
             title="Search tools, typefaces, icons, and API mocks (Cmd + K)"
-            className="h-11 min-w-11 flex items-center justify-center gap-2 px-2.5 rounded-lg bg-[var(--bg-sidebar)] border border-[var(--border-dev)] text-xs text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:border-rose-500/40 transition-all cursor-pointer"
+            className="h-8 min-w-11 flex items-center justify-center gap-2 px-2.5 rounded-lg bg-[var(--bg-sidebar)] border border-[var(--border-dev)] text-xs text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:border-rose-500/40 transition-all cursor-pointer"
           >
             <Search className="w-3.5 h-3.5 text-rose-500" />
             <span className="hidden sm:inline text-[11px] text-[var(--text-muted)]">Search...</span>
