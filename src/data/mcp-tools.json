@@ -2828,6 +2828,13 @@
     "Category": "Art & Culture"
   },
   {
+    "API": "taddeimania/lathe",
+    "Description": "A free, open-source DAW with its own MCP server: read the session, play any bars, build tracks and plug-in chains, write MIDI in a compact note notation, mix with channel EQ and sends, set the song's keys, convert audio to MIDI and export audio, each change one undo step in the app.",
+    "Language": "Unknown",
+    "Link": "https://github.com/taddeimania/lathe",
+    "Category": "Art & Culture"
+  },
+  {
     "API": "tasopen/mcp-alphabanana",
     "Description": "Generate image assets with Google Gemini (Nano Banana 2 and Pro): transparent PNG/WebP, exact resizing and cropping, reference images and Search grounding.",
     "Language": "TypeScript",
@@ -14525,6 +14532,13 @@
     "Category": "Developer Tools"
   },
   {
+    "API": "neoma-pcam/pcam-live",
+    "Description": "Connects Frontier LLMs directly to a physical hardware enclave for sub-millisecond (0.85ms) non-linear physical equilibrium, mechanical resonance damping, and cryptographic PUF attestation via cloud.",
+    "Language": "Python",
+    "Link": "https://github.com/neoma-pcam/pcam-live",
+    "Category": "Developer Tools"
+  },
+  {
     "API": "Neovim",
     "Description": "Control Neovim using Model Context Protocol (MCP) and the official neovim/node-client JavaScript library",
     "Language": "Unknown",
@@ -19709,6 +19723,13 @@
     "Description": "Self-hosted MCP server for managing Ethereum wallets: create and list wallets, check live balances, validate addresses, query gas prices, and list transactions.",
     "Language": "Unknown",
     "Link": "https://github.com/louischeung007/ethereum-wallet-mcp-server",
+    "Category": "Finance & Fintech"
+  },
+  {
+    "API": "luca-network/spr",
+    "Description": "Records each payment an AI agent makes as a signed record on your own machine: what it declared before paying, what it paid, and whether it stayed inside its limit. Anyone can check the records. `npx -y @luca-network/spr-mcp`",
+    "Language": "TypeScript",
+    "Link": "https://github.com/luca-network/spr",
     "Category": "Finance & Fintech"
   },
   {
@@ -34209,6 +34230,13 @@
     "Category": "Search & Data Extraction"
   },
   {
+    "API": "pecopeko/mcp-public-intel",
+    "Description": "Zero-API-key public intelligence extraction across SEC EDGAR XBRL financials and Form D raises, Greenhouse/Lever/Ashby engineering job boards, Shopify catalogs, Substack full-text Markdown, and Podcasting 2.0 RSS transcripts.",
+    "Language": "Python",
+    "Link": "https://github.com/pecopeko/mcp-public-intel",
+    "Category": "Search & Data Extraction"
+  },
+  {
     "API": "pepabo/muumuu-domain-mcp",
     "Description": "Search and register Muumuu Domain (GMO Pepabo) domains, manage owned domains and contracts, and configure DNS records.",
     "Language": "Unknown",
@@ -34388,6 +34416,13 @@
     "Description": "Unified real-time search across Google, YouTube, Amazon, Walmart, Reddit and TikTok for web, e-commerce, product, social media and video data.",
     "Language": "TypeScript",
     "Link": "https://github.com/scavio-ai/scavio-mcp",
+    "Category": "Search & Data Extraction"
+  },
+  {
+    "API": "scrapecrate/mcp-server",
+    "Description": "One API key for YouTube transcripts and metadata, Google Maps places and reviews, Trustpilot reviews and the Meta Ad Library, via the ScrapeCrate API.",
+    "Language": "Python",
+    "Link": "https://github.com/scrapecrate/mcp-server",
     "Category": "Search & Data Extraction"
   },
   {
